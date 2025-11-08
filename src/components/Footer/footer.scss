@@ -1,0 +1,64 @@
+.footer {
+    background-color: #fff;
+    font-size: 0.95rem;
+
+    &__link {
+        color: #6c757d;
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+            color: #000;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+    }
+
+    select {
+        display: block;
+        margin: 0 auto; // центрирует по горизонтали
+        width: 150px; // ширину можно подогнать
+        border: 1px solid #ccc; // нейтральная граница
+        border-radius: 8px;
+        padding: 6px 30px;
+        font-size: 0.9rem;
+        color: #333;
+        background-color: #fff;
+        background-position: right 10px center;
+        cursor: pointer;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        
+
+        &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+        }
+
+        option {
+            color: #333;
+            background-color: #fff;
+        }
+    }
+
+    hr {
+        opacity: 0.15;
+    }
+
+    strong {
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            text-align: center;
+        }
+
+        &__link {
+            display: inline-block;
+            margin-bottom: 0.25rem;
+        }
+    }
+
+}
