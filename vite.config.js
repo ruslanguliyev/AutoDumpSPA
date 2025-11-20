@@ -8,6 +8,14 @@ const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    hmr: {
+      overlay: true
+    },
+    watch: {
+      usePolling: false
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
