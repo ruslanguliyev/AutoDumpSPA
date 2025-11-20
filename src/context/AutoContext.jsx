@@ -3,10 +3,10 @@ import { autos } from '../data/data.js';
 
 const AutoContext = createContext();
 
-export const AutoProvider = (props) => {
+export const AutoProvider = ({ children }) => {
   return (
     <AutoContext.Provider value={{ autos }}>
-      {props.children}
+      {children}
     </AutoContext.Provider>
   );
 };
