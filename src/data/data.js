@@ -8,27 +8,31 @@ export const autos = [
     model: "Phantom",
     description: "British luxury icon. Owned by BMW. Hand-built perfection.",
     image: image1,
-    alt: "Rolls Royce Phantom"
+    alt: "Rolls Royce Phantom",
+    vehicleType: "car"
   },
   {
     brand: "Bentley",
     model: "Continental GT",
     description: "660 hp. Handcrafted interior. The grand tourer king.",
     image: image1,
-    alt: "Bentley GT"
+    alt: "Bentley GT",
+    vehicleType: "car"
   },
   {
     brand: "Mercedes-Benz",
     model: "G-Class",
     description: "Mercedes-Benz G-Class is a luxury SUV that combines off-road capability with high-end comfort and technology.",
     image: gWagon,
-    alt: "Mercedes-Benz G-Class"
+    alt: "Mercedes-Benz G-Class",
+    vehicleType: "car"
   },
   {
     brand: "Bentley",
     model: "Continental GT",
     description: "660 hp. Handcrafted interior. The grand tourer king.",
     image: image1,
-    alt: "Bentley GT"
+    alt: "Bentley GT",
+    vehicleType: "car"
   },
 ];
