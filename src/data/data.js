@@ -35,4 +35,6 @@ export const autos = [
     alt: "Bentley GT",
     vehicleType: "car"
   },
+
+  
 ];

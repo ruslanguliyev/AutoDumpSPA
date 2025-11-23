@@ -28,7 +28,19 @@ export default function Home() {
         onFilterChange={handleFilterChange}
         resultsCount={filteredAutos.length}
       />
-      
+
+      {/* Regular Cars Section */}
+      <div className="home__container">
+        <h2 className="home__section-title">Available Vehicles</h2>
+        <div className="home__grid">
+          {carsWithIds.map((car) => (
+            <AutoCard key={car.id} car={car} />
+          ))}
+        </div>
+      </div>
+
+
+
       {/* Auction Cards Section */}
       {auctions.length > 0 && (
         <div className="home__auctions">
@@ -43,15 +55,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* Regular Cars Section */}
-      <div className="home__container">
-        <h2 className="home__section-title">Available Vehicles</h2>
-        <div className="home__grid">
-          {carsWithIds.map((car) => (
-            <AutoCard key={car.id} car={car} />
-          ))}
-        </div>
-      </div>
+
+
     </div>
   );
 }

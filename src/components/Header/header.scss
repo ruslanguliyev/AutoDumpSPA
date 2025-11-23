@@ -1,9 +1,28 @@
 .header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+  background: #ffffff;
   border-bottom: 1px solid #e5e5e5;
-  background-color: #fff;
+  transition: all 0.25s ease;
+
+  &--scrolled {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.85);
+  }
 
   &__nav {
-    padding: 0.75rem 0;
+    width: 100%;
+  }
+
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__brand {
@@ -12,7 +31,9 @@
   }
 
   &__logo {
-    max-height: 50px;
+    height: 48px;
+    width: auto;
+    display: block;
     transition: transform 0.2s ease;
 
     &:hover {
@@ -20,22 +41,86 @@
     }
   }
 
-  &__menu {
-    align-items: center;
+  /* ==== BURGER BUTTON ==== */
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px;
+    transition: 0.3s;
+
+    span {
+      width: 26px;
+      height: 3px;
+      background: #212529;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    &.is-open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    &.is-open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    &.is-open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
   }
 
-  &__list {
+  /* ==== MENU ==== */
+  &__menu {
     display: flex;
     align-items: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 70px;
+      right: 0;
+      width: 100%;
+      height: calc(100vh - 70px);
+      padding: 2rem 1.5rem;
+      background: #fff;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+
+      &.is-open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  /* ==== NAVIGATION LIST ==== */
+  &__list {
+    display: flex;
+    gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
   }
 
   &__link {
-    color: #212529;
-    font-weight: 500;
     text-decoration: none;
+    font-weight: 500;
+    color: #212529;
     transition: opacity 0.2s ease;
 
     &:hover {
@@ -43,17 +128,46 @@
     }
   }
 
+  /* ==== AUTH BUTTONS ==== */
   &__auth {
-    
-  
+    display: flex;
+    gap: 0.75rem;
 
-    @media(max-width:768px) {
-      justify-content: center ;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+
+  &__btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+    background: #0d6efd;
+    color: #fff;
+
+    &--outline {
+      background: transparent;
+      border: 2px solid #0d6efd;
+      color: #0d6efd;
+
+      &:hover {
+        background: #0d6efd;
+        color: #fff;
+      }
     }
 
-    a {
-      font-weight: 500;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
 
+  @media (max-width: 768px) {
+    &__toggle {
+      display: flex;
     }
   }
 }

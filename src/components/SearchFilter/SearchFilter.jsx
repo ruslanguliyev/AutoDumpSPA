@@ -1,4 +1,8 @@
+// src/components/SearchFilter/SearchFilter.jsx (примерный путь)
+
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   IconCar,
   IconBike,
@@ -6,6 +10,16 @@ import {
   IconTruck,
   IconDeviceDesktop,
 } from '@tabler/icons-react';
+
+// ✅ ВАЖНО: поправь путь, если у тебя другая структура
+import {
+  makesByCategory,
+  priceRanges,
+  registrationYears,
+} from '../../data/options';
+// если alias @ не настроен, сделай так, например:
+// import { makesByCategory, priceRanges, registrationYears } from '../../data/searchFilterOptions';
+
 import './SearchFilter.scss';
 
 const vehicleTypes = [
@@ -14,128 +28,6 @@ const vehicleTypes = [
   { id: 'camper', label: 'Camper', icon: IconCamper, color: '#2563eb' },
   { id: 'truck', label: 'Truck', icon: IconTruck, color: '#dc2626' },
   { id: 'commercial', label: 'Commercial', icon: IconDeviceDesktop, color: '#000000' },
-];
-
-// Марки для каждой категории транспорта
-const makesByCategory = {
-  car: [
-    'All Makes',
-    'Mercedes-Benz',
-    'BMW',
-    'Audi',
-    'Rolls Royce',
-    'Bentley',
-    'Porsche',
-    'Ferrari',
-    'Lamborghini',
-    'Volkswagen',
-    'Toyota',
-    'Honda',
-    'Ford',
-    'Chevrolet',
-    'Nissan',
-    'Hyundai',
-    'Kia',
-    'Mazda',
-    'Subaru',
-    'Lexus',
-  ],
-  motorcycle: [
-    'All Makes',
-    'Harley-Davidson',
-    'Honda',
-    'Yamaha',
-    'Kawasaki',
-    'Suzuki',
-    'Ducati',
-    'BMW',
-    'Triumph',
-    'Indian',
-    'KTM',
-    'Aprilia',
-    'Moto Guzzi',
-    'Royal Enfield',
-    'MV Agusta',
-  ],
-  camper: [
-    'All Makes',
-    'Winnebago',
-    'Airstream',
-    'Forest River',
-    'Thor Industries',
-    'Fleetwood',
-    'Newmar',
-    'Tiffin',
-    'Jayco',
-    'Coachmen',
-    'Keystone',
-    'Dutchmen',
-    'Grand Design',
-    'Entegra',
-  ],
-  truck: [
-    'All Makes',
-    'Ford',
-    'Chevrolet',
-    'Ram',
-    'GMC',
-    'Toyota',
-    'Nissan',
-    'Dodge',
-    'Mercedes-Benz',
-    'Volvo',
-    'Peterbilt',
-    'Kenworth',
-    'Freightliner',
-    'Mack',
-    'International',
-  ],
-  commercial: [
-    'All Makes',
-    'Mercedes-Benz',
-    'Ford',
-    'Volkswagen',
-    'Fiat',
-    'Peugeot',
-    'Citroën',
-    'Renault',
-    'Iveco',
-    'MAN',
-    'Scania',
-    'DAF',
-    'Isuzu',
-    'Mitsubishi',
-  ],
-};
-
-const priceRanges = [
-  'No limit',
-  '€5,000',
-  '€10,000',
-  '€20,000',
-  '€30,000',
-  '€50,000',
-  '€75,000',
-  '€100,000',
-  '€150,000',
-  '€200,000',
-  '€300,000',
-  '€500,000',
-];
-
-const registrationYears = [
-  'Any year',
-  '2024',
-  '2023',
-  '2022',
-  '2021',
-  '2020',
-  '2019',
-  '2018',
-  '2017',
-  '2016',
-  '2015',
-  'Older',
 ];
 
 const regions = [
@@ -148,6 +40,8 @@ const regions = [
 ];
 
 export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
+  const navigate = useNavigate();
+
   const [activeVehicleType, setActiveVehicleType] = useState('car');
   const [filters, setFilters] = useState({
     make: '',
@@ -158,12 +52,12 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
     city: '',
   });
 
-  // Получаем список марок для текущей категории транспорта
+  // Марки для выбранного типа (car / motorcycle / camper / truck / commercial)
   const currentMakes = useMemo(() => {
-    return makesByCategory[activeVehicleType] || makesByCategory.car;
+    return makesByCategory[activeVehicleType] || makesByCategory.car || [];
   }, [activeVehicleType]);
 
-  // Сбрасываем марку при смене категории транспорта
+  // При смене типа транспорта — сбрасываем марку
   useEffect(() => {
     setFilters((prev) => ({ ...prev, make: '' }));
   }, [activeVehicleType]);
@@ -182,28 +76,40 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
   };
 
   const handleSearch = () => {
+    const params = new URLSearchParams();
+
+    if (activeVehicleType) params.set('type', activeVehicleType);
+    if (filters.make) params.set('brand', filters.make);
+    if (filters.model) params.set('model', filters.model);
+    if (filters.price) params.set('priceTo', filters.price);
+    if (filters.registration) params.set('yearFrom', filters.registration);
+    if (filters.region) params.set('region', filters.region);
+    if (filters.city) params.set('city', filters.city);
+
     onFilterChange?.({ ...filters, vehicleType: activeVehicleType });
+
+    navigate(`/search?${params.toString()}`);
   };
 
-  const formatResultsCount = (count) => {
-    return new Intl.NumberFormat('en-US').format(count);
-  };
+  const formatResultsCount = (count) =>
+    new Intl.NumberFormat('en-US').format(count);
 
   return (
     <div className="search-filter">
       <div className="search-filter__container">
-        {/* Vehicle Type Navigation */}
+        {/* Навигация по типам транспорта */}
         <div className="search-filter__nav">
           {vehicleTypes.map((type) => {
             const IconComponent = type.icon;
+            const isActive = activeVehicleType === type.id;
             return (
               <button
                 key={type.id}
-                className={`search-filter__nav-item ${
-                  activeVehicleType === type.id ? 'search-filter__nav-item--active' : ''
-                }`}
+                className={`search-filter__nav-item ${isActive ? 'search-filter__nav-item--active' : ''
+                  }`}
                 onClick={() => handleVehicleTypeChange(type.id)}
                 aria-label={type.label}
+                type="button"
               >
                 <IconComponent
                   className="search-filter__nav-icon"
@@ -216,14 +122,14 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
           })}
         </div>
 
-        {/* Main Search Form */}
+        {/* Основная форма поиска */}
         <div className="search-filter__form-wrapper">
           <h2 className="search-filter__title">
             Find used vehicles and new vehicles
           </h2>
 
           <div className="search-filter__form">
-            {/* First Row */}
+            {/* Первая строка */}
             <div className="search-filter__row">
               <div className="search-filter__field">
                 <label htmlFor="make" className="search-filter__label">
@@ -285,7 +191,7 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
               </div>
             </div>
 
-            {/* Second Row */}
+            {/* Вторая строка */}
             <div className="search-filter__row">
               <div className="search-filter__field">
                 <label htmlFor="registration" className="search-filter__label">
@@ -351,9 +257,13 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
           </div>
 
           <div className="search-filter__actions">
-            <a href="#" className="search-filter__refine">
+            <button
+              className="search-filter__refine"
+              type="button"
+            // сюда позже можно повесить открытие "доп. фильтров"
+            >
               Refine search
-            </a>
+            </button>
             <button
               className="search-filter__button"
               onClick={handleSearch}
@@ -367,4 +277,3 @@ export default function SearchFilter({ onFilterChange, resultsCount = 0 }) {
     </div>
   );
 }
-

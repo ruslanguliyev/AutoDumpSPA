@@ -1,59 +1,55 @@
-import "./Header.scss";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./header.scss";
 
-const Header = () => {
+export default function Header() {
+    const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const onScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
+        window.addEventListener("scroll", onScroll);
+
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
-        <header id="mainHeader" className="header">
-            <nav className="navbar navbar-expand-md bg-body header__nav">
-                <div className="container">
-                    <a className="navbar-brand fw-bold header__brand" href="/">
+        <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
+            <nav className="header__nav">
+                <div className="header__container">
+                    <Link to="/" className="header__brand">
                         <img
-                            className="header__logo w-auto d-block"
-                            height="50"
+                            className="header__logo"
                             src="/src/assets/images/autodump-logo.PNG"
                             alt="Logo"
                         />
-                    </a>
+                    </Link>
 
                     <button
-                        className="navbar-toggler ms-auto"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNav"
-                        aria-controls="mainNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
+                        className={`header__toggle ${open ? "is-open" : ""}`}
+                        onClick={() => setOpen(!open)}
                     >
-                        <span className="navbar-toggler-icon"></span>
+                        <span />
+                        <span />
+                        <span />
                     </button>
 
-                    <div className="collapse navbar-collapse header__menu" id="mainNav">
-                        <ul className="navbar-nav mx-md-auto my-2 my-md-0 gap-2 header__list">
-                            <li className="nav-item">
-                                <a className="nav-link header__link" href="/about">
-                                    About
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link header__link" href="#">
-                                    Auctions
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link header__link" href="#">
-                                    Pricing
-                                </a>
-                            </li>
+                    <div className={`header__menu ${open ? "is-open" : ""}`}>
+                        <ul className="header__list">
+                            <li><Link to="/about" className="header__link">About</Link></li>
+                            <li><Link to="/auctions" className="header__link">Auctions</Link></li>
+                            <li><Link to="/pricing" className="header__link">Pricing</Link></li>
                         </ul>
 
-                        <div className="d-flex gap-2 ms-md-0 ms-auto header__auth">
-                            <a className="btn btn-outline-primary" >Log in</a>
-                            <a className="btn btn-outline-primary">Sign in</a>
+                        <div className="header__auth">
+                            <button className="header__btn header__btn--outline">Log in</button>
+                            <button className="header__btn">Sign in</button>
                         </div>
                     </div>
                 </div>
             </nav>
         </header>
     );
-};
-
-export default Header;
+}
