@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import AutoCard from '../../components/CardComponents/AutoCard.jsx';
 import SearchFilter from '../../components/SearchFilter/SearchFilter.jsx';
 import AuctionCarCard from '../../components/AuctionCarCard/AuctionCarCard';
@@ -14,14 +13,6 @@ export default function Home() {
     updateFilters(newFilters);
   };
 
-  // Генерируем уникальные ключи для карточек
-  const carsWithIds = useMemo(() => {
-    return filteredAutos.map((car, index) => ({
-      ...car,
-      id: car.id || `car-${index}-${car.brand}-${car.model}`,
-    }));
-  }, [filteredAutos]);
-
   return (
     <div className="home">
       <SearchFilter
@@ -29,19 +20,15 @@ export default function Home() {
         resultsCount={filteredAutos.length}
       />
 
-      {/* Regular Cars Section */}
       <div className="home__container">
         <h2 className="home__section-title">Available Vehicles</h2>
         <div className="home__grid">
-          {carsWithIds.map((car) => (
+          {filteredAutos.map((car) => (
             <AutoCard key={car.id} car={car} />
           ))}
         </div>
       </div>
 
-
-
-      {/* Auction Cards Section */}
       {auctions.length > 0 && (
         <div className="home__auctions">
           <div className="home__container">
@@ -54,9 +41,7 @@ export default function Home() {
           </div>
         </div>
       )}
-
-
-
     </div>
   );
 }
+

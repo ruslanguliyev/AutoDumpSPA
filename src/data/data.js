@@ -4,6 +4,7 @@ import gWagon from '../assets/images/G-wagon.jpeg';
 
 export const autos = [
   {
+    id: "1",
     brand: "Rolls Royce",
     model: "Phantom",
     description: "British luxury icon. Owned by BMW. Hand-built perfection.",
@@ -12,6 +13,7 @@ export const autos = [
     vehicleType: "car"
   },
   {
+    id: "2",
     brand: "Bentley",
     model: "Continental GT",
     description: "660 hp. Handcrafted interior. The grand tourer king.",
@@ -20,6 +22,7 @@ export const autos = [
     vehicleType: "car"
   },
   {
+    id: "3",
     brand: "Mercedes-Benz",
     model: "G-Class",
     description: "Mercedes-Benz G-Class is a luxury SUV that combines off-road capability with high-end comfort and technology.",
@@ -28,6 +31,7 @@ export const autos = [
     vehicleType: "car"
   },
   {
+    id: "4",
     brand: "Bentley",
     model: "Continental GT",
     description: "660 hp. Handcrafted interior. The grand tourer king.",

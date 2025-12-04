@@ -1,11 +1,15 @@
 import './AutoCard.scss';
+import { Link } from 'react-router-dom';
+
 
 export default function AutoCard({ car }) {
+
+
     return (
-        <div className="auto-card">
+        <Link to={`/vehicles/${car.id}`} className="auto-card">
             <div className="auto-card__image-wrapper">
-                <img 
-                    src={car.image} 
+                <img
+                    src={car.image}
                     alt={car.alt || `${car.brand} ${car.model}`}
                     className="auto-card__image"
                 />
@@ -18,6 +22,6 @@ export default function AutoCard({ car }) {
                     {car.description}
                 </p>
             </div>
-        </div>
+        </Link>
     );
 }
