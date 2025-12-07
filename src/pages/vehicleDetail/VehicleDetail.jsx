@@ -11,11 +11,11 @@ export default function VehicleDetail() {
 
     return (
         <div className="vehicle-page-wrapper">
-
             <div className="vehicle-grid">
 
-                {/* ЛЕВАЯ КОЛОНКА — ФОТО */}
+                {/* ЛЕВАЯ КОЛОНКА */}
                 <div className="vehicle-left">
+
                     <div className="vehicle-gallery">
                         <img className="main-image" src={car.image} alt={car.alt} />
                         <div className="thumbs">
@@ -24,16 +24,87 @@ export default function VehicleDetail() {
                             ))}
                         </div>
                     </div>
+
+                    {/* ХАРАКТЕРИСТИКИ — ДОЛЖНЫ БЫТЬ В ЛЕВОЙ ЧАСТИ */}
+                    <div className="vehicle-specs-section">
+                        <h2>Характеристики</h2>
+
+                        <div className="specs-grid">
+
+                            <div className="spec-row">
+                                <span className="spec-name">Марка:</span>
+                                <span className="spec-value">{car.brand}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Модель:</span>
+                                <span className="spec-value">{car.model}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Год выпуска:</span>
+                                <span className="spec-value">{car.year}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Тип кузова:</span>
+                                <span className="spec-value">{car.bodyType || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Цвет:</span>
+                                <span className="spec-value">{car.color || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Мотор:</span>
+                                <span className="spec-value">{car.engine || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Пробег:</span>
+                                <span className="spec-value">{car.km} km</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Коробка передач:</span>
+                                <span className="spec-value">{car.transmission || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Привод:</span>
+                                <span className="spec-value">{car.drive || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Состояние:</span>
+                                <span className="spec-value">{car.condition || "—"}</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+
                 </div>
 
                 {/* ПРАВАЯ КОЛОНКА — sticky */}
                 <div className="vehicle-right">
                     <div className="vehicle-info">
-                        <h1>{car.brand} {car.model}</h1>
+
+                        <h2 className="car-title">{car.brand} {car.model}</h2>
 
                         <div className="price-box">
-                            <p className="price">{car.price} €</p>
-                            <p className="monthly">~ {car.monthlyPayment} € / month</p>
+                            <p className="big-price">{car.price} €</p>
+                            <p className="price-month">~ {car.monthlyPayment} € / month</p>
+                        </div>
+
+                        <div className="rating-bar">
+                            <span className="bar green"></span>
+                            <span className="bar green"></span>
+                            <span className="bar green"></span>
+                            <span className="bar grey"></span>
+                            <span className="bar grey"></span>
+                            <p className="rate-text">Fair Price</p>
                         </div>
 
                         <div className="info-block">
@@ -43,14 +114,19 @@ export default function VehicleDetail() {
                             <p><strong>Год:</strong> {car.year}</p>
                         </div>
 
-                       
+                        <button className="contact-btn">Связаться</button>
+
+                        <div className="action-buttons">
+                            <button className="secondary-btn">В избранное</button>
+                            <button className="secondary-btn">Поделиться</button>
+                        </div>
 
                     </div>
+
                 </div>
 
             </div>
-
         </div>
     );
-}
 
+}

@@ -1,10 +1,12 @@
+/* Обертка всей страницы */
 .vehicle-page-wrapper {
   display: flex;
   justify-content: center;
   padding: 40px 0;
+  background: #fafafa;
 }
 
-/* Два отдельных блока */
+/* GRID: 2 колонки */
 .vehicle-grid {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -19,11 +21,17 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* Левая колонка */
+/* ============================
+   ЛЕВАЯ КОЛОНКА
+============================= */
+
 .vehicle-left {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
+/* Галерея */
 .vehicle-gallery {
   width: 100%;
 }
@@ -39,33 +47,202 @@
 .thumbs {
   display: flex;
   gap: 10px;
+
+  img {
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 }
 
-/* ПРАВАЯ КОЛОНКА — sticky */
+/* ============================
+   ПРАВАЯ КОЛОНКА (sticky)
+============================= */
+
 .vehicle-right {
   position: relative;
-  
 }
 
 .vehicle-info {
   position: sticky;
-  
-  border-radius: 12px;
-  top: 90px; // расстояние до Header
+  top: 90px;
+  padding: 24px;
+  border-radius: 16px;
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: 0px 0px 9px 0px rgba(34, 60, 80, 0.2);
-  background: white;
+  gap: 18px;
+
+ box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* Адаптив */
+/* Заголовок */
+.car-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Цена */
+.price-box {
+  text-align: center;
+
+  .big-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffd700;
+  }
+
+  .price-month {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+}
+
+/* Имитация рейтинга акцентной полосой */
+.rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .bar {
+    width: 28px;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .green {
+    background: #2ecc71;
+  }
+
+  .grey {
+    background: #555;
+  }
+
+  .rate-text {
+    margin-left: 10px;
+    font-size: 13px;
+    
+  }
+}
+
+/* Характеристики */
+.info-block {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+
+  p {
+    margin-bottom: 8px;
+  }
+
+  
+}
+
+/* Основная кнопка */
+.contact-btn {
+  background: #F12E21;
+  color: white;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+
+  &:hover {
+    background: #ff784e;
+  }
+}
+
+/* Нижние действия */
+.action-buttons {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+
+  .secondary-btn {
+    flex: 1;
+    background: #333;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 12px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+
+    &:hover {
+      background: #444;
+    }
+  }
+}
+
+
+/* ============================
+   НИЖНИЕ ХАРАКТЕРИСТИКИ (как Turbo.az)
+============================= */
+
+.vehicle-specs-section {
+  padding: 24px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fafafa;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 40px;
+
+    @media (max-width: 700px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #ddd;
+
+    font-size: 16px;
+  }
+
+  .spec-name {
+    color: #777;
+    font-weight: 500;
+  }
+
+  .spec-value {
+    color: #222;
+    font-weight: 600;
+  }
+}
+
+/* ============================
+   АДАПТИВ
+============================= */
+
 @media (max-width: 900px) {
   .vehicle-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // одна колонка
   }
 
   .vehicle-info {
-    position: static; // sticky отключаем на мобиле
+    position: static; // sticky выключаем
   }
 }
