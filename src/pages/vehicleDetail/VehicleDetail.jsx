@@ -121,6 +121,19 @@ export default function VehicleDetail() {
                             <button className="secondary-btn">Поделиться</button>
                         </div>
 
+                        <div className="seller-card">
+                            <img className="seller-logo" src={car.sellerLogo} alt="Seller" />
+
+                            <div className="seller-info-text">
+                                <h4 className="seller-name">{car.sellerName}</h4>
+
+                                <div className="seller-rating">
+                                    ⭐ {car.sellerRating} Stars
+                                    <span className="seller-count">{car.sellerVotes} Ratings</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>

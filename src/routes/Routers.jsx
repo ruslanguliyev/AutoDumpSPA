@@ -1,10 +1,10 @@
 // src/routes/Routers.jsx
-import React from 'react';
 import { Routes, Route } from "react-router-dom";
 import Home from '../pages/home/Home';
 import About from '../pages/about/About';
 import SearchResults from '../pages/searchResults/SearchResults';
 import VehicleDetail from '../pages/vehicleDetail/VehicleDetail';
+import Parts from '../pages/parts/Parts';
 
 
 const Routers = () => {
@@ -13,6 +13,7 @@ const Routers = () => {
             <Route path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
             <Route path='/search' element={<SearchResults />} /> 
+            <Route path='/parts' element={<Parts/>}/>
             <Route path='/vehicles/:id' element={<VehicleDetail/>} />
         </Routes>
     );

@@ -6,6 +6,7 @@
   background: #ffffff;
   border-bottom: 1px solid #e5e5e5;
   transition: all 0.25s ease;
+  overflow-x: hidden; // страховка
 
   &--scrolled {
     backdrop-filter: blur(8px);
@@ -23,12 +24,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+    min-width: 0; // предотвращает переполнение
   }
 
   &__brand {
     display: flex;
     align-items: center;
+    min-width: 0;
   }
 
   &__logo {
@@ -42,7 +44,9 @@
     }
   }
 
-  /* ==== BURGER BUTTON ==== */
+  /* =============================
+     BURGER BUTTON (MOBILE)
+  ============================== */
   &__toggle {
     display: none;
     flex-direction: column;
@@ -74,42 +78,47 @@
     }
   }
 
-  /* ==== MENU ==== */
+  /* =============================
+     MAIN MENU
+     (Desktop default, mobile off-canvas)
+  ============================== */
   &__menu {
     display: flex;
     align-items: center;
     gap: 2rem;
     transition: all 0.3s ease;
+    min-width: 0;
 
+    /* ===== MOBILE VERSION ===== */
     @media (max-width: 768px) {
       position: fixed;
       top: 70px;
-      right: 0;
-      width: 100%;
+      right: -100vw; // спрятано за экраном
+      width: 100vw; // гарантированно не больше экрана
       height: calc(100vh - 70px);
       padding: 2rem 1.5rem;
       background: #fff;
       flex-direction: column;
       justify-content: space-between;
-      transform: translateX(100%);
       opacity: 0;
       pointer-events: none;
+      transition: all 0.3s ease;
 
       &.is-open {
-        transform: translateX(0);
+        right: 0; // показываем меню
         opacity: 1;
         pointer-events: auto;
       }
     }
   }
 
-  /* ==== NAVIGATION LIST ==== */
   &__list {
     display: flex;
     gap: 1.5rem;
     list-style: none;
     margin: 0;
     padding: 0;
+    min-width: 0;
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -129,7 +138,9 @@
     }
   }
 
-  /* ==== AUTH BUTTONS ==== */
+  /* =============================
+     AUTH BUTTONS
+  ============================== */
   &__auth {
     display: flex;
     gap: 0.75rem;
@@ -166,6 +177,7 @@
     }
   }
 
+  /* Show burger on mobile */
   @media (max-width: 768px) {
     &__toggle {
       display: flex;
