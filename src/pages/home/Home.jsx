@@ -4,6 +4,7 @@ import AuctionCarCard from '../../components/AuctionCarCard/AuctionCarCard';
 import { useAuto } from '../../context/AutoContext';
 import { useAuctionStore } from '../../store/auctionStore';
 import './Home.scss';
+import HeroSlider from '../../components/Hero/HeroSlider.jsx';
 
 export default function Home() {
   const { filteredAutos, updateFilters } = useAuto();
@@ -15,6 +16,9 @@ export default function Home() {
 
   return (
     <div className="home">
+
+      <HeroSlider/>
+
       <SearchFilter
         onFilterChange={handleFilterChange}
         resultsCount={filteredAutos.length}
