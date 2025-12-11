@@ -1,59 +1,109 @@
 .auto-card {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    height: 100%;
+    text-decoration: none;
+    color: inherit;
     display: flex;
     flex-direction: column;
-    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: 0.25s ease;
+    text-align: left;
 
     &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
 
-        .auto-card__image {
-            transform: scale(1.05);
-        }
+        // .auto-card__image {
+        //     transform: scale(1.04);
+        // }
     }
 
+    /* IMAGE */
     &__image-wrapper {
-        width: 100%;
-        height: 200px;
+        height: 150px;
         overflow: hidden;
-        background: #f5f5f5;
+        background: #f7f7f7;
+        position: relative;
     }
 
     &__image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s ease-in-out;
+        transition: 0.35s ease;
     }
 
+    /* BADGE */
+    &__badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff4a3d;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: white;
+        border-radius: 6px;
+        letter-spacing: .5px;
+    }
+
+    /* CONTENT */
     &__content {
-        padding: 1.5rem;
-        flex: 1;
+        padding: 1.1rem;
         display: flex;
         flex-direction: column;
+        gap: 0.35rem;
+        align-items: flex-start;
+    }
+
+    &__price {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 2px;
     }
 
     &__title {
-        font-size: 1.25rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        margin: 0 0 0.75rem 0;
-        color: #212529;
-        line-height: 1.4;
+        line-height: 1.3;
+        color: #222;
     }
 
-    &__description {
-        font-size: 0.875rem;
-        color: #6c757d;
-        margin: 0;
-        line-height: 1.5;
-        flex: 1;
+    &__version {
+        font-weight: 400;
+        color: #777;
+    }
+
+    /* SPECS */
+    &__details {
+        font-size: 0.78rem;
+        color: #555;
+        line-height: 1.3;
+        // white-space: nowrap; 
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    /* LOCATION */
+    &__location {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
+
+    .location-icon {
+        width: 16px;
+        height: 16px;
+        color: #666;
+        flex-shrink: 0;
     }
 }
-

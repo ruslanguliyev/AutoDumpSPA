@@ -13,6 +13,7 @@ export default function SearchResults() {
   const results = getAutosByFilters(filters);
 
   return (
+    <>
     <div className="container mx-auto p-6">
       <h1 className="text-xl font-semibold mb-4">
         Search Results ({results.length})
@@ -28,5 +29,7 @@ export default function SearchResults() {
         ))}
       </div>
     </div>
+
+    </>
   );
 }

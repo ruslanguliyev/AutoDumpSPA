@@ -8,10 +8,10 @@
   transition: all 0.25s ease;
   overflow-x: hidden; // страховка
 
-  &--scrolled {
-    backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.85);
-  }
+  // &--scrolled {
+  //   backdrop-filter: blur(8px);
+  //   background: rgba(255, 255, 255, 0.85);
+  // }
 
   &__nav {
     width: 100%;

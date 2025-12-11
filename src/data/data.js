@@ -1,48 +1,84 @@
 // src/data/autos.js
 import image1 from '../assets/images/Image1.jpeg';
 import gWagon from '../assets/images/G-wagon.jpeg';
-// import image2 from '../assets/images/Image1_2.jpeg';
-// import image3 from '../assets/images/Image1_3.jpeg';
-// import image4 from '../assets/images/Image1_4.jpeg';
-// import image5 from '../assets/images/Image1_5.jpeg';
 
 export const autos = [
   {
     id: "1",
     brand: "Rolls Royce",
     model: "Cullinan",
-    description: "British luxury icon. Owned by BMW. Hand-built perfection.",
-    image: image1,
-    alt: "Rolls Royce Phantom",
-    vehicleType: "car"
+    version: "Black Badge",
+    code: "RR-98432",
+    price: 384900,
+    year: 2021,
+    engine: "6.75L V12 • 600 HP",
+    transmission: "Automatic",
+    drive: "AWD",
+    mileage: 12000,
+    location: "Düsseldorf, Germany",
+    description: "British luxury icon. Hand-built perfection.",
+    image: [image1],
+    alt: "Rolls Royce Cullinan",
+    vehicleType: "car",
+    isHot: true
   },
+
   {
     id: "2",
     brand: "Bentley",
     model: "Continental GT",
-    description: "660 hp. Handcrafted interior. The grand tourer king.",
+    version: "W12 Speed",
+    code: "BT-55720",
+    price: 229000,
+    year: 2020,
+    engine: "6.0 W12 • 660 HP",
+    transmission: "Automatic",
+    drive: "AWD",
+    mileage: 34000,
+    location: "Berlin, Germany",
+    description: "Handcrafted luxury grand tourer.",
     image: [image1],
-    alt: "Bentley GT",
+    alt: "Bentley Continental GT",
     vehicleType: "car"
   },
+
   {
     id: "3",
     brand: "Mercedes-Benz",
     model: "G-Class",
-    description: "Mercedes-Benz G-Class is a luxury SUV that combines off-road capability with high-end comfort and technology.",
+    version: "G63 AMG",
+    code: "MB-88301",
+    price: 189900,
+    year: 2019,
+    engine: "4.0 V8 Biturbo • 585 HP",
+    transmission: "Automatic",
+    drive: "AWD",
+    mileage: 45000,
+    location: "Hamburg, Germany",
+    description:
+      "Luxury SUV with iconic design and top-tier performance.",
     image: [gWagon],
-    alt: "Mercedes-Benz G-Class",
-    vehicleType: "car"
+    alt: "Mercedes-Benz G-Class AMG",
+    vehicleType: "car",
+    isHot: true
   },
+
   {
     id: "4",
     brand: "Bentley",
     model: "Continental GT",
-    description: "660 hp. Handcrafted interior. The grand tourer king.",
+    version: "V8 S",
+    code: "BT-99214",
+    price: 164900,
+    year: 2018,
+    engine: "4.0 V8 • 550 HP",
+    transmission: "Automatic",
+    drive: "AWD",
+    mileage: 56000,
+    location: "Munich, Germany",
+    description: "Luxury performance coupe.",
     image: [image1],
-    alt: "Bentley GT",
+    alt: "Bentley Continental GT",
     vehicleType: "car"
-  },
-
-  
+  }
 ];
