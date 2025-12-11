@@ -5,6 +5,7 @@ import About from '../pages/about/About';
 import SearchResults from '../pages/searchResults/SearchResults';
 import VehicleDetail from '../pages/vehicleDetail/VehicleDetail';
 import Parts from '../pages/parts/Parts';
+import SellerPage from "../pages/seller/SellerPage";
 
 
 const Routers = () => {
@@ -15,6 +16,7 @@ const Routers = () => {
             <Route path='/search' element={<SearchResults />} /> 
             <Route path='/parts' element={<Parts/>}/>
             <Route path='/vehicles/:id' element={<VehicleDetail/>} />
+            <Route path="/seller/:sellerId" element={<SellerPage />} />
         </Routes>
     );
 };

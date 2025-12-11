@@ -1,30 +1,48 @@
 import './AutoCard.scss';
 import { Link } from 'react-router-dom';
+import { Heart } from "lucide-react";
+import { useFavoritesStore } from "../../store/favoritesStore";
 
 export default function AutoCard({ car }) {
+    const { favorites, toggleFavorite } = useFavoritesStore();
+    const isFav = favorites.includes(car.id);
+
     const mainImage = Array.isArray(car.image) ? car.image[0] : car.image;
 
     return (
         <Link to={`/vehicles/${car.id}`} className="auto-card">
 
-            {/* IMAGE */}
             <div className="auto-card__image-wrapper">
-                <img src={mainImage}
+                <img
+                    src={mainImage}
                     alt={`${car.brand} ${car.model}`}
-                    className="auto-card__image" />
+                    className="auto-card__image"
+                />
 
                 {car.isHot && <span className="auto-card__badge">HOT</span>}
+
+                {/* HEART BUTTON */}
+                <button
+                    className="auto-card__fav-btn"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFavorite(car.id);
+                    }}
+                >
+                    <Heart
+                        className={`fav-icon ${isFav ? "active" : ""}`}
+                        strokeWidth={1.7}
+                    />
+                </button>
             </div>
 
-            {/* CONTENT */}
             <div className="auto-card__content">
 
-                {/* PRICE */}
                 <div className="auto-card__price">
                     €{car.price.toLocaleString()}
                 </div>
 
-                {/* TITLE */}
                 <h3 className="auto-card__title">
                     {car.brand} {car.model}
                     {car.version && (
@@ -32,12 +50,10 @@ export default function AutoCard({ car }) {
                     )}
                 </h3>
 
-                {/* SPECS */}
                 <p className="auto-card__details">
                     {car.year} • {car.engine} • {car.mileage} km • {car.transmission}
                 </p>
 
-                {/* LOCATION */}
                 <div className="auto-card__location">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         fill="none"

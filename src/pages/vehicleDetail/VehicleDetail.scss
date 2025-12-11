@@ -1,4 +1,4 @@
-/* Обертка всей страницы */
+/* Вся страница */
 .vehicle-page-wrapper {
   display: flex;
   justify-content: center;
@@ -6,55 +6,71 @@
   background: #fafafa;
 }
 
-/* GRID: 2 колонки */
+/* GRID */
 .vehicle-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 360px;
   gap: 32px;
 
   width: 100%;
-  max-width: 1300px;
+  max-width: 100%;
+  overflow-x: clip;
 
-  background: white;
+  background: #fff;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* ============================
-   ЛЕВАЯ КОЛОНКА
-============================= */
-
+/* Левая часть */
 .vehicle-left {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-/* Галерея */
+/* Фото */
 .vehicle-gallery {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
 }
+
 
 .main-image {
   width: 100%;
-  height: 420px;
+  aspect-ratio: 16 / 9; // универсально для авто-фото
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 12px;
+  overflow: hidden;
+
+  @media (max-width: 600px) {
+    border-radius: 0;
+  }
 }
+
+
 
 .thumbs {
   display: flex;
+  justify-content: center;
   gap: 10px;
+  flex-wrap: nowrap;
 
   img {
-    width: 90px;
-    height: 70px;
+    width: 80px;
+    height: 60px;
     object-fit: cover;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.2s ease;
 
     &:hover {
       opacity: 0.7;
@@ -62,10 +78,64 @@
   }
 }
 
-/* ============================
-   ПРАВАЯ КОЛОНКА (sticky)
-============================= */
 
+/* Характеристики */
+.vehicle-specs-section {
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 40px;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 6px;
+  }
+
+  .spec-name {
+    color: #777;
+  }
+
+  .spec-value {
+    font-weight: 600;
+  }
+}
+
+.owner-note {
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    line-height: 1.6;
+    font-size: 15px;
+    color: #444;
+  }
+}
+
+
+/* Правая часть */
 .vehicle-right {
   position: relative;
 }
@@ -73,19 +143,19 @@
 .vehicle-info {
   position: sticky;
   top: 90px;
-  padding: 24px;
-  border-radius: 16px;
+  padding: 22px 20px;
+  border-radius: 14px;
 
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
 }
 
 /* Заголовок */
 .car-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   text-align: center;
 }
@@ -95,18 +165,13 @@
   text-align: center;
 
   .big-price {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 800;
-    color: #ffd700;
-  }
-
-  .price-month {
-    margin-top: 4px;
-    font-size: 14px;
+    color: #e4b100;
   }
 }
 
-/* Имитация рейтинга акцентной полосой */
+/* Rating */
 .rating-bar {
   display: flex;
   align-items: center;
@@ -119,219 +184,184 @@
   }
 
   .green {
-    background: #2ecc71;
+    background: #27ae60;
   }
 
   .grey {
-    background: #555;
+    background: #ccc;
   }
 
   .rate-text {
-    margin-left: 10px;
-    font-size: 13px;
-
+    margin-left: 8px;
+    font-size: 12px;
   }
 }
 
-/* Характеристики */
+/* Информация */
 .info-block {
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 10px 14px;
+  background: #fafafa;
+  border-radius: 10px;
+
+  strong {
+    font-weight: 600;
+  }
 
   p {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
-
-
 }
 
-/* Основная кнопка */
+/* Кнопка "Связаться" */
 .contact-btn {
-  background: #F12E21;
-  color: white;
-  padding: 14px 0;
+  background: #f12e21;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 0;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 12px;
-  border: none;
   cursor: pointer;
   transition: 0.25s;
 
   &:hover {
-    background: #ff784e;
+    background: #ff6a4c;
   }
 }
 
-/* Нижние действия */
+/* Нижние кнопки */
 .action-buttons {
-  margin-top: 6px;
   display: flex;
-  gap: 12px;
-
-  .secondary-btn {
-    flex: 1;
-    background: #333;
-    border: 1px solid #444;
-    color: #ddd;
-    padding: 12px 0;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.25s;
-
-    &:hover {
-      background: #444;
-    }
-  }
+  gap: 10px;
 }
 
+/* Избранное */
+.fav-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.25s;
 
-/* ============================
-   НИЖНИЕ ХАРАКТЕРИСТИКИ (как Turbo.az)
-============================= */
-
-.vehicle-specs-section {
-  padding: 24px;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  background: #fafafa;
-
-  h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #333;
+  &:hover {
+    background: #eee;
   }
 
-  .specs-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 40px;
-
-    @media (max-width: 700px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .spec-row {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed #ddd;
-
-    font-size: 16px;
-  }
-
-  .spec-name {
-    color: #777;
-    font-weight: 500;
-  }
-
-  .spec-value {
-    color: #222;
+  &.active {
+    background: #fff4cc;
+    border-color: #f1c40f;
+    color: #9f7b00;
     font-weight: 600;
   }
 }
 
-.seller-card {
-  margin-top: 16px;
-  padding: 16px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+/* Поделиться */
+.share-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.25s;
 
+  &:hover {
+    background: #eee;
+  }
+}
+
+.seller-card-mini {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
+
+  padding: 16px 20px;
+  border-radius: 14px;
+
+  background: #fff;
+  border: 1px solid #eee;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  text-decoration: none;
+  color: inherit;
 
   cursor: pointer;
   transition: 0.2s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  }
+  margin-top: 12px;
+
+  // &:hover {
+  //   transform: translateY(-2px);
+  //   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  // }
 }
 
-.seller-logo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+.seller-card-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
   object-fit: cover;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
 }
 
-.seller-info-text {
+.seller-card-right {
   display: flex;
   flex-direction: column;
 }
 
-.seller-name {
-  font-size: 16px;
+.seller-card-name {
+  font-size: 18px;
   font-weight: 700;
   margin: 0;
 }
 
-.seller-rating {
+.seller-card-type {
+  margin-top: 2px;
   font-size: 14px;
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .seller-count {
-    color: #777;
-  }
+  color: #666;
 }
 
+.seller-card-rating {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #444;
 
-/* ============================
-   АДАПТИВ
-============================= */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.seller-card-votes {
+  color: #777;
+  font-size: 13px;
+}
+
 
 @media (max-width: 900px) {
   .vehicle-grid {
-    grid-template-columns: 1fr; // одна колонка
+    grid-template-columns: 1fr;
   }
 
   .vehicle-info {
-    position: static; // sticky выключаем
+    position: static;
   }
 }
 
-//===============Swiper====================//
-.thumbs-swiper {
-  height: 90px !important;
-  margin-top: 12px;
-
-  .swiper-slide {
-    opacity: 0.5;
-    transition: opacity 0.3s;
-    cursor: pointer;
+/* MOBILE FIX */
+@media (max-width: 600px) {
+  .specs-grid {
+    grid-template-columns: 1fr; // была 1fr 1fr → ломало адаптив
+    gap: 12px;
   }
 
-  .swiper-slide-thumb-active {
-    opacity: 1 !important;
-    border: 3px solid #F12E21;
-    border-radius: 10px;
-  }
-
-  img {
-    width: 100%;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-}
-
-.main-swiper {
-  height: 480px !important;
-  border-radius: 16px;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .spec-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }

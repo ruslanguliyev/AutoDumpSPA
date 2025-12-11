@@ -1,11 +1,16 @@
 import { useParams } from "react-router-dom";
 import { autos } from "../../data/data";
-import './VehicleDetail.scss'
+import { useFavoritesStore } from "../../store/favoritesStore";
+import { Link } from "react-router-dom";
 
+import "./VehicleDetail.scss";
 
 export default function VehicleDetail() {
     const { id } = useParams();
-    const car = autos.find(c => c.id == id);
+    const car = autos.find((c) => c.id == id);
+
+    const { favorites, toggleFavorite } = useFavoritesStore();
+    const isFavorite = favorites.includes(car.id);
 
     if (!car) return <div>Not found</div>;
 
@@ -13,19 +18,21 @@ export default function VehicleDetail() {
         <div className="vehicle-page-wrapper">
             <div className="vehicle-grid">
 
-                {/* ЛЕВАЯ КОЛОНКА */}
+                {/* ЛЕВАЯ ЧАСТЬ */}
                 <div className="vehicle-left">
 
+                    {/* ФОТО */}
                     <div className="vehicle-gallery">
-                        <img className="main-image" src={car.image} alt={car.alt} />
+                        <img className="main-image" src={car.image[0]} alt={car.alt} />
+
                         <div className="thumbs">
-                            {car.images?.map((img, i) => (
+                            {car.image.map((img, i) => (
                                 <img key={i} src={img} alt={`${car.model}-${i}`} />
                             ))}
                         </div>
                     </div>
 
-                    {/* ХАРАКТЕРИСТИКИ — ДОЛЖНЫ БЫТЬ В ЛЕВОЙ ЧАСТИ */}
+                    {/* ХАРАКТЕРИСТИКИ */}
                     <div className="vehicle-specs-section">
                         <h2>Характеристики</h2>
 
@@ -42,52 +49,81 @@ export default function VehicleDetail() {
                             </div>
 
                             <div className="spec-row">
+                                <span className="spec-name">Версия:</span>
+                                <span className="spec-value">{car.version}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Код авто:</span>
+                                <span className="spec-value">{car.code}</span>
+                            </div>
+
+                            <div className="spec-row">
                                 <span className="spec-name">Год выпуска:</span>
                                 <span className="spec-value">{car.year}</span>
                             </div>
 
                             <div className="spec-row">
-                                <span className="spec-name">Тип кузова:</span>
-                                <span className="spec-value">{car.bodyType || "—"}</span>
-                            </div>
-
-                            <div className="spec-row">
-                                <span className="spec-name">Цвет:</span>
-                                <span className="spec-value">{car.color || "—"}</span>
-                            </div>
-
-                            <div className="spec-row">
                                 <span className="spec-name">Мотор:</span>
-                                <span className="spec-value">{car.engine || "—"}</span>
-                            </div>
-
-                            <div className="spec-row">
-                                <span className="spec-name">Пробег:</span>
-                                <span className="spec-value">{car.km} km</span>
+                                <span className="spec-value">{car.engine}</span>
                             </div>
 
                             <div className="spec-row">
                                 <span className="spec-name">Коробка передач:</span>
-                                <span className="spec-value">{car.transmission || "—"}</span>
+                                <span className="spec-value">{car.transmission}</span>
                             </div>
 
                             <div className="spec-row">
                                 <span className="spec-name">Привод:</span>
-                                <span className="spec-value">{car.drive || "—"}</span>
+                                <span className="spec-value">{car.drive}</span>
                             </div>
 
                             <div className="spec-row">
-                                <span className="spec-name">Состояние:</span>
-                                <span className="spec-value">{car.condition || "—"}</span>
+                                <span className="spec-name">Пробег:</span>
+                                <span className="spec-value">{car.mileage} km</span>
                             </div>
 
+                            <div className="spec-row">
+                                <span className="spec-name">Локация:</span>
+                                <span className="spec-value">{car.location}</span>
+                            </div>
+                            <div className="spec-row">
+                                <span className="spec-name">Количество владельцев:</span>
+                                <span className="spec-value">{car.owners || "—"}</span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">В кредите:</span>
+                                <span className="spec-value">
+                                    {car.isFinanced ? "Да" : "Нет"}
+                                </span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Дата публикации:</span>
+                                <span className="spec-value">
+                                    {car.postedAt ? new Date(car.postedAt).toLocaleDateString() : "—"}
+                                </span>
+                            </div>
+
+                            <div className="spec-row">
+                                <span className="spec-name">Просмотры:</span>
+                                <span className="spec-value">{car.views || 0}</span>
+                            </div>
 
                         </div>
+
                     </div>
 
+                    {car.sellerNote && (
+                        <div className="owner-note">
+                            <h3>Комментарий владельца</h3>
+                            <p>{car.sellerNote}</p>
+                        </div>
+                    )}
                 </div>
 
-                {/* ПРАВАЯ КОЛОНКА — sticky */}
+                {/* ПРАВАЯ ЧАСТЬ (sticky) */}
                 <div className="vehicle-right">
                     <div className="vehicle-info">
 
@@ -95,9 +131,9 @@ export default function VehicleDetail() {
 
                         <div className="price-box">
                             <p className="big-price">{car.price} €</p>
-                            <p className="price-month">~ {car.monthlyPayment} € / month</p>
                         </div>
 
+                        {/* Fair Price */}
                         <div className="rating-bar">
                             <span className="bar green"></span>
                             <span className="bar green"></span>
@@ -107,39 +143,49 @@ export default function VehicleDetail() {
                             <p className="rate-text">Fair Price</p>
                         </div>
 
+                        {/* Основные данные */}
                         <div className="info-block">
-                            <p><strong>Пробег:</strong> {car.km} km</p>
-                            <p><strong>Мощность:</strong> {car.power} PS</p>
-                            <p><strong>Топливо:</strong> {car.fuel}</p>
+                            <p><strong>Пробег:</strong> {car.mileage} km</p>
+                            <p><strong>Мотор:</strong> {car.engine}</p>
+                            <p><strong>Привод:</strong> {car.drive}</p>
                             <p><strong>Год:</strong> {car.year}</p>
                         </div>
 
                         <button className="contact-btn">Связаться</button>
 
                         <div className="action-buttons">
-                            <button className="secondary-btn">В избранное</button>
-                            <button className="secondary-btn">Поделиться</button>
+
+                            <button
+                                className={`fav-btn ${isFavorite ? "active" : ""}`}
+                                onClick={() => toggleFavorite(car.id)}
+                            >
+                                {isFavorite ? "В избранном" : "В избранное"}
+                            </button>
+
+                            <button className="share-btn">Поделиться</button>
                         </div>
 
-                        <div className="seller-card">
-                            <img className="seller-logo" src={car.sellerLogo} alt="Seller" />
-
-                            <div className="seller-info-text">
-                                <h4 className="seller-name">{car.sellerName}</h4>
-
-                                <div className="seller-rating">
-                                    ⭐ {car.sellerRating} Stars
-                                    <span className="seller-count">{car.sellerVotes} Ratings</span>
+                        {car.seller && (
+                            <Link to={`/seller/${car.seller.id}`} className="seller-card-mini">
+                                <div className="seller-card-left">
+                                    <img src={car.seller.logo} alt={car.seller.name} className="seller-card-logo" />
                                 </div>
-                            </div>
-                        </div>
+
+                                <div className="seller-card-right">
+                                    <h4 className="seller-card-name">{car.seller.name}</h4>
+                                    <p className="seller-card-type">{car.seller.type}</p>
+
+                                    <div className="seller-card-rating">
+                                        ⭐ {car.seller.rating}
+                                        <span className="seller-card-votes">({car.seller.votes})</span>
+                                    </div>
+                                </div>
+                            </Link>
+                        )}
 
                     </div>
-
                 </div>
-
             </div>
         </div>
     );
-
 }

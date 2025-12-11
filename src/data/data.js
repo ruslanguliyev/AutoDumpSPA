@@ -1,6 +1,7 @@
 // src/data/autos.js
 import image1 from '../assets/images/Image1.jpeg';
 import gWagon from '../assets/images/G-wagon.jpeg';
+import userLogo from '../assets/images/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png';
 
 export const autos = [
   {
@@ -20,7 +21,12 @@ export const autos = [
     image: [image1],
     alt: "Rolls Royce Cullinan",
     vehicleType: "car",
-    isHot: true
+    isHot: true,
+    owners: 1,
+    views: 2381,
+    postedAt: "2025-01-05",
+    isFinanced: false,
+    sellerNote: "Машина полностью обслужена. Гаражное хранение.",
   },
 
   {
@@ -39,7 +45,13 @@ export const autos = [
     description: "Handcrafted luxury grand tourer.",
     image: [image1],
     alt: "Bentley Continental GT",
-    vehicleType: "car"
+    vehicleType: "car",
+    isHot: false,
+    owners: 1,
+    views: 2381,
+    postedAt: "2025-01-05",
+    isFinanced: false,
+    sellerNote: "Машина полностью обслужена. Гаражное хранение.",
   },
 
   {
@@ -60,7 +72,20 @@ export const autos = [
     image: [gWagon],
     alt: "Mercedes-Benz G-Class AMG",
     vehicleType: "car",
-    isHot: true
+    isHot: true,
+    owners: 1,
+    views: 2381,
+    postedAt: "2025-01-05",
+    isFinanced: false,
+    sellerNote: "Машина полностью обслужена. Гаражное хранение.",
+    seller: {
+      id: "dealer_01",
+      name: "BMW Cars AutoSalon",
+      logo: userLogo,
+      type: "Дилер",
+      rating: 4.8,
+      votes: 312
+    },
   },
 
   {
@@ -79,6 +104,12 @@ export const autos = [
     description: "Luxury performance coupe.",
     image: [image1],
     alt: "Bentley Continental GT",
-    vehicleType: "car"
+    vehicleType: "car",
+    isHot: false,
+    owners: 1,
+    views: 2381,
+    postedAt: "2025-01-05",
+    isFinanced: false,
+    sellerNote: "Машина полностью обслужена. Гаражное хранение.",
   }
 ];

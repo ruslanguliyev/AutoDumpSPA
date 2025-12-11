@@ -2,29 +2,28 @@
     background: #fff;
     border-radius: 14px;
     overflow: hidden;
-    text-decoration: none;
-    color: inherit;
     display: flex;
     flex-direction: column;
+    text-decoration: none;
+    color: inherit;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     transition: 0.25s ease;
     text-align: left;
 
     &:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 
         // .auto-card__image {
         //     transform: scale(1.04);
         // }
     }
 
-    /* IMAGE */
     &__image-wrapper {
-        height: 150px;
+        height: 185px;
         overflow: hidden;
-        background: #f7f7f7;
         position: relative;
+        background: #f7f7f7;
     }
 
     &__image {
@@ -34,7 +33,7 @@
         transition: 0.35s ease;
     }
 
-    /* BADGE */
+    /* HOT badge */
     &__badge {
         position: absolute;
         top: 10px;
@@ -45,12 +44,45 @@
         font-weight: 600;
         color: white;
         border-radius: 6px;
-        letter-spacing: .5px;
     }
 
-    /* CONTENT */
+    /* FAVORITE BUTTON */
+    &__fav-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(6px);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+    }
+
+    .fav-icon {
+        width: 20px;
+        height: 20px;
+        color: #444;
+        transition: 0.2s ease;
+    }
+
+    .fav-icon.active {
+        color: #e63946;
+        fill: #e63946;
+    }
+
+    /* CONTENT SECTION */
     &__content {
-        padding: 1.1rem;
+        padding: 1.15rem;
         display: flex;
         flex-direction: column;
         gap: 0.35rem;
@@ -58,41 +90,37 @@
     }
 
     &__price {
-        font-size: 1.15rem;
+        font-size: 1.18rem;
         font-weight: 700;
         color: #111;
-        margin-bottom: 2px;
     }
 
     &__title {
-        font-size: 0.95rem;
+        font-size: 0.97rem;
         font-weight: 600;
-        line-height: 1.3;
         color: #222;
+        margin: 0;
+        line-height: 1.3;
     }
 
     &__version {
-        font-weight: 400;
         color: #777;
+        font-weight: 400;
     }
 
-    /* SPECS */
     &__details {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         color: #555;
-        line-height: 1.3;
-        // white-space: nowrap; 
-        // overflow: hidden;
-        // text-overflow: ellipsis;
-        max-width: 100%;
+        // white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    /* LOCATION */
     &__location {
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         color: #666;
         white-space: nowrap;
         overflow: hidden;
@@ -104,6 +132,5 @@
         width: 16px;
         height: 16px;
         color: #666;
-        flex-shrink: 0;
     }
 }
