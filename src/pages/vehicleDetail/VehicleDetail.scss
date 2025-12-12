@@ -30,57 +30,58 @@
 }
 
 /* Фото */
-.vehicle-gallery {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+// .vehicle-gallery {
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
 
-  img {
-    max-width: 100%;
-    display: block;
-  }
-}
-
-
-.main-image {
-  width: 100%;
-  aspect-ratio: 16 / 9; // универсально для авто-фото
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
-
-  @media (max-width: 600px) {
-    border-radius: 0;
-  }
-}
+//   img {
+//     max-width: 100%;
+//     display: block;
+//   }
+// }
 
 
+// .main-image {
+//   width: 100%;
+//   // aspect-ratio: 16 / 9; // универсально для авто-фото
+//   object-fit: cover;
+//   border-radius: 12px;
+//   margin-bottom: 12px;
+//   overflow: hidden;
 
-.thumbs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: nowrap;
+//   @media (max-width: 600px) {
+//     border-radius: 0;
+//   }
+// }
 
-  img {
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s ease;
 
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-}
+
+// .thumbs {
+//   display: flex;
+//   justify-content: center;
+//   gap: 10px;
+//   flex-wrap: nowrap;
+
+//   img {
+//     width: 80px;
+//     height: 60px;
+//     object-fit: cover;
+//     border-radius: 6px;
+//     cursor: pointer;
+//     transition: 0.2s ease;
+
+//     &:hover {
+//       opacity: 0.7;
+//     }
+//   }
+// }
 
 
 /* Характеристики */
 .vehicle-specs-section {
+  margin-top: 10px;
   padding: 24px;
   border-radius: 12px;
   border: 1px solid #e5e5e5;

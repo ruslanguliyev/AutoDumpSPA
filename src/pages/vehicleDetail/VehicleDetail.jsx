@@ -1,9 +1,15 @@
+import { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import { autos } from "../../data/data";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { Link } from "react-router-dom";
 
 import "./VehicleDetail.scss";
+
+const MediaCarousel = lazy(() =>
+    import("../../components/MediaCarousel/MediaCarousel")
+);
+
 
 export default function VehicleDetail() {
     const { id } = useParams();
@@ -14,6 +20,14 @@ export default function VehicleDetail() {
 
     if (!car) return <div>Not found</div>;
 
+    // 🔁 адаптер данных
+    const media = car.image.map((src, index) => ({
+        id: `${car.id}-${index}`,
+        src,
+        alt: `${car.brand} ${car.model} image ${index + 1}`,
+        type: "image",
+    }));
+
     return (
         <div className="vehicle-page-wrapper">
             <div className="vehicle-grid">
@@ -22,7 +36,7 @@ export default function VehicleDetail() {
                 <div className="vehicle-left">
 
                     {/* ФОТО */}
-                    <div className="vehicle-gallery">
+                    {/* <div className="vehicle-gallery">
                         <img className="main-image" src={car.image[0]} alt={car.alt} />
 
                         <div className="thumbs">
@@ -30,7 +44,15 @@ export default function VehicleDetail() {
                                 <img key={i} src={img} alt={`${car.model}-${i}`} />
                             ))}
                         </div>
-                    </div>
+                    </div> */}
+
+                    {/* КАРУСЕЛЬ */}
+                    <Suspense fallback={<div>Loading images…</div>}>
+                        <MediaCarousel
+                            items={media}
+                            ariaLabel={`${car.brand} ${car.model} gallery`}
+                        />
+                    </Suspense>
 
                     {/* ХАРАКТЕРИСТИКИ */}
                     <div className="vehicle-specs-section">

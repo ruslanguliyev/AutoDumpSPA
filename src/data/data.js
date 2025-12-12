@@ -1,6 +1,8 @@
 // src/data/autos.js
 import image1 from '../assets/images/Image1.jpeg';
 import gWagon from '../assets/images/G-wagon.jpeg';
+import gwagon1 from '../assets/images/Image3.jpeg';
+import gwagon2 from '../assets/images/Image6.jpeg';
 import userLogo from '../assets/images/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png';
 
 export const autos = [
@@ -69,7 +71,7 @@ export const autos = [
     location: "Hamburg, Germany",
     description:
       "Luxury SUV with iconic design and top-tier performance.",
-    image: [gWagon],
+    image: [gWagon, gwagon1, gwagon2],
     alt: "Mercedes-Benz G-Class AMG",
     vehicleType: "car",
     isHot: true,

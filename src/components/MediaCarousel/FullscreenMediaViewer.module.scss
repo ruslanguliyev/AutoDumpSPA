@@ -1,0 +1,94 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+}
+
+.viewer {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 60px 1fr 120px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.close {
+    font-size: 28px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* CENTER */
+.center {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.image {
+    max-width: 90vw;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* ARROWS */
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.prev {
+    left: 20px;
+}
+
+.next {
+    right: 20px;
+}
+
+/* FOOTER */
+.footer {
+    display: flex;
+    gap: 10px;
+    padding: 10px 16px;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+}
+
+.thumb {
+    background: none;
+    border: none;
+    opacity: 0.5;
+    cursor: pointer;
+
+}
+
+.thumb img {
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.active {
+    opacity: 1;
+    outline: 2px solid #fff;
+}
