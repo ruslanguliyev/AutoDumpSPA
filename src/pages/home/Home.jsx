@@ -17,34 +17,36 @@ export default function Home() {
   return (
     <div className="home">
 
-      <HeroSlider/>
 
-      <SearchFilter
-        onFilterChange={handleFilterChange}
-        resultsCount={filteredAutos.length}
-      />
 
       <div className="home__container">
+        <HeroSlider />
+
+        <SearchFilter
+          onFilterChange={handleFilterChange}
+          resultsCount={filteredAutos.length}
+        />
         <h2 className="home__section-title">Available Vehicles</h2>
         <div className="home__grid">
           {filteredAutos.map((car) => (
             <AutoCard key={car.id} car={car} />
           ))}
         </div>
-      </div>
 
-      {auctions.length > 0 && (
-        <div className="home__auctions">
-          <div className="home__container">
+
+        {auctions.length > 0 && (
+          <div className="home__auctions">
             <h2 className="home__section-title">Live Auctions</h2>
             <div className="home__auctions-grid">
               {auctions.map((auction) => (
                 <AuctionCarCard key={auction.id} auctionId={auction.id} />
               ))}
-            </div>
+            </div>  
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+
     </div>
   );
 }

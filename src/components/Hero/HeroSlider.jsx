@@ -16,7 +16,7 @@ const slides = [img1, img2, img3];
 
 export default function HeroSlider() {
     return (
-        <div className="hero-slider-wrapper">
+        <div className="hero-slider-wrapper mb-5">
             <Swiper
                 modules={[Autoplay, Pagination, ]}
                 autoplay={{ delay: 4000, disableOnInteraction: false }}

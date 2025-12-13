@@ -1,5 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { getAutosByFilters } from "../../api/autos";
+import AutoCard from "../../components/CardComponents/AutoCard";
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import BackButton from '../../components/BackButton/BackButton'
+import './SearchResult.scss'
 
 export default function SearchResults() {
   const [params] = useSearchParams();
@@ -8,28 +12,32 @@ export default function SearchResults() {
     brand: params.get("brand") || "",
     model: params.get("model") || "",
     vehicleType: params.get("type") || "",
+    region: params.get("region") || "",
   };
 
   const results = getAutosByFilters(filters);
 
   return (
-    <>
-    <div className="container mx-auto p-6">
-      <h1 className="text-xl font-semibold mb-4">
-        Search Results ({results.length})
+    <div className="container mx-auto p-6 space-y-8">
+
+      <div className="back_button d-flex align-items-start">
+        <BackButton />
+      </div>
+      {/* 🔍 SEARCH FILTER */}
+      <SearchFilter />
+
+      {/* 🧠 TITLE */}
+      <h1 className="text-xl font-semibold">
+        Search Results {results.length}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 🚗 RESULTS */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {results.map((car) => (
-          <div key={car.model} className="border rounded p-4">
-            <img src={car.image} alt={car.alt} className="w-full h-40 object-cover rounded" />
-            <h2 className="text-lg font-bold mt-2">{car.brand} {car.model}</h2>
-            <p className="text-sm text-gray-600 mt-1">{car.description}</p>
-          </div>
+          <AutoCard key={car.id} car={car} />
         ))}
       </div>
-    </div>
 
-    </>
+    </div>
   );
 }
