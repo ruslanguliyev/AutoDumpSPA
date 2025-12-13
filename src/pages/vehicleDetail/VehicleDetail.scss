@@ -29,6 +29,12 @@
   overflow-x: hidden;
 }
 
+.vehicle-left>button {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: start;
+}
+
 /* Фото */
 // .vehicle-gallery {
 //   width: 100%;

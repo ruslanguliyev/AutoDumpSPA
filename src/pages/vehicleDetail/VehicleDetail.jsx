@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { autos } from "../../data/data";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { Link } from "react-router-dom";
+import BackButton from "../../components/BackButton/BackButton";
 
 import "./VehicleDetail.scss";
 
@@ -32,9 +33,10 @@ export default function VehicleDetail() {
         <div className="vehicle-page-wrapper">
             <div className="vehicle-grid">
 
+
                 {/* ЛЕВАЯ ЧАСТЬ */}
                 <div className="vehicle-left">
-
+                    <BackButton fallback="/vehicles" />
                     {/* ФОТО */}
                     {/* <div className="vehicle-gallery">
                         <img className="main-image" src={car.image[0]} alt={car.alt} />
@@ -45,6 +47,8 @@ export default function VehicleDetail() {
                             ))}
                         </div>
                     </div> */}
+
+
 
                     {/* КАРУСЕЛЬ */}
                     <Suspense fallback={<div>Loading images…</div>}>

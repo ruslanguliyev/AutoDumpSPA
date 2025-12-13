@@ -5,15 +5,24 @@ import FullscreenMediaViewer from "./FullscreenMediaViewer";
 export default function MediaCarousel({
     items,
     ariaLabel = "Media carousel",
-    showDots = true,
     showControls = true,
     showThumbnails = true,
 }) {
+    // fixed (clicked) image
     const [index, setIndex] = useState(0);
+
+    // temporary (hovered) image
+
+
+    // fullscreen state
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
     const touchStartX = useRef(null);
 
+    // what is currently shown
 
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    const current = items[index];
+
     const goTo = (i) => setIndex(i);
 
     const prev = useCallback(() => {
@@ -24,6 +33,7 @@ export default function MediaCarousel({
         setIndex((i) => (i === items.length - 1 ? 0 : i + 1));
     }, [items.length]);
 
+    // swipe support
     const onTouchStart = (e) => {
         touchStartX.current = e.touches[0].clientX;
     };
@@ -31,13 +41,11 @@ export default function MediaCarousel({
     const onTouchEnd = (e) => {
         if (touchStartX.current === null) return;
         const delta = touchStartX.current - e.changedTouches[0].clientX;
-        if (Math.abs(delta) > 50) delta > 0 ? next() : prev();
+        if (Math.abs(delta) > 50) {
+            delta > 0 ? next() : prev();
+        }
         touchStartX.current = null;
     };
-
-    const current = items[index];
-
-
 
     return (
         <section
@@ -78,21 +86,6 @@ export default function MediaCarousel({
                 )}
             </div>
 
-            {/* DOTS */}
-            {showDots && (
-                <div className={styles.dots} role="tablist">
-                    {items.map((_, i) => (
-                        <button
-                            key={i}
-                            className={`${styles.dot} ${i === index ? styles.active : ""}`}
-                            onClick={() => setIndex(i)}
-                            aria-selected={i === index}
-                            role="tab"
-                        />
-                    ))}
-                </div>
-            )}
-
             {/* THUMBNAILS */}
             {showThumbnails && (
                 <div className={styles.thumbnails}>
@@ -101,18 +94,18 @@ export default function MediaCarousel({
                             key={item.id}
                             className={`${styles.thumb} ${i === index ? styles.thumbActive : ""
                                 }`}
-                            onClick={() => setIndex(i)}
+                            onMouseEnter={() => setIndex(i)}   
                             aria-label={`Show image ${i + 1}`}
                         >
                             <img src={item.src} alt={item.alt} />
                         </button>
+
                     ))}
                 </div>
             )}
 
-
+            {/* FULLSCREEN */}
             {isFullscreen && (
-
                 <FullscreenMediaViewer
                     items={items}
                     index={index}

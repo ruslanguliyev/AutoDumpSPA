@@ -47,12 +47,15 @@ export default function FullscreenMediaViewer({
                     {items.map((item, i) => (
                         <button
                             key={item.id}
-                            className={`${styles.thumb} ${i === index ? styles.active : ""}`}
-                            onClick={() => onSelect(i)}
+                            className={`${styles.thumb} ${i === index ? styles.active : ""
+                                }`}
+                            onMouseEnter={() => onSelect(i)}   // 🔥 ВАЖНО
+                            aria-label={`Show image ${i + 1}`}
                         >
                             <img src={item.src} alt={item.alt} />
                         </button>
                     ))}
+
                 </div>
 
             </div>
