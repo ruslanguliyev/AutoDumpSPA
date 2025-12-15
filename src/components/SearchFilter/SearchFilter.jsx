@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IconChevronDown } from '@tabler/icons-react';
 
 import {
   IconCar,
@@ -9,6 +10,7 @@ import {
   IconCamper,
   IconTruck,
   IconDeviceDesktop,
+  IconSearch,
 } from '@tabler/icons-react';
 
 import {
@@ -19,12 +21,14 @@ import {
 
 import './SearchFilter.scss';
 
+/* ================= CONFIG ================= */
+
 const vehicleTypes = [
-  { id: 'car', label: 'Car', icon: IconCar, color: '#dc2626' },
-  { id: 'motorcycle', label: 'Motorcycle', icon: IconBike, color: '#dc2626' },
-  { id: 'camper', label: 'Camper', icon: IconCamper, color: '#2563eb' },
-  { id: 'truck', label: 'Truck', icon: IconTruck, color: '#dc2626' },
-  { id: 'commercial', label: 'Commercial', icon: IconDeviceDesktop, color: '#000000' },
+  { id: 'car', label: 'Car', icon: IconCar },
+  { id: 'motorcycle', label: 'Motorcycle', icon: IconBike },
+  { id: 'camper', label: 'Camper', icon: IconCamper },
+  { id: 'truck', label: 'Truck', icon: IconTruck },
+  { id: 'commercial', label: 'Commercial', icon: IconDeviceDesktop },
 ];
 
 const regions = [
@@ -36,12 +40,15 @@ const regions = [
   { value: 'uk', label: 'United Kingdom', flag: '🇬🇧' },
 ];
 
+/* ================= COMPONENT ================= */
+
 export default function SearchFilter({
-  variant = 'hero', // 👈 hero | compact
+  variant = 'hero', // hero | compact
   resultsCount = 0,
 }) {
   const navigate = useNavigate();
 
+  const [isOpen, setIsOpen] = useState(false);
   const [activeVehicleType, setActiveVehicleType] = useState('car');
   const [filters, setFilters] = useState({
     make: '',
@@ -52,13 +59,18 @@ export default function SearchFilter({
     city: '',
   });
 
-  const currentMakes = useMemo(() => {
-    return makesByCategory[activeVehicleType] || [];
-  }, [activeVehicleType]);
+  /* ---------- derived ---------- */
+
+  const currentMakes = useMemo(
+    () => makesByCategory[activeVehicleType] || [],
+    [activeVehicleType]
+  );
 
   useEffect(() => {
     setFilters((prev) => ({ ...prev, make: '' }));
   }, [activeVehicleType]);
+
+  /* ---------- handlers ---------- */
 
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
@@ -78,96 +90,156 @@ export default function SearchFilter({
     navigate(`/search?${params.toString()}`);
   };
 
+  /* ================= RENDER ================= */
+
   return (
-    <div className={`search-filter search-filter--${variant} mb-3`}>
-      <div className="search-filter__container">
+    <div className={`search-filter search-filter--${variant} mb-4`}>
+      {/* MOBILE TOGGLE */}
+      <div className="search-filter__mobile-toggle">
+        <button type="button" onClick={() => setIsOpen((v) => !v)}>
+          <span className="left">
+            <IconSearch size={18} />
+            Filters
+          </span>
 
-        {/* VEHICLE TYPES */}
-        <div className="search-filter__nav">
-          {vehicleTypes.map((type) => {
-            const Icon = type.icon;
-            const active = activeVehicleType === type.id;
+          <span className="right">
+            <span className="count">{resultsCount}</span>
+            <span className={`arrow ${isOpen ? 'up' : ''}`}>
+              <IconChevronDown size={18} stroke={2} />
+            </span>
+          </span>
+        </button>
+      </div>
 
-            return (
+      {/* COLLAPSIBLE CONTENT */}
+      <div className={`search-filter__content ${isOpen ? 'is-open' : ''}`}>
+        <div className="search-filter__inner">
+          {/* VEHICLE TYPES */}
+          <div className="search-filter__nav">
+            {vehicleTypes.map(({ id, label, icon: Icon }) => (
               <button
-                key={type.id}
-                className={`search-filter__nav-item ${active ? 'is-active' : ''}`}
-                onClick={() => setActiveVehicleType(type.id)}
+                key={id}
                 type="button"
+                className={`search-filter__nav-item ${activeVehicleType === id ? 'is-active' : ''
+                  }`}
+                onClick={() => setActiveVehicleType(id)}
               >
-                <Icon size={variant === 'compact' ? 18 : 22} />
-                <span>{type.label}</span>
+                {Icon && <Icon size={20} />}
+                <span>{label}</span>
               </button>
-            );
-          })}
-        </div>
-
-        {/* FORM */}
-        <div className="search-filter__form">
-
-          {/* ROW 1 */}
-          <div className="search-filter__row">
-            <select value={filters.make} onChange={(e) => handleFilterChange('make', e.target.value)}>
-              {currentMakes.map((make) => (
-                <option key={make} value={make === 'All Makes' ? '' : make}>
-                  {make}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="text"
-              placeholder="Model"
-              value={filters.model}
-              onChange={(e) => handleFilterChange('model', e.target.value)}
-            />
-
-            <select value={filters.price} onChange={(e) => handleFilterChange('price', e.target.value)}>
-              {priceRanges.map((price) => (
-                <option key={price} value={price === 'No limit' ? '' : price}>
-                  {price}
-                </option>
-              ))}
-            </select>
-
-            {variant === 'compact' && (
-              <button className="search-filter__button" onClick={handleSearch}>
-                {resultsCount} results
-              </button>
-            )}
+            ))}
           </div>
 
-          {/* ROW 2 (только hero) */}
-          {variant === 'hero' && (
+          {/* FORM */}
+          <div className="search-filter__form">
+            {/* ROW 1 */}
             <div className="search-filter__row">
-              <select value={filters.registration} onChange={(e) => handleFilterChange('registration', e.target.value)}>
-                {registrationYears.map((year) => (
-                  <option key={year} value={year === 'Any year' ? '' : year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-
-              <select value={filters.region} onChange={(e) => handleFilterChange('region', e.target.value)}>
-                {regions.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.flag} {r.label}
+              <select
+                value={filters.make}
+                onChange={(e) =>
+                  handleFilterChange('make', e.target.value)
+                }
+              >
+                {currentMakes.map((make) => (
+                  <option
+                    key={make}
+                    value={make === 'All Makes' ? '' : make}
+                  >
+                    {make}
                   </option>
                 ))}
               </select>
 
               <input
                 type="text"
-                placeholder="City / ZIP"
-                value={filters.city}
-                onChange={(e) => handleFilterChange('city', e.target.value)}
+                placeholder="Model"
+                value={filters.model}
+                onChange={(e) =>
+                  handleFilterChange('model', e.target.value)
+                }
               />
 
-              <button className="search-filter__button" onClick={handleSearch}>
-                {resultsCount} results
-              </button>
+              <select
+                value={filters.price}
+                onChange={(e) =>
+                  handleFilterChange('price', e.target.value)
+                }
+              >
+                {priceRanges.map((price) => (
+                  <option
+                    key={price}
+                    value={price === 'No limit' ? '' : price}
+                  >
+                    {price}
+                  </option>
+                ))}
+              </select>
+
+              {variant === 'compact' && (
+                <button
+                  type="button"
+                  className="search-filter__button"
+                  onClick={handleSearch}
+                >
+                  {resultsCount} results
+                </button>
+              )}
             </div>
-          )}
+
+            {/* ROW 2 (hero only) */}
+            {variant === 'hero' && (
+              <div className="search-filter__row">
+                <select
+                  value={filters.registration}
+                  onChange={(e) =>
+                    handleFilterChange(
+                      'registration',
+                      e.target.value
+                    )
+                  }
+                >
+                  {registrationYears.map((year) => (
+                    <option
+                      key={year}
+                      value={year === 'Any year' ? '' : year}
+                    >
+                      {year}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={filters.region}
+                  onChange={(e) =>
+                    handleFilterChange('region', e.target.value)
+                  }
+                >
+                  {regions.map((r) => (
+                    <option key={r.value} value={r.value}>
+                      {r.flag} {r.label}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="text"
+                  placeholder="City / ZIP"
+                  value={filters.city}
+                  onChange={(e) =>
+                    handleFilterChange('city', e.target.value)
+                  }
+                />
+
+                <button
+                  type="button"
+                  className="search-filter__button"
+                  onClick={handleSearch}
+                >
+                  {resultsCount} results
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
