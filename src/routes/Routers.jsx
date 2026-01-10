@@ -4,8 +4,8 @@ import Home from '../pages/home/Home';
 import About from '../pages/about/About';
 import SearchResults from '../pages/searchResults/SearchResults';
 import VehicleDetail from '../pages/vehicleDetail/VehicleDetail';
-import PartsPage from '../pages/PartsPage';
 import SellerPage from "../pages/seller/SellerPage";
+import PartsPage from "../pages/parts/PartsPage";
 
 
 const Routers = () => {

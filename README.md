@@ -1,16 +1,37 @@
-# React + Vite
+# AUTODUMP (Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Local dev
 
-Currently, two official plugins are available:
+```bash
+npm install
+npm run dev
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Parts page data source
 
-## React Compiler
+The `/parts` page uses **TanStack Query** and can work in two modes:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Mock mode (default in DEV)**: no backend required.
+- **GraphQL mode**: fetches data from `VITE_GRAPHQL_ENDPOINT`.
 
-## Expanding the ESLint configuration
+### Environment variables (optional)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Create `.env.local` (recommended) in the project root:
+
+```bash
+# GraphQL backend endpoint (used only when VITE_USE_PARTS_MOCKS=false)
+VITE_GRAPHQL_ENDPOINT=http://localhost:4000/graphql
+
+# Use mock parts data in development (default: true)
+# Set to "false" to force real backend requests.
+VITE_USE_PARTS_MOCKS=true
+```
+
+### If you see `ERR_NAME_NOT_RESOLVED` in console
+
+This means the configured GraphQL host cannot be resolved/reached (for example, `fake-graphql.autodump.local`).
+
+Fix options:
+
+- Set `VITE_USE_PARTS_MOCKS=true` (or just remove `VITE_USE_PARTS_MOCKS=false`).
+- Set `VITE_GRAPHQL_ENDPOINT` to a real, reachable endpoint.
