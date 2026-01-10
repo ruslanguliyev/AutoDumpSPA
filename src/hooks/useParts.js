@@ -23,21 +23,27 @@ export const useParts = () => {
     keepPreviousData: true,
   });
 
-  const invalidate = () =>
-    queryClient.invalidateQueries({ queryKey: [PARTS_QUERY_KEY] });
+  // 🔑 КЛЮЧЕВАЯ ЛОГИКА
+  const hasData = Boolean(query.data?.items?.length);
 
   return {
     parts: query.data?.items ?? [],
     total: query.data?.total ?? 0,
     isLoading: query.isLoading || query.isFetching,
-    error: query.error,
-    filters: normalizedFilters,
+
+    // ❗ Ошибка ТОЛЬКО если НЕТ данных
+    error: hasData ? null : query.error,
+
+    // UI should consume the store source-of-truth (strings, no nulls/objects).
+    // Sanitization is for fetching/querying only.
+    filters,
     setFilter,
     resetFilters,
     refetch: query.refetch,
-    invalidate,
+    invalidate: () =>
+      queryClient.invalidateQueries({ queryKey: [PARTS_QUERY_KEY] }),
+
     selectedPartId,
     selectPart,
   };
 };
-

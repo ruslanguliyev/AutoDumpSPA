@@ -25,14 +25,14 @@ export const PART_SORT_OPTIONS = [
 
 export const PARTS_DEFAULT_FILTER = {
   search: '',
-  category: 'all',
+  category: '',
   brand: '',
   model: '',
-  condition: 'all',
+  condition: '',
   priceFrom: '',
   priceTo: '',
   location: '',
-  sort: 'RELEVANCE',
+  sort: '',
   limit: 20,
   offset: 0,
 };
