@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import PartsSearchFilter from '@/components/PartsSearchFilter/PartsSearchFilter';
 import { partsFilterConfig } from '@/components/PartsSearchFilter/config/partsFilterConfig';
 import { useParts } from '@/hooks/useParts';
@@ -54,42 +53,16 @@ const PartsPage = () => {
     error,
     refetch,
     selectPart,
+    selectOptions,
   } = useParts();
 
   const errorMessage =
     error instanceof Error ? error.message : error ? String(error) : null;
 
-  const filterOptions = useMemo(() => {
-    const unique = (values) => [...new Set(values.filter(Boolean))].sort();
-    const toOptions = (values) => unique(values).map((value) => ({ value, label: value }));
-    const ensureSelected = (options, selectedValue) => {
-      if (!selectedValue) return options;
-      if (options.some((option) => option.value === selectedValue)) return options;
-      return [{ value: selectedValue, label: selectedValue }, ...options];
-    };
-
-    const brands = ensureSelected(
-      toOptions(parts.map((part) => part.brand)),
-      filters.brand
-    );
-
-    const modelsSource = filters.brand
-      ? parts.filter((part) => part.brand === filters.brand).map((part) => part.model)
-      : parts.map((part) => part.model);
-    const models = ensureSelected(toOptions(modelsSource), filters.model);
-
-    const locations = ensureSelected(
-      toOptions(parts.map((part) => part.location)),
-      filters.location
-    );
-
-    return {
-      ...partsFilterConfig,
-      brands,
-      models,
-      locations,
-    };
-  }, [filters.brand, filters.model, filters.location, parts]);
+  const filterOptions = {
+    ...partsFilterConfig,
+    ...selectOptions,
+  };
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10">

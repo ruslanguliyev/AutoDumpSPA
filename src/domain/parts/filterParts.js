@@ -63,3 +63,45 @@ export const mapPartsPayloadToDomain = (payload) => ({
   total: payload?.total ?? 0,
 });
 
+/**
+ * Multi-token, case-insensitive partial match across selected fields.
+ * An item matches only if ALL tokens match at least one field.
+ *
+ * Fields checked (in order):
+ * - name
+ * - oem / oemCode
+ * - brand
+ * - model
+ * - category
+ * - location
+ *
+ * @param {Record<string, unknown> | null | undefined} item
+ * @param {string | null | undefined} search
+ * @returns {boolean}
+ */
+export const matchesPartSearch = (item, search) => {
+  const tokens = String(search ?? '')
+    .trim()
+    .split(/\s+/)
+    .map((token) => token.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (tokens.length === 0) return true;
+
+  const fields = [
+    item?.name,
+    item?.oem,
+    item?.oemCode,
+    item?.brand,
+    item?.model,
+    item?.category,
+    item?.location,
+  ]
+    .filter((value) => value !== null && value !== undefined && String(value).trim() !== '')
+    .map((value) => String(value).trim().toLowerCase());
+
+  if (fields.length === 0) return false;
+
+  return tokens.every((token) => fields.some((field) => field.includes(token)));
+};
+

@@ -1,6 +1,7 @@
 import {
   sanitizeFilters,
   mapPartsPayloadToDomain,
+  matchesPartSearch,
 } from '@/domain/parts/filterParts';
 
 // ======================================================
@@ -67,7 +68,6 @@ const buildPartsFilterInput = (filters) => ({
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
 const applyMockFiltering = (payload, filters) => {
-  const search = normalize(filters.search);
   const category = normalize(filters.category);
   const brand = normalize(filters.brand);
   const model = normalize(filters.model);
@@ -84,19 +84,7 @@ const applyMockFiltering = (payload, filters) => {
       : Number(filters.priceTo);
 
   let items = (payload?.items ?? []).filter((item) => {
-    const haystack = normalize(
-      [
-        item.name,
-        item.description,
-        item.oemCode,
-        item.brand,
-        item.model,
-        item.category,
-        item.location,
-      ].filter(Boolean).join(' ')
-    );
-
-    if (search && !haystack.includes(search)) return false;
+    if (!matchesPartSearch(item, filters.search)) return false;
 
     if (category && category !== 'all' && normalize(item.category) !== category) return false;
     if (brand && !normalize(item.brand).includes(brand)) return false;
