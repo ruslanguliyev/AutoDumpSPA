@@ -1,46 +1,7 @@
 import PartsSearchFilter from '@/components/PartsSearchFilter/PartsSearchFilter';
 import { partsFilterConfig } from '@/components/PartsSearchFilter/config/partsFilterConfig';
+import PartCard from '@/components/PartCard/PartCard.jsx';
 import { useParts } from '@/hooks/useParts';
-
-const PartCard = ({ part, onSelect }) => (
-  <article
-    className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-    onClick={() => onSelect(part.id)}
-  >
-    <div className="flex items-start justify-between gap-2">
-      <div className="flex flex-col gap-1">
-        <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
-          {part.category}
-        </p>
-        <h3 className="text-lg font-semibold text-slate-900">{part.name}</h3>
-        <p className="text-sm text-slate-600">{part.description}</p>
-      </div>
-      <div className="text-right">
-        <div className="text-lg font-semibold text-slate-900">
-          {part.currency} {part.price.toLocaleString()}
-        </div>
-        <p className="text-xs text-slate-500">Stock: {part.stock}</p>
-      </div>
-    </div>
-
-    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-      <span className="rounded-full bg-slate-50 px-3 py-1 font-medium text-slate-700">
-        {part.brand} {part.model}
-      </span>
-      {part.oemCode ? (
-        <span className="rounded-full bg-slate-50 px-3 py-1 font-medium text-slate-700">
-          OEM: {part.oemCode}
-        </span>
-      ) : null}
-      <span className="rounded-full bg-slate-50 px-3 py-1 font-medium text-slate-700">
-        {part.condition}
-      </span>
-      <span className="rounded-full bg-slate-50 px-3 py-1 font-medium text-slate-700">
-        {part.location}
-      </span>
-    </div>
-  </article>
-);
 
 const PartsPage = () => {
   const {
@@ -52,7 +13,6 @@ const PartsPage = () => {
     isLoading,
     error,
     refetch,
-    selectPart,
     selectOptions,
   } = useParts();
 
@@ -104,7 +64,7 @@ const PartsPage = () => {
         </div>
       ) : null}
 
-      <section className="grid gap-4 sm:grid-cols-2">
+      <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {isLoading && parts.length === 0 ? (
           <div className="col-span-full text-sm text-slate-500">
             Loading inventory…
@@ -118,7 +78,7 @@ const PartsPage = () => {
         ) : null}
 
         {parts.map((part) => (
-          <PartCard key={part.id} part={part} onSelect={selectPart} />
+          <PartCard key={part.id} part={part} />
         ))}
       </section>
     </div>

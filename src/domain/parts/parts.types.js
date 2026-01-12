@@ -29,6 +29,7 @@
  * @property {number} stock
  * @property {string} location
  * @property {string} imageUrl
+ * @property {string | string[]} image
  */
 
 /**

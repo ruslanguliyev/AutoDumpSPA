@@ -1,0 +1,27 @@
+.rating-stars {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 4px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.rating-stars__star {
+    flex: 0 0 auto;
+    display: inline-block;
+    color: #f59e0b;
+    fill: transparent;
+}
+
+.rating-stars__star--filled {
+    fill: currentColor;
+}
+
+.rating-stars__value {
+    margin-left: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #64748b;
+}

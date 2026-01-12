@@ -19,7 +19,7 @@ import {
   registrationYears,
 } from '../../data/options';
 
-import './SearchFilter.scss';
+import './AutoSearchFilter.scss';
 
 /* ================= CONFIG ================= */
 

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ShoppingCart } from 'lucide-react';
+import { useCartStore } from '@/store/cartStore';
 import "./header.scss";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const count = useCartStore((s) => s.items.length);
 
     useEffect(() => {
         const onScroll = () => {
@@ -40,7 +43,6 @@ export default function Header() {
                         <ul className="header__list">
                             <li><Link to="/" className="header__link">Home</Link></li>
                             <li><Link to="/about" className="header__link">About</Link></li>
-                            <li><Link to="/auctions" className="header__link">Auctions</Link></li>
                             <li><Link to="/autorepair" className="header__link">Auto Repair</Link></li>
                             <li><Link to="/parts" className="header__link">Parts</Link></li>
                         </ul>
@@ -49,6 +51,8 @@ export default function Header() {
                             <button className="header__btn header__btn--outline">Log in</button>
                             <button className="header__btn">Sign in</button>
                         </div>
+                        <ShoppingCart />
+                        {count > 0 && <span className="cart-badge">{count}</span>}
                     </div>
                 </div>
             </nav>

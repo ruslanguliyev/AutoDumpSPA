@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
 import { getAutosByFilters } from "../../api/autos";
-import AutoCard from "../../components/CardComponents/AutoCard";
-import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import AutoCard from "../../components/AutoCardComponent/AutoCard";
+import SearchFilter from "../../components/AutoSearchFilter/AutoSearchFilter";
 import BackButton from '../../components/BackButton/BackButton'
-import './SearchResult.scss'
+import './AutoSearchResult.scss'
 
-export default function SearchResults() {
+export default function AutoSearchResults() {
   const [params] = useSearchParams();
 
   const filters = {

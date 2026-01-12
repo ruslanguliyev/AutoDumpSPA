@@ -31,27 +31,32 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
 
 /**
  * Map transport-layer part to domain entity.
- * @param {{ id: string; name: string; category?: string; brand?: string; model?: string; condition?: string; description?: string; price?: number; currency?: string; oemCode?: string; compatibility?: string[]; stock?: number; location?: string; imageUrl?: string }} dto
+ * @param {{ id: string; name: string; category?: string; brand?: string; model?: string; condition?: string; description?: string; price?: number; currency?: string; oemCode?: string; compatibility?: string[]; stock?: number; location?: string; imageUrl?: string; image?: string | string[] }} dto
  * @returns {import('./parts.types').PartEntity}
  */
-export const mapPartToEntity = (dto) => ({
-  id: dto.id,
-  name: dto.name,
-  category: dto.category || 'unspecified',
-  brand: dto.brand || 'Unknown',
-  model: dto.model || 'Compatible models',
-  condition: dto.condition || 'unknown',
-  description: dto.description || '',
-  price: dto.price ?? 0,
-  currency: dto.currency || 'USD',
-  oemCode: dto.oemCode || '',
-  compatibility: dto.compatibility ?? [],
-  stock: dto.stock ?? 0,
-  location: dto.location || 'N/A',
-  imageUrl:
+export const mapPartToEntity = (dto) => {
+  const fallbackImageUrl =
     dto.imageUrl ||
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=60',
-});
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=60';
+
+  return {
+    id: dto.id,
+    name: dto.name,
+    category: dto.category || 'unspecified',
+    brand: dto.brand || 'Unknown',
+    model: dto.model || 'Compatible models',
+    condition: dto.condition || 'unknown',
+    description: dto.description || '',
+    price: dto.price ?? 0,
+    currency: dto.currency || 'USD',
+    oemCode: dto.oemCode || '',
+    compatibility: dto.compatibility ?? [],
+    stock: dto.stock ?? 0,
+    location: dto.location || 'N/A',
+    imageUrl: fallbackImageUrl,
+    image: dto.image ?? dto.imageUrl ?? fallbackImageUrl,
+  };
+};
 
 /**
  * Map transport-layer payload to domain result.
