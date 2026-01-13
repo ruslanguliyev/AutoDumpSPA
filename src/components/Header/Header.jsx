@@ -53,6 +53,7 @@ export default function Header() {
     const cartCount = cartItems.length;
     const removeFromCartAt = useCartStore((s) => s.removeFromCartAt);
 
+    const favoritesCount = useFavoritesStore((s) => s.items.length);
     const favoriteItems = useFavoritesStore((s) => s.items);
     const removeFromFavorites = useFavoritesStore((s) => s.removeFromFavorites);
 
@@ -190,9 +191,9 @@ export default function Header() {
                                         onClick={() => togglePopover("favorites")}
                                     >
                                         <Heart size={22} />
-                                        {favoriteItems?.length ? (
+                                        {favoritesCount > 0 ? (
                                             <span className="count-badge" aria-hidden="true">
-                                                {favoriteItems.length}
+                                                {favoritesCount}
                                             </span>
                                         ) : null}
                                     </button>
@@ -335,17 +336,32 @@ export default function Header() {
                         </div>
                     ) : (
                         <div className="header__mobile">
-                        <button
+                            <div className="header__mobileIndicators" aria-label="Mobile counters">
+                                {favoritesCount > 0 ? (
+                                    <span className="header__mobileIndicator" aria-label={`Favorites: ${favoritesCount}`}>
+                                        <Heart size={16} />
+                                        <span className="header__mobileIndicatorCount">{favoritesCount}</span>
+                                    </span>
+                                ) : null}
+                                {cartCount > 0 ? (
+                                    <span className="header__mobileIndicator" aria-label={`Cart: ${cartCount}`}>
+                                        <ShoppingCart size={16} />
+                                        <span className="header__mobileIndicatorCount">{cartCount}</span>
+                                    </span>
+                                ) : null}
+                            </div>
+
+                            <button
                                 type="button"
-                            className="header__burger"
+                                className="header__burger"
                                 onClick={openDrawer}
                                 aria-label="Open menu"
                                 aria-haspopup="dialog"
                                 aria-expanded={isDrawerOpen}
                                 aria-controls="mobile-drawer"
-                        >
-                            <Menu size={26} />
-                        </button>
+                            >
+                                <Menu size={26} />
+                            </button>
                         </div>
                     )}
                 </div>
@@ -380,12 +396,21 @@ export default function Header() {
                         </div>
 
                         <nav className="mobile-drawer__nav" aria-label="Mobile navigation links">
-                            {mobileMenuItems.map(({ to, label, Icon }) => (
-                                <Link key={to} to={to} onClick={closeDrawer}>
-                                    <Icon size={18} />
-                                    <span>{label}</span>
-                            </Link>
-                            ))}
+                            {mobileMenuItems.map(({ to, label, Icon }) => {
+                                const badgeCount =
+                                    to === "/favorites" ? favoritesCount : to === "/cart" ? cartCount : 0;
+                                return (
+                                    <Link key={to} to={to} onClick={closeDrawer}>
+                                        <Icon size={18} />
+                                        <span className="mobile-drawer__label">{label}</span>
+                                        {badgeCount > 0 ? (
+                                            <span className="mobile-drawer__badge" aria-hidden="true">
+                                                {badgeCount}
+                                            </span>
+                                        ) : null}
+                                    </Link>
+                                );
+                            })}
                         </nav>
                     </aside>
                 </div>
