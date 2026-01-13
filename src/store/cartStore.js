@@ -6,4 +6,9 @@ export const useCartStore = create((set) => ({
     set((state) => ({
       items: [...state.items, part],
     })),
+  removeFromCartAt: (index) =>
+    set((state) => ({
+      items: state.items.filter((_, i) => i !== index),
+    })),
+  clearCart: () => set({ items: [] }),
 }));

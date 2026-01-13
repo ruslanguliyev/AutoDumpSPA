@@ -4,8 +4,8 @@ import { Heart } from "lucide-react";
 import { useFavoritesStore } from "../../store/favoritesStore";
 
 export default function AutoCard({ car }) {
-    const { favorites, toggleFavorite } = useFavoritesStore();
-    const isFav = favorites.includes(car.id);
+    const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+    const isFav = useFavoritesStore((s) => s.isFavorited("vehicle", car.id));
 
     const mainImage = Array.isArray(car.image) ? car.image[0] : car.image;
 
@@ -27,12 +27,18 @@ export default function AutoCard({ car }) {
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleFavorite(car.id);
+                        toggleFavorite({
+                            type: "vehicle",
+                            id: car.id,
+                            title: `${car.brand} ${car.model}`,
+                            thumbnail: mainImage,
+                        });
                     }}
                 >
                     <Heart
                         className={`fav-icon ${isFav ? "active" : ""}`}
                         strokeWidth={1.7}
+                        fill={isFav ? "currentColor" : "none"}
                     />
                 </button>
             </div>

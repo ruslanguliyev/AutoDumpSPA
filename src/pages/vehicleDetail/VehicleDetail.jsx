@@ -16,8 +16,10 @@ export default function VehicleDetail() {
     const { id } = useParams();
     const car = autos.find((c) => c.id == id);
 
-    const { favorites, toggleFavorite } = useFavoritesStore();
-    const isFavorite = favorites.includes(car.id);
+    const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+    const isFavorite = useFavoritesStore((s) =>
+        car ? s.isFavorited("vehicle", car.id) : false
+    );
 
     if (!car) return <div>Not found</div>;
 
@@ -183,7 +185,14 @@ export default function VehicleDetail() {
 
                             <button
                                 className={`fav-btn ${isFavorite ? "active" : ""}`}
-                                onClick={() => toggleFavorite(car.id)}
+                                onClick={() =>
+                                    toggleFavorite({
+                                        type: "vehicle",
+                                        id: car.id,
+                                        title: `${car.brand} ${car.model}`,
+                                        thumbnail: Array.isArray(car.image) ? car.image[0] : car.image,
+                                    })
+                                }
                             >
                                 {isFavorite ? "В избранном" : "В избранное"}
                             </button>

@@ -1,12 +1,14 @@
 import './PartCard.scss';
-import { ShoppingCart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import RatingStars from '@components/RatingStars/RatingStars.jsx';
 import { useCartStore } from '@store/cartStore';
+import { useFavoritesStore } from '@store/favoritesStore';
 
 export default function PartCard({ part }) {
     if (!part) return null;
 
     const addToCart = useCartStore((s) => s.addToCart);
+    const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
 
     const hasDiscount = Number.isFinite(part.discountPercent);
     const oldPrice = hasDiscount
@@ -18,6 +20,11 @@ export default function PartCard({ part }) {
     const reviewsCount = Number.isFinite(part.reviewsCount)
         ? part.reviewsCount
         : 0;
+
+    const partId = part.id ?? part._id ?? part.sku ?? part.code ?? part.name;
+    const favActive = useFavoritesStore((s) =>
+        partId != null ? s.isFavorited('part', partId) : false
+    );
 
     return (
         <article className="part-card">
@@ -33,6 +40,28 @@ export default function PartCard({ part }) {
                     alt={part.name}
                     className="part-card__image"
                 />
+                <button
+                    type="button"
+                    className={`part-card__fav-btn ${favActive ? 'active' : ''}`}
+                    aria-label={favActive ? 'Remove from favorites' : 'Add to favorites'}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (partId == null) return;
+                        toggleFavorite({
+                            type: 'part',
+                            id: partId,
+                            title: part.name,
+                            thumbnail: imageSrc,
+                        });
+                    }}
+                >
+                    <Heart
+                        className="part-card__fav-icon"
+                        strokeWidth={1.7}
+                        fill={favActive ? 'currentColor' : 'none'}
+                    />
+                </button>
             </div>
 
             <div className="part-card__content">
