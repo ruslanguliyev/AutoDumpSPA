@@ -1,5 +1,6 @@
 import './PartCard.scss';
 import { Heart, ShoppingCart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import RatingStars from '@components/RatingStars/RatingStars.jsx';
 import { useCartStore } from '@store/cartStore';
 import { useFavoritesStore } from '@store/favoritesStore';
@@ -35,11 +36,22 @@ export default function PartCard({ part }) {
             )}
 
             <div className="part-card__image-wrapper">
-                <img
-                    src={imageSrc}
-                    alt={part.name}
-                    className="part-card__image"
-                />
+                {part?.id ? (
+                    <Link to={`/parts/${part.id}`} aria-label={`Open ${part.name}`}>
+                        <img
+                            src={imageSrc}
+                            alt={part.name}
+                            className="part-card__image"
+                        />
+                    </Link>
+                ) : (
+                    <img
+                        src={imageSrc}
+                        alt={part.name}
+                        className="part-card__image"
+                    />
+                )}
+
                 <button
                     type="button"
                     className={`part-card__fav-btn ${favActive ? 'active' : ''}`}
@@ -65,7 +77,13 @@ export default function PartCard({ part }) {
             </div>
 
             <div className="part-card__content">
-                <h3 className="part-card__title">{part.name}</h3>
+                {part?.id ? (
+                    <Link to={`/parts/${part.id}`} className="part-card__title">
+                        {part.name}
+                    </Link>
+                ) : (
+                    <h3 className="part-card__title">{part.name}</h3>
+                )}
 
                 <div className="part-card__rating">
                     <RatingStars value={ratingValue} count={reviewsCount} />
@@ -93,7 +111,7 @@ export default function PartCard({ part }) {
 
                 <button
                     className="part-card__cart-btn"
-                    onClick={() => addToCart(part)}
+                    onClick={() => addToCart(part, 1)}
                 >
                     <ShoppingCart size={18} />
                     In den Warenkorb

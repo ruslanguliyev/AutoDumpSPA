@@ -1,6 +1,7 @@
 import {
   sanitizeFilters,
   mapPartsPayloadToDomain,
+  mapPartToEntity,
   matchesPartSearch,
 } from '@/domain/parts/filterParts';
 import brakePadsImg from '@/assets/images/brake-pads.jpg';
@@ -11,12 +12,40 @@ import frontBumperImg from '@/assets/images/front-bumper-suitable-for-mercedes-e
 import shockAbsorberImg from '@/assets/images/shock_absorber_vw.jpg';
 import brakeDiskImg from '@/assets/images/brake-disk.jpg';
 import sideMirrorImg from '@/assets/images/side-miror.jpg';
+import sellerAvatarImg from '@/assets/images/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png';
 
 // ======================================================
 // 🔧 MOCK MODE (только для DEV)
 // ======================================================
 const shouldUseMocks = () =>
   import.meta.env.DEV && String(import.meta.env.VITE_USE_PARTS_MOCKS ?? 'true') !== 'false';
+
+const MOCK_SELLERS = [
+  {
+    id: 'seller-1',
+    name: 'AutoDump Partner',
+    type: 'Verified seller',
+    rating: 4.8,
+    votes: 312,
+    logo: sellerAvatarImg,
+  },
+  {
+    id: 'seller-2',
+    name: 'Berlin Parts Depot',
+    type: 'Dealer',
+    rating: 4.6,
+    votes: 188,
+    logo: sellerAvatarImg,
+  },
+  {
+    id: 'seller-3',
+    name: 'OEM Market',
+    type: 'Marketplace',
+    rating: 4.7,
+    votes: 246,
+    logo: sellerAvatarImg,
+  },
+];
 
 const MOCK_PAYLOAD = {
   total: 2,
@@ -39,6 +68,7 @@ const MOCK_PAYLOAD = {
       stock: 5,
       location: 'Berlin',
       imageUrl: brakePadsImg,
+      seller: MOCK_SELLERS[1],
     },
     {
       id: '2',
@@ -58,6 +88,7 @@ const MOCK_PAYLOAD = {
       stock: 1,
       location: 'Hamburg',
       imageUrl: headlightImg,
+      seller: MOCK_SELLERS[0],
     },
     {
       id: '3',
@@ -77,6 +108,7 @@ const MOCK_PAYLOAD = {
       stock: 12,
       location: 'Munich',
       imageUrl: oilFilterImg,
+      seller: MOCK_SELLERS[2],
     },
     {
       id: '4',
@@ -96,6 +128,7 @@ const MOCK_PAYLOAD = {
       stock: 7,
       location: 'Stuttgart',
       imageUrl: airFilterImg,
+      seller: MOCK_SELLERS[0],
     },
     {
       id: '5',
@@ -115,6 +148,7 @@ const MOCK_PAYLOAD = {
       stock: 1,
       location: 'Frankfurt',
       imageUrl: frontBumperImg,
+      seller: MOCK_SELLERS[1],
     },
     {
       id: '6',
@@ -134,6 +168,7 @@ const MOCK_PAYLOAD = {
       stock: 9,
       location: 'Cologne',
       imageUrl: shockAbsorberImg,
+      seller: MOCK_SELLERS[2],
     },
     {
       id: '7',
@@ -153,6 +188,7 @@ const MOCK_PAYLOAD = {
       stock: 4,
       location: 'Berlin',
       imageUrl: brakeDiskImg,
+      seller: MOCK_SELLERS[1],
     },
     {
       id: '8',
@@ -172,6 +208,7 @@ const MOCK_PAYLOAD = {
       stock: 2,
       location: 'Düsseldorf',
       imageUrl: sideMirrorImg,
+      seller: MOCK_SELLERS[0],
     },
   ],
 };
@@ -265,16 +302,13 @@ query Parts($filter: PartsFilterInput) {
 const GRAPHQL_ENDPOINT =
   import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql';
 
-const fetchPartsFromGraphql = async (filters) => {
+const graphqlRequest = async ({ query, variables }) => {
   const res = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({
-      query: PARTS_QUERY,
-      variables: { filter: buildPartsFilterInput(filters) },
-    }),
+    body: JSON.stringify({ query, variables }),
   });
 
   if (!res.ok) {
@@ -285,7 +319,16 @@ const fetchPartsFromGraphql = async (filters) => {
   const firstErrorMessage = json?.errors?.[0]?.message;
   if (firstErrorMessage) throw new Error(firstErrorMessage);
 
-  return mapPartsPayloadToDomain(json?.data?.parts);
+  return json?.data ?? null;
+};
+
+const fetchPartsFromGraphql = async (filters) => {
+  const data = await graphqlRequest({
+    query: PARTS_QUERY,
+    variables: { filter: buildPartsFilterInput(filters) },
+  });
+
+  return mapPartsPayloadToDomain(data?.parts);
 };
 
 // ======================================================
@@ -306,4 +349,72 @@ export const fetchParts = async (filters) => {
 
   // 🔌 REAL BACKEND (PROD / LATER)
   return await fetchPartsFromGraphql(normalized);
+};
+
+// ======================================================
+// 🔎 PART DETAILS
+// ======================================================
+const PART_BY_ID_QUERY = `
+query Part($id: ID!) {
+  part(id: $id) {
+    id
+    name
+    category
+    brand
+    model
+    condition
+    description
+    price
+    currency
+    oemCode
+    compatibility
+    stock
+    location
+    imageUrl
+  }
+}
+`;
+
+const fetchPartByIdFromGraphql = async (id) => {
+  // Best-case: backend supports `part(id)`
+  try {
+    const data = await graphqlRequest({
+      query: PART_BY_ID_QUERY,
+      variables: { id: String(id) },
+    });
+    if (data?.part) return mapPartToEntity(data.part);
+    return null;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+
+    // Fallback: schema might not have `part(id)` yet.
+    // We intentionally keep this fallback isolated to the API layer,
+    // so UI stays stable while backend evolves.
+    if (!msg.toLowerCase().includes('cannot query field') || !msg.includes('part')) {
+      throw e;
+    }
+
+    const payload = await fetchPartsFromGraphql(
+      sanitizeFilters({ limit: 10_000, offset: 0 })
+    );
+
+    const hit = payload?.items?.find((item) => String(item.id) === String(id));
+    return hit ? mapPartToEntity(hit) : null;
+  }
+};
+
+/**
+ * Fetch a single part by id and convert to domain entity.
+ * In DEV returns mocked data for UI development.
+ */
+export const fetchPartById = async (id) => {
+  const safeId = String(id ?? '').trim();
+  if (!safeId) return null;
+
+  if (shouldUseMocks()) {
+    const item = (MOCK_PAYLOAD?.items ?? []).find((p) => String(p.id) === safeId);
+    return item ? mapPartToEntity(item) : null;
+  }
+
+  return await fetchPartByIdFromGraphql(safeId);
 };

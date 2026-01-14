@@ -50,7 +50,14 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
 
     const cartItems = useCartStore((s) => s.items);
-    const cartCount = cartItems.length;
+    const cartCount = useMemo(
+        () =>
+            (cartItems ?? []).reduce((sum, item) => {
+                const qty = Number.isFinite(Number(item?.quantity)) ? Number(item.quantity) : 1;
+                return sum + Math.max(1, qty);
+            }, 0),
+        [cartItems]
+    );
     const removeFromCartAt = useCartStore((s) => s.removeFromCartAt);
 
     const favoritesCount = useFavoritesStore((s) => s.items.length);
@@ -203,7 +210,10 @@ export default function Header() {
                                             {favoriteItems?.length ? (
                                                 <div className="header__popoverList">
                                                     {favoriteItems.slice(0, 6).map((fav) => {
-                                                        const to = fav.type === "vehicle" ? `/vehicles/${fav.id}` : "/parts";
+                                                        const to =
+                                                            fav.type === "vehicle"
+                                                                ? `/vehicles/${fav.id}`
+                                                                : `/parts/${fav.id}`;
                                                         const title =
                                                             fav.title ||
                                                             (fav.type === "vehicle"

@@ -7,6 +7,12 @@ export default function MediaCarousel({
     ariaLabel = "Media carousel",
     showControls = true,
     showThumbnails = true,
+    className,
+    viewportClassName,
+    mediaClassName,
+    thumbnailsClassName,
+    thumbButtonClassName,
+    thumbImageClassName,
 }) {
     // fixed (clicked) image
     const [index, setIndex] = useState(0);
@@ -49,20 +55,20 @@ export default function MediaCarousel({
 
     return (
         <section
-            className={styles.carousel}
+            className={[styles.carousel, className].filter(Boolean).join(" ")}
             aria-roledescription="carousel"
             aria-label={ariaLabel}
         >
             {/* MAIN IMAGE */}
             <div
-                className={styles.viewport}
+                className={[styles.viewport, viewportClassName].filter(Boolean).join(" ")}
                 onTouchStart={onTouchStart}
                 onTouchEnd={onTouchEnd}
             >
                 <img
                     src={current.src}
                     alt={current.alt}
-                    className={styles.media}
+                    className={[styles.media, mediaClassName].filter(Boolean).join(" ")}
                     onClick={() => setIsFullscreen(true)}
                 />
 
@@ -88,16 +94,25 @@ export default function MediaCarousel({
 
             {/* THUMBNAILS */}
             {showThumbnails && (
-                <div className={styles.thumbnails}>
+                <div className={[styles.thumbnails, thumbnailsClassName].filter(Boolean).join(" ")}>
                     {items.map((item, i) => (
                         <button
                             key={item.id}
-                            className={`${styles.thumb} ${i === index ? styles.thumbActive : ""
-                                }`}
+                            className={[
+                                styles.thumb,
+                                i === index ? styles.thumbActive : "",
+                                thumbButtonClassName,
+                            ]
+                                .filter(Boolean)
+                                .join(" ")}
                             onMouseEnter={() => setIndex(i)}   
                             aria-label={`Show image ${i + 1}`}
                         >
-                            <img src={item.src} alt={item.alt} />
+                            <img
+                                src={item.src}
+                                alt={item.alt}
+                                className={thumbImageClassName}
+                            />
                         </button>
 
                     ))}

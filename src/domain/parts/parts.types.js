@@ -30,6 +30,7 @@
  * @property {string} location
  * @property {string} imageUrl
  * @property {string | string[]} image
+ * @property {{ id: string; name?: string; logo?: string; avatarUrl?: string; type?: string; rating?: number; votes?: number } | null | undefined} seller
  */
 
 /**

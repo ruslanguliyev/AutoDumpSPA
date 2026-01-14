@@ -31,7 +31,7 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
 
 /**
  * Map transport-layer part to domain entity.
- * @param {{ id: string; name: string; category?: string; brand?: string; model?: string; condition?: string; description?: string; price?: number; currency?: string; oemCode?: string; compatibility?: string[]; stock?: number; location?: string; imageUrl?: string; image?: string | string[] }} dto
+ * @param {{ id: string; name: string; category?: string; brand?: string; model?: string; condition?: string; description?: string; price?: number; currency?: string; oemCode?: string; compatibility?: string[]; stock?: number; location?: string; imageUrl?: string; image?: string | string[]; seller?: { id: string; name?: string; logo?: string; avatarUrl?: string; type?: string; rating?: number; votes?: number } }} dto
  * @returns {import('./parts.types').PartEntity}
  */
 export const mapPartToEntity = (dto) => {
@@ -55,6 +55,7 @@ export const mapPartToEntity = (dto) => {
     location: dto.location || 'N/A',
     imageUrl: fallbackImageUrl,
     image: dto.image ?? dto.imageUrl ?? fallbackImageUrl,
+    seller: dto.seller ?? null,
   };
 };
 
