@@ -28,12 +28,14 @@ export const PartDetailsTabs = ({
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card">
       <div
-        className="border-b border-border bg-secondary/40 p-4"
+        className="border-b border-border bg-card p-4"
         role="tablist"
         aria-label="Part details sections"
       >
-        <div className="flex w-full overflow-hidden rounded-xl border border-border bg-background">
-          {tabs.map((tab, index) => {
+        {/* Mobile: horizontal swipe (carousel). Desktop: segmented full width. */}
+        <div className="w-full overflow-x-auto sm:overflow-hidden">
+          <div className="flex w-max min-w-full snap-x snap-mandatory overflow-hidden rounded-xl border border-border bg-secondary/40">
+            {tabs.map((tab, index) => {
             const isActive = tab.key === active;
             const withDivider = index !== tabs.length - 1;
             return (
@@ -43,13 +45,12 @@ export const PartDetailsTabs = ({
                 role="tab"
                 aria-selected={isActive}
                 className={[
-                  // Mobile-friendly: prevent overflow by allowing flex items to shrink
-                  // and truncating long labels (e.g. "Compatibility").
-                  'min-w-0 flex-1 truncate whitespace-nowrap px-2 py-2 text-xs font-extrabold transition sm:px-2 sm:text-sm',
-                  withDivider ? 'border-r border-border' : '',
+                  // Swipeable tabs on small screens; segmented on sm+.
+                  'snap-start whitespace-nowrap px-3 py-2 text-xs font-extrabold transition sm:flex-1 sm:px-4 sm:py-3 sm:text-sm',
+                  withDivider ? 'sm:border-r sm:border-border' : '',
                   isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary/60 text-foreground hover:bg-accent',
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'bg-transparent text-foreground hover:bg-background/70',
                 ]
                   .filter(Boolean)
                   .join(' ')}
@@ -58,11 +59,12 @@ export const PartDetailsTabs = ({
                 {tab.label}
               </button>
             );
-          })}
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="p-3 text-foreground">{renderPanel()}</div>
+      <div className="p-6 text-foreground">{renderPanel()}</div>
     </section>
   );
 };

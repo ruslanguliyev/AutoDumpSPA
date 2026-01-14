@@ -122,7 +122,17 @@ export default function PartDetailsPage() {
 
               <div className="mt-6">
                 <PartDetailsTabs
+                  initialTab="specs"
                   description={
+                    part.description ? (
+                      <p className="whitespace-pre-line text-sm leading-6 text-foreground">
+                        {part.description}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No description provided.</p>
+                    )
+                  }
+                  specifications={
                     <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:divide-x md:divide-border">
                       <div className="space-y-6 md:pr-10">
                         <div className="text-center text-base font-extrabold">Main info</div>
@@ -162,22 +172,13 @@ export default function PartDetailsPage() {
                       </div>
                     </div>
                   }
-                  specifications={
-                    <div className="space-y-4">
-                      <Row label="Category" value={part.category || '—'} />
-                      <Row label="Brand" value={part.brand || '—'} />
-                      <Row label="Model" value={part.model || '—'} />
-                      <Row label="Condition" value={part.condition || '—'} />
-                      <Row label="OEM" value={part.oemCode || '—'} />
-                    </div>
-                  }
                   compatibility={
                     compatibilityList.length ? (
-                      <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                      <ul className="mx-auto grid w-full max-w-[520px] list-none grid-cols-1 gap-3 p-0 md:max-w-none md:grid-cols-2">
                         {compatibilityList.map((item) => (
                           <li
                             key={item}
-                            className="rounded-xl border border-border bg-background px-3 py-2 text-sm font-semibold"
+                            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-center text-sm font-semibold"
                           >
                             {item}
                           </li>

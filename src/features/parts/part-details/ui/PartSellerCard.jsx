@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
 export const PartSellerCard = ({ seller }) => {
   if (!seller?.id) return null;
@@ -14,27 +15,25 @@ export const PartSellerCard = ({ seller }) => {
   return (
     <Link
       to={`/seller/${seller.id}`}
-      className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm transition hover:bg-accent"
+      className="group flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-3 transition hover:bg-accent"
       aria-label={`Open seller ${name}`}
     >
       {avatar ? (
         <img
           src={avatar}
           alt=""
-          className="h-14 w-14 rounded-xl border border-border bg-background object-cover"
+          className="h-10 w-10 rounded-full border border-border bg-secondary object-cover"
           loading="lazy"
         />
       ) : (
-        <div className="h-14 w-14 rounded-xl border border-border bg-secondary" />
+        <div className="h-10 w-10 rounded-full border border-border bg-secondary" />
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="truncate text-sm font-extrabold text-foreground">{name}</div>
-        {type ? (
-          <div className="mt-0.5 text-xs font-semibold text-muted-foreground">{type}</div>
-        ) : null}
+        <div className="text-[11px] font-semibold text-muted-foreground">Sold by</div>
+        <div className="mt-0.5 truncate text-sm font-extrabold text-foreground">{name}</div>
 
-        <div className="mt-2 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+        <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
           {rating != null ? (
             <span className="inline-flex items-center gap-1">
               <span aria-hidden="true">⭐</span>
@@ -45,12 +44,16 @@ export const PartSellerCard = ({ seller }) => {
           )}
 
           {votes != null ? <span className="text-muted-foreground">({votes})</span> : null}
+          {type ? <span className="text-muted-foreground">·</span> : null}
+          {type ? <span className="text-muted-foreground">{type}</span> : null}
         </div>
       </div>
 
-      <div className="shrink-0 text-xs font-extrabold text-muted-foreground transition group-hover:text-foreground">
-        View
-      </div>
+      <ChevronRight
+        size={18}
+        className="shrink-0 text-muted-foreground transition group-hover:text-foreground"
+        aria-hidden="true"
+      />
     </Link>
   );
 };
