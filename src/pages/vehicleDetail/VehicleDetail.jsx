@@ -1,14 +1,153 @@
 import { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
+import { Heart, MapPin, Phone, ShieldCheck, Star, Store } from "lucide-react";
 import { autos } from "../../data/data";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { Link } from "react-router-dom";
-import BackButton from "../../components/BackButton/BackButton";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+
 
 import "./VehicleDetail.scss";
 
 const MediaCarousel = lazy(() =>
     import("../../components/MediaCarousel/MediaCarousel")
+);
+
+const formatInt = (value) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "—";
+    return new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(n);
+};
+
+const getCurrencySymbol = (currency) => {
+    switch (currency) {
+        case "USD":
+            return "$";
+        case "EUR":
+            return "€";
+        case "RUB":
+            return "₽";
+        default:
+            return "";
+    }
+};
+
+const formatPrice = (value, currency) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "—";
+    const symbol = getCurrencySymbol(currency);
+    return `${symbol}${formatInt(n)}`;
+};
+
+const VehicleSummaryCard = ({
+    title,
+    year,
+    mileage,
+    price,
+    currency,
+    location,
+    isFavorite,
+    onToggleFavorite,
+}) => {
+    return (
+        <div className="vehicle-summary-card">
+            <h2 className="car-title">{title}</h2>
+            <p className="car-meta">
+                {year} • {formatInt(mileage)} km
+            </p>
+
+            <div className="price-box">
+                <p className="big-price">{formatPrice(price, currency)}</p>
+            </div>
+
+            <div className="car-location">
+                <MapPin size={16} aria-hidden="true" />
+                <span>{location}</span>
+            </div>
+
+            <button type="button" className="contact-btn">
+                <Phone size={18} aria-hidden="true" />
+                <span>Contact Seller</span>
+            </button>
+
+            <button
+                type="button"
+                className={`fav-btn ${isFavorite ? "active" : ""}`}
+                onClick={onToggleFavorite}
+            >
+                <Heart size={18} aria-hidden="true" />
+                <span>{isFavorite ? "Added to Favorites" : "Add to Favorites"}</span>
+            </button>
+        </div>
+    );
+};
+
+const SellerCard = ({ seller, phone, location }) => {
+    const content = (
+        <div className="seller-card">
+            <div className="seller-card__header">
+                <h3 className="seller-card__title">Seller Information</h3>
+            </div>
+
+            <div className="seller-card__body">
+                <div className="seller-card__main">
+                    <div className="seller-card-left" aria-hidden="true">
+                        <div className="seller-avatar">
+                            <Store size={22} />
+                        </div>
+                    </div>
+
+                    <div className="seller-card-right">
+                        <h4 className="seller-card-name">{seller?.name ?? "—"}</h4>
+                        <p className="seller-card-type">{seller?.type ?? "—"}</p>
+
+                        <div className="seller-card-rating" aria-label="Seller rating">
+                            <Star size={18} className="rating-star" aria-hidden="true" />
+                            <span className="rating-value">{seller?.rating ?? "—"}</span>
+                            <span className="seller-card-votes">
+                                ({seller?.votes ?? 0} reviews)
+                            </span>
+                        </div>
+
+                        <div className="seller-card-meta">
+                            <div className="meta-row">
+                                <Phone size={18} aria-hidden="true" />
+                                <span>{phone}</span>
+                            </div>
+                            <div className="meta-row">
+                                <MapPin size={18} aria-hidden="true" />
+                                <span>{location}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    if (seller?.id) {
+        return (
+            <Link to={`/seller/${seller.id}`} className="seller-card-link">
+                {content}
+            </Link>
+        );
+    }
+
+    return content;
+};
+
+const SafetyTipsCard = ({ tips }) => (
+    <div className="safety-tips">
+        <h3 className="section-title">
+            <ShieldCheck size={18} aria-hidden="true" />
+            Safety Tips
+        </h3>
+        <ul>
+            {tips.map((tip) => (
+                <li key={tip}>{tip}</li>
+            ))}
+        </ul>
+    </div>
 );
 
 
@@ -31,6 +170,22 @@ export default function VehicleDetail() {
         type: "image",
     }));
 
+    const currency = car?.currency ?? "EUR";
+    const sellerPhone = car?.seller?.phone ?? "—";
+
+    const safetyTips = [
+        "Meet the seller in a safe public location",
+        "Inspect the car thoroughly before purchase",
+        "Never pay in advance without seeing the car",
+        "Check all documents carefully",
+    ];
+
+    const breadcrumbs = [
+        { label: "Home", to: "/" },
+        { label: "Cars", to: "/search" },
+        { label: `${car.brand} ${car.model}` },
+    ];
+
     return (
         <div className="vehicle-page-wrapper">
             <div className="vehicle-grid">
@@ -38,7 +193,8 @@ export default function VehicleDetail() {
 
                 {/* ЛЕВАЯ ЧАСТЬ */}
                 <div className="vehicle-left">
-                    <BackButton fallback="/vehicles" />
+                    <Breadcrumbs items={breadcrumbs} />
+                    
                     {/* ФОТО */}
                     {/* <div className="vehicle-gallery">
                         <img className="main-image" src={car.image[0]} alt={car.alt} />
@@ -154,70 +310,26 @@ export default function VehicleDetail() {
                 {/* ПРАВАЯ ЧАСТЬ (sticky) */}
                 <div className="vehicle-right">
                     <div className="vehicle-info">
+                        <VehicleSummaryCard
+                            title={`${car.brand} ${car.model}`}
+                            year={car.year}
+                            mileage={car.mileage}
+                            price={car.price}
+                            currency={currency}
+                            location={car.location}
+                            isFavorite={isFavorite}
+                            onToggleFavorite={() =>
+                                toggleFavorite({
+                                    type: "vehicle",
+                                    id: car.id,
+                                    title: `${car.brand} ${car.model}`,
+                                    thumbnail: Array.isArray(car.image) ? car.image[0] : car.image,
+                                })
+                            }
+                        />
 
-                        <h2 className="car-title">{car.brand} {car.model}</h2>
-
-                        <div className="price-box">
-                            <p className="big-price">{car.price} €</p>
-                        </div>
-
-                        {/* Fair Price */}
-                        <div className="rating-bar">
-                            <span className="bar green"></span>
-                            <span className="bar green"></span>
-                            <span className="bar green"></span>
-                            <span className="bar grey"></span>
-                            <span className="bar grey"></span>
-                            <p className="rate-text">Fair Price</p>
-                        </div>
-
-                        {/* Основные данные */}
-                        <div className="info-block">
-                            <p><strong>Пробег:</strong> {car.mileage} km</p>
-                            <p><strong>Мотор:</strong> {car.engine}</p>
-                            <p><strong>Привод:</strong> {car.drive}</p>
-                            <p><strong>Год:</strong> {car.year}</p>
-                        </div>
-
-                        <button className="contact-btn">Связаться</button>
-
-                        <div className="action-buttons">
-
-                            <button
-                                className={`fav-btn ${isFavorite ? "active" : ""}`}
-                                onClick={() =>
-                                    toggleFavorite({
-                                        type: "vehicle",
-                                        id: car.id,
-                                        title: `${car.brand} ${car.model}`,
-                                        thumbnail: Array.isArray(car.image) ? car.image[0] : car.image,
-                                    })
-                                }
-                            >
-                                {isFavorite ? "В избранном" : "В избранное"}
-                            </button>
-
-                            <button className="share-btn">Поделиться</button>
-                        </div>
-
-                        {car.seller && (
-                            <Link to={`/seller/${car.seller.id}`} className="seller-card-mini">
-                                <div className="seller-card-left">
-                                    <img src={car.seller.logo} alt={car.seller.name} className="seller-card-logo" />
-                                </div>
-
-                                <div className="seller-card-right">
-                                    <h4 className="seller-card-name">{car.seller.name}</h4>
-                                    <p className="seller-card-type">{car.seller.type}</p>
-
-                                    <div className="seller-card-rating">
-                                        ⭐ {car.seller.rating}
-                                        <span className="seller-card-votes">({car.seller.votes})</span>
-                                    </div>
-                                </div>
-                            </Link>
-                        )}
-
+                        <SellerCard seller={car.seller} phone={sellerPhone} location={car.location} />
+                        <SafetyTipsCard tips={safetyTips} />
                     </div>
                 </div>
             </div>

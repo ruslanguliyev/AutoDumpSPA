@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import BackButton from '@/components/BackButton/BackButton';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import RatingStars from '@/components/RatingStars/RatingStars.jsx';
 import { useFavoritesStore } from '@/store/favoritesStore';
 import { PartGallery } from '@/features/parts/part-details/ui/PartGallery';
@@ -31,6 +32,12 @@ export default function PartDetailsPage() {
     const list = Array.isArray(part?.compatibility) ? part.compatibility : [];
     return list.filter(Boolean);
   }, [part?.compatibility]);
+
+  const breadcrumbs = [
+    { label: 'Home', to: '/' },
+    { label: 'Parts', to: '/parts' },
+    ...(part?.name ? [{ label: part.name }] : []),
+  ];
 
   if (isLoading) {
     return (
@@ -77,8 +84,8 @@ export default function PartDetailsPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
           {/* LEFT */}
           <div className="space-y-6">
+            <Breadcrumbs items={breadcrumbs} />
             <div className="flex items-center justify-between gap-3">
-              <BackButton fallback="/parts" />
             </div>
 
             <PartGallery part={part} />

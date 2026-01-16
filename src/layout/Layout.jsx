@@ -1,8 +1,8 @@
 import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
 import Routers from '../routes/Routers'
 import { Outlet } from 'react-router-dom'
 import ScrollToTopOnRouteChange from '../components/ScrollToTopOnRouteChange'
+import Footer from '../components/Footer/Footer'
 
 const Layout = () => {
     return (
@@ -10,8 +10,8 @@ const Layout = () => {
             <ScrollToTopOnRouteChange />
             <Header />
             <Routers />
-            <Outlet />
             <Footer />
+            <Outlet />
         </>
     )
 }

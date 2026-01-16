@@ -150,170 +150,180 @@
 .vehicle-info {
   position: sticky;
   top: 90px;
-  padding: 22px 20px;
-  border-radius: 14px;
-
   display: flex;
   flex-direction: column;
-  gap: 16px;
-
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+  gap: 20px;
 }
 
 /* Заголовок */
 .car-title {
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 700;
-  text-align: center;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.car-meta {
+  margin: 6px 0 10px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+
+.vehicle-summary-card {
+  padding: 22px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  text-align: left;
 }
 
 /* Цена */
 .price-box {
-  text-align: center;
-
   .big-price {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 800;
-    color: #e4b100;
+    color: var(--chart-1);
+    margin: 0;
   }
 }
 
-/* Rating */
-.rating-bar {
-  display: flex;
+.car-location {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted-foreground);
 
-  .bar {
-    width: 28px;
-    height: 8px;
-    border-radius: 4px;
-  }
-
-  .green {
-    background: #27ae60;
-  }
-
-  .grey {
-    background: #ccc;
-  }
-
-  .rate-text {
-    margin-left: 8px;
-    font-size: 12px;
-  }
-}
-
-/* Информация */
-.info-block {
-  padding: 10px 14px;
-  background: #fafafa;
-  border-radius: 10px;
-
-  strong {
-    font-weight: 600;
-  }
-
-  p {
-    margin-bottom: 6px;
+  svg {
+    color: var(--muted-foreground);
   }
 }
 
 /* Кнопка "Связаться" */
 .contact-btn {
-  background: #f12e21;
-  color: #fff;
+  width: 100%;
+  background: var(--chart-1);
+  color: var(--primary-foreground);
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px 0;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.25s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
   &:hover {
-    background: #ff6a4c;
+    filter: brightness(0.98);
   }
-}
-
-/* Нижние кнопки */
-.action-buttons {
-  display: flex;
-  gap: 10px;
 }
 
 /* Избранное */
 .fav-btn {
-  flex: 1;
-  padding: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background: #f7f7f7;
-  font-size: 14px;
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 15px;
   cursor: pointer;
   transition: 0.25s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--foreground);
 
   &:hover {
-    background: #eee;
+    background: var(--accent);
   }
 
   &.active {
-    background: #fff4cc;
-    border-color: #f1c40f;
-    color: #9f7b00;
+    background: color-mix(in oklch, var(--chart-1) 14%, var(--card));
+    border-color: color-mix(in oklch, var(--chart-1) 35%, var(--border));
+    color: var(--chart-1);
     font-weight: 600;
   }
 }
 
-/* Поделиться */
-.share-btn {
-  flex: 1;
-  padding: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background: #f7f7f7;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.25s;
-
-  &:hover {
-    background: #eee;
-  }
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.seller-card-mini {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  padding: 16px 20px;
-  border-radius: 14px;
-
-  background: #fff;
-  border: 1px solid #eee;
-
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-
+.seller-card-link {
   text-decoration: none;
   color: inherit;
-
-  cursor: pointer;
-  transition: 0.2s ease;
-
-  margin-top: 12px;
-
-  // &:hover {
-  //   transform: translateY(-2px);
-  //   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-  // }
+  display: block;
 }
 
-.seller-card-logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  object-fit: cover;
-  border: 1px solid #ddd;
+.seller-card {
+  padding: 22px 24px;
+  border-radius: 16px;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+
+  box-shadow: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seller-card__header {
+  display: flex;
+  align-items: flex-start;
+}
+
+.seller-card__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.seller-card__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-card__main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.seller-card-left {
+  flex: 0 0 auto;
+}
+
+.seller-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--chart-1) 14%, var(--card));
+  border: 1px solid color-mix(in oklch, var(--chart-1) 25%, var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    color: var(--chart-1);
+  }
 }
 
 .seller-card-right {
@@ -322,30 +332,87 @@
 }
 
 .seller-card-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   margin: 0;
+  color: var(--foreground);
 }
 
 .seller-card-type {
   margin-top: 2px;
-  font-size: 14px;
-  color: #666;
+  font-size: 16px;
+  color: var(--muted-foreground);
 }
 
 .seller-card-rating {
   margin-top: 4px;
-  font-size: 14px;
-  color: #444;
+  font-size: 16px;
+  color: var(--foreground);
 
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
+.rating-star {
+  color: var(--chart-4);
+}
+
+.rating-value {
+  font-weight: 700;
+}
+
 .seller-card-votes {
-  color: #777;
-  font-size: 13px;
+  color: var(--muted-foreground);
+  font-size: 16px;
+}
+
+.seller-card-meta {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 16px;
+  color: var(--muted-foreground);
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  svg {
+    color: var(--muted-foreground);
+  }
+}
+
+.seller-card--empty {
+  cursor: default;
+}
+
+.safety-tips {
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in oklch, var(--chart-1) 30%, var(--border));
+  background: color-mix(in oklch, var(--chart-1) 10%, var(--card));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  ul {
+    margin: 0;
+    padding-left: 22px;
+    list-style: disc;
+    list-style-position: outside;
+    color: #5f4a32;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  li {
+    display: list-item;
+    margin: 12px 0;
+  }
 }
 
 
