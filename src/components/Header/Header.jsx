@@ -159,6 +159,7 @@ export default function Header() {
                             <nav className="header__nav" aria-label="Primary navigation">
                                 <Link to="/">Home</Link>
                                 <Link to="/about">About</Link>
+                                <Link to="/autosearch">Cars</Link>
                                 <Link to="/parts">Parts</Link>
                             </nav>
 
