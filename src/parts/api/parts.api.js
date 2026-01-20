@@ -22,27 +22,30 @@ const shouldUseMocks = () =>
 
 const MOCK_SELLERS = [
   {
-    id: 'dealer_01',
+    id: 'parts_dealer_01',
     name: 'BMW Cars AutoSalon',
     type: 'dealer',
+    domain: 'parts',
     hasPublicPage: true,
     rating: 4.8,
     votes: 312,
     logo: sellerAvatarImg,
   },
   {
-    id: 'dealer_02',
+    id: 'parts_dealer_02',
     name: 'LuxuryCars AutoSalon',
     type: 'dealer',
+    domain: 'parts',
     hasPublicPage: true,
     rating: 4.6,
     votes: 188,
     logo: sellerAvatarImg,
   },
   {
-    id: 'private_03',
+    id: 'parts_private_03',
     name: 'Private Seller',
     type: 'private',
+    domain: 'parts',
     hasPublicPage: false,
     rating: 4.7,
     votes: 246,

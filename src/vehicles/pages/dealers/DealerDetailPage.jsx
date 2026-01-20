@@ -26,6 +26,12 @@ export default function DealerDetailPage() {
     );
   }, [dealerId]);
 
+  const dealerFromVehicles = useMemo(() => {
+    if (!dealerId) return null;
+    const match = autos.find((vehicle) => vehicle?.seller?.id === dealerId);
+    return match?.seller ?? null;
+  }, [dealerId]);
+
   const partsQuery = useQuery({
     queryKey: [PARTS_QUERY_KEY, "dealer", dealerId],
     queryFn: () =>
@@ -42,8 +48,17 @@ export default function DealerDetailPage() {
     );
   }, [dealerId, partsQuery.data?.items]);
 
-  const dealer = dealerVehicles[0]?.seller ?? dealerParts[0]?.seller ?? null;
-  const shouldWaitForParts = dealerVehicles.length === 0 && partsQuery.isLoading;
+  const dealerFromParts = useMemo(() => {
+    const items = partsQuery.data?.items ?? [];
+    const match = items.find((part) => part?.seller?.id === dealerId);
+    return match?.seller ?? null;
+  }, [dealerId, partsQuery.data?.items]);
+
+  const dealer = dealerFromVehicles ?? dealerFromParts;
+  const dealerDomain = dealer?.domain ?? null;
+  const isCarsDealer = dealerDomain === "cars";
+  const isPartsDealer = dealerDomain === "parts";
+  const shouldWaitForParts = !dealer && partsQuery.isLoading;
 
   if (shouldWaitForParts) {
     return (
@@ -55,7 +70,7 @@ export default function DealerDetailPage() {
     );
   }
 
-  if (!dealer || !isPublicDealer(dealer)) {
+  if (!dealer || !isPublicDealer(dealer) || (!isCarsDealer && !isPartsDealer)) {
     return <NotFound />;
   }
 
@@ -87,44 +102,51 @@ export default function DealerDetailPage() {
               </div>
             ) : null}
             <div className="text-sm text-slate-500">
-              {dealerVehicles.length} vehicle
-              {dealerVehicles.length === 1 ? "" : "s"} · {dealerParts.length}{" "}
-              part{dealerParts.length === 1 ? "" : "s"}
+              {isCarsDealer
+                ? `${dealerVehicles.length} vehicle${dealerVehicles.length === 1 ? "" : "s"}`
+                : null}
+              {isPartsDealer
+                ? `${dealerParts.length} part${dealerParts.length === 1 ? "" : "s"}`
+                : null}
             </div>
           </div>
         </header>
 
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">Vehicles</h2>
-          {dealerVehicles.length === 0 ? (
-            <div className="rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
-              This dealer has no vehicles listed yet.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {dealerVehicles.map((car) => (
-                <AutoCard key={car.id} car={car} />
-              ))}
-            </div>
-          )}
-        </section>
+        {isCarsDealer ? (
+          <section className="space-y-4">
+            <h2 className="text-lg font-semibold text-slate-900">Vehicles</h2>
+            {dealerVehicles.length === 0 ? (
+              <div className="rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
+                This dealer has no vehicles listed yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {dealerVehicles.map((car) => (
+                  <AutoCard key={car.id} car={car} />
+                ))}
+              </div>
+            )}
+          </section>
+        ) : null}
 
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">Parts</h2>
-          {partsQuery.isLoading ? (
-            <div className="text-sm text-slate-500">Loading parts…</div>
-          ) : dealerParts.length === 0 ? (
-            <div className="rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
-              This dealer has no parts listed yet.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {dealerParts.map((part) => (
-                <PartCard key={part.id} part={part} />
-              ))}
-            </div>
-          )}
-        </section>
+        {isPartsDealer ? (
+          <section className="space-y-4">
+            <h2 className="text-lg font-semibold text-slate-900">Parts</h2>
+            {partsQuery.isLoading ? (
+              <div className="text-sm text-slate-500">Loading parts…</div>
+            ) : dealerParts.length === 0 ? (
+              <div className="rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
+                This dealer has no parts listed yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {dealerParts.map((part) => (
+                  <PartCard key={part.id} part={part} />
+                ))}
+              </div>
+            )}
+          </section>
+        ) : null}
       </div>
     </div>
   );

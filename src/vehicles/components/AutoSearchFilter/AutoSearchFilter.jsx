@@ -1,6 +1,6 @@
 // src/components/SearchFilter/SearchFilter.jsx
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconChevronDown } from '@tabler/icons-react';
 
@@ -45,8 +45,10 @@ const regions = [
 export default function SearchFilter({
   variant = 'hero', // hero | compact
   resultsCount = 0,
+  onFilterChange,
 }) {
   const navigate = useNavigate();
+  const onFilterChangeRef = useRef(onFilterChange);
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeVehicleType, setActiveVehicleType] = useState('car');
@@ -67,13 +69,23 @@ export default function SearchFilter({
   );
 
   useEffect(() => {
-    setFilters((prev) => ({ ...prev, make: '' }));
+    onFilterChangeRef.current = onFilterChange;
+  }, [onFilterChange]);
+
+  useEffect(() => {
+    setFilters((prev) => {
+      const next = { ...prev, make: '' };
+      onFilterChangeRef.current?.({ vehicleType: activeVehicleType, ...next });
+      return next;
+    });
   }, [activeVehicleType]);
 
   /* ---------- handlers ---------- */
 
   const handleFilterChange = (field, value) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
+    const next = { ...filters, [field]: value };
+    setFilters(next);
+    onFilterChangeRef.current?.({ vehicleType: activeVehicleType, ...next });
   };
 
   const handleSearch = () => {
@@ -87,7 +99,7 @@ export default function SearchFilter({
     if (filters.region) params.set('region', filters.region);
     if (filters.city) params.set('city', filters.city);
 
-    navigate(`/search?${params.toString()}`);
+    navigate(`/autosearch?${params.toString()}`);
   };
 
   /* ================= RENDER ================= */
