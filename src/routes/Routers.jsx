@@ -1,12 +1,13 @@
 // src/routes/Routers.jsx
 import { Routes, Route } from "react-router-dom";
-import Home from '../pages/home/Home';
-import About from '../pages/about/About';
-import AutoSearchResults from '../pages/AutoSearchResults/AutoSearchResults';
-import VehicleDetail from '../pages/vehicleDetail/VehicleDetail';
-import SellerPage from "../pages/seller/SellerPage";
-import PartsPage from "../pages/parts/PartsPage";
-import PartDetail from "../pages/partDetail/PartDetail";
+import Home from '@/vehicles/pages/home/Home';
+import About from '@/app/pages/about/About';
+import AutoSearchResults from '@/vehicles/pages/AutoSearchResults/AutoSearchResults';
+import VehicleDetail from '@/vehicles/pages/vehicleDetail/VehicleDetail';
+import SellerPage from "@/vehicles/pages/dealers/SellerPage";
+import DealerDetailPage from "@/vehicles/pages/dealers/DealerDetailPage";
+import PartsPage from "@/parts/pages/PartsPage";
+import PartDetail from "@/parts/pages/partDetail/PartDetail";
 
 
 const Routers = () => {
@@ -18,7 +19,8 @@ const Routers = () => {
             <Route path='/parts' element={<PartsPage/>}/>
             <Route path='/parts/:id' element={<PartDetail/>}/>
             <Route path='/vehicles/:id' element={<VehicleDetail/>} />
-            <Route path="/seller/:sellerId" element={<SellerPage />} />
+            <Route path="/dealers" element={<SellerPage />} />
+            <Route path="/dealers/:dealerId" element={<DealerDetailPage />} />
         </Routes>
     );
 };
