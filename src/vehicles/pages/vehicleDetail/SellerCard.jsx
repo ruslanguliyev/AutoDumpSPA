@@ -10,7 +10,7 @@ import {
   Star,
 } from "lucide-react";
 
-const DEALER_TYPE = "dealer";
+const PUBLIC_SELLER_TYPES = new Set(["dealer", "reseller"]);
 
 const SellerCard = ({ seller, phone, location, isFavorite, onToggleFavorite }) => {
   const navigate = useNavigate();
@@ -35,11 +35,11 @@ const SellerCard = ({ seller, phone, location, isFavorite, onToggleFavorite }) =
   const favoriteLabel = isFavorite ? "Added to Favorites" : "Add to Favorites";
 
   const canOpenPublicPage =
-    seller?.type === DEALER_TYPE && seller?.hasPublicPage === true;
+    PUBLIC_SELLER_TYPES.has(seller?.type) && seller?.hasPublicPage === true;
 
   const openDealerPage = () => {
     if (!canOpenPublicPage || !seller?.id) return;
-    navigate(`/dealers/${seller.id}`);
+    navigate(`/sellers/${seller.id}`);
   };
 
   const onCardKeyDown = (e) => {

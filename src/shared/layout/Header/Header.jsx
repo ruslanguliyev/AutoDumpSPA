@@ -54,7 +54,7 @@ export default function Header() {
     const mobileMenuItems = useMemo(
         () => [
             { to: "/", label: "Home", Icon: Home },
-            { to: "/about", label: "About", Icon: Info },
+            { to: "/sellers", label: "Sellers", Icon: Info },
             { to: "/parts", label: "Parts", Icon: Package },
             { to: "/favorites", label: "Favorites", Icon: Heart },
             { to: "/account", label: "Account", Icon: User },
@@ -128,7 +128,7 @@ export default function Header() {
                         <div className="header__desktop" ref={popoverRootRef}>
                             <nav className="header__nav" aria-label="Primary navigation">
                                 <Link to="/">Home</Link>
-                                <Link to="/about">About</Link>
+                                <Link to="/sellers">Sellers</Link>
                                 <Link to="/autosearch">Cars</Link>
                                 <Link to="/parts">Parts</Link>
                             </nav>

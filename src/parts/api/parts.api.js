@@ -22,24 +22,26 @@ const shouldUseMocks = () =>
 
 const MOCK_SELLERS = [
   {
-    id: 'parts_dealer_01',
-    name: 'BMW Cars AutoSalon',
-    type: 'dealer',
+    id: 'parts_reseller_01',
+    name: 'Xirdalan Parts Reseller',
+    type: 'reseller',
     domain: 'parts',
     hasPublicPage: true,
     rating: 4.8,
     votes: 312,
     logo: sellerAvatarImg,
+    city: 'Cologne',
   },
   {
-    id: 'parts_dealer_02',
-    name: 'LuxuryCars AutoSalon',
-    type: 'dealer',
+    id: 'parts_reseller_02',
+    name: 'Babek Prospekti Parts Reseller',
+    type: 'reseller',
     domain: 'parts',
     hasPublicPage: true,
     rating: 4.6,
     votes: 188,
     logo: sellerAvatarImg,
+    city: 'Cologne',
   },
   {
     id: 'parts_private_03',
@@ -50,6 +52,7 @@ const MOCK_SELLERS = [
     rating: 4.7,
     votes: 246,
     logo: sellerAvatarImg,
+    city: 'Berlin',
   },
 ];
 
@@ -134,7 +137,7 @@ const MOCK_PAYLOAD = {
       stock: 7,
       location: 'Stuttgart',
       imageUrl: airFilterImg,
-      seller: MOCK_SELLERS[0],
+      seller: MOCK_SELLERS[2],
     },
     {
       id: '5',
@@ -154,7 +157,7 @@ const MOCK_PAYLOAD = {
       stock: 1,
       location: 'Frankfurt',
       imageUrl: frontBumperImg,
-      seller: MOCK_SELLERS[1],
+      seller: MOCK_SELLERS[2],
     },
     {
       id: '6',
@@ -194,7 +197,7 @@ const MOCK_PAYLOAD = {
       stock: 4,
       location: 'Berlin',
       imageUrl: brakeDiskImg,
-      seller: MOCK_SELLERS[1],
+      seller: MOCK_SELLERS[2],
     },
     {
       id: '8',
@@ -214,7 +217,7 @@ const MOCK_PAYLOAD = {
       stock: 2,
       location: 'Düsseldorf',
       imageUrl: sideMirrorImg,
-      seller: MOCK_SELLERS[0],
+      seller: MOCK_SELLERS[2],
     },
   ],
 };

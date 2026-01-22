@@ -30,7 +30,7 @@
  * @property {string} location
  * @property {string} imageUrl
  * @property {string | string[]} image
- * @property {{ id: string; name?: string; logo?: string; avatarUrl?: string; type?: string; hasPublicPage?: boolean; rating?: number; votes?: number } | null} seller
+ * @property {{ id: string; name?: string; logo?: string; avatarUrl?: string; type?: string; domain?: string; hasPublicPage?: boolean; rating?: number; votes?: number } | null} seller
  */
 
 /**

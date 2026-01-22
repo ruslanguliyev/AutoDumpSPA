@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
-const DEALER_TYPE = 'dealer';
+const PUBLIC_SELLER_TYPES = new Set(['dealer', 'reseller']);
 
 export const PartSellerCard = ({ seller }) => {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ export const PartSellerCard = ({ seller }) => {
   const type = seller?.type || null;
 
   const canOpenPublicPage =
-    seller?.type === DEALER_TYPE && seller?.hasPublicPage === true;
+    PUBLIC_SELLER_TYPES.has(seller?.type) && seller?.hasPublicPage === true;
 
   const openDealerPage = () => {
     if (!canOpenPublicPage || !seller?.id) return;
-    navigate(`/dealers/${seller.id}`);
+    navigate(`/sellers/${seller.id}`);
   };
 
   const onCardKeyDown = (e) => {
@@ -38,7 +38,7 @@ export const PartSellerCard = ({ seller }) => {
         'group flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-3 transition',
         canOpenPublicPage ? 'cursor-pointer hover:bg-accent' : 'cursor-default',
       ].join(' ')}
-      aria-label={canOpenPublicPage ? `Open dealer ${name}` : 'Seller info'}
+      aria-label={canOpenPublicPage ? `Open seller ${name}` : 'Seller info'}
       onClick={canOpenPublicPage ? openDealerPage : undefined}
       onKeyDown={canOpenPublicPage ? onCardKeyDown : undefined}
       role={canOpenPublicPage ? 'button' : undefined}
