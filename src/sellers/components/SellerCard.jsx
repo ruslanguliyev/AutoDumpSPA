@@ -1,6 +1,7 @@
 const DOMAIN_LABELS = { cars: "Cars", parts: "Parts" };
 const TYPE_LABELS = { dealer: "Dealer", reseller: "Reseller", private: "Private" };
 
+
 const getInitials = (name) => {
   const safe = String(name ?? "").trim();
   if (!safe) return "??";
@@ -43,7 +44,7 @@ const SellerCard = ({ seller, onClick }) => {
     >
       {/* ROW 1: LOGO + BADGE */}
       <div className="flex items-center justify-between">
-        <div className="h-12 w-12 overflow-hidden rounded-full ring-1 ring-slate-200">
+        <div className="h-15 w-15 overflow-hidden rounded-full ring-1 ring-slate-200">
           {seller?.logo ? (
             <img
               src={seller.logo}
@@ -104,7 +105,7 @@ const SellerCard = ({ seller, onClick }) => {
           e.stopPropagation();
           onClick?.();
         }}
-        className="mt-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+        className="mt-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-[#416E97] hover:opacity-90 transition-opacity"
       >
         View seller →
       </button>

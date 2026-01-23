@@ -1,5 +1,5 @@
-import { Check, Heart, ShieldCheck } from 'lucide-react';
-import { PartSellerCard } from '@/parts/components/part-details/PartSellerCard';
+import { Check, Heart } from 'lucide-react';
+import { SellerCard, TrustBlock } from '@/shared/blocks';
 
 export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
   const inStock = (part?.stock ?? 0) > 0;
@@ -73,25 +73,10 @@ export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
         </div>
 
         {/* 5) Seller card */}
-        <PartSellerCard seller={part?.seller} />
+        <SellerCard seller={part?.seller} variant="compact" />
 
         {/* 6) Protection / guarantees */}
-        <div className="rounded-xl border border-border bg-secondary/10 p-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2 font-extrabold text-foreground">
-            <ShieldCheck size={16} className="text-primary" aria-hidden="true" />
-            Buyer protection
-          </div>
-          <div className="mt-2 flex flex-col gap-2 font-semibold">
-            <span className="inline-flex items-center gap-2">
-              <Check size={14} className="text-emerald-600" aria-hidden="true" />
-              Verified seller
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Check size={14} className="text-emerald-600" aria-hidden="true" />
-              Secure payment
-            </span>
-          </div>
-        </div>
+        <TrustBlock variant="part" />
       </div>
     </div>
   );
