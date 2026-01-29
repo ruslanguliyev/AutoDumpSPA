@@ -1,0 +1,123 @@
+type Service {
+  id: ID!
+  slug: String!
+
+  name: String!
+  legalName: String
+  description: String
+
+  type: String!                # garage | official | detailing | tire | electric | body
+  categories: [String!]!
+
+  services: [ServiceItem!]!
+
+  supportedBrands: [String!]!
+  supportedModels: [ServiceModelRule!]
+
+  location: ServiceLocation!
+
+  rating: Float!
+  reviewsCount: Int!
+
+  verified: Boolean!
+  verificationLevel: String     # basic | business | official
+
+  priceRange: Int               # 1–4
+  avgCheck: Int
+
+  schedule: WeeklySchedule
+
+  contacts: ServiceContacts
+
+  media: ServiceMedia
+
+  promotedLevel: String         # none | boosted | premium
+  isActive: Boolean!
+}
+
+type ServiceItem {
+  id: ID!
+  code: String!                 # oil_change, brake_pads, diagnostics
+  title: String!
+  category: String!
+
+  priceFrom: Int
+  priceTo: Int
+  currency: String
+
+  durationMin: Int
+
+  applicableBrands: [String!]
+  popular: Boolean
+}
+
+type ServiceModelRule {
+  brand: String!
+  models: [String]
+  yearFrom: Int
+  yearTo: Int
+}
+
+type ServiceLocation {
+  country: String!
+  city: String!
+  address: String
+  lat: Float!
+  lng: Float!
+  radiusKm: Int
+}
+
+type WeeklySchedule {
+  monday: DaySchedule
+  tuesday: DaySchedule
+  wednesday: DaySchedule
+  thursday: DaySchedule
+  friday: DaySchedule
+  saturday: DaySchedule
+  sunday: DaySchedule
+}
+
+type DaySchedule {
+  from: String
+  to: String
+  closed: Boolean
+}
+
+type ServiceContacts {
+  phone: String
+  whatsapp: String
+  email: String
+  website: String
+}
+
+type ServiceMedia {
+  logo: String
+  cover: String
+  gallery: [String]
+}
+
+type ServiceReview {
+  id: ID!
+  serviceId: ID!
+  rating: Int!
+  comment: String
+  authorName: String
+  verifiedVisit: Boolean!
+  createdAt: String!
+}
+
+type Query {
+  services(
+    city: String
+    radiusKm: Int
+    serviceTypes: [String]
+    serviceCodes: [String]
+    brands: [String]
+    categories: [String]
+    ratingFrom: Float
+    priceRange: [Int]
+    verifiedOnly: Boolean
+  ): [Service!]!
+
+  service(id: ID, slug: String): Service
+}

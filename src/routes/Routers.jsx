@@ -14,6 +14,8 @@ import { fetchParts } from "@/parts/api/parts.api";
 import { PARTS_DEFAULT_FILTER } from "@/parts/utils/parts.constants";
 import SellersPage from "@/sellers/pages/SellersPage";
 import SellerDetailPage from "@/sellers/pages/SellerDetailPage";
+import ServicesListPage from "@/services/pages/ServicesListPage";
+import ServiceDetailPage from "@/services/pages/ServiceDetailPage";
 
 const PARTS_QUERY_KEY = "parts";
 const EMPTY_LIST = [];
@@ -30,13 +32,32 @@ const SellersPageRoute = () => {
     const partsQuery = useSellersPartsQuery();
     const partsItems = partsQuery.data?.items ?? EMPTY_LIST;
 
-    return (
-        <SellersPage
-            vehicles={autos}
-            parts={partsItems}
-            isPartsLoading={partsQuery.isLoading}
-        />
-    );
+    // Handle error state - don't block rendering if parts fail to load
+    if (partsQuery.error) {
+        console.error('Error loading parts for sellers:', partsQuery.error);
+    }
+
+    try {
+        return (
+            <SellersPage
+                vehicles={autos ?? []}
+                parts={partsItems}
+                isPartsLoading={partsQuery.isLoading}
+            />
+        );
+    } catch (error) {
+        console.error('Error rendering SellersPage:', error);
+        return (
+            <div className="w-full px-4 py-10">
+                <div className="mx-auto w-full max-w-[1280px]">
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+                        <div className="font-semibold">Error loading sellers page</div>
+                        <div className="mt-1">{error?.message || String(error)}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 };
 
 const SellerDetailPageRoute = () => {
@@ -60,6 +81,8 @@ const Routers = () => {
             <Route path="/sellers/:sellerId" element={<SellerDetailPageRoute />} />
             <Route path="/dealers" element={<SellersPageRoute />} />
             <Route path="/dealers/:sellerId" element={<SellerDetailPageRoute />} />
+            <Route path="/services" element={<ServicesListPage />} />
+            <Route path="/services/:idOrSlug" element={<ServiceDetailPage />} />
         </Routes>
     );
 };

@@ -2,8 +2,6 @@ import { useMemo, useState } from 'react';
 import { IconFilter, IconRotate, IconSearch } from '@tabler/icons-react';
 import './SellersFilter.scss';
 
-/* ---------- UI ATOMS ---------- */
-
 const Section = ({ label, children }) => (
   <div className="filter-section">
     {label ? <span className="filter-label">{label}</span> : null}
@@ -11,14 +9,8 @@ const Section = ({ label, children }) => (
   </div>
 );
 
-const TextInput = ({
-  value,
-  onChange,
-  placeholder,
-  icon: Icon,
-  className = '',
-}) => (
-  <div className={`input-wrapper ${className}`}>
+const TextInput = ({ value, onChange, placeholder, icon: Icon }) => (
+  <div className="input-wrapper">
     {Icon ? <Icon size={16} className="input-icon" /> : null}
     <input
       type="text"
@@ -29,30 +21,44 @@ const TextInput = ({
   </div>
 );
 
-const Select = ({ value, onChange, options, placeholder }) => (
-  <select value={value ?? ''} onChange={(e) => onChange?.(e.target.value)}>
-    {placeholder ? <option value="">{placeholder}</option> : null}
-    {(options ?? []).map((o) => (
-      <option key={o.value} value={o.value}>
-        {o.label}
-      </option>
-    ))}
-  </select>
-);
+const Select = ({ value, onChange, options, placeholder }) => {
+  return (
+    <select value={value ?? ''} onChange={(e) => onChange?.(e.target.value)}>
+      {placeholder ? <option value="">{placeholder}</option> : null}
+      {(options ?? []).map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
 
 const Checkbox = ({ checked, onChange, label }) => (
-  <label className="checkbox">
+  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
     <input
       type="checkbox"
       checked={!!checked}
       onChange={(e) => onChange?.(e.target.checked)}
     />
-    <span>{label}</span>
+    <span style={{ fontSize: 14, color: '#0f172a' }}>{label}</span>
   </label>
 );
 
-/* ---------- MAIN COMPONENT ---------- */
-
+/**
+ * SellersFilter (аналог PartsSearchFilter)
+ *
+ * Props:
+ * - filters: {
+ *    search, domain, sellerType, rating, listings,
+ *    city, verifiedOnly, sort
+ *  }
+ * - options: { domains, sellerTypes, ratings, listings, cities, sorts }
+ * - onChange: (key, value) => void
+ * - onReset: () => void
+ * - total: number
+ * - isLoading: boolean
+ */
 export default function SellersFilter({
   filters,
   options,
@@ -64,7 +70,14 @@ export default function SellersFilter({
   const [open, setOpen] = useState(false);
 
   const safeFilters = filters ?? {};
-  const safeOptions = options ?? {};
+  const safeOptions = {
+    domains: options?.domains ?? [],
+    sellerTypes: options?.sellerTypes ?? [],
+    ratings: options?.ratings ?? [],
+    listings: options?.listings ?? [],
+    cities: options?.cities ?? [],
+    sorts: options?.sorts ?? [],
+  };
 
   const footerText = useMemo(() => {
     if (isLoading) return 'Updating sellers…';
@@ -76,7 +89,7 @@ export default function SellersFilter({
     <div className="sellers-filter">
       {/* PRIMARY BAR */}
       <div className="filter-primary">
-        <TextInput
+        <TextInput className="filter-input"
           icon={IconSearch}
           placeholder="Search sellers (name, city)"
           value={safeFilters.search}
@@ -171,3 +184,4 @@ export default function SellersFilter({
     </div>
   );
 }
+

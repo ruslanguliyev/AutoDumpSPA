@@ -48,11 +48,14 @@ export default function SellerPage({
   isPartsLoading = false,
 } = {}) {
   const navigate = useNavigate();
-  const domainFilter = useSellersStore((s) => s.domainFilter);
-  const typeFilter = useSellersStore((s) => s.typeFilter);
-  const setDomainFilter = useSellersStore((s) => s.setDomainFilter);
-  const setTypeFilter = useSellersStore((s) => s.setTypeFilter);
-  const resetFilters = useSellersStore((s) => s.resetFilters);
+  
+  // Safe access to store with fallbacks
+  const store = useSellersStore();
+  const domainFilter = store?.domainFilter ?? 'all';
+  const typeFilter = store?.typeFilter ?? 'all';
+  const setDomainFilter = store?.setDomainFilter ?? (() => {});
+  const setTypeFilter = store?.setTypeFilter ?? (() => {});
+  const resetFilters = store?.resetFilters ?? (() => {});
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState(() => {
     if (typeFilter === "dealer") return ["dealer"];
@@ -67,11 +70,14 @@ export default function SellerPage({
 
   const sellers = useSellersData({ vehicles, parts });
 
+  // Safety check: ensure sellers is an array
+  const safeSellers = Array.isArray(sellers) ? sellers : [];
+
   const filteredSellers = useMemo(() => {
     const ratingMin = Number(selectedRating);
     const hasRatingMin = Number.isFinite(ratingMin) && selectedRating !== "";
 
-    return sellers.filter((seller) => {
+    return safeSellers.filter((seller) => {
       if (domainFilter !== "all" && seller.domain !== domainFilter) return false;
       if (typeFilter !== "all" && seller.type !== typeFilter) return false;
       // Safety: no "private" sellers on sellers page
@@ -104,14 +110,14 @@ export default function SellerPage({
     selectedCity,
     selectedListings,
     selectedRating,
-    sellers,
+    safeSellers,
     typeFilter,
   ]);
 
   const isFiltering = domainFilter !== "all" || typeFilter !== "all";
   const countLabel = isFiltering
-    ? `${filteredSellers.length} of ${sellers.length} sellers`
-    : `${sellers.length} seller${sellers.length === 1 ? "" : "s"}`;
+    ? `${filteredSellers.length} of ${safeSellers.length} sellers`
+    : `${safeSellers.length} seller${safeSellers.length === 1 ? "" : "s"}`;
   const showCountLabel = `Show ${filteredSellers.length} seller${
     filteredSellers.length === 1 ? "" : "s"
   }`;
@@ -147,12 +153,12 @@ export default function SellerPage({
 
   const cityOptions = useMemo(() => {
     const set = new Set();
-    sellers.forEach((s) => {
+    safeSellers.forEach((s) => {
       const c = typeof s?.city === "string" ? s.city.trim() : "";
       if (c) set.add(c);
     });
     return Array.from(set).sort((a, b) => a.localeCompare(b));
-  }, [sellers]);
+  }, [safeSellers]);
 
   const sellerFilterOptions = useMemo(() => {
     const domains = [
@@ -250,7 +256,7 @@ export default function SellerPage({
           />
         </header>
 
-        {isPartsLoading && sellers.length === 0 ? (
+        {isPartsLoading && safeSellers.length === 0 ? (
           <div className="rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
             Loading sellers...
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Home, Info, Menu, Package, X, User } from "lucide-react";
+import { Heart, Home, Info, Menu, Package, X, User, Wrench } from "lucide-react";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import logoUrl from "@/assets/images/autodump-logo.PNG";
 import "./header.scss";
@@ -56,6 +56,7 @@ export default function Header() {
             { to: "/", label: "Home", Icon: Home },
             { to: "/sellers", label: "Sellers", Icon: Info },
             { to: "/parts", label: "Parts", Icon: Package },
+            { to: "/services", label: "Services", Icon: Wrench },
             { to: "/favorites", label: "Favorites", Icon: Heart },
             { to: "/account", label: "Account", Icon: User },
         ],
@@ -131,6 +132,7 @@ export default function Header() {
                                 <Link to="/sellers">Sellers</Link>
                                 <Link to="/autosearch">Cars</Link>
                                 <Link to="/parts">Parts</Link>
+                                <Link to="/services">Services</Link>
                             </nav>
 
                             <div className="header__actions" aria-label="Header actions">

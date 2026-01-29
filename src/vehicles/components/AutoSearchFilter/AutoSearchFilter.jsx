@@ -72,13 +72,15 @@ export default function SearchFilter({
     onFilterChangeRef.current = onFilterChange;
   }, [onFilterChange]);
 
+  // Reset make when vehicle type changes
   useEffect(() => {
-    setFilters((prev) => {
-      const next = { ...prev, make: '' };
-      onFilterChangeRef.current?.({ vehicleType: activeVehicleType, ...next });
-      return next;
-    });
+    setFilters((prev) => ({ ...prev, make: '' }));
   }, [activeVehicleType]);
+
+  // Notify parent of filter changes after state update
+  useEffect(() => {
+    onFilterChangeRef.current?.({ vehicleType: activeVehicleType, ...filters });
+  }, [activeVehicleType, filters]);
 
   /* ---------- handlers ---------- */
 
