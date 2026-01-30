@@ -15,6 +15,7 @@ export default function ServicesListPage() {
   const ratingFrom = useServicesFiltersStore((state) => state.ratingFrom);
   const priceRange = useServicesFiltersStore((state) => state.priceRange);
   const verifiedOnly = useServicesFiltersStore((state) => state.verifiedOnly);
+  const openNow = useServicesFiltersStore((state) => state.openNow);
 
   const setCity = useServicesFiltersStore((state) => state.setCity);
   const setRadiusKm = useServicesFiltersStore((state) => state.setRadiusKm);
@@ -25,6 +26,7 @@ export default function ServicesListPage() {
   const setRatingFrom = useServicesFiltersStore((state) => state.setRatingFrom);
   const togglePriceRange = useServicesFiltersStore((state) => state.togglePriceRange);
   const toggleVerified = useServicesFiltersStore((state) => state.toggleVerified);
+  const setOpenNow = useServicesFiltersStore((state) => state.setOpenNow);
   const reset = useServicesFiltersStore((state) => state.reset);
 
   // Memoize filters object to prevent unnecessary re-renders
@@ -39,8 +41,9 @@ export default function ServicesListPage() {
       ratingFrom,
       priceRange,
       verifiedOnly,
+      openNow,
     }),
-    [city, radiusKm, serviceTypes, serviceCodes, brands, categories, ratingFrom, priceRange, verifiedOnly]
+    [city, radiusKm, serviceTypes, serviceCodes, brands, categories, ratingFrom, priceRange, verifiedOnly, openNow]
   );
 
   const { services, isLoading, error } = useServices();
@@ -102,6 +105,7 @@ export default function ServicesListPage() {
     else if (key === 'ratingFrom') setRatingFrom(value);
     else if (key === 'togglePriceRange') togglePriceRange(value);
     else if (key === 'verifiedOnly') toggleVerified();
+    else if (key === 'openNow') setOpenNow(value);
   };
 
   const errorMessage = error instanceof Error ? error.message : error ? String(error) : null;

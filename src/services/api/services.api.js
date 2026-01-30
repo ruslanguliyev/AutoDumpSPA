@@ -22,8 +22,11 @@ const applyMockFiltering = (services, filters) => {
   const verifiedOnly = filters.verifiedOnly === true;
 
   let filtered = services.filter((service) => {
-    // City filter
-    if (city && normalize(service.location?.city) !== city) return false;
+    // City filter - partial match
+    if (city) {
+      const serviceCity = normalize(service.location?.city);
+      if (!serviceCity || !serviceCity.includes(city)) return false;
+    }
 
     // Service types filter
     if (serviceTypes.length > 0 && !serviceTypes.includes(service.type)) return false;

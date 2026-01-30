@@ -10,6 +10,7 @@ const initialState = {
   ratingFrom: '',
   priceRange: [],
   verifiedOnly: false,
+  openNow: false,
 };
 
 export const useServicesFiltersStore = create((set) => ({
@@ -63,6 +64,8 @@ export const useServicesFiltersStore = create((set) => ({
     set((state) => ({
       verifiedOnly: !state.verifiedOnly,
     })),
+
+  setOpenNow: (openNow) => set({ openNow: !!openNow }),
 
   reset: () => set(initialState),
 }));

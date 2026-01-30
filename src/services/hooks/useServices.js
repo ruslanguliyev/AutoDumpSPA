@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getServices } from '@/services/api/services.query';
 import { useServicesFiltersStore } from '@/services/store/servicesFilters.store';
+import { isServiceOpen } from '@/services/utils/serviceSchedule.utils';
 
 const SERVICES_QUERY_KEY = 'services';
 
@@ -16,6 +17,7 @@ export const useServices = () => {
   const ratingFrom = useServicesFiltersStore((state) => state.ratingFrom);
   const priceRange = useServicesFiltersStore((state) => state.priceRange);
   const verifiedOnly = useServicesFiltersStore((state) => state.verifiedOnly);
+  const openNow = useServicesFiltersStore((state) => state.openNow);
 
   // Memoize filters object to prevent unnecessary re-renders
   const filters = useMemo(
@@ -42,8 +44,17 @@ export const useServices = () => {
 
   const services = query.data ?? [];
   
+  // Filter by openNow if enabled
+  const filteredServices = useMemo(() => {
+    if (!openNow) return services;
+    return services.filter((service) => {
+      if (!service.schedule) return false;
+      return isServiceOpen(service.schedule);
+    });
+  }, [services, openNow]);
+  
   // Sort: promotedLevel (premium > boosted > none) → rating
-  const sortedServices = [...services].sort((a, b) => {
+  const sortedServices = [...filteredServices].sort((a, b) => {
     const promotedOrder = { premium: 3, boosted: 2, none: 1 };
     const aPromoted = promotedOrder[a.promotedLevel] || 1;
     const bPromoted = promotedOrder[b.promotedLevel] || 1;

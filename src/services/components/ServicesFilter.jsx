@@ -1,6 +1,34 @@
-import { useState } from 'react';
-import { IconFilter, IconRotate, IconMapPin } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
+import { IconFilter, IconMapPin, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react';
 import './ServicesFilter.scss';
+
+const SERVICE_TYPES = [
+  { value: 'garage', label: 'Garage' },
+  { value: 'official', label: 'Official' },
+  { value: 'detailing', label: 'Detailing' },
+  { value: 'tire', label: 'Tire' },
+  { value: 'electric', label: 'Electric' },
+  { value: 'body', label: 'Body' },
+];
+
+const RATING_OPTIONS = [
+  { value: '', label: 'Any rating' },
+  { value: '3', label: '3.0+' },
+  { value: '3.5', label: '3.5+' },
+  { value: '4', label: '4.0+' },
+  { value: '4.5', label: '4.5+' },
+];
+
+const RADIUS_OPTIONS = [
+  { value: '', label: 'Any distance' },
+  { value: '5', label: '5 km' },
+  { value: '10', label: '10 km' },
+  { value: '25', label: '25 km' },
+  { value: '50', label: '50 km' },
+  { value: '100', label: '100 km' },
+];
+
+const POPULAR_SERVICES_LIMIT = 6;
 
 const Section = ({ label, children }) => (
   <div className="filter-section">
@@ -21,20 +49,9 @@ const TextInput = ({ value, onChange, placeholder, icon: Icon }) => (
   </div>
 );
 
-const NumberInput = ({ value, onChange, placeholder }) => (
-  <input
-    type="number"
-    min="0"
-    value={value ?? ''}
-    placeholder={placeholder}
-    onChange={(e) => onChange?.(e.target.value)}
-  />
-);
-
-const Select = ({ value, onChange, options, placeholder }) => (
+const Select = ({ value, onChange, options }) => (
   <select value={value ?? ''} onChange={(e) => onChange?.(e.target.value)}>
-    {placeholder && <option value="">{placeholder}</option>}
-    {(options ?? []).map((option) => (
+    {options.map((option) => (
       <option key={option.value} value={option.value}>
         {option.label}
       </option>
@@ -42,37 +59,46 @@ const Select = ({ value, onChange, options, placeholder }) => (
   </select>
 );
 
-const MultiSelect = ({ values, onChange, options, placeholder }) => (
-  <div className="multi-select">
-    {placeholder && <span className="multi-select-label">{placeholder}</span>}
-    <div className="multi-select-chips">
-      {(options ?? []).map((option) => {
-        const isSelected = values.includes(option.value);
-        return (
-          <button
-            key={option.value}
-            type="button"
-            className={`chip ${isSelected ? 'chip-selected' : ''}`}
-            onClick={() => onChange?.(option.value)}
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </div>
-  </div>
+const Toggle = ({ checked, onChange, label }) => (
+  <button
+    type="button"
+    className={`toggle ${checked ? 'toggle-active' : ''}`}
+    onClick={() => onChange?.(!checked)}
+  >
+    <span className="toggle-label">{label}</span>
+    <span className="toggle-switch">
+      <span className="toggle-slider" />
+    </span>
+  </button>
 );
 
-const Checkbox = ({ checked, onChange, label }) => (
-  <label className="checkbox-label">
-    <input
-      type="checkbox"
-      checked={!!checked}
-      onChange={(e) => onChange?.(e.target.checked)}
-    />
-    <span>{label}</span>
-  </label>
+const Chip = ({ selected, onClick, children }) => (
+  <button
+    type="button"
+    className={`chip ${selected ? 'chip-selected' : ''}`}
+    onClick={onClick}
+  >
+    {children}
+  </button>
 );
+
+const CollapsibleSection = ({ label, children, defaultCollapsed = true }) => {
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  
+  return (
+    <div className="collapsible-section">
+      <button
+        type="button"
+        className="collapsible-header"
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        <span className="filter-label">{label}</span>
+        {collapsed ? <IconChevronDown size={16} /> : <IconChevronUp size={16} />}
+      </button>
+      {!collapsed && <div className="collapsible-content">{children}</div>}
+    </div>
+  );
+};
 
 export default function ServicesFilter({
   filters,
@@ -83,18 +109,47 @@ export default function ServicesFilter({
   isLoading,
 }) {
   const [open, setOpen] = useState(false);
+  const [brandSearch, setBrandSearch] = useState('');
+  const [showAllServices, setShowAllServices] = useState(false);
 
   const safeFilters = filters ?? {};
-  const safeOptions = options ?? {};
+  const safeOptions = {
+    serviceCodes: options?.serviceCodes ?? [],
+    brands: options?.brands ?? [],
+  };
 
-  const footerText = isLoading
-    ? 'Updating services…'
-    : `${total} service${total === 1 ? '' : 's'} available`;
+  // Get popular services (first 6 by default)
+  const popularServices = useMemo(() => {
+    return safeOptions.serviceCodes.slice(0, POPULAR_SERVICES_LIMIT);
+  }, [safeOptions.serviceCodes]);
+
+  const allServices = useMemo(() => {
+    return safeOptions.serviceCodes;
+  }, [safeOptions.serviceCodes]);
+
+  // Filter brands by search
+  const filteredBrands = useMemo(() => {
+    if (!brandSearch) return safeOptions.brands;
+    const searchLower = brandSearch.toLowerCase();
+    return safeOptions.brands.filter((brand) =>
+      brand.label.toLowerCase().includes(searchLower)
+    );
+  }, [safeOptions.brands, brandSearch]);
+
+  const footerText = useMemo(() => {
+    if (isLoading) return 'Updating services…';
+    const n = Number.isFinite(total) ? total : 0;
+    return `${n} service${n === 1 ? '' : 's'} available`;
+  }, [isLoading, total]);
+
+  const selectedServiceTypes = safeFilters.serviceTypes || [];
+  const selectedBrands = safeFilters.brands || [];
+  const selectedServices = safeFilters.serviceCodes || [];
 
   return (
     <div className="services-filter">
-      {/* PRIMARY BAR */}
-      <div className="filter-primary">
+      {/* TOP BAR - Always visible */}
+      <div className="filter-top-bar">
         <TextInput
           icon={IconMapPin}
           placeholder="City"
@@ -102,10 +157,22 @@ export default function ServicesFilter({
           onChange={(v) => onChange?.('city', v)}
         />
 
-        <NumberInput
-          placeholder="Radius (km)"
+        <Select
           value={safeFilters.radiusKm}
           onChange={(v) => onChange?.('radiusKm', v)}
+          options={RADIUS_OPTIONS}
+        />
+
+        <Toggle
+          checked={safeFilters.openNow || false}
+          onChange={(v) => onChange?.('openNow', v)}
+          label="Open now"
+        />
+
+        <Toggle
+          checked={safeFilters.verifiedOnly || false}
+          onChange={(v) => onChange?.('verifiedOnly', v)}
+          label="Verified"
         />
 
         <button
@@ -116,78 +183,91 @@ export default function ServicesFilter({
           <IconFilter size={16} />
           Filters
         </button>
-
-        <button
-          type="button"
-          className="btn ghost"
-          onClick={onReset}
-          title="Reset filters"
-        >
-          <IconRotate size={16} />
-        </button>
       </div>
 
-      {/* ADVANCED */}
+      {/* FILTER PANEL - Expandable */}
       {open && (
-        <div className="filter-advanced">
-          <Section label="Service types">
-            <MultiSelect
-              values={safeFilters.serviceTypes || []}
-              onChange={(v) => onChange?.('toggleServiceType', v)}
-              options={safeOptions.serviceTypes}
-              placeholder="Select types"
-            />
+        <div className="filter-panel">
+          {/* Service Type */}
+          <Section label="Service Type">
+            <div className="chips-row">
+              {SERVICE_TYPES.map((type) => {
+                const isSelected = selectedServiceTypes.includes(type.value);
+                return (
+                  <Chip
+                    key={type.value}
+                    selected={isSelected}
+                    onClick={() => onChange?.('toggleServiceType', type.value)}
+                  >
+                    {type.label}
+                  </Chip>
+                );
+              })}
+            </div>
           </Section>
 
-          <Section label="Service codes">
-            <MultiSelect
-              values={safeFilters.serviceCodes || []}
-              onChange={(v) => onChange?.('toggleServiceCode', v)}
-              options={safeOptions.serviceCodes}
-              placeholder="Select services"
-            />
+          {/* Brands - Collapsible with search */}
+          <CollapsibleSection label="Brands" defaultCollapsed={true}>
+            <div className="brands-section">
+              <div className="input-wrapper">
+                <IconSearch size={16} className="input-icon" />
+                <input
+                  type="text"
+                  value={brandSearch}
+                  placeholder="Search brands..."
+                  onChange={(e) => setBrandSearch(e.target.value)}
+                />
+              </div>
+              <div className="chips-grid">
+                {filteredBrands.map((brand) => {
+                  const isSelected = selectedBrands.includes(brand.value);
+                  return (
+                    <Chip
+                      key={brand.value}
+                      selected={isSelected}
+                      onClick={() => onChange?.('toggleBrand', brand.value)}
+                    >
+                      {brand.label}
+                    </Chip>
+                  );
+                })}
+              </div>
+            </div>
+          </CollapsibleSection>
+
+          {/* Services - Popular first, then "Show more" */}
+          <Section label="Services">
+            <div className="chips-grid">
+              {(showAllServices ? allServices : popularServices).map((service) => {
+                const isSelected = selectedServices.includes(service.value);
+                return (
+                  <Chip
+                    key={service.value}
+                    selected={isSelected}
+                    onClick={() => onChange?.('toggleServiceCode', service.value)}
+                  >
+                    {service.label}
+                  </Chip>
+                );
+              })}
+            </div>
+            {!showAllServices && allServices.length > POPULAR_SERVICES_LIMIT && (
+              <button
+                type="button"
+                className="btn-link"
+                onClick={() => setShowAllServices(true)}
+              >
+                Show more ({allServices.length - POPULAR_SERVICES_LIMIT} more)
+              </button>
+            )}
           </Section>
 
-          <Section label="Brands">
-            <MultiSelect
-              values={safeFilters.brands || []}
-              onChange={(v) => onChange?.('toggleBrand', v)}
-              options={safeOptions.brands}
-              placeholder="Select brands"
-            />
-          </Section>
-
-          <Section label="Categories">
-            <MultiSelect
-              values={safeFilters.categories || []}
-              onChange={(v) => onChange?.('toggleCategory', v)}
-              options={safeOptions.categories}
-              placeholder="Select categories"
-            />
-          </Section>
-
-          <Section label="Rating from">
-            <NumberInput
-              placeholder="Min rating"
-              value={safeFilters.ratingFrom}
+          {/* Rating */}
+          <Section label="Rating">
+            <Select
+              value={safeFilters.ratingFrom || ''}
               onChange={(v) => onChange?.('ratingFrom', v)}
-            />
-          </Section>
-
-          <Section label="Price range">
-            <MultiSelect
-              values={safeFilters.priceRange || []}
-              onChange={(v) => onChange?.('togglePriceRange', v)}
-              options={safeOptions.priceRanges}
-              placeholder="Select price ranges"
-            />
-          </Section>
-
-          <Section label="">
-            <Checkbox
-              checked={safeFilters.verifiedOnly}
-              onChange={(v) => onChange?.('verifiedOnly', v)}
-              label="Verified services only"
+              options={RATING_OPTIONS}
             />
           </Section>
         </div>
