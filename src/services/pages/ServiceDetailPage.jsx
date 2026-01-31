@@ -64,7 +64,7 @@ export default function ServiceDetailPage() {
   }
 
   return (
-    <div className="service-detail-page w-full px-4 py-10">
+    <div className="service-detail-page w-full px-2 py-4 sm:px-4 sm:py-6 md:py-10">
       <div className="mx-auto w-full max-w-[1280px]">
         <Breadcrumbs items={breadcrumbs} />
 
@@ -74,9 +74,9 @@ export default function ServiceDetailPage() {
           reviewsCount={reviewsCount}
         />
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:mt-6 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
           {/* LEFT COLUMN */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <ServiceGallery media={service.media} serviceName={service.name} />
             <FullPriceList services={service.services || []} />
             <BrandsServiced brands={service.supportedBrands} />

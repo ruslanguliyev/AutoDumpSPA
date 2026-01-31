@@ -20,7 +20,7 @@ export default function OpeningHours({ schedule }) {
   const today = new Date().getDay();
 
   return (
-    <section className="opening-hours rounded-2xl border border-slate-200 bg-white p-6">
+    <section className="opening-hours rounded-xl border border-slate-200 bg-white p-4 sm:rounded-2xl sm:p-6">
       <div className="hours-header">
         <div className="hours-icon">
           <Clock size={16} />

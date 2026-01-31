@@ -25,7 +25,37 @@
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.35);
-      
+    
+    }
+
+    &__breadcrumbs {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 10;
+
+      @media (min-width: 768px) {
+        top: 24px;
+        left: 24px;
+      }
+
+      @media (min-width: 1200px) {
+        top: 32px;
+        left: 32px;
+      }
+
+      .breadcrumbs {
+        &__link,
+        &__current,
+        &__sep {
+          color: #fff;
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        &__link:hover {
+          color: #e0e7ff;
+        }
+      }
     }
   }
 

@@ -2,7 +2,7 @@ import { Phone, MessageCircle, Globe } from 'lucide-react';
 
 export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
       <div className="status-section">
         <div className="status-row">
           <div className="status-left">

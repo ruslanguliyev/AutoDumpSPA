@@ -12,7 +12,7 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
   if (!reviewsCount || reviewsCount === 0) return null;
 
   return (
-    <section className="service-detail-page__reviews rounded-2xl border border-slate-200 bg-white p-6">
+    <section className="service-detail-page__reviews rounded-xl border border-slate-200 bg-white p-4 sm:rounded-2xl sm:p-6">
       <div className="rating-header">
         <div className="rating-number">{ratingValue.toFixed(1)}</div>
         <div className="rating-stars">

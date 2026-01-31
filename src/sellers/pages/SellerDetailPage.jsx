@@ -15,6 +15,7 @@ import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import AutoCard from "@/vehicles/components/AutoCardComponent/AutoCard";
 import PartCard from "@/parts/components/PartCard/PartCard";
+import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
 import "./SellerDetailPage.scss";
 
 const getInitials = (name) => {
@@ -228,6 +229,9 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
         }
       >
         <div className="seller-hero__overlay" />
+        <div className="seller-hero__breadcrumbs">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
       </section>
 
       {/* Seller Info Card */}
