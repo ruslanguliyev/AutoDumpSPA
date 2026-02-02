@@ -26,8 +26,8 @@ export default function FullPriceList({ services }) {
   if (!services || services.length === 0) return null;
 
   return (
-    <section className="price-list rounded-xl border border-slate-200 bg-white p-4 sm:rounded-2xl sm:p-6">
-      <h2 className="mb-3 text-base font-bold text-slate-900 sm:mb-4 sm:text-lg">Services & Prices</h2>
+    <section className="price-list rounded-xl border border-border bg-card p-4 sm:rounded-2xl sm:p-6">
+      <h2 className="mb-3 text-base font-bold text-foreground sm:mb-4 sm:text-lg">Services & Prices</h2>
       <div className="price-list__container">
         {services.map((item) => (
           <div key={item.id} className="price-list__item">

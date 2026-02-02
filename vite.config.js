@@ -26,5 +26,7 @@ export default defineConfig({
       '@store': path.resolve(__dirname, './src/store'),
       '@styles': path.resolve(__dirname, './src/styles'),
     },
+    // Prevent duplicate React instances if node_modules exist higher up the filesystem.
+    dedupe: ['react', 'react-dom'],
   },
 })

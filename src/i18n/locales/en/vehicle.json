@@ -1,0 +1,72 @@
+{
+  "title": "Vehicles",
+  "selector": {
+    "title": "Vehicle Selector",
+    "vin": "VIN",
+    "vinPlaceholder": "Enter VIN",
+    "or": "or",
+    "brand": "Brand",
+    "brandPlaceholder": "Brand",
+    "model": "Model",
+    "modelPlaceholder": "Model",
+    "engine": "Engine",
+    "enginePlaceholder": "Engine",
+    "generation": "Generation",
+    "yearFrom": "Year from",
+    "yearTo": "Year to"
+  },
+  "filter": {
+    "vehicleType": "Vehicle Type",
+    "car": "Car",
+    "motorcycle": "Motorcycle",
+    "camper": "Camper",
+    "truck": "Truck",
+    "commercial": "Commercial",
+    "make": "Make",
+    "allMakes": "All Makes",
+    "model": "Model",
+    "price": "Price",
+    "registration": "Registration",
+    "region": "Region",
+    "city": "City",
+    "search": "Search"
+  },
+  "specs": {
+    "title": "Specifications",
+    "brand": "Brand",
+    "model": "Model",
+    "version": "Version",
+    "code": "Vehicle Code",
+    "year": "Year",
+    "engine": "Engine",
+    "transmission": "Transmission",
+    "drive": "Drive",
+    "mileage": "Mileage",
+    "km": "km",
+    "location": "Location",
+    "owners": "Number of owners",
+    "financed": "Financed",
+    "yes": "Yes",
+    "no": "No",
+    "postedAt": "Published date",
+    "views": "Views",
+    "ownerComment": "Owner comment"
+  },
+  "details": {
+    "title": "Vehicle Details",
+    "notFound": "Vehicle not found",
+    "missingId": "Missing vehicle id"
+  },
+  "card": {
+    "viewDetails": "View details",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites"
+  },
+  "search": {
+    "title": "Search Vehicles",
+    "results": "Search Results",
+    "noResults": "No vehicles found",
+    "resultsCount": "{{count}} vehicle found",
+    "resultsCount_plural": "{{count}} vehicles found"
+  }
+}

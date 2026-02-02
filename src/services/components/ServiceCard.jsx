@@ -21,17 +21,17 @@ const ServiceCard = ({ service }) => {
 
   const promotedBadge =
     service.promotedLevel === 'premium'
-      ? 'bg-purple-100 text-purple-700 ring-1 ring-purple-200'
+      ? 'bg-premium/10 text-premium ring-1 ring-premium/30'
       : service.promotedLevel === 'boosted'
-        ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-200'
+        ? 'bg-primary/10 text-primary ring-1 ring-primary/30'
         : null;
 
   const verifiedBadge = service.verified
-    ? 'bg-green-100 text-green-700 ring-1 ring-green-200'
+    ? 'bg-success/10 text-success ring-1 ring-success/30'
     : null;
 
   return (
-    <article className="flex h-full w-full flex-col rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md">
+    <article className="flex h-full w-full flex-col rounded-2xl border border-border bg-card shadow-[var(--shadow)] transition hover:shadow-[var(--shadow)]">
       {/* COVER IMAGE */}
       {cover ? (
         <div className="relative h-42 w-full overflow-hidden rounded-t-2xl">
@@ -55,12 +55,12 @@ const ServiceCard = ({ service }) => {
       <div className="flex flex-1 flex-col p-3">
 
         {/* NAME */}
-        <h4 className="flex items-start mt-2 text-base font-semibold leading-snug text-slate-900">
+        <h4 className="flex items-start mt-2 text-base font-semibold leading-snug text-foreground">
           {service.name}
         </h4>
 
         {/* TYPE + CATEGORIES */}
-        <p className="flex items-start text-sm text-slate-500">
+        <p className="flex items-start text-sm text-muted-foreground">
           {typeLabel}
           {service.categories && service.categories.length > 0
             ? ` · ${service.categories.slice(0, 2).join(', ')}`
@@ -74,7 +74,7 @@ const ServiceCard = ({ service }) => {
 
         {/* LOCATION */}
         {city ? (
-          <div className="mt-2 flex items-center gap-1 text-sm text-slate-500">
+          <div className="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
             <span aria-hidden="true">📍</span>
             <span className="truncate">{city}</span>
           </div>
@@ -82,11 +82,11 @@ const ServiceCard = ({ service }) => {
 
         {/* PRICE RANGE / AVG CHECK */}
         {service.avgCheck ? (
-          <div className="flex items-start mt-2 text-sm text-slate-600">
+          <div className="flex items-start mt-2 text-sm text-muted-foreground">
             Avg. check: {service.avgCheck} {service.services?.[0]?.currency || '€'}
           </div>
         ) : service.priceRange ? (
-          <div className="mt-2 text-sm text-slate-600">
+          <div className="mt-2 text-sm text-muted-foreground">
             Price range: {'$'.repeat(service.priceRange)}
           </div>
         ) : null}
@@ -95,12 +95,12 @@ const ServiceCard = ({ service }) => {
         <div className="flex-1" />
 
         {/* DIVIDER */}
-        <div className="border-t border-slate-200 my-3" />
+        <div className="border-t border-border my-3" />
 
         {/* BUTTON */}
         <Link
           to={`/services/${service.slug || service.id}`}
-          className="rounded-xl bg-[#416E97] px-4 py-2.5 text-center text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="rounded-xl bg-brand px-4 py-2.5 text-center text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
         >
           View service →
         </Link>

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchParts } from '@/parts/api/parts.api';
 import { sanitizeFilters } from '@/parts/utils/filterParts';
+import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { usePartsStore } from '@/parts/store/partsStore';
 import { PARTS_DEFAULT_FILTER } from '@/parts/utils/parts.constants';
 
@@ -9,8 +10,9 @@ const PARTS_QUERY_KEY = 'parts';
 
 export const useParts = () => {
   const queryClient = useQueryClient();
-  const { filters, setFilter, resetFilters, selectedPartId, selectPart } =
-    usePartsStore();
+  const filters = useFiltersStore((state) => state.filters.parts);
+  const selectedPartId = usePartsStore((state) => state.selectedPartId);
+  const selectPart = usePartsStore((state) => state.selectPart);
 
   const normalizedFilters = useMemo(
     () => sanitizeFilters(filters),
@@ -96,11 +98,8 @@ export const useParts = () => {
     // ❗ Ошибка ТОЛЬКО если НЕТ данных
     error: hasData ? null : query.error,
 
-    // UI should consume the store source-of-truth (strings, no nulls/objects).
-    // Sanitization is for fetching/querying only.
+    // UI consumes filters from the unified filters store.
     filters,
-    setFilter,
-    resetFilters,
     refetch: query.refetch,
     invalidate: () =>
       queryClient.invalidateQueries({ queryKey: [PARTS_QUERY_KEY] }),

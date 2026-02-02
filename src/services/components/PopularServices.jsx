@@ -24,8 +24,8 @@ export default function PopularServices({ popularServices, allServicesCount }) {
   if (!popularServices || popularServices.length === 0) return null;
 
   return (
-    <section className="service-detail-page__popular-services rounded-2xl border border-slate-200 bg-white p-6">
-      <h2 className="mb-4 text-lg font-bold text-slate-900">Popular Services</h2>
+    <section className="service-detail-page__popular-services rounded-2xl border border-border bg-card p-6">
+      <h2 className="mb-4 text-lg font-bold text-foreground">Popular Services</h2>
       <div>
         {popularServices.map((item) => (
           <div key={item.id} className="service-item">

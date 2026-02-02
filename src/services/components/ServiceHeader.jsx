@@ -5,7 +5,7 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
   const location = service.location;
 
   return (
-    <section className="service-detail-page__header mt-4 rounded-xl border border-slate-200 bg-white p-4 sm:mt-6 sm:rounded-2xl sm:p-6">
+    <section className="service-detail-page__header mt-4 rounded-xl border border-border bg-card p-4 sm:mt-6 sm:rounded-2xl sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -19,10 +19,10 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
             <span className="capitalize">{service.type}</span>
             {ratingValue > 0 && (
               <>
-                <span className="text-slate-300">•</span>
+                <span className="text-muted-foreground/60">•</span>
                 <RatingStars value={ratingValue} count={0} />
                 {reviewsCount > 0 && (
-                  <span className="text-slate-500">({reviewsCount} reviews)</span>
+                  <span className="text-muted-foreground">({reviewsCount} reviews)</span>
                 )}
               </>
             )}
@@ -38,7 +38,7 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
         <div className="flex items-center gap-2 flex-shrink-0 sm:self-start">
           <button
             type="button"
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 sm:gap-2 sm:px-3 sm:text-sm"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-foreground hover:bg-muted sm:gap-2 sm:px-3 sm:text-sm"
             aria-label="Share service"
           >
             <Share2 size={16} className="sm:w-[18px] sm:h-[18px]" />

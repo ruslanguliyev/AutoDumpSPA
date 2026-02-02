@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IconSearch, IconFilter, IconRotate } from '@tabler/icons-react';
 import './PartsSearchFilter.scss';
 
@@ -31,13 +32,42 @@ const NumberInput = ({ value, onChange, placeholder }) => (
   />
 );
 
-const Select = ({ value, onChange, options, placeholder }) => {
+const Select = ({ value, onChange, options, placeholder, translateOptions = false, t }) => {
+  const getLabel = (option) => {
+    if (!translateOptions || !t) return option.label;
+    
+    // Translate condition values
+    if (option.value === 'new') return t('filter.new');
+    if (option.value === 'used') return t('filter.used');
+    if (option.value === 'refurbished') return t('filter.refurbished');
+    if (option.value === 'all' && option.label === 'Any condition') return t('filter.anyCondition');
+    
+    // Translate sort options
+    if (option.value === 'RELEVANCE') return t('filter.relevance');
+    if (option.value === 'PRICE_ASC') return t('filter.priceLowToHigh');
+    if (option.value === 'PRICE_DESC') return t('filter.priceHighToLow');
+    if (option.value === 'NEWEST') return t('filter.newestFirst');
+    
+    // Translate categories
+    if (option.value === 'engine') return t('categories.engine');
+    if (option.value === 'transmission') return t('categories.transmission');
+    if (option.value === 'suspension') return t('categories.suspension');
+    if (option.value === 'brakes') return t('categories.brakes');
+    if (option.value === 'body') return t('categories.body');
+    if (option.value === 'interior') return t('categories.interior');
+    if (option.value === 'electrical') return t('categories.electrical');
+    if (option.value === 'wheels') return t('categories.wheels');
+    if (option.value === 'all' && option.label === 'All categories') return t('filter.allCategories');
+    
+    return option.label;
+  };
+
   return (
     <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}>
       {placeholder && <option value="">{placeholder}</option>}
       {(options ?? []).map((option) => (
         <option key={option.value} value={option.value}>
-          {option.label}
+          {getLabel(option)}
         </option>
       ))}
     </select>
@@ -52,6 +82,7 @@ const PartsSearchFilter = ({
   total,
   isLoading,
 }) => {
+  const { t } = useTranslation('part');
   const [open, setOpen] = useState(false);
 
   return (
@@ -60,7 +91,7 @@ const PartsSearchFilter = ({
       <div className="filter-primary">
         <TextInput
           icon={IconSearch}
-          placeholder="Search by OEM or name"
+          placeholder={t('filter.search')}
           value={filters.search}
           onChange={(v) => onChange('search', v)}
         />
@@ -69,7 +100,9 @@ const PartsSearchFilter = ({
           value={filters.category}
           onChange={(v) => onChange('category', v)}
           options={options.categories}
-          placeholder="All categories"
+          placeholder={t('filter.allCategories')}
+          translateOptions={true}
+          t={t}
         />
 
         <button
@@ -78,14 +111,14 @@ const PartsSearchFilter = ({
           onClick={() => setOpen((v) => !v)}
         >
           <IconFilter size={16} />
-          Filters
+          {t('filter.filters')}
         </button>
 
         <button
           type="button"
           className="btn ghost"
           onClick={onReset}
-          title="Reset filters"
+          title={t('filter.reset')}
         >
           <IconRotate size={16} />
         </button>
@@ -94,62 +127,66 @@ const PartsSearchFilter = ({
       {/* ADVANCED */}
       {open && (
         <div className="filter-advanced">
-          <Section label="Brand">
+          <Section label={t('filter.brand')}>
             <Select
               value={filters.brand}
               onChange={(v) => onChange('brand', v)}
               options={options.brands}
-              placeholder="All brands"
+              placeholder={t('filter.allBrands')}
             />
           </Section>
 
-          <Section label="Model">
+          <Section label={t('filter.model')}>
             <Select
               value={filters.model}
               onChange={(v) => onChange('model', v)}
               options={options.models}
-              placeholder="All models"
+              placeholder={t('filter.allModels')}
             />
           </Section>
 
-          <Section label="Condition">
+          <Section label={t('filter.condition')}>
             <Select
               value={filters.condition}
               onChange={(v) => onChange('condition', v)}
               options={options.conditions}
-              placeholder="Any condition"
+              placeholder={t('filter.anyCondition')}
+              translateOptions={true}
+              t={t}
             />
           </Section>
 
-          <Section label="Location">
+          <Section label={t('filter.location')}>
             <Select
               value={filters.location}
               onChange={(v) => onChange('location', v)}
               options={options.locations}
-              placeholder="Any location"
+              placeholder={t('filter.anyLocation')}
             />
           </Section>
 
-          <Section label="Price">
+          <Section label={t('filter.priceFrom')}>
             <div className="price-row">
               <NumberInput
-                placeholder="From"
+                placeholder={t('filter.from')}
                 value={filters.priceFrom}
                 onChange={(v) => onChange('priceFrom', v)}
               />
               <NumberInput
-                placeholder="To"
+                placeholder={t('filter.to')}
                 value={filters.priceTo}
                 onChange={(v) => onChange('priceTo', v)}
               />
             </div>
           </Section>
 
-          <Section label="Sort by">
+          <Section label={t('filter.sortBy')}>
             <Select
               value={filters.sort}
               onChange={(v) => onChange('sort', v)}
               options={options.sorts}
+              translateOptions={true}
+              t={t}
             />
           </Section>
         </div>
@@ -157,7 +194,7 @@ const PartsSearchFilter = ({
 
       {/* FOOTER */}
       <div className="filter-footer">
-        {isLoading ? 'Updating inventory…' : `${total} parts available`}
+        {isLoading ? t('list.updatingInventory') : t('list.partsAvailable', { count: total })}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 .section {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: rgb(var(--card));
+  border: 1px solid rgb(var(--border));
   border-radius: 16px;
   padding: 24px;
 }
@@ -9,10 +9,10 @@
   margin: 0 0 8px;
   font-size: 18px;
   font-weight: 600;
-  color: #0f172a;
+  color: rgb(var(--foreground));
 }
 
 .placeholder {
   font-size: 14px;
-  color: #64748b;
+  color: rgb(var(--muted-foreground));
 }

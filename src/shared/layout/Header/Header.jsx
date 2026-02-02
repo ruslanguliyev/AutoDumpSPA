@@ -2,6 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Heart, Home, Info, Menu, Package, X, User, Wrench } from "lucide-react";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
+import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
+import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
+import { useTranslation } from "react-i18next";
 import logoUrl from "@/assets/images/autodump-logo.PNG";
 import "./header.scss";
 
@@ -34,10 +37,13 @@ const useMediaQuery = (query) => {
 export default function Header() {
     const isMobile = useMediaQuery("(max-width: 768px)");
     const location = useLocation();
+    const { t } = useTranslation('common');
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [openPopover, setOpenPopover] = useState(null); // 'user' | 'favorites' | null
     const [scrolled, setScrolled] = useState(false);
+
+    const { language, setLanguage } = useLanguageSync();
 
     const favoritesCount = useFavoritesStore((s) => s.items.length);
     const favoriteItems = useFavoritesStore((s) => s.items);
@@ -46,21 +52,21 @@ export default function Header() {
     const popoverRootRef = useRef(null);
 
     const favoritesCountLabel = useMemo(() => {
-        if (!favoriteItems?.length) return "Favorites (empty)";
-        if (favoriteItems.length === 1) return "Favorites (1 item)";
-        return `Favorites (${favoriteItems.length} items)`;
-    }, [favoriteItems]);
+        const count = favoriteItems?.length ?? 0;
+        if (!count) return t('labels.favoritesEmpty');
+        return t('labels.favoritesCount', { count });
+    }, [favoriteItems, t]);
 
     const mobileMenuItems = useMemo(
         () => [
-            { to: "/", label: "Home", Icon: Home },
-            { to: "/sellers", label: "Sellers", Icon: Info },
-            { to: "/parts", label: "Parts", Icon: Package },
-            { to: "/services", label: "Services", Icon: Wrench },
-            { to: "/favorites", label: "Favorites", Icon: Heart },
-            { to: "/account", label: "Account", Icon: User },
+            { to: "/", label: t('nav.home'), Icon: Home },
+            { to: "/sellers", label: t('nav.sellers'), Icon: Info },
+            { to: "/parts", label: t('nav.parts'), Icon: Package },
+            { to: "/services", label: t('nav.services'), Icon: Wrench },
+            { to: "/favorites", label: t('nav.favorites'), Icon: Heart },
+            { to: "/account", label: t('nav.account'), Icon: User },
         ],
-        []
+        [t]
     );
 
     useEffect(() => {
@@ -121,26 +127,32 @@ export default function Header() {
         <>
             <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
                 <div className="header__container">
-                    <Link to="/" className="header__brand" aria-label="Go to home">
+                    <Link to="/" className="header__brand" aria-label={t('common.goHome')}>
                         <img src={logoUrl} alt="AutoDump" className="header__logo" />
                     </Link>
 
                     {!isMobile ? (
                         <div className="header__desktop" ref={popoverRootRef}>
-                            <nav className="header__nav" aria-label="Primary navigation">
-                                <Link to="/">Home</Link>
-                                <Link to="/sellers">Sellers</Link>
-                                <Link to="/autosearch">Cars</Link>
-                                <Link to="/parts">Parts</Link>
-                                <Link to="/services">Services</Link>
+                            <nav className="header__nav" aria-label={t('labels.primaryNavigation')}>
+                                <Link to="/">{t('nav.home')}</Link>
+                                <Link to="/sellers">{t('nav.sellers')}</Link>
+                                <Link to="/autosearch">{t('nav.cars')}</Link>
+                                <Link to="/parts">{t('nav.parts')}</Link>
+                                <Link to="/services">{t('nav.services')}</Link>
                             </nav>
 
-                            <div className="header__actions" aria-label="Header actions">
+                            <div className="header__actions" aria-label={t('labels.headerActions')}>
+                                {/* Utilities (shadcn-only UI): [Language] [Theme] [Existing icons] */}
+                                <div className="flex items-center gap-2 whitespace-nowrap">
+                                    <HeaderLanguageSelector value={language} onChange={setLanguage} />
+                                    <HeaderThemeToggle />
+                                </div>
+
                                 <div className="header__action">
                                     <button
                                         type="button"
                                         className="header__iconBtn"
-                                        aria-label="Account"
+                                        aria-label={t('labels.account')}
                                         aria-haspopup="menu"
                                         aria-expanded={openPopover === "user"}
                                         aria-controls="popover-user"
@@ -151,10 +163,10 @@ export default function Header() {
                                     {openPopover === "user" ? (
                                         <div id="popover-user" className="header__popover" role="menu">
                                             <Link to="/login" role="menuitem" onClick={closePopover}>
-                                                Log in
+                                                {t('buttons.login')}
                                             </Link>
                                             <Link to="/signup" role="menuitem" onClick={closePopover}>
-                                                Sign in
+                                                {t('buttons.signup')}
                                             </Link>
                                         </div>
                                     ) : null}
@@ -179,7 +191,7 @@ export default function Header() {
                                     </button>
                                     {openPopover === "favorites" ? (
                                         <div id="popover-favorites" className="header__popover" role="menu">
-                                            <div className="header__popoverTitle">Favorites</div>
+                                            <div className="header__popoverTitle">{t('labels.favorites')}</div>
                                             {favoriteItems?.length ? (
                                                 <div className="header__popoverList">
                                                     {favoriteItems.slice(0, 6).map((fav) => {
@@ -190,8 +202,8 @@ export default function Header() {
                                                         const title =
                                                             fav.title ||
                                                             (fav.type === "vehicle"
-                                                                ? `Vehicle #${fav.id}`
-                                                                : `Part #${fav.id}`);
+                                                                ? t('labels.vehicleWithNumber', { id: fav.id })
+                                                                : t('labels.partWithNumber', { id: fav.id }));
                                                         return (
                                                             <div key={fav.key} className="header__listItem" role="menuitem">
                                                                 <Link
@@ -212,14 +224,14 @@ export default function Header() {
                                                                     <div className="header__listMain">
                                                                         <div className="header__listTitle">{title}</div>
                                                                         <div className="header__listMeta">
-                                                                            {fav.type === "vehicle" ? "Vehicle" : "Part"}
+                                                                            {fav.type === "vehicle" ? t('labels.vehicle') : t('labels.part')}
                                                                         </div>
                                                                     </div>
                                                                 </Link>
                                                                 <button
                                                                     type="button"
                                                                     className="header__removeBtn"
-                                                                    aria-label="Remove from favorites"
+                                                                    aria-label={t('labels.removeFromFavorites')}
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
                                                                         e.stopPropagation();
@@ -232,12 +244,12 @@ export default function Header() {
                                                         );
                                                     })}
                                                     <Link to="/favorites" role="menuitem" onClick={closePopover}>
-                                                        View all favorites
+                                                        {t('labels.viewAllFavorites')}
                                                     </Link>
                                                 </div>
                                             ) : (
                                                 <div className="header__empty" role="note">
-                                                    No favorites yet
+                                                    {t('labels.noFavorites')}
                                                 </div>
                                             )}
                                         </div>
@@ -248,9 +260,9 @@ export default function Header() {
                         </div>
                     ) : (
                         <div className="header__mobile">
-                            <div className="header__mobileIndicators" aria-label="Mobile counters">
+                            <div className="header__mobileIndicators" aria-label={t('labels.mobileCounters')}>
                                 {favoritesCount > 0 ? (
-                                    <span className="header__mobileIndicator" aria-label={`Favorites: ${favoritesCount}`}>
+                                    <span className="header__mobileIndicator" aria-label={`${t('labels.favorites')}: ${favoritesCount}`}>
                                         <Heart size={16} />
                                         <span className="header__mobileIndicatorCount">{favoritesCount}</span>
                                     </span>
@@ -261,7 +273,7 @@ export default function Header() {
                                 type="button"
                                 className="header__burger"
                                 onClick={openDrawer}
-                                aria-label="Open menu"
+                                aria-label={t('labels.openMenu')}
                                 aria-haspopup="dialog"
                                 aria-expanded={isDrawerOpen}
                                 aria-controls="mobile-drawer"
@@ -279,7 +291,7 @@ export default function Header() {
                         type="button"
                         className="mobile-overlay"
                         onClick={closeDrawer}
-                        aria-label="Close menu"
+                        aria-label={t('labels.closeMenu')}
                     />
 
                     <aside
@@ -287,18 +299,24 @@ export default function Header() {
                         className="mobile-drawer"
                         role="dialog"
                         aria-modal="true"
-                        aria-label="Mobile navigation"
+                        aria-label={t('labels.mobileNavigation')}
                     >
                         <div className="mobile-drawer__header">
-                            <span className="mobile-drawer__title">Menu</span>
+                            <span className="mobile-drawer__title">{t('labels.menu')}</span>
                             <button
                                 type="button"
                                 className="mobile-drawer__close"
                                 onClick={closeDrawer}
-                                aria-label="Close menu"
+                                aria-label={t('labels.closeMenu')}
                             >
                                 <X size={22} />
                             </button>
+                        </div>
+
+                        {/* Mobile utilities (compact, no layout shift in the top header) */}
+                        <div className="flex items-center gap-2 px-4 pb-2">
+                            <HeaderLanguageSelector value={language} onChange={setLanguage} compact />
+                            <HeaderThemeToggle />
                         </div>
 
                         <nav className="mobile-drawer__nav" aria-label="Mobile navigation links">

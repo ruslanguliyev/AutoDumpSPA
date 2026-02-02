@@ -35,13 +35,13 @@ const Select = ({ value, onChange, options, placeholder }) => {
 };
 
 const Checkbox = ({ checked, onChange, label }) => (
-  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+  <label className="inline-flex items-center gap-2">
     <input
       type="checkbox"
       checked={!!checked}
       onChange={(e) => onChange?.(e.target.checked)}
     />
-    <span style={{ fontSize: 14, color: '#0f172a' }}>{label}</span>
+    <span className="text-sm text-foreground">{label}</span>
   </label>
 );
 

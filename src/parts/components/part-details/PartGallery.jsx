@@ -1,4 +1,5 @@
 import { lazy, Suspense, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const MediaCarousel = lazy(() => import('@/shared/ui/MediaCarousel/MediaCarousel'));
 
@@ -9,6 +10,7 @@ const toArray = (value) => {
 };
 
 export const PartGallery = ({ part }) => {
+  const { t } = useTranslation('part');
   const media = useMemo(() => {
     const images = toArray(part?.image?.length ? part.image : part?.imageUrl);
     const fallbackAlt = part?.name ? `${part.name}` : 'Part image';
@@ -23,7 +25,7 @@ export const PartGallery = ({ part }) => {
   if (media.length === 0) {
     return (
       <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-        No images available.
+        {t('gallery.noImages')}
       </div>
     );
   }
@@ -33,13 +35,13 @@ export const PartGallery = ({ part }) => {
       <Suspense
         fallback={
           <div className="rounded-xl bg-secondary p-6 text-sm font-semibold text-muted-foreground">
-            Loading images…
+            {t('gallery.loadingImages')}
           </div>
         }
       >
         <MediaCarousel
           items={media}
-          ariaLabel={`${part?.name ?? 'Part'} gallery`}
+          ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? 'Part' })}
           viewportClassName="!flex !items-center !justify-center !bg-background !h-[320px] md:!h-[420px]"
           mediaClassName="!object-contain !max-h-full !max-w-full !w-auto !mx-auto"
           thumbnailsClassName="!justify-start"

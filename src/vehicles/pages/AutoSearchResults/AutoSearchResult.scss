@@ -11,12 +11,12 @@
     min-width: 200px;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid rgb(var(--border));
 }
 
 .search-filter__button {
-    background: #000;
-    color: white;
+    background: rgb(var(--foreground));
+    color: rgb(var(--background));
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;

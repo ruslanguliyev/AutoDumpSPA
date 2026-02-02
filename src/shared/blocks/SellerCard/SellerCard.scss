@@ -2,15 +2,11 @@
 // Compact variant uses Tailwind classes
 
 .seller-card {
-  // Local tokens for premium seller card (do not touch global tokens)
-  --seller-primary: oklch(0.488 0.243 264.376);
-  --seller-primary-hover: oklch(0.46 0.243 264.376);
-
   padding: 20px 20px 18px;
   border-radius: 16px;
 
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgb(var(--card));
+  border: 1px solid rgb(var(--border));
 
   box-shadow: none;
 
@@ -33,8 +29,8 @@
   width: 52px;
   height: 52px;
   border-radius: 999px;
-  background: color-mix(in oklch, var(--muted-foreground) 10%, var(--card));
-  border: 1px solid var(--border);
+  background: rgb(var(--muted));
+  border: 1px solid rgb(var(--border));
   flex: 0 0 auto;
   overflow: hidden;
 }
@@ -65,7 +61,7 @@
   font-size: 16.5px;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--foreground);
+  color: rgb(var(--foreground));
   text-decoration: none;
 
   // Header requirement: title + badge on ONE line
@@ -78,7 +74,7 @@
   margin: 3px 0 0;
   font-size: 13px;
   line-height: 1.35;
-  color: var(--muted-foreground);
+  color: rgb(var(--muted-foreground));
   align-self: flex-start;
   text-align: left;
 }
@@ -89,16 +85,16 @@
   gap: 8px;
   padding: 2px 8px;
   border-radius: 999px;
-  background: color-mix(in oklch, oklch(0.9 0.06 145) 65%, var(--card));
-  border: 1px solid color-mix(in oklch, oklch(0.78 0.08 145) 35%, var(--border));
-  color: oklch(0.44 0.12 145);
+  background: rgb(var(--success) / 0.12);
+  border: 1px solid rgb(var(--success) / 0.35);
+  color: rgb(var(--success));
   font-size: 11.5px;
   font-weight: 600;
   line-height: 1.3;
   flex: 0 0 auto;
 
   svg {
-    color: oklch(0.44 0.12 145);
+    color: rgb(var(--success));
     width: 14px;
     height: 14px;
   }
@@ -109,7 +105,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--foreground);
+  color: rgb(var(--foreground));
 }
 
 .seller-card__stars {
@@ -119,13 +115,13 @@
 }
 
 .seller-card__star {
-  color: var(--chart-4);
+  color: rgb(var(--warning));
 }
 
 .seller-card__ratingText {
   font-size: 13px;
   line-height: 1.2;
-  color: var(--foreground);
+  color: rgb(var(--foreground));
 }
 
 .seller-card__meta {
@@ -134,7 +130,7 @@
   gap: 8px;
   font-size: 14px;
   line-height: 1.35;
-  color: var(--muted-foreground);
+  color: rgb(var(--muted-foreground));
 }
 
 .seller-card__metaRow {
@@ -143,7 +139,7 @@
   gap: 10px;
 
   svg {
-    color: var(--muted-foreground);
+    color: rgb(var(--muted-foreground));
   }
 }
 
@@ -171,32 +167,32 @@
 
 .seller-card__primaryButton {
   border: none;
-  background: var(--seller-primary);
-  color: oklch(0.985 0 0);
+  background: rgb(var(--primary));
+  color: rgb(var(--primary-foreground));
   transition: 0.2s ease;
 
   &:hover {
-    background: var(--seller-primary-hover);
+    filter: brightness(0.95);
   }
 }
 
 .seller-card__secondaryButton {
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--foreground);
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--card));
+  color: rgb(var(--foreground));
   transition: 0.2s ease;
 
   &:hover {
-    background: var(--accent);
+    background: rgb(var(--accent));
   }
 }
 
 .seller-card__secondaryButton--active {
-  border-color: color-mix(in oklch, var(--chart-1) 40%, var(--border));
-  background: color-mix(in oklch, var(--chart-1) 12%, var(--card));
-  color: var(--chart-1);
+  border-color: rgb(var(--primary) / 0.35);
+  background: rgb(var(--primary) / 0.12);
+  color: rgb(var(--primary));
 
   &:hover {
-    background: color-mix(in oklch, var(--chart-1) 16%, var(--card));
+    background: rgb(var(--primary) / 0.18);
   }
 }

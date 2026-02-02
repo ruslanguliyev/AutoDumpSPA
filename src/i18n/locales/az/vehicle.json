@@ -1,0 +1,72 @@
+{
+  "title": "Avtomobillər",
+  "selector": {
+    "title": "Avtomobil seçimi",
+    "vin": "VIN",
+    "vinPlaceholder": "VIN daxil edin",
+    "or": "və ya",
+    "brand": "Marka",
+    "brandPlaceholder": "Marka",
+    "model": "Model",
+    "modelPlaceholder": "Model",
+    "engine": "Mühərrik",
+    "enginePlaceholder": "Mühərrik",
+    "generation": "Nəsil",
+    "yearFrom": "İldən",
+    "yearTo": "İlə"
+  },
+  "filter": {
+    "vehicleType": "Nəqliyyat növü",
+    "car": "Avtomobil",
+    "motorcycle": "Motosikl",
+    "camper": "Kempinq",
+    "truck": "Yük maşını",
+    "commercial": "Kommersiya",
+    "make": "Marka",
+    "allMakes": "Bütün markalar",
+    "model": "Model",
+    "price": "Qiymət",
+    "registration": "Qeydiyyat",
+    "region": "Region",
+    "city": "Şəhər",
+    "search": "Axtar"
+  },
+  "specs": {
+    "title": "Xüsusiyyətlər",
+    "brand": "Marka",
+    "model": "Model",
+    "version": "Versiya",
+    "code": "Avtomobil kodu",
+    "year": "İl",
+    "engine": "Mühərrik",
+    "transmission": "Ötürücü",
+    "drive": "Sürücü",
+    "mileage": "Yürüş",
+    "km": "km",
+    "location": "Yerləşmə",
+    "owners": "Sahib sayı",
+    "financed": "Kreditdə",
+    "yes": "Bəli",
+    "no": "Xeyr",
+    "postedAt": "Dərc tarixi",
+    "views": "Baxışlar",
+    "ownerComment": "Sahibin şərhi"
+  },
+  "details": {
+    "title": "Avtomobil detalları",
+    "notFound": "Avtomobil tapılmadı",
+    "missingId": "Avtomobil ID-si yoxdur"
+  },
+  "card": {
+    "viewDetails": "Detallara bax",
+    "addToFavorites": "Seçilmişlərə əlavə et",
+    "removeFromFavorites": "Seçilmişlərdən sil"
+  },
+  "search": {
+    "title": "Avtomobil axtar",
+    "results": "Axtarış nəticələri",
+    "noResults": "Avtomobil tapılmadı",
+    "resultsCount": "{{count}} avtomobil tapıldı",
+    "resultsCount_plural": "{{count}} avtomobil tapıldı"
+  }
+}

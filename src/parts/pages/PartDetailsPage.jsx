@@ -8,6 +8,7 @@ import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
 import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
+import { useTranslation } from 'react-i18next';
 
 const Row = ({ label, value }) => (
   <div className="flex items-baseline justify-between gap-6 border-b border-dashed border-border pb-2">
@@ -17,6 +18,7 @@ const Row = ({ label, value }) => (
 );
 
 export default function PartDetailsPage() {
+  const { t } = useTranslation(['part', 'common']);
   const { id } = useParams();
   const { data: part, isLoading, error } = usePartDetails(id);
 
@@ -34,8 +36,8 @@ export default function PartDetailsPage() {
   }, [part?.compatibility]);
 
   const breadcrumbs = [
-    { label: 'Home', to: '/' },
-    { label: 'Parts', to: '/parts' },
+    { label: t('nav.home', { ns: 'common' }), to: '/' },
+    { label: t('nav.parts', { ns: 'common' }), to: '/parts' },
     ...(part?.name ? [{ label: part.name }] : []),
   ];
 
@@ -44,7 +46,7 @@ export default function PartDetailsPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            Loading part details…
+            {t('details.loadingDetails', { ns: 'part' })}
           </div>
         </div>
       </div>
@@ -57,7 +59,7 @@ export default function PartDetailsPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive">
-            Failed to load part. {message ? <span>{message}</span> : null}
+            {t('details.failedToLoad', { ns: 'part' })} {message ? <span>{message}</span> : null}
           </div>
           <BackButton fallback="/parts" />
         </div>
@@ -70,7 +72,7 @@ export default function PartDetailsPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            Part not found.
+            {t('details.notFound', { ns: 'part' })}
           </div>
           <BackButton fallback="/parts" />
         </div>
@@ -101,11 +103,11 @@ export default function PartDetailsPage() {
                       {part.category}
                     </span>
                     <span className="text-xs font-semibold">
-                      Brand: <span className="text-foreground">{part.brand}</span>
+                      {t('details.brandLabel', { ns: 'part' })}: <span className="text-foreground">{part.brand}</span>
                     </span>
                     {part.oemCode ? (
                       <span className="text-xs font-semibold">
-                        OEM: <span className="font-mono text-foreground">{part.oemCode}</span>
+                        {t('details.oemLabel', { ns: 'part' })}: <span className="font-mono text-foreground">{part.oemCode}</span>
                       </span>
                     ) : null}
                   </div>
@@ -117,11 +119,11 @@ export default function PartDetailsPage() {
                   </div>
                   {reviewsCount > 0 ? (
                     <div className="mt-1 text-xs font-semibold text-muted-foreground">
-                      {reviewsCount} reviews
+                      {t('details.reviewsCount', { ns: 'part', count: reviewsCount })}
                     </div>
                   ) : (
                     <div className="mt-1 text-xs font-semibold text-muted-foreground">
-                      No reviews yet
+                      {t('details.noReviewsYet', { ns: 'part' })}
                     </div>
                   )}
                 </div>
@@ -136,42 +138,55 @@ export default function PartDetailsPage() {
                         {part.description}
                       </p>
                     ) : (
-                      <p className="text-sm text-muted-foreground">No description provided.</p>
+                      <p className="text-sm text-muted-foreground">{t('details.noDescription', { ns: 'part' })}</p>
                     )
                   }
                   specifications={
                     <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:divide-x md:divide-border">
                       <div className="space-y-6 md:pr-10">
-                        <div className="text-center text-base font-extrabold">Main info</div>
+                        <div className="text-center text-base font-extrabold">{t('details.mainInfo', { ns: 'part' })}</div>
                         <div className="space-y-4">
-                          <Row label="Article / OEM" value={part.oemCode || '—'} />
-                          <Row label="Condition" value={part.condition || '—'} />
+                          <Row label={t('details.article', { ns: 'part' })} value={part.oemCode || '—'} />
                           <Row
-                            label="Availability"
-                            value={part.stock > 0 ? 'In stock' : 'Out of stock'}
-                          />
-                          <Row label="Location" value={part.location || '—'} />
-                        </div>
-                      </div>
-
-                      <div className="space-y-6 md:pl-10">
-                        <div className="text-center text-base font-extrabold">Compatibility</div>
-                        <div className="space-y-4">
-                          <Row label="Make" value={part.brand || '—'} />
-                          <Row label="Model" value={part.model || '—'} />
-                          <Row
-                            label="Fits"
+                            label={t('details.condition', { ns: 'part' })}
                             value={
-                              compatibilityList.length
-                                ? `${compatibilityList.length} variants`
+                              part.condition
+                                ? (() => {
+                                    const lower = part.condition.toLowerCase();
+                                    if (lower === 'new') return t('filter.new', { ns: 'part' });
+                                    if (lower === 'used') return t('filter.used', { ns: 'part' });
+                                    if (lower === 'refurbished') return t('filter.refurbished', { ns: 'part' });
+                                    return part.condition;
+                                  })()
                                 : '—'
                             }
                           />
                           <Row
-                            label="More"
+                            label={t('details.availability', { ns: 'part' })}
+                            value={part.stock > 0 ? t('details.inStock', { ns: 'part' }) : t('details.outOfStock', { ns: 'part' })}
+                          />
+                          <Row label={t('details.location', { ns: 'part' })} value={part.location || '—'} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-6 md:pl-10">
+                        <div className="text-center text-base font-extrabold">{t('details.compatibilityTitle', { ns: 'part' })}</div>
+                        <div className="space-y-4">
+                          <Row label={t('details.make', { ns: 'part' })} value={part.brand || '—'} />
+                          <Row label={t('details.model', { ns: 'part' })} value={part.model || '—'} />
+                          <Row
+                            label={t('details.fits', { ns: 'part' })}
+                            value={
+                              compatibilityList.length
+                                ? t('details.variantsCount', { ns: 'part', count: compatibilityList.length })
+                                : '—'
+                            }
+                          />
+                          <Row
+                            label={t('buttons.viewMore', { ns: 'common' })}
                             value={
                               <Link to="/parts" className="underline">
-                                Browse parts
+                                {t('details.browseParts', { ns: 'part' })}
                               </Link>
                             }
                           />
@@ -192,14 +207,14 @@ export default function PartDetailsPage() {
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-muted-foreground">Compatibility list is not available.</p>
+                      <p className="text-muted-foreground">{t('details.compatibilityNotAvailable', { ns: 'part' })}</p>
                     )
                   }
                   reviews={
                     <div className="space-y-2">
-                      <div className="text-sm font-extrabold">Reviews</div>
+                      <div className="text-sm font-extrabold">{t('details.reviewsNotAvailableTitle', { ns: 'part' })}</div>
                       <p className="text-muted-foreground">
-                        Reviews are not available yet. (This section is ready for backend data.)
+                        {t('details.reviewsNotAvailableBody', { ns: 'part' })}
                       </p>
                     </div>
                   }

@@ -3,7 +3,7 @@ import ServiceCard from './ServiceCard';
 const ServicesGrid = ({ services, isLoading }) => {
   if (isLoading && services.length === 0) {
     return (
-      <div className="col-span-full text-sm text-slate-500">
+      <div className="col-span-full text-sm text-muted-foreground">
         Loading services…
       </div>
     );
@@ -11,7 +11,7 @@ const ServicesGrid = ({ services, isLoading }) => {
 
   if (!isLoading && services.length === 0) {
     return (
-      <div className="col-span-full rounded-xl border border-slate-100 bg-white px-4 py-6 text-sm text-slate-600">
+      <div className="col-span-full rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
         No services match these filters. Adjust search and try again.
       </div>
     );

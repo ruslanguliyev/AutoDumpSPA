@@ -1,9 +1,9 @@
 .services-filter {
-  background: #fff;
-  border: 1px solid #f1f5f9;
+  background: rgb(var(--card));
+  border: 1px solid rgb(var(--border));
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow);
 }
 
 /* TOP BAR - Always visible, single row */
@@ -32,7 +32,7 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: rgb(var(--muted-foreground));
     pointer-events: none;
   }
 
@@ -41,14 +41,14 @@
     padding: 12px 14px 12px 36px;
     font-size: 14px;
     border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    background: #fff;
+    border: 1px solid rgb(var(--border));
+    background: rgb(var(--background));
     transition: 0.15s;
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      border-color: rgb(var(--primary));
+      box-shadow: 0 0 0 3px rgb(var(--primary) / 0.15);
     }
   }
 }
@@ -59,15 +59,15 @@ select {
   padding: 12px 14px;
   font-size: 14px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--background));
   transition: 0.15s;
   cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: rgb(var(--primary));
+    box-shadow: 0 0 0 3px rgb(var(--primary) / 0.15);
   }
 }
 
@@ -78,8 +78,8 @@ select {
   gap: 8px;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--background));
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -87,7 +87,7 @@ select {
   .toggle-label {
     font-size: 13px;
     font-weight: 500;
-    color: #64748b;
+    color: rgb(var(--muted-foreground));
   }
 
   .toggle-switch {
@@ -95,7 +95,7 @@ select {
     width: 36px;
     height: 20px;
     border-radius: 10px;
-    background: #e2e8f0;
+    background: rgb(var(--border));
     transition: background 0.15s;
   }
 
@@ -106,21 +106,21 @@ select {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #fff;
+    background: rgb(var(--background));
     transition: transform 0.15s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgb(var(--shadow-color) / 0.1);
   }
 
   &.toggle-active {
-    border-color: #2563eb;
-    background: #eff6ff;
+    border-color: rgb(var(--primary));
+    background: rgb(var(--primary) / 0.1);
 
     .toggle-label {
-      color: #2563eb;
+      color: rgb(var(--primary));
     }
 
     .toggle-switch {
-      background: #2563eb;
+      background: rgb(var(--primary));
     }
 
     .toggle-slider {
@@ -129,8 +129,8 @@ select {
   }
 
   &:hover:not(.toggle-active) {
-    border-color: #cbd5e1;
-    background: #f8fafc;
+    border-color: rgb(var(--border));
+    background: rgb(var(--muted));
   }
 }
 
@@ -150,10 +150,10 @@ select {
   white-space: nowrap;
 
   &.secondary {
-    border-color: #e2e8f0;
+    border-color: rgb(var(--border));
 
     &:hover {
-      background: #f8fafc;
+      background: rgb(var(--muted));
     }
   }
 }
@@ -163,7 +163,7 @@ select {
   padding: 0;
   border: none;
   background: none;
-  color: #2563eb;
+  color: rgb(var(--primary));
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -171,7 +171,8 @@ select {
   transition: color 0.15s;
 
   &:hover {
-    color: #1d4ed8;
+    color: rgb(var(--primary));
+    opacity: 0.85;
     text-decoration: underline;
   }
 }
@@ -180,7 +181,7 @@ select {
 .filter-panel {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid rgb(var(--border));
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -196,7 +197,7 @@ select {
 .filter-label {
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color: rgb(var(--muted-foreground));
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -265,31 +266,30 @@ select {
 
 .chip {
   padding: 8px 14px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgb(var(--border));
   border-radius: 8px;
-  background: #fff;
+  background: rgb(var(--background));
   font-size: 13px;
   font-weight: 500;
-  color: #475569;
+  color: rgb(var(--muted-foreground));
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
   white-space: nowrap;
 
   &:hover {
-    border-color: #2563eb;
-    background: #f8fafc;
-    color: #2563eb;
+    border-color: rgb(var(--primary));
+    background: rgb(var(--muted));
+    color: rgb(var(--primary));
   }
 
   &.chip-selected {
-    background: #2563eb;
-    color: #fff;
-    border-color: #2563eb;
+    background: rgb(var(--primary));
+    color: rgb(var(--primary-foreground));
+    border-color: rgb(var(--primary));
 
     &:hover {
-      background: #1d4ed8;
-      border-color: #1d4ed8;
+      filter: brightness(0.95);
     }
   }
 }
@@ -298,8 +298,8 @@ select {
 .filter-footer {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid rgb(var(--border));
   font-size: 12px;
-  color: #64748b;
+  color: rgb(var(--muted-foreground));
   text-align: center;
 }

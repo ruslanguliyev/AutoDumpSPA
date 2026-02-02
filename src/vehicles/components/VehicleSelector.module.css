@@ -7,7 +7,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: rgb(var(--foreground));
 }
 
 .field {
@@ -19,20 +19,20 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: rgb(var(--muted-foreground));
 }
 
 .input {
-  border: 1px solid #d1d5db;
+  border: 1px solid rgb(var(--border));
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 14px;
-  background-color: #ffffff;
-  color: #111827;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
 }
 
 .input:focus {
-  outline: 2px solid #c7d2fe;
+  outline: 2px solid rgb(var(--primary) / 0.35);
   outline-offset: 1px;
 }
 
@@ -41,7 +41,7 @@
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: rgb(var(--muted-foreground));
 }
 
 .grid {

@@ -1,11 +1,5 @@
 import { useMemo, useState } from 'react';
-
-const DEFAULT_TABS = [
-  { key: 'description', label: 'Description' },
-  { key: 'specs', label: 'Specifications' },
-  { key: 'compatibility', label: 'Compatibility' },
-  { key: 'reviews', label: 'Reviews' },
-];
+import { useTranslation } from 'react-i18next';
 
 export const PartDetailsTabs = ({
   description,
@@ -14,7 +8,13 @@ export const PartDetailsTabs = ({
   reviews,
   initialTab = 'description',
 }) => {
-  const tabs = useMemo(() => DEFAULT_TABS, []);
+  const { t } = useTranslation('part');
+  const tabs = useMemo(() => [
+    { key: 'description', label: t('tabs.description') },
+    { key: 'specs', label: t('tabs.specs') },
+    { key: 'compatibility', label: t('tabs.compatibility') },
+    { key: 'reviews', label: t('tabs.reviews') },
+  ], [t]);
   const [active, setActive] = useState(initialTab);
 
   const renderPanel = () => {
@@ -30,7 +30,7 @@ export const PartDetailsTabs = ({
       <div
         className="border-b border-border bg-card p-4"
         role="tablist"
-        aria-label="Part details sections"
+        aria-label={t('tabs.ariaLabel')}
       >
         {/* Mobile: horizontal swipe (carousel). Desktop: segmented full width. */}
         <div className="w-full overflow-x-auto sm:overflow-hidden">
@@ -49,7 +49,7 @@ export const PartDetailsTabs = ({
                   'snap-start whitespace-nowrap px-3 py-2 text-xs font-extrabold transition sm:flex-1 sm:px-4 sm:py-3 sm:text-sm',
                   withDivider ? 'sm:border-r sm:border-border' : '',
                   isActive
-                    ? 'bg-slate-900 text-white shadow-sm'
+                    ? 'bg-foreground text-background shadow-[var(--shadow)]'
                     : 'bg-transparent text-foreground hover:bg-background/70',
                 ]
                   .filter(Boolean)

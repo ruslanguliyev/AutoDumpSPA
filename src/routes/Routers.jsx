@@ -16,6 +16,7 @@ import SellersPage from "@/sellers/pages/SellersPage";
 import SellerDetailPage from "@/sellers/pages/SellerDetailPage";
 import ServicesListPage from "@/services/pages/ServicesListPage";
 import ServiceDetailPage from "@/services/pages/ServiceDetailPage";
+import LanguageRoute from "./LanguageRoute";
 
 const PARTS_QUERY_KEY = "parts";
 const EMPTY_LIST = [];
@@ -50,7 +51,7 @@ const SellersPageRoute = () => {
         return (
             <div className="w-full px-4 py-10">
                 <div className="mx-auto w-full max-w-[1280px]">
-                    <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+                    <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
                         <div className="font-semibold">Error loading sellers page</div>
                         <div className="mt-1">{error?.message || String(error)}</div>
                     </div>
@@ -71,6 +72,7 @@ const SellerDetailPageRoute = () => {
 const Routers = () => {
     return (
         <Routes>
+            {/* Original routes - working without language prefix */}
             <Route path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
             <Route path='/autosearch' element={<AutoSearchResults />} /> 
@@ -83,6 +85,21 @@ const Routers = () => {
             <Route path="/dealers/:sellerId" element={<SellerDetailPageRoute />} />
             <Route path="/services" element={<ServicesListPage />} />
             <Route path="/services/:idOrSlug" element={<ServiceDetailPage />} />
+            {/* Language-prefixed routes (optional, for future use) */}
+            <Route path="/:lang" element={<LanguageRoute />}>
+                <Route index element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="autosearch" element={<AutoSearchResults />} />
+                <Route path="parts" element={<PartsPage />} />
+                <Route path="parts/:id" element={<PartDetail />} />
+                <Route path="vehicles/:id" element={<VehicleDetail />} />
+                <Route path="sellers" element={<SellersPageRoute />} />
+                <Route path="sellers/:sellerId" element={<SellerDetailPageRoute />} />
+                <Route path="dealers" element={<SellersPageRoute />} />
+                <Route path="dealers/:sellerId" element={<SellerDetailPageRoute />} />
+                <Route path="services" element={<ServicesListPage />} />
+                <Route path="services/:idOrSlug" element={<ServiceDetailPage />} />
+            </Route>
         </Routes>
     );
 };

@@ -32,19 +32,19 @@ const SellerCard = ({ seller, onClick }) => {
 
   const badgeTone =
     seller?.type === "dealer"
-      ? "bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+      ? "bg-primary/10 text-primary ring-1 ring-primary/30"
       : seller?.type === "reseller"
-        ? "bg-amber-50 text-amber-700 ring-1 ring-amber-100"
-        : "bg-slate-100 text-slate-600 ring-1 ring-slate-200";
+        ? "bg-warning/10 text-warning ring-1 ring-warning/30"
+        : "bg-muted text-muted-foreground ring-1 ring-border";
 
   return (
     <article
       onClick={onClick}
-      className="flex h-full w-full cursor-pointer flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:shadow-md"
+      className="flex h-full w-full cursor-pointer flex-col rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] transition hover:shadow-[var(--shadow)]"
     >
       {/* ROW 1: LOGO + BADGE */}
       <div className="flex items-center justify-between">
-        <div className="h-15 w-15 overflow-hidden rounded-full ring-1 ring-slate-200">
+        <div className="h-15 w-15 overflow-hidden rounded-full ring-1 ring-border">
           {seller?.logo ? (
             <img
               src={seller.logo}
@@ -52,7 +52,7 @@ const SellerCard = ({ seller, onClick }) => {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-blue-600 text-sm font-semibold text-white">
+            <div className="flex h-full w-full items-center justify-center bg-primary text-sm font-semibold text-primary-foreground">
               {getInitials(seller?.name)}
             </div>
           )}
@@ -66,26 +66,26 @@ const SellerCard = ({ seller, onClick }) => {
       </div>
 
       {/* ROW 2: NAME */}
-      <h4 className="mt-2 text-sm font-semibold leading-snug text-slate-900">
+      <h4 className="mt-2 text-sm font-semibold leading-snug text-foreground">
         {seller?.name ?? "Seller"}
       </h4>
 
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted-foreground">
         {domainLabel} · {typeLabel}
       </p>
 
       {/* ROW 3: RATING + LISTINGS */}
-      <div className="border-t border-slate-300 pt-3">
-        <div className="flex items-center gap-2 text-sm text-slate-600">
+      <div className="border-t border-border pt-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {ratingValue != null ? (
             <span className="inline-flex items-center gap-1">
-              <span className="text-amber-500">⭐</span>
-              <span className="font-semibold text-slate-900">
+              <span className="text-warning">⭐</span>
+              <span className="font-semibold text-foreground">
                 {ratingValue.toFixed(1)}
               </span>
             </span>
           ) : null}
-          {ratingValue != null ? <span className="text-slate-300">•</span> : null}
+          {ratingValue != null ? <span className="text-muted-foreground/60">•</span> : null}
           <span>{listingsCount} listings</span>
         </div>
       </div>
@@ -93,7 +93,7 @@ const SellerCard = ({ seller, onClick }) => {
 
       {/* ROW 4: CITY */}
       {locationLabel ? (
-        <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+        <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
           <span aria-hidden="true">📍</span>
           <span className="truncate">{locationLabel}</span>
         </div>
@@ -105,7 +105,7 @@ const SellerCard = ({ seller, onClick }) => {
           e.stopPropagation();
           onClick?.();
         }}
-        className="mt-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-[#416E97] hover:opacity-90 transition-opacity"
+        className="mt-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-brand-foreground bg-brand hover:opacity-90 transition-opacity"
       >
         View seller →
       </button>

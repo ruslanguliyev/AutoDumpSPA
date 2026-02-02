@@ -3,12 +3,12 @@
 /* ===================================================== */
 
 .search-filter {
-  background: #ffffff;
+  background: rgb(var(--card));
   border-radius: 16px;
   padding: 20px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
   
 }
 
@@ -24,8 +24,8 @@
     height: 48px;
     padding: 0 14px;
     border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
+    border: 1px solid rgb(var(--border));
+    background: rgb(var(--background));
     font-weight: 600;
 
     display: flex;
@@ -33,7 +33,7 @@
     justify-content: space-between;
     cursor: pointer;
 
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow);
 
     .left {
       display: flex;
@@ -47,8 +47,8 @@
       gap: 10px;
 
       .count {
-        background: #2563eb;
-        color: #fff;
+        background: rgb(var(--primary));
+        color: rgb(var(--primary-foreground));
         font-size: 12px;
         padding: 4px 8px;
         border-radius: 999px;
@@ -122,7 +122,7 @@
   &.is-active {
     opacity: 1;
     font-weight: 600;
-    border-bottom: 2px solid #2563eb;
+    border-bottom: 2px solid rgb(var(--primary));
   }
 }
 
@@ -147,7 +147,7 @@
     height: 44px;
     padding: 0 12px;
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--border));
     font-size: 14px;
   }
 }
@@ -157,8 +157,8 @@
   height: 44px;
   border-radius: 12px;
   border: none;
-  background: #2563eb;
-  color: #ffffff;
+  background: rgb(var(--primary));
+  color: rgb(var(--primary-foreground));
   font-weight: 600;
   cursor: pointer;
 }

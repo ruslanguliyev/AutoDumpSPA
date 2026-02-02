@@ -28,7 +28,7 @@ export default function ServiceDetailPage() {
     return (
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
             Loading service details…
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function ServiceDetailPage() {
     return (
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+          <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
             Failed to load service. {message ? <span>{message}</span> : null}
           </div>
           <BackButton fallback="/services" />
@@ -54,7 +54,7 @@ export default function ServiceDetailPage() {
     return (
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
             Service not found.
           </div>
           <BackButton fallback="/services" />

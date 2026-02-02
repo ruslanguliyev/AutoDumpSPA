@@ -1,0 +1,72 @@
+{
+  "title": "Автомобили",
+  "selector": {
+    "title": "Выбор автомобиля",
+    "vin": "VIN",
+    "vinPlaceholder": "Введите VIN",
+    "or": "или",
+    "brand": "Марка",
+    "brandPlaceholder": "Марка",
+    "model": "Модель",
+    "modelPlaceholder": "Модель",
+    "engine": "Двигатель",
+    "enginePlaceholder": "Двигатель",
+    "generation": "Поколение",
+    "yearFrom": "Год от",
+    "yearTo": "Год до"
+  },
+  "filter": {
+    "vehicleType": "Тип транспорта",
+    "car": "Легковой",
+    "motorcycle": "Мотоцикл",
+    "camper": "Кемпер",
+    "truck": "Грузовик",
+    "commercial": "Коммерческий",
+    "make": "Марка",
+    "allMakes": "Все марки",
+    "model": "Модель",
+    "price": "Цена",
+    "registration": "Регистрация",
+    "region": "Регион",
+    "city": "Город",
+    "search": "Поиск"
+  },
+  "specs": {
+    "title": "Характеристики",
+    "brand": "Марка",
+    "model": "Модель",
+    "version": "Версия",
+    "code": "Код авто",
+    "year": "Год выпуска",
+    "engine": "Мотор",
+    "transmission": "Коробка передач",
+    "drive": "Привод",
+    "mileage": "Пробег",
+    "km": "км",
+    "location": "Локация",
+    "owners": "Количество владельцев",
+    "financed": "В кредите",
+    "yes": "Да",
+    "no": "Нет",
+    "postedAt": "Дата публикации",
+    "views": "Просмотры",
+    "ownerComment": "Комментарий владельца"
+  },
+  "details": {
+    "title": "Детали автомобиля",
+    "notFound": "Автомобиль не найден",
+    "missingId": "Отсутствует ID автомобиля"
+  },
+  "card": {
+    "viewDetails": "Посмотреть детали",
+    "addToFavorites": "Добавить в избранное",
+    "removeFromFavorites": "Удалить из избранного"
+  },
+  "search": {
+    "title": "Поиск автомобилей",
+    "results": "Результаты поиска",
+    "noResults": "Автомобили не найдены",
+    "resultsCount": "Найден {{count}} автомобиль",
+    "resultsCount_plural": "Найдено {{count}} автомобилей"
+  }
+}

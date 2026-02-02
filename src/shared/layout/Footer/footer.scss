@@ -1,14 +1,14 @@
 .footer {
-    background-color: #fff;
+    background-color: rgb(var(--background));
     font-size: 0.95rem;
 
     &__link {
-        color: #6c757d;
+        color: rgb(var(--muted-foreground));
         text-decoration: none;
         transition: all 0.2s ease;
 
         &:hover {
-            color: #000;
+            color: rgb(var(--foreground));
             text-decoration: underline;
             text-underline-offset: 3px;
         }
@@ -18,12 +18,12 @@
         display: block;
         margin: 0 auto; // центрирует по горизонтали
         width: 150px; // ширину можно подогнать
-        border: 1px solid #ccc; // нейтральная граница
+        border: 1px solid rgb(var(--border)); // нейтральная граница
         border-radius: 8px;
         padding: 6px 30px;
         font-size: 0.9rem;
-        color: #333;
-        background-color: #fff;
+        color: rgb(var(--foreground));
+        background-color: rgb(var(--background));
         background-position: right 10px center;
         cursor: pointer;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -32,13 +32,13 @@
 
         &:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+            border-color: rgb(var(--primary));
+            box-shadow: 0 0 0 2px rgb(var(--primary) / 0.2);
         }
 
         option {
-            color: #333;
-            background-color: #fff;
+            color: rgb(var(--foreground));
+            background-color: rgb(var(--background));
         }
     }
 

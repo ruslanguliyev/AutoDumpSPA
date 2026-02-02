@@ -15,7 +15,6 @@ import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import AutoCard from "@/vehicles/components/AutoCardComponent/AutoCard";
 import PartCard from "@/parts/components/PartCard/PartCard";
-import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
 import "./SellerDetailPage.scss";
 
 const getInitials = (name) => {
@@ -229,9 +228,6 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
         }
       >
         <div className="seller-hero__overlay" />
-        <div className="seller-hero__breadcrumbs">
-          <Breadcrumbs items={breadcrumbs} />
-        </div>
       </section>
 
       {/* Seller Info Card */}
@@ -262,41 +258,67 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
 
                 <div className="seller-card__meta-row">
                   {ratingValue != null && (
-                    <div className="seller-card__rating">
-                      <span className="seller-card__rating-star">★</span>
-                      <span className="seller-card__rating-value">
-                        {ratingValue.toFixed(1)}
-                      </span>
-                      {votesValue != null && (
-                        <span className="seller-card__rating-count">
-                          ({votesValue} Reviews)
-                        </span>
-                      )}
+                    <div className="seller-card__meta-item seller-card__meta-item--rating">
+                      <div className="seller-card__meta-icon">
+                        <span className="seller-card__rating-star">★</span>
+                      </div>
+                      <div className="seller-card__meta-content">
+                        <div className="seller-card__meta-value">
+                          {ratingValue.toFixed(1)}
+                        </div>
+                        {votesValue != null && (
+                          <div className="seller-card__meta-label">
+                            <span className="seller-card__meta-label-desktop">
+                              ({votesValue} Reviews)
+                            </span>
+                            <span className="seller-card__meta-label-mobile">
+                              {votesValue} Reviews
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
 
                   {city && (
-                    <button
-                      onClick={handleLocationClick}
-                      className="seller-card__location"
-                      type="button"
-                    >
-                      <MapPin size={14} />
-                      <span>
-                        {city}
-                        {country && `, ${country}`}
-                      </span>
-                    </button>
-                  )}
-
-                  {memberSince && (
-                    <div className="seller-card__member-since">
-                      <Calendar size={14} />
-                      Member since {new Date(memberSince).getFullYear()}
+                    <div className="seller-card__meta-item seller-card__meta-item--location">
+                      <div className="seller-card__meta-icon">
+                        <MapPin size={18} />
+                      </div>
+                      <div className="seller-card__meta-content">
+                        <div className="seller-card__meta-value">
+                          <span className="seller-card__meta-value-desktop">
+                            {city}
+                            {country && `, ${country}`}
+                          </span>
+                          <span className="seller-card__meta-value-mobile">
+                            {city}
+                          </span>
+                        </div>
+                        <div className="seller-card__meta-label">
+                          <span className="seller-card__meta-label-mobile-only">
+                            {country || "Location"}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   )}
 
-
+                  {memberSince && (
+                    <div className="seller-card__meta-item seller-card__meta-item--member">
+                      <div className="seller-card__meta-icon">
+                        <Calendar size={18} />
+                      </div>
+                      <div className="seller-card__meta-content">
+                        <div className="seller-card__meta-value">
+                          {new Date().getFullYear() - new Date(memberSince).getFullYear()} Yrs
+                        </div>
+                        <div className="seller-card__meta-label">
+                          Active Seller
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="seller-card__description">
                   <p className="seller-card__description-text">{description}</p>

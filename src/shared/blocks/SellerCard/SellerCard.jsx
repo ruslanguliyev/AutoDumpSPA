@@ -150,7 +150,7 @@ export const SellerCard = ({ seller, variant = 'full', actions, className = '' }
               className="h-full w-full object-cover rounded-full"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-blue-600 text-sm font-semibold text-white rounded-full">
+            <div className="flex h-full w-full items-center justify-center bg-primary text-sm font-semibold text-primary-foreground rounded-full">
               {getInitials(name)}
             </div>
           )}

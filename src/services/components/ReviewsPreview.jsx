@@ -12,7 +12,7 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
   if (!reviewsCount || reviewsCount === 0) return null;
 
   return (
-    <section className="service-detail-page__reviews rounded-xl border border-slate-200 bg-white p-4 sm:rounded-2xl sm:p-6">
+    <section className="service-detail-page__reviews rounded-xl border border-border bg-card p-4 sm:rounded-2xl sm:p-6">
       <div className="rating-header">
         <div className="rating-number">{ratingValue.toFixed(1)}</div>
         <div className="rating-stars">
@@ -74,7 +74,7 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
 
       <button
         type="button"
-        className="mt-4 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        className="mt-4 w-full rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
       >
         Show all {reviewsCount} reviews
       </button>

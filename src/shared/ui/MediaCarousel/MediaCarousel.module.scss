@@ -20,8 +20,8 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.45);
-    color: #fff;
+    background: rgb(var(--shadow-color) / 0.45);
+    color: rgb(var(--primary-foreground));
     font-size: 28px;
     padding: 6px 12px;
     border-radius: 8px;
@@ -47,11 +47,11 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #ccc;
+    background: rgb(var(--border));
 }
 
 .active {
-    background: #000;
+    background: rgb(var(--foreground));
 }
 
 /* THUMBNAILS */
@@ -85,6 +85,5 @@
 
 .thumbActive {
     opacity: 1;
-    // outline: 2px solid #000;
     border-radius: 8px;
 }

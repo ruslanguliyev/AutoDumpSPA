@@ -1,10 +1,12 @@
 import './PartCard.scss';
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 
 export default function PartCard({ part }) {
+    const { t } = useTranslation('part');
     if (!part) return null;
 
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
@@ -35,7 +37,7 @@ export default function PartCard({ part }) {
 
             <div className="part-card__image-wrapper">
                 {part?.id ? (
-                    <Link to={`/parts/${part.id}`} aria-label={`Open ${part.name}`}>
+                    <Link to={`/parts/${part.id}`} aria-label={t('card.openPart', { name: part.name })}>
                         <img
                             src={imageSrc}
                             alt={part.name}
@@ -53,7 +55,7 @@ export default function PartCard({ part }) {
                 <button
                     type="button"
                     className={`part-card__fav-btn ${favActive ? 'active' : ''}`}
-                    aria-label={favActive ? 'Remove from favorites' : 'Add to favorites'}
+                    aria-label={favActive ? t('card.removeFromFavorites') : t('card.addToFavorites')}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -89,8 +91,8 @@ export default function PartCard({ part }) {
 
                 <div className="part-card__stock">
                     {part.stock > 0
-                        ? 'Auf Lager. Versandbereit in 1–2 Werktagen.'
-                        : 'Nicht verfügbar'}
+                        ? t('card.stockInStock')
+                        : t('card.stockOutOfStock')}
                 </div>
 
                 <div className="part-card__spacer" />
