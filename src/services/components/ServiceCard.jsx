@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 
@@ -75,7 +76,7 @@ const ServiceCard = ({ service }) => {
         {/* LOCATION */}
         {city ? (
           <div className="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
-            <span aria-hidden="true">📍</span>
+            <MapPin size={14} className="text-muted-foreground" aria-hidden="true" />
             <span className="truncate">{city}</span>
           </div>
         ) : null}

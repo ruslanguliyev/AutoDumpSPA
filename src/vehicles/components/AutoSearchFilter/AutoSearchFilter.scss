@@ -116,12 +116,12 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
-  opacity: 0.6;
+  color: rgb(var(--muted-foreground));
   padding-bottom: 6px;
 
   &.is-active {
-    opacity: 1;
     font-weight: 600;
+    color: rgb(var(--foreground));
     border-bottom: 2px solid rgb(var(--primary));
   }
 }
@@ -149,6 +149,12 @@
     border-radius: 10px;
     border: 1px solid rgb(var(--border));
     font-size: 14px;
+    background: rgb(var(--background));
+    color: rgb(var(--foreground));
+
+    &::placeholder {
+      color: rgb(var(--muted-foreground));
+    }
   }
 }
 

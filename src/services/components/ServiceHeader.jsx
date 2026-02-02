@@ -19,7 +19,7 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
             <span className="capitalize">{service.type}</span>
             {ratingValue > 0 && (
               <>
-                <span className="text-muted-foreground/60">•</span>
+                <span className="text-muted-foreground">•</span>
                 <RatingStars value={ratingValue} count={0} />
                 {reviewsCount > 0 && (
                   <span className="text-muted-foreground">({reviewsCount} reviews)</span>

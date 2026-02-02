@@ -22,11 +22,14 @@
 .hero-slide {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    /* растягивается без искажений */
-    background-position: center;
-    /* центрируем */
-    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-slide__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @media (max-width: 1024px) {

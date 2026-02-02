@@ -142,11 +142,8 @@ export default function Header() {
                             </nav>
 
                             <div className="header__actions" aria-label={t('labels.headerActions')}>
-                                {/* Utilities (shadcn-only UI): [Language] [Theme] [Existing icons] */}
-                                <div className="flex items-center gap-2 whitespace-nowrap">
-                                    <HeaderLanguageSelector value={language} onChange={setLanguage} />
-                                    <HeaderThemeToggle />
-                                </div>
+                                <HeaderLanguageSelector value={language} onChange={setLanguage} />
+                                <HeaderThemeToggle />
 
                                 <div className="header__action">
                                     <button
@@ -314,7 +311,7 @@ export default function Header() {
                         </div>
 
                         {/* Mobile utilities (compact, no layout shift in the top header) */}
-                        <div className="flex items-center gap-2 px-4 pb-2">
+                        <div className="flex items-center gap-2 px-4 pb-2" style={{ flexWrap: 'wrap' }}>
                             <HeaderLanguageSelector value={language} onChange={setLanguage} compact />
                             <HeaderThemeToggle />
                         </div>

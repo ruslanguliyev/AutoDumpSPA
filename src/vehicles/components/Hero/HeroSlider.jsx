@@ -27,10 +27,14 @@ export default function HeroSlider() {
             >
                 {slides.map((img, i) => (
                     <SwiperSlide key={i}>
-                        <div
-                            className="hero-slide"
-                            style={{ backgroundImage: `url(${img})` }}
-                        ></div>
+                        <div className="hero-slide">
+                            <img
+                                src={img}
+                                alt=""
+                                className="hero-slide__image"
+                                loading="lazy"
+                            />
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>

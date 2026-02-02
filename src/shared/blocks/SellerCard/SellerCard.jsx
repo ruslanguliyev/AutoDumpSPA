@@ -93,7 +93,7 @@ export const SellerCard = ({ seller, variant = 'full', actions, className = '' }
           <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
             {rating != null ? (
               <span className="inline-flex items-center gap-1">
-                <span aria-hidden="true">⭐</span>
+                <Star size={12} className="text-warning" fill="currentColor" aria-hidden="true" />
                 <span className="font-extrabold text-foreground">{rating.toFixed(1)}</span>
               </span>
             ) : (

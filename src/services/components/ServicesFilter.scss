@@ -43,7 +43,12 @@
     border-radius: 12px;
     border: 1px solid rgb(var(--border));
     background: rgb(var(--background));
+    color: rgb(var(--foreground));
     transition: 0.15s;
+
+    &::placeholder {
+      color: rgb(var(--muted-foreground));
+    }
 
     &:focus {
       outline: none;
@@ -61,6 +66,7 @@ select {
   border-radius: 12px;
   border: 1px solid rgb(var(--border));
   background: rgb(var(--background));
+  color: rgb(var(--foreground));
   transition: 0.15s;
   cursor: pointer;
 
@@ -218,10 +224,10 @@ select {
   border: none;
   background: none;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: color 0.15s, background-color 0.15s;
 
   &:hover {
-    opacity: 0.7;
+    color: rgb(var(--foreground));
   }
 
   .filter-label {

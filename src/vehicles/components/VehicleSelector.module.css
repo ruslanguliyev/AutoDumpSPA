@@ -31,6 +31,10 @@
   color: rgb(var(--foreground));
 }
 
+.input::placeholder {
+  color: rgb(var(--muted-foreground));
+}
+
 .input:focus {
   outline: 2px solid rgb(var(--primary) / 0.35);
   outline-offset: 1px;

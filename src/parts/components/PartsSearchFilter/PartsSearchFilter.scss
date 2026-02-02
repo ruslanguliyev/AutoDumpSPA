@@ -66,7 +66,12 @@ select {
     border-radius: 12px;
     border: 1px solid rgb(var(--border));
     background: rgb(var(--background));
+    color: rgb(var(--foreground));
     transition: 0.15s;
+
+    &::placeholder {
+        color: rgb(var(--muted-foreground));
+    }
 
     &:focus {
         outline: none;

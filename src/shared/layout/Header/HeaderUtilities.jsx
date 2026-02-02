@@ -1,65 +1,76 @@
 import { Moon, Sun } from 'lucide-react';
-import { Button } from '@/shared/ui/button';
 import { changeLanguage } from '@/i18n/config';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/shared/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '@/shared/store/theme';
+import { HeaderIconButton } from './HeaderIconButton';
+import { useState, useRef, useEffect } from 'react';
 
 export const HeaderLanguageSelector = ({ value, onChange, compact = false }) => {
   const { t } = useTranslation('common');
+  const [isOpen, setIsOpen] = useState(false);
+  const popoverRef = useRef(null);
+
   const handleLanguageChange = async (lang) => {
-    if (lang === value) return; // Don't change if already selected
+    if (lang === value) {
+      setIsOpen(false);
+      return;
+    }
     try {
-      // Required: do NOT rely on Zustand/URL alone
       await changeLanguage(lang);
-      // Keep existing app sync (store + URL)
       await onChange(lang);
+      setIsOpen(false);
     } catch (error) {
       console.error('Failed to change language:', error);
     }
   };
 
+  // Закрытие при клике вне области
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('pointerdown', handleClickOutside);
+    return () => window.removeEventListener('pointerdown', handleClickOutside);
+  }, [isOpen]);
+
+  const languages = [
+    { code: 'en', label: 'EN' },
+    { code: 'ru', label: 'RU' },
+    { code: 'az', label: 'AZ' },
+  ];
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size={compact ? 'icon' : 'sm'}
-          className="shrink-0"
-          aria-label={t('labels.language')}
-        >
-          {compact ? value.toUpperCase() : value.toUpperCase()}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem 
-          onSelect={() => {
-            handleLanguageChange('en').catch(console.error);
-          }}
-        >
-          EN
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onSelect={() => {
-            handleLanguageChange('ru').catch(console.error);
-          }}
-        >
-          RU
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onSelect={() => {
-            handleLanguageChange('az').catch(console.error);
-          }}
-        >
-          AZ
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="header__action" ref={popoverRef}>
+      <HeaderIconButton
+        aria-label={t('labels.language')}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-controls="popover-language"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="header__languageText">
+          {value.toUpperCase()}
+        </span>
+      </HeaderIconButton>
+      {isOpen ? (
+        <div id="popover-language" className="header__popover header__popover--language" role="menu">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              type="button"
+              role="menuitem"
+              className={`header__popoverItem ${lang.code === value ? 'header__popoverItem--active' : ''}`}
+              onClick={() => handleLanguageChange(lang.code)}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 };
 
@@ -68,16 +79,16 @@ export const HeaderThemeToggle = () => {
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isDark = theme === 'dark';
+  
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="shrink-0"
-      aria-label={isDark ? t('labels.switchToLight') : t('labels.switchToDark')}
-      onClick={toggleTheme}
-    >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
-    </Button>
+    <div className="header__action">
+      <HeaderIconButton
+        aria-label={isDark ? t('labels.switchToLight') : t('labels.switchToDark')}
+        onClick={toggleTheme}
+      >
+        {isDark ? <Sun size={22} /> : <Moon size={22} />}
+      </HeaderIconButton>
+    </div>
   );
 };
 

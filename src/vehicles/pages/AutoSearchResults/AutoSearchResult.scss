@@ -12,6 +12,12 @@
     padding: 0.75rem 1rem;
     border-radius: 8px;
     border: 1px solid rgb(var(--border));
+    background: rgb(var(--background));
+    color: rgb(var(--foreground));
+
+    &::placeholder {
+        color: rgb(var(--muted-foreground));
+    }
 }
 
 .search-filter__button {

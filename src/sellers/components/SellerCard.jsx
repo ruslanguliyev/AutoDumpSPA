@@ -1,3 +1,5 @@
+import { MapPin, Star } from "lucide-react";
+
 const DOMAIN_LABELS = { cars: "Cars", parts: "Parts" };
 const TYPE_LABELS = { dealer: "Dealer", reseller: "Reseller", private: "Private" };
 
@@ -79,13 +81,13 @@ const SellerCard = ({ seller, onClick }) => {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {ratingValue != null ? (
             <span className="inline-flex items-center gap-1">
-              <span className="text-warning">⭐</span>
+              <Star size={14} className="text-warning" fill="currentColor" aria-hidden="true" />
               <span className="font-semibold text-foreground">
                 {ratingValue.toFixed(1)}
               </span>
             </span>
           ) : null}
-          {ratingValue != null ? <span className="text-muted-foreground/60">•</span> : null}
+          {ratingValue != null ? <span className="text-muted-foreground">•</span> : null}
           <span>{listingsCount} listings</span>
         </div>
       </div>
@@ -94,7 +96,7 @@ const SellerCard = ({ seller, onClick }) => {
       {/* ROW 4: CITY */}
       {locationLabel ? (
         <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-          <span aria-hidden="true">📍</span>
+          <MapPin size={14} className="text-muted-foreground" aria-hidden="true" />
           <span className="truncate">{locationLabel}</span>
         </div>
       ) : null}
