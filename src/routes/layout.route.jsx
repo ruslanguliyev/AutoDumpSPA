@@ -1,11 +1,11 @@
-import Layout from '@/shared/layout/Layout';
+import MainLayout from '@/shared/layout/MainLayout';
 import ScrollToTopOnRouteChange from '@/shared/hooks/ScrollToTopOnRouteChange';
 
 const LayoutRoute = () => {
   return (
     <>
       <ScrollToTopOnRouteChange />
-      <Layout />
+      <MainLayout />
     </>
   );
 };

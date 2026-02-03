@@ -1,15 +1,7 @@
-import Header from '@/shared/layout/Header/Header'
-import Footer from '@/shared/layout/Footer/Footer'
-import { Outlet } from 'react-router-dom'
+import MainLayout from '@/shared/layout/MainLayout';
 
 const Layout = () => {
-    return (
-        <>
-            <Header />
-            <Outlet />
-            <Footer />
-        </>
-    )
-}
+  return <MainLayout />;
+};
 
-export default Layout
+export default Layout;
