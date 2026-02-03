@@ -3,7 +3,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchParts } from '@/parts/api/parts.api';
 import { sanitizeFilters } from '@/parts/utils/filterParts';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
-import { usePartsStore } from '@/parts/store/partsStore';
 import { PARTS_DEFAULT_FILTER } from '@/parts/utils/parts.constants';
 
 const PARTS_QUERY_KEY = 'parts';
@@ -11,8 +10,6 @@ const PARTS_QUERY_KEY = 'parts';
 export const useParts = () => {
   const queryClient = useQueryClient();
   const filters = useFiltersStore((state) => state.filters.parts);
-  const selectedPartId = usePartsStore((state) => state.selectedPartId);
-  const selectPart = usePartsStore((state) => state.selectPart);
 
   const normalizedFilters = useMemo(
     () => sanitizeFilters(filters),
@@ -105,7 +102,5 @@ export const useParts = () => {
       queryClient.invalidateQueries({ queryKey: [PARTS_QUERY_KEY] }),
 
     selectOptions,
-    selectedPartId,
-    selectPart,
   };
 };

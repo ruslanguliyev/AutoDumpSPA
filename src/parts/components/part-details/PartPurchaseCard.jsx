@@ -1,6 +1,7 @@
 import { Check, Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { SellerCard, TrustBlock } from '@/shared/blocks';
+import { SellerCard } from '@/shared/components/SellerCard/SellerCard';
+import { TrustBlock } from '@/shared/blocks';
 
 export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
   const { t } = useTranslation('part');

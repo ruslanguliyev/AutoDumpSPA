@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { CalendarDays, Clock, Heart, MapPin, Phone } from "lucide-react";
-import { autos } from "@/vehicles/api/data";
+import { useAutoDetails } from "@/vehicles/hooks/useAutoDetails";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
-import { SellerCard, TrustBlock } from "@/shared/blocks";
+import { SellerCard } from "@/shared/components/SellerCard/SellerCard";
+import { TrustBlock } from "@/shared/blocks";
 
 import VehicleGallery from "@/vehicles/pages/vehicleDetail/VehicleGallery";
 import VehicleSpecs from "@/vehicles/pages/vehicleDetail/VehicleSpecs";
 import VehicleSummaryCard from "@/vehicles/pages/vehicleDetail/VehicleSummaryCard";
 
-import "@/shared/blocks/SellerCard/SellerCard.scss";
+import "@/shared/components/SellerCard/SellerCard.scss";
 import "@/shared/blocks/TrustBlock/TrustBlock.scss";
 import "./VehicleDetail.scss";
 
 export default function VehicleDetail() {
     const { id } = useParams();
-    const car = autos.find((c) => c.id == id);
+    const { data: car } = useAutoDetails(id);
 
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
     const isFavorite = useFavoritesStore((s) =>

@@ -1,4 +1,4 @@
-import SellerCard from "@/sellers/components/SellerCard";
+import { SellerCard } from "@/shared/components/SellerCard/SellerCard";
 
 const SellersGrid = ({ sellers, onSellerClick }) => {
   const safeSellers = Array.isArray(sellers) ? sellers : [];
@@ -15,6 +15,7 @@ const SellersGrid = ({ sellers, onSellerClick }) => {
           <SellerCard
             key={seller.id}
             seller={seller}
+            variant="grid"
             onClick={() => onSellerClick?.(seller)}
           />
         );

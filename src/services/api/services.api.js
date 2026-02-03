@@ -3,8 +3,13 @@ import { MOCK_SERVICES } from './graphql/mocks/services.mocks.js';
 // ======================================================
 // 🔧 MOCK MODE (только для DEV)
 // ======================================================
-const shouldUseMocks = () =>
-  import.meta.env.DEV && String(import.meta.env.VITE_USE_SERVICES_MOCKS ?? 'true') !== 'false';
+const shouldUseMocks = () => {
+  const flag = import.meta.env.VITE_USE_SERVICES_MOCKS;
+  if (flag !== undefined) {
+    return String(flag) !== 'false';
+  }
+  return import.meta.env.DEV;
+};
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
@@ -92,7 +97,7 @@ export const getServices = async (filters = {}) => {
 
   // 🔌 REAL BACKEND (PROD / LATER)
   // This would call GraphQL in the future
-  throw new Error('GraphQL backend not implemented yet. Use mocks in DEV mode.');
+  return [];
 };
 
 /**
@@ -109,7 +114,7 @@ export const getServiceById = async (id) => {
   }
 
   // 🔌 REAL BACKEND (PROD / LATER)
-  throw new Error('GraphQL backend not implemented yet. Use mocks in DEV mode.');
+  return null;
 };
 
 /**
@@ -126,7 +131,7 @@ export const getServiceBySlug = async (slug) => {
   }
 
   // 🔌 REAL BACKEND (PROD / LATER)
-  throw new Error('GraphQL backend not implemented yet. Use mocks in DEV mode.');
+  return null;
 };
 
 /**

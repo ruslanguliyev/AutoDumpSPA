@@ -24,6 +24,14 @@ const shouldMatchRegion = (location, region) => {
   return normalize(location).includes(regionLabel);
 };
 
+export const getAutos = () => autos;
+
+export const getAutoById = (id) => {
+  const safeId = String(id ?? '').trim();
+  if (!safeId) return null;
+  return autos.find((car) => String(car.id) === safeId) ?? null;
+};
+
 export function getAutosByFilters(filters) {
   const brand = normalize(filters.brand);
   const model = normalize(filters.model);
