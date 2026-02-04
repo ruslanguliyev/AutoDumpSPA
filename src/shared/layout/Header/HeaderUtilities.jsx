@@ -5,7 +5,7 @@ import { useThemeStore } from '@/shared/store/theme';
 import { HeaderIconButton } from './HeaderIconButton';
 import { useState, useRef, useEffect } from 'react';
 
-export const HeaderLanguageSelector = ({ value, onChange, compact = false }) => {
+export const HeaderLanguageSelector = ({ value, onChange, compact = false, onOpen }) => {
   const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef(null);
@@ -35,6 +35,13 @@ export const HeaderLanguageSelector = ({ value, onChange, compact = false }) => 
     window.addEventListener('pointerdown', handleClickOutside);
     return () => window.removeEventListener('pointerdown', handleClickOutside);
   }, [isOpen]);
+
+  // Закрыть другие попапы при открытии LanguageBar
+  useEffect(() => {
+    if (isOpen && onOpen) {
+      onOpen();
+    }
+  }, [isOpen, onOpen]);
 
   const languages = [
     { code: 'en', label: 'EN' },

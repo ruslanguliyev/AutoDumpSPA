@@ -97,6 +97,32 @@
     "en": "English",
     "az": "Azərbaycan"
   },
+  "seller": {
+    "fallbackName": "Продавец",
+    "openSeller": "Открыть продавца {{name}}",
+    "sellerInfo": "Информация о продавце",
+    "soldBy": "Продавец",
+    "noRating": "Нет рейтинга",
+    "verified": "Проверен",
+    "verifiedSeller": "Проверенный продавец",
+    "sellerRating": "Рейтинг продавца",
+    "sellerCard": "Карточка продавца",
+    "listings": "{{count}} объявление",
+    "listings_plural": "{{count}} объявлений",
+    "reviews": "{{count}} отзыв",
+    "reviews_plural": "{{count}} отзывов",
+    "viewSeller": "Смотреть продавца →",
+    "notAvailable": "н/д",
+    "type": {
+      "dealer": "Дилер",
+      "reseller": "Реселлер",
+      "private": "Частный"
+    },
+    "domain": {
+      "cars": "Автомобили",
+      "parts": "Запчасти"
+    }
+  },
   "trust": {
     "buyerProtection": "Защита покупателя",
     "verifiedSeller": "Проверенный продавец",

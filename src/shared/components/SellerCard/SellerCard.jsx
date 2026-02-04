@@ -1,16 +1,32 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, MapPin, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const PUBLIC_SELLER_TYPES = new Set(['dealer', 'reseller']);
-
-const TYPE_LABELS = { dealer: 'Dealer', reseller: 'Reseller', private: 'Private' };
-const DOMAIN_LABELS = { cars: 'Cars', parts: 'Parts' };
+const KNOWN_SELLER_TYPES = new Set(['dealer', 'reseller', 'private']);
+const KNOWN_DOMAINS = new Set(['cars', 'parts']);
 
 const getInitials = (name) => {
   const safe = String(name ?? '').trim();
   if (!safe) return '??';
   return safe.slice(0, 2).toUpperCase();
+};
+
+const normalizeKey = (value) => String(value ?? '').trim().toLowerCase();
+
+const getTypeLabel = (type, t) => {
+  const key = normalizeKey(type);
+  if (!key) return '—';
+  if (KNOWN_SELLER_TYPES.has(key)) return t(`seller.type.${key}`);
+  return type;
+};
+
+const getDomainLabel = (domain, t) => {
+  const key = normalizeKey(domain);
+  if (!key) return t('seller.notAvailable');
+  if (KNOWN_DOMAINS.has(key)) return t(`seller.domain.${key}`);
+  return domain;
 };
 
 const getLocationLabel = (seller) => {
@@ -37,21 +53,22 @@ export const SellerCard = ({
   onClick,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('common');
 
   if (!seller?.id) return null;
 
-  const name = seller?.name || 'Seller';
+  const name = seller?.name || t('seller.fallbackName');
   const ratingNumber = Number(seller?.rating);
   const rating = Number.isFinite(ratingNumber) && ratingNumber != null ? ratingNumber : null;
   const votesNumber = Number(seller?.votes);
   const votes = Number.isFinite(votesNumber) && votesNumber != null ? votesNumber : null;
   const avatar = seller?.logo || seller?.avatarUrl || null;
   const type = seller?.type || null;
-  const typeLabel = TYPE_LABELS[type] ?? type ?? '—';
+  const typeLabel = getTypeLabel(type, t);
 
   if (variant === 'grid') {
     const ratingValue = Number.isFinite(ratingNumber) ? ratingNumber : null;
-    const domainLabel = DOMAIN_LABELS[seller?.domain] ?? seller?.domain ?? 'n/a';
+    const domainLabel = getDomainLabel(seller?.domain, t);
     const locationLabel = getLocationLabel(seller);
     const listingsCount = Number.isFinite(seller?.listingsCount)
       ? seller.listingsCount
@@ -94,7 +111,7 @@ export const SellerCard = ({
 
         {/* ROW 2: NAME */}
         <h4 className="mt-2 text-sm font-semibold leading-snug text-foreground">
-          {seller?.name ?? 'Seller'}
+          {name}
         </h4>
 
         <p className="text-sm text-muted-foreground">
@@ -113,7 +130,7 @@ export const SellerCard = ({
               </span>
             ) : null}
             {ratingValue != null ? <span className="text-muted-foreground">•</span> : null}
-            <span>{listingsCount} listings</span>
+            <span>{t('seller.listings', { count: listingsCount })}</span>
           </div>
         </div>
 
@@ -133,7 +150,7 @@ export const SellerCard = ({
           }}
           className="mt-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-brand-foreground bg-brand hover:opacity-90 transition-opacity"
         >
-          View seller →
+          {t('seller.viewSeller')}
         </button>
       </article>
     );
@@ -171,7 +188,7 @@ export const SellerCard = ({
         ]
           .filter(Boolean)
           .join(' ')}
-        aria-label={canOpenPublicPage ? `Open seller ${name}` : 'Seller info'}
+        aria-label={canOpenPublicPage ? t('seller.openSeller', { name }) : t('seller.sellerInfo')}
         onClick={canOpenPublicPage ? openDealerPage : undefined}
         onKeyDown={canOpenPublicPage ? onCardKeyDown : undefined}
         role={canOpenPublicPage ? 'button' : undefined}
@@ -191,7 +208,7 @@ export const SellerCard = ({
         )}
 
         <div className="min-w-0 flex-1">
-          <div className="text-[11px] font-semibold text-muted-foreground">Sold by</div>
+          <div className="text-[11px] font-semibold text-muted-foreground">{t('seller.soldBy')}</div>
           <div className="mt-0.5 truncate text-sm font-extrabold text-foreground">{name}</div>
 
           <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
@@ -201,7 +218,7 @@ export const SellerCard = ({
                 <span className="font-extrabold text-foreground">{rating.toFixed(1)}</span>
               </span>
             ) : (
-              <span className="text-muted-foreground">No rating</span>
+              <span className="text-muted-foreground">{t('seller.noRating')}</span>
             )}
 
             {votes != null ? <span className="text-muted-foreground">({votes})</span> : null}
@@ -239,7 +256,7 @@ export const SellerCard = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label="Seller card"
+      aria-label={t('seller.sellerCard')}
       onClick={canOpenPublicPage ? openDealerPage : undefined}
       onKeyDown={canOpenPublicPage ? onCardKeyDown : undefined}
       role={canOpenPublicPage ? 'button' : undefined}
@@ -263,15 +280,15 @@ export const SellerCard = ({
           <div className="seller-card__titleLine">
             <h4 className="seller-card__name">{name}</h4>
 
-            <span className="seller-card__badge" aria-label="Verified seller">
+            <span className="seller-card__badge" aria-label={t('seller.verifiedSeller')}>
               <BadgeCheck size={16} aria-hidden="true" />
-              Verified
+              {t('seller.verified')}
             </span>
           </div>
 
           <p className="seller-card__type">{typeLabel}</p>
 
-          <div className="seller-card__rating" aria-label="Seller rating">
+          <div className="seller-card__rating" aria-label={t('seller.sellerRating')}>
             <div className="seller-card__stars" aria-hidden="true">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
@@ -284,7 +301,7 @@ export const SellerCard = ({
               ))}
             </div>
             <span className="seller-card__ratingText">
-              {rating !== null ? rating.toFixed(1) : '—'} ({votes ?? 0} reviews)
+              {rating !== null ? rating.toFixed(1) : '—'} ({t('seller.reviews', { count: votes ?? 0 })})
             </span>
           </div>
         </div>

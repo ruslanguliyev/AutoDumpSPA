@@ -10,17 +10,17 @@ const toArray = (value) => {
 };
 
 export const PartGallery = ({ part }) => {
-  const { t } = useTranslation('part');
+  const { t } = useTranslation(['part', 'common']);
   const media = useMemo(() => {
     const images = toArray(part?.image?.length ? part.image : part?.imageUrl);
-    const fallbackAlt = part?.name ? `${part.name}` : 'Part image';
+    const fallbackAlt = part?.name ? `${part.name}` : t('gallery.fallbackAlt', { ns: 'part' });
     return images.map((src, index) => ({
       id: `${part?.id ?? 'part'}-${index}`,
       src,
       alt: `${fallbackAlt} ${index + 1}`,
       type: 'image',
     }));
-  }, [part]);
+  }, [part, t]);
 
   if (media.length === 0) {
     return (
@@ -41,7 +41,7 @@ export const PartGallery = ({ part }) => {
       >
         <MediaCarousel
           items={media}
-          ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? 'Part' })}
+          ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? t('labels.part', { ns: 'common' }) })}
           viewportClassName="!flex !items-center !justify-center !bg-background !h-[320px] md:!h-[420px]"
           mediaClassName="!object-contain !max-h-full !max-w-full !w-auto !mx-auto"
           thumbnailsClassName="!justify-start"

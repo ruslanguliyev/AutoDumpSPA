@@ -36,6 +36,8 @@
     "body": "Body",
     "interior": "Interior",
     "electrical": "Electrical",
+    "lighting": "Lighting",
+    "exterior": "Exterior",
     "wheels": "Wheels & Tires"
   },
   "details": {
@@ -113,6 +115,7 @@
   "gallery": {
     "noImages": "No images available.",
     "loadingImages": "Loading images…",
+    "fallbackAlt": "Part image",
     "ariaLabel": "{{name}} gallery"
   }
 }

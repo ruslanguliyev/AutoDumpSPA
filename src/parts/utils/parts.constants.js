@@ -6,8 +6,30 @@ export const PART_CATEGORIES = [
   { value: 'body', label: 'Body' },
   { value: 'interior', label: 'Interior' },
   { value: 'electrical', label: 'Electrical' },
+  { value: 'lighting', label: 'Lighting' },
+  { value: 'exterior', label: 'Exterior' },
   { value: 'wheels', label: 'Wheels & Tires' },
 ];
+
+const normalizeCategoryValue = (value) => String(value ?? '').trim().toLowerCase();
+
+const CATEGORY_KEY_LOOKUP = new Map();
+
+PART_CATEGORIES.forEach(({ value, label }) => {
+  const normalizedValue = normalizeCategoryValue(value);
+  const normalizedLabel = normalizeCategoryValue(label);
+
+  if (normalizedValue) CATEGORY_KEY_LOOKUP.set(normalizedValue, value);
+  if (normalizedLabel) CATEGORY_KEY_LOOKUP.set(normalizedLabel, value);
+});
+
+CATEGORY_KEY_LOOKUP.set('wheels and tires', 'wheels');
+
+export const getPartCategoryKey = (value) => {
+  const normalized = normalizeCategoryValue(value);
+  if (!normalized) return null;
+  return CATEGORY_KEY_LOOKUP.get(normalized) ?? null;
+};
 
 export const PART_CONDITIONS = [
   { value: 'all', label: 'Any condition' },

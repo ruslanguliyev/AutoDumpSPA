@@ -142,7 +142,11 @@ export default function Header() {
                             </nav>
 
                             <div className="header__actions" aria-label={t('labels.headerActions')}>
-                                <HeaderLanguageSelector value={language} onChange={setLanguage} />
+                                <HeaderLanguageSelector 
+                                    value={language} 
+                                    onChange={setLanguage} 
+                                    onOpen={closePopover}
+                                />
                                 <HeaderThemeToggle />
 
                                 <div className="header__action">
@@ -312,7 +316,12 @@ export default function Header() {
 
                         {/* Mobile utilities (compact, no layout shift in the top header) */}
                         <div className="flex items-center gap-2 px-4 pb-2" style={{ flexWrap: 'wrap' }}>
-                            <HeaderLanguageSelector value={language} onChange={setLanguage} compact />
+                            <HeaderLanguageSelector 
+                                value={language} 
+                                onChange={setLanguage} 
+                                compact 
+                                onOpen={closePopover}
+                            />
                             <HeaderThemeToggle />
                         </div>
 

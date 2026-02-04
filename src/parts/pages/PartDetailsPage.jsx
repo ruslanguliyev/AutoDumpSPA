@@ -8,6 +8,7 @@ import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
 import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
+import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 import { useTranslation } from 'react-i18next';
 
 const Row = ({ label, value }) => (
@@ -80,6 +81,11 @@ export default function PartDetailsPage() {
     );
   }
 
+  const categoryKey = getPartCategoryKey(part?.category);
+  const categoryLabel = categoryKey
+    ? t(`categories.${categoryKey}`, { ns: 'part', defaultValue: part?.category ?? '' })
+    : part?.category?.trim() ?? '';
+
   return (
     <div className="w-full px-4 py-10">
       <div className="mx-auto w-full max-w-[1280px]">
@@ -99,9 +105,11 @@ export default function PartDetailsPage() {
                     {part.name}
                   </h1>
                   <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    <span className="rounded-full px-3 py-1 text-xs font-bold bg-primary text-primary-foreground">
-                      {part.category}
-                    </span>
+                    {categoryLabel ? (
+                      <span className="rounded-full px-3 py-1 text-xs font-bold bg-primary text-primary-foreground">
+                        {categoryLabel}
+                      </span>
+                    ) : null}
                     <span className="text-xs font-semibold">
                       {t('details.brandLabel', { ns: 'part' })}: <span className="text-foreground">{part.brand}</span>
                     </span>

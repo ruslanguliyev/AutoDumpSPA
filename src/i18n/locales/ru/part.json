@@ -36,6 +36,8 @@
     "body": "Кузов",
     "interior": "Салон",
     "electrical": "Электрика",
+    "lighting": "Освещение",
+    "exterior": "Экстерьер",
     "wheels": "Колеса и шины"
   },
   "details": {
@@ -113,6 +115,7 @@
   "gallery": {
     "noImages": "Изображения недоступны.",
     "loadingImages": "Загрузка изображений…",
+    "fallbackAlt": "Изображение запчасти",
     "ariaLabel": "Галерея {{name}}"
   }
 }

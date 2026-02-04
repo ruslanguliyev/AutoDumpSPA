@@ -97,6 +97,32 @@
     "en": "English",
     "az": "Azərbaycan"
   },
+  "seller": {
+    "fallbackName": "Seller",
+    "openSeller": "Open seller {{name}}",
+    "sellerInfo": "Seller info",
+    "soldBy": "Sold by",
+    "noRating": "No rating",
+    "verified": "Verified",
+    "verifiedSeller": "Verified seller",
+    "sellerRating": "Seller rating",
+    "sellerCard": "Seller card",
+    "listings": "{{count}} listing",
+    "listings_plural": "{{count}} listings",
+    "reviews": "{{count}} review",
+    "reviews_plural": "{{count}} reviews",
+    "viewSeller": "View seller →",
+    "notAvailable": "n/a",
+    "type": {
+      "dealer": "Dealer",
+      "reseller": "Reseller",
+      "private": "Private"
+    },
+    "domain": {
+      "cars": "Cars",
+      "parts": "Parts"
+    }
+  },
   "trust": {
     "buyerProtection": "Buyer protection",
     "verifiedSeller": "Verified seller",

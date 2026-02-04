@@ -36,6 +36,8 @@
     "body": "Kuzov",
     "interior": "Salon",
     "electrical": "Elektrik",
+    "lighting": "İşıqlandırma",
+    "exterior": "Eksteryer",
     "wheels": "Təkərlər və şinlər"
   },
   "details": {
@@ -113,6 +115,7 @@
   "gallery": {
     "noImages": "Şəkillər mövcud deyil.",
     "loadingImages": "Şəkillər yüklənir…",
+    "fallbackAlt": "Ehtiyat hissəsi şəkli",
     "ariaLabel": "{{name}} qalereyası"
   }
 }

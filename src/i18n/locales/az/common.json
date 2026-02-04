@@ -97,6 +97,32 @@
     "en": "English",
     "az": "Azərbaycan"
   },
+  "seller": {
+    "fallbackName": "Satıcı",
+    "openSeller": "Satıcı {{name}} aç",
+    "sellerInfo": "Satıcı məlumatı",
+    "soldBy": "Satıcı",
+    "noRating": "Reytinq yoxdur",
+    "verified": "Təsdiqlənmiş",
+    "verifiedSeller": "Təsdiqlənmiş satıcı",
+    "sellerRating": "Satıcı reytinqi",
+    "sellerCard": "Satıcı kartı",
+    "listings": "{{count}} elan",
+    "listings_plural": "{{count}} elan",
+    "reviews": "{{count}} rəy",
+    "reviews_plural": "{{count}} rəy",
+    "viewSeller": "Satıcıya bax →",
+    "notAvailable": "yoxdur",
+    "type": {
+      "dealer": "Diler",
+      "reseller": "Reseller",
+      "private": "Şəxsi"
+    },
+    "domain": {
+      "cars": "Avtomobillər",
+      "parts": "Ehtiyat hissələri"
+    }
+  },
   "trust": {
     "buyerProtection": "Alıcı müdafiəsi",
     "verifiedSeller": "Təsdiqlənmiş satıcı",
