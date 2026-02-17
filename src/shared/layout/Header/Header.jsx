@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Home, Info, Menu, Package, X, User, Wrench } from "lucide-react";
+import { Heart, Home, Info, Menu, Package, Plus, X, User, Wrench } from "lucide-react";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
+import Button from "@/shared/ui/button";
 import { useTranslation } from "react-i18next";
 import logoUrl from "@/assets/images/autodump-logo.PNG";
 import "./header.scss";
@@ -59,6 +60,7 @@ export default function Header() {
 
     const mobileMenuItems = useMemo(
         () => [
+            { to: "/add", label: t('nav.addListing'), Icon: Plus },
             { to: "/", label: t('nav.home'), Icon: Home },
             { to: "/sellers", label: t('nav.sellers'), Icon: Info },
             { to: "/parts", label: t('nav.parts'), Icon: Package },
@@ -142,6 +144,23 @@ export default function Header() {
                             </nav>
 
                             <div className="header__actions" aria-label={t('labels.headerActions')}>
+                                <div className="header__action">
+                                    <Button
+                                        asChild
+                                        variant="primary"
+                                        size="sm"
+                                        className="h-12 px-6 rounded-xl transition-all duration-200 hover:brightness-110 hover:shadow hover:-translate-y-px group"
+                                    >
+                                        <Link to="/add" className="inline-flex items-center gap-2">
+                                            <Plus
+                                                size={18}
+                                                className="shrink-0 transition-transform duration-200 group-hover:scale-105"
+                                                aria-hidden
+                                            />
+                                            <span>{t('nav.addListing')}</span>
+                                        </Link>
+                                    </Button>
+                                </div>
                                 <HeaderLanguageSelector 
                                     value={language} 
                                     onChange={setLanguage} 

@@ -7,7 +7,8 @@
     "services": "Услуги",
     "favorites": "Избранное",
     "account": "Аккаунт",
-    "about": "О нас"
+    "about": "О нас",
+    "addListing": "Добавить объявление"
   },
   "buttons": {
     "search": "Поиск",

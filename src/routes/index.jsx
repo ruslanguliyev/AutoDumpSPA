@@ -26,6 +26,8 @@ const ServicesListPage = lazy(() => import('@/services/pages/ServicesListPage'))
 const ServiceDetailPage = lazy(
   () => import('@/services/pages/ServiceDetailPage')
 );
+const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
+const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
 
 const AUTOS_QUERY_KEY = 'autos';
 const PARTS_QUERY_KEY = 'parts';
@@ -98,6 +100,8 @@ const createAppRoutes = () => [
   { path: 'dealers/:sellerId', element: <SellerDetailPageRoute /> },
   { path: 'services', element: <ServicesListPage /> },
   { path: 'services/:idOrSlug', element: <ServiceDetailPage /> },
+  { path: 'add', element: <AddEntryPage /> },
+  { path: 'add/:draftId', element: <AddWizardPage /> },
 ];
 
 const router = createBrowserRouter([

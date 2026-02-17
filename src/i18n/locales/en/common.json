@@ -7,7 +7,8 @@
     "services": "Services",
     "favorites": "Favorites",
     "account": "Account",
-    "about": "About"
+    "about": "About",
+    "addListing": "Add Listing"
   },
   "buttons": {
     "search": "Search",

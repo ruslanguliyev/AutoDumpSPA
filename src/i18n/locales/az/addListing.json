@@ -1,0 +1,14 @@
+{
+  "title": "Yeni elan əlavə et",
+  "subtitle": "Elan növünü seçin və yaradılmaya başlayın.",
+  "vehicle": {
+    "title": "Avtomobil elanı",
+    "description": "VIN, texniki xüsusiyyətlər, qiymət və satıcı məlumatlarını əlavə edin.",
+    "button": "Avtomobil qaralaması yarat"
+  },
+  "part": {
+    "title": "Ehtiyat hissəsi elanı",
+    "description": "Uyğunluq və vəziyyət məlumatlarını daxil edin.",
+    "button": "Hissə qaralaması yarat"
+  }
+}
