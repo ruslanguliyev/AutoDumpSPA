@@ -185,7 +185,7 @@ export default function Header() {
                                             <Link to="/login" role="menuitem" onClick={closePopover}>
                                                 {t('buttons.login')}
                                             </Link>
-                                            <Link to="/signup" role="menuitem" onClick={closePopover}>
+                                            <Link to="/register" role="menuitem" onClick={closePopover}>
                                                 {t('buttons.signup')}
                                             </Link>
                                         </div>

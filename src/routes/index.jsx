@@ -9,6 +9,7 @@ import RouteErrorBoundary from '@/routes/route-error-boundary';
 import { fetchParts } from '@/parts/api/parts.api';
 import { PARTS_DEFAULT_FILTER } from '@/parts/utils/parts.constants';
 import { getAutos } from '@/vehicles/api/autos';
+import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
 
 const Home = lazy(() => import('@/vehicles/pages/home/Home'));
 const About = lazy(() => import('@/app/pages/about/About'));
@@ -28,6 +29,8 @@ const ServiceDetailPage = lazy(
 );
 const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
 const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
+const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 
 const AUTOS_QUERY_KEY = 'autos';
 const PARTS_QUERY_KEY = 'parts';
@@ -100,8 +103,22 @@ const createAppRoutes = () => [
   { path: 'dealers/:sellerId', element: <SellerDetailPageRoute /> },
   { path: 'services', element: <ServicesListPage /> },
   { path: 'services/:idOrSlug', element: <ServiceDetailPage /> },
-  { path: 'add', element: <AddEntryPage /> },
-  { path: 'add/:draftId', element: <AddWizardPage /> },
+  {
+    path: 'add',
+    element: (
+      <ProtectedRoute>
+        <AddEntryPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'add/:draftId',
+    element: (
+      <ProtectedRoute>
+        <AddWizardPage />
+      </ProtectedRoute>
+    ),
+  },
 ];
 
 const router = createBrowserRouter([
@@ -117,6 +134,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: 'login', element: <LoginPage /> },
+  { path: 'register', element: <RegisterPage /> },
 ]);
 
 const AppRoutes = () => <RouterProvider router={router} />;
