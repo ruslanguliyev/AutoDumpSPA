@@ -6,6 +6,7 @@ import {
   IconDeviceDesktop,
   IconTruck,
 } from '@tabler/icons-react';
+import type { TFunction } from 'i18next';
 
 import {
   makesByCategory,
@@ -15,43 +16,57 @@ import {
 import { getDefaultFilters } from '../store/filters.defaults';
 import type { FilterOption, FiltersConfig } from '../types/filters.types';
 
-const vehicleTypeOptions: FilterOption[] = [
-  { value: 'car', label: 'Car', icon: IconCar },
-  { value: 'motorcycle', label: 'Motorcycle', icon: IconBike },
-  { value: 'camper', label: 'Camper', icon: IconCamper },
-  { value: 'truck', label: 'Truck', icon: IconTruck },
-  { value: 'commercial', label: 'Commercial', icon: IconDeviceDesktop },
-];
-
-const regionOptions: FilterOption[] = [
-  { value: 'europe', label: '🇪🇺 EU Europe' },
-  { value: 'germany', label: '🇩🇪 Germany' },
-  { value: 'france', label: '🇫🇷 France' },
-  { value: 'italy', label: '🇮🇹 Italy' },
-  { value: 'spain', label: '🇪🇸 Spain' },
-  { value: 'uk', label: '🇬🇧 United Kingdom' },
-];
-
-const toOptions = (values: string[], emptyLabel: string) =>
-  values.map((value) => ({
-    value: value === emptyLabel ? '' : value,
-    label: value,
-  }));
-
-const priceOptions = toOptions(priceRanges, 'No limit');
-const registrationOptions = toOptions(registrationYears, 'Any year');
-
-const buildMakeOptions = (vehicleType: string) =>
-  toOptions(makesByCategory[vehicleType] || [], 'All Makes');
-
 type CarsFiltersConfigArgs = {
+  t: TFunction<'vehicle'>;
   variant?: 'hero' | 'compact';
 };
 
 export const createCarsFiltersConfig = ({
+  t,
   variant = 'hero',
-}: CarsFiltersConfigArgs = {}): FiltersConfig => {
+}: CarsFiltersConfigArgs): FiltersConfig => {
   const variantClass = `search-filter--${variant}`;
+
+  const vehicleTypeOptions: FilterOption[] = [
+    { value: 'car', label: t('filter.car'), icon: IconCar },
+    { value: 'motorcycle', label: t('filter.motorcycle'), icon: IconBike },
+    { value: 'camper', label: t('filter.camper'), icon: IconCamper },
+    { value: 'truck', label: t('filter.truck'), icon: IconTruck },
+    { value: 'commercial', label: t('filter.commercial'), icon: IconDeviceDesktop },
+  ];
+
+  const regionOptions: FilterOption[] = [
+    { value: 'europe', label: `🇪🇺 ${t('filter.regions.europe')}` },
+    { value: 'germany', label: `🇩🇪 ${t('filter.regions.germany')}` },
+    { value: 'france', label: `🇫🇷 ${t('filter.regions.france')}` },
+    { value: 'italy', label: `🇮🇹 ${t('filter.regions.italy')}` },
+    { value: 'spain', label: `🇪🇸 ${t('filter.regions.spain')}` },
+    { value: 'uk', label: `🇬🇧 ${t('filter.regions.uk')}` },
+  ];
+
+  const toPriceOptions = (): FilterOption[] =>
+    priceRanges.map((value) => ({
+      value: value === 'No limit' ? '' : value,
+      label: value === 'No limit' ? t('filter.noLimit') : value,
+    }));
+
+  const toRegistrationOptions = (): FilterOption[] =>
+    registrationYears.map((value) => {
+      if (value === 'Any year') return { value: '', label: t('filter.anyYear') };
+      if (value === 'Older') return { value, label: t('filter.older') };
+      return { value, label: value };
+    });
+
+  const priceOptions = toPriceOptions();
+  const registrationOptions = toRegistrationOptions();
+
+  const buildMakeOptions = (vehicleType: string): FilterOption[] => {
+    const makes = makesByCategory[vehicleType] || [];
+    return makes.map((value) => ({
+      value: value === 'All Makes' ? '' : value,
+      label: value === 'All Makes' ? t('filter.allMakes') : value,
+    }));
+  };
 
   return {
     domain: 'cars',
@@ -63,7 +78,7 @@ export const createCarsFiltersConfig = ({
     primaryClassName: 'search-filter__form',
     mobileToggle: {
       show: true,
-      label: 'Filters',
+      label: t('filter.filters'),
       withCount: true,
     },
     primaryGroups: [
@@ -90,7 +105,7 @@ export const createCarsFiltersConfig = ({
             options: (filters) =>
               buildMakeOptions(String(filters.vehicleType || 'car')),
           },
-          { type: 'text', id: 'model', placeholder: 'Model' },
+          { type: 'text', id: 'model', placeholder: t('filter.modelPlaceholder') },
           { type: 'select', id: 'price', options: priceOptions },
         ],
       },
@@ -104,7 +119,7 @@ export const createCarsFiltersConfig = ({
             options: registrationOptions,
           },
           { type: 'select', id: 'region', options: regionOptions },
-          { type: 'text', id: 'city', placeholder: 'City / ZIP' },
+          { type: 'text', id: 'city', placeholder: t('filter.cityPlaceholder') },
         ],
       },
     ],

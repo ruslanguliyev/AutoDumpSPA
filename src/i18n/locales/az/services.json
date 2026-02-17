@@ -1,0 +1,134 @@
+{
+  "title": "Avtomobil xidmətləri",
+  "subtitle": "Sizin üçün peşəkar avtomobil xidmətləri",
+  "meta": {
+    "title": "Avtomobil xidmətləri"
+  },
+  "filters": {
+    "filters": "Filtrlər",
+    "resetLabel": "Filtrləri sıfırla",
+    "updating": "Siyahı yenilənir…",
+    "available_one": "{{count}} xidmət",
+    "available_other": "{{count}} xidmət",
+    "cityPlaceholder": "Şəhər",
+    "openNow": "İndi açıqdır",
+    "verified": "Təsdiqlənmişlər",
+    "serviceType": "Xidmət növü",
+    "brands": "Brendlər",
+    "searchBrandsPlaceholder": "Brend axtarışı...",
+    "services": "Xidmətlər",
+    "showMore": "Daha {{count}}",
+    "rating": "Reytinq",
+    "serviceTypes": {
+      "garage": "Qaraj",
+      "official": "Rəsmi",
+      "detailing": "Deteyling",
+      "tire": "Şin",
+      "electric": "Elektrik",
+      "body": "Kuzov"
+    },
+    "ratingOptions": {
+      "any": "İstənilən reytinq",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "radiusOptions": {
+      "any": "İstənilən məsafə",
+      "5": "5 km",
+      "10": "10 km",
+      "25": "25 km",
+      "50": "50 km",
+      "100": "100 km"
+    }
+  },
+  "list": {
+    "loading": "Xidmətlər yüklənir…",
+    "empty": "Seçilmiş filtrlərə uyğun xidmət tapılmadı. Axtarış parametrlərini dəyişin.",
+    "errorFailed": "Xidmətlər yüklənərkən xəta baş verdi.",
+    "errorCheckEndpoint": "Yoxlayın"
+  },
+  "card": {
+    "verified": "✓ Təsdiqlənmiş",
+    "avgCheck": "Orta çek",
+    "priceRange": "Qiymət aralığı",
+    "viewService": "Ətraflı →",
+    "fallbackType": "Xidmət"
+  },
+  "detail": {
+    "loading": "Xidmət məlumatları yüklənir…",
+    "errorFailed": "Xidmət yüklənərkən xəta baş verdi.",
+    "notFound": "Xidmət tapılmadı.",
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "services": "Xidmətlər"
+    }
+  },
+  "header": {
+    "verified": "TƏSDİQLƏNMİŞ",
+    "reviews": "{{count}} rəy",
+    "share": "Paylaş",
+    "shareAria": "Xidməti paylaş"
+  },
+  "priceList": {
+    "title": "Xidmətlər və qiymətlər",
+    "popularBadge": "MƏŞHUR",
+    "hotBadge": "HİT",
+    "from": "dən",
+    "noPrice": "—"
+  },
+  "popular": {
+    "title": "Məşhur xidmətlər",
+    "popularBadge": "MƏŞHUR",
+    "from": "dən",
+    "viewAll": "Bütün xidmətlər →"
+  },
+  "serviceDescriptions": {
+    "oil_change": "Yağ və filtrlərin dəyişdirilməsi, mayelərin əlavə edilməsi, 25 nöqtəli yoxlama.",
+    "brake_pads": "Əyləc təbəqələrinin (ön/arxa ox) dəyişdirilməsi, sensorların yoxlanması.",
+    "diagnostics": "Xəta kodlarının və sistemlərin tam diaqnostikası."
+  },
+  "duration": {
+    "mins": "{{count}} dəq",
+    "hour_one": "{{count}} saat",
+    "hour_other": "{{count}} saat",
+    "hoursDecimal": "{{hours}},{{mins}} saat"
+  },
+  "brands": {
+    "title": "Xidmət göstərilən brendlər"
+  },
+  "reviews": {
+    "basedOn": "{{count}} rəyə əsasən",
+    "showAll": "Bütün {{count}} rəy",
+    "agoWeeks": "{{count}} həftə əvvəl",
+    "agoMonths": "{{count}} ay əvvəl",
+    "sampleReview1": "Əla xidmət. X5-dəki problem tez müəyyən edildi və təmir təxmini müddətdə tamamlandı. Qiymət rəsmi dilerlə müqayisədə ağlabatandır.",
+    "sampleReview2": "Keyfiyyətli iş, mehriban personal. Gözləmə zonası təmizdir, yaxşı qəhvə var."
+  },
+  "sidebar": {
+    "status": "Status",
+    "openNow": "Açıqdır",
+    "closed": "Bağlıdır",
+    "closesAt": "Bağlanma",
+    "callNow": "Zəng et",
+    "whatsapp": "WhatsApp",
+    "website": "Sayt",
+    "openingHours": "İş saatları",
+    "contactDetails": "Əlaqə məlumatları",
+    "viewMap": "Xəritəyə bax",
+    "phone": "Telefon",
+    "email": "Email",
+    "address": "Ünvan",
+    "today": "(bu gün)"
+  },
+  "days": {
+    "monday": "Bazar ertəsi",
+    "tuesday": "Çərşənbə axşamı",
+    "wednesday": "Çərşənbə",
+    "thursday": "Cümə axşamı",
+    "friday": "Cümə",
+    "saturday": "Şənbə",
+    "sunday": "Bazar"
+  }
+}

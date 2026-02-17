@@ -1,9 +1,11 @@
 import './AutoCard.scss';
 import { Link } from 'react-router-dom';
 import { Heart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 
 export default function AutoCard({ car }) {
+    const { t } = useTranslation("vehicle");
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
     const isFav = useFavoritesStore((s) => s.isFavorited("vehicle", car.id));
 
@@ -19,11 +21,12 @@ export default function AutoCard({ car }) {
                     className="auto-card__image"
                 />
 
-                {car.isHot && <span className="auto-card__badge">HOT</span>}
+                {car.isHot && <span className="auto-card__badge">{t('badges.hot')}</span>}
 
                 {/* HEART BUTTON */}
                 <button
                     className="auto-card__fav-btn"
+                    aria-label={isFav ? t('card.removeFromFavoritesAria') : t('card.addToFavoritesAria')}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();

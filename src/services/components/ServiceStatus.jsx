@@ -1,20 +1,22 @@
 import { Phone, MessageCircle, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
+  const { t } = useTranslation('services');
   return (
     <section className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:rounded-2xl sm:p-6">
       <div className="status-section">
         <div className="status-row">
           <div className="status-left">
-            <p className="status-label">Status</p>
+            <p className="status-label">{t('sidebar.status')}</p>
             <div className={`status-value ${isOpen ? 'open' : 'closed'}`}>
               <span className={`status-dot ${isOpen ? 'open' : 'closed'}`} />
-              {isOpen ? 'Open Now' : 'Closed'}
+              {isOpen ? t('sidebar.openNow') : t('sidebar.closed')}
             </div>
           </div>
           {todaySchedule && !todaySchedule.closed && todaySchedule.to && (
             <div className="status-right">
-              <p className="closes-label">Closes at</p>
+              <p className="closes-label">{t('sidebar.closesAt')}</p>
               <p className="closes-time">{todaySchedule.to}</p>
             </div>
           )}
@@ -28,7 +30,7 @@ export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
             className="cta-primary call"
           >
             <Phone size={18} strokeWidth={2.5} />
-            Call Now
+            {t('sidebar.callNow')}
           </a>
         )}
         <div className="cta-secondary">
@@ -40,7 +42,7 @@ export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
               className="cta-button whatsapp"
             >
               <MessageCircle size={18} strokeWidth={2.5} />
-              WhatsApp
+              {t('sidebar.whatsapp')}
             </a>
           )}
           {contacts?.website && contacts.website.trim() && (
@@ -51,7 +53,7 @@ export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
               className="cta-button website"
             >
               <Globe size={18} strokeWidth={2.5} />
-              Website
+              {t('sidebar.website')}
             </a>
           )}
         </div>

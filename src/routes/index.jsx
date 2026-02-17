@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import LayoutRoute from '@/routes/layout.route';
 import LanguageRoute from '@/routes/LanguageRoute';
@@ -47,6 +48,7 @@ const useSellersPartsQuery = () =>
   });
 
 const SellersPageRoute = () => {
+  const { t } = useTranslation('sellers');
   const autosQuery = useAutosListQuery();
   const partsQuery = useSellersPartsQuery();
   const autosItems = autosQuery.data ?? EMPTY_LIST;
@@ -65,7 +67,7 @@ const SellersPageRoute = () => {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
-            <div className="font-semibold">Error loading sellers page</div>
+            <div className="font-semibold">{t('errors.loadFailed')}</div>
             <div className="mt-1">{error?.message || String(error)}</div>
           </div>
         </div>

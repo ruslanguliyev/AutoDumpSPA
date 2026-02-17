@@ -6,11 +6,11 @@ const VehicleSpecs = ({ car }) => {
   const locale = i18n.language || 'en';
 
   const formatDate = (value) => {
-    if (!value) return '—';
+    if (!value) return t('specs.noValue');
     try {
       return new Intl.DateTimeFormat(locale).format(new Date(value));
     } catch {
-      return '—';
+      return t('specs.noValue');
     }
   };
 
@@ -74,7 +74,7 @@ const VehicleSpecs = ({ car }) => {
           </div>
           <div className="spec-row">
             <span className="spec-name">{t('specs.owners')}:</span>
-            <span className="spec-value">{car.owners || '—'}</span>
+            <span className="spec-value">{car.owners || t('specs.noValue')}</span>
           </div>
 
           <div className="spec-row">

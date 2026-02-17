@@ -1,10 +1,13 @@
+import { useTranslation } from 'react-i18next';
 import ServiceCard from './ServiceCard';
 
 const ServicesGrid = ({ services, isLoading }) => {
+  const { t } = useTranslation('services');
+
   if (isLoading && services.length === 0) {
     return (
       <div className="col-span-full text-sm text-muted-foreground">
-        Loading services…
+        {t('list.loading')}
       </div>
     );
   }
@@ -12,7 +15,7 @@ const ServicesGrid = ({ services, isLoading }) => {
   if (!isLoading && services.length === 0) {
     return (
       <div className="col-span-full rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
-        No services match these filters. Adjust search and try again.
+        {t('list.empty')}
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard';
 import BackButton from '@/shared/ui/BackButton/BackButton';
 import FiltersPanel from '@/features/filters/components/FiltersPanel';
@@ -8,12 +9,13 @@ import { useAutos } from '@/vehicles/hooks/useAutos';
 import './AutoSearchResult.scss';
 
 export default function AutoSearchResults() {
+  const { t } = useTranslation('vehicle');
   const { autos } = useAutos();
   useCarsFiltersUrlSync();
 
   const filtersConfig = useMemo(
-    () => createCarsFiltersConfig({ variant: 'hero' }),
-    []
+    () => createCarsFiltersConfig({ t, variant: 'hero' }),
+    [t]
   );
 
   return (
@@ -24,7 +26,7 @@ export default function AutoSearchResults() {
 
       <FiltersPanel domain="cars" config={filtersConfig} total={autos.length} />
 
-      <h1 className="text-xl font-semibold">Search Results {autos.length}</h1>
+      <h1 className="text-xl font-semibold">{t('search.resultsWithCount', { count: autos.length })}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {autos.map((car) => (

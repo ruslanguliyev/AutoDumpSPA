@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 
 const ratingDistribution = [
@@ -9,6 +10,7 @@ const ratingDistribution = [
 ];
 
 export default function ReviewsPreview({ ratingValue, reviewsCount }) {
+  const { t } = useTranslation('services');
   if (!reviewsCount || reviewsCount === 0) return null;
 
   return (
@@ -18,7 +20,7 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
         <div className="rating-stars">
           <RatingStars value={ratingValue} count={0} />
         </div>
-        <span className="rating-text">Based on {reviewsCount} reviews</span>
+        <span className="rating-text">{t('reviews.basedOn', { count: reviewsCount })}</span>
       </div>
 
       <div className="rating-distribution">
@@ -43,15 +45,13 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
               <div className="author-avatar">MK</div>
               <span className="author-name">Markus K.</span>
             </div>
-            <span className="review-date">2 weeks ago</span>
+            <span className="review-date">{t('reviews.agoWeeks', { count: 2 })}</span>
           </div>
           <div className="review-stars">
             <RatingStars value={5} count={0} />
           </div>
           <p className="review-text">
-            Excellent service. They diagnosed the issue with my X5 quickly and the repair
-            was done within the estimated timeframe. Price was fair compared to other
-            official dealers.
+            {t('reviews.sampleReview1')}
           </p>
         </div>
 
@@ -61,13 +61,13 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
               <div className="author-avatar">JS</div>
               <span className="author-name">Julia Schmidt</span>
             </div>
-            <span className="review-date">1 month ago</span>
+            <span className="review-date">{t('reviews.agoMonths', { count: 1 })}</span>
           </div>
           <div className="review-stars">
             <RatingStars value={5} count={0} />
           </div>
           <p className="review-text">
-            Good work, friendly staff. Waiting area is clean and has good coffee.
+            {t('reviews.sampleReview2')}
           </p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function ReviewsPreview({ ratingValue, reviewsCount }) {
         type="button"
         className="mt-4 w-full rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
       >
-        Show all {reviewsCount} reviews
+        {t('reviews.showAll', { count: reviewsCount })}
       </button>
     </section>
   );

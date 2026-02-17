@@ -1,33 +1,29 @@
 import { Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const formatDuration = (minutes) => {
+const formatDuration = (minutes, t) => {
   if (!minutes) return null;
-  if (minutes < 60) return `${minutes} mins`;
+  if (minutes < 60) return t('duration.mins', { count: minutes });
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  if (mins === 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
-  return `${hours}.${mins} hour${hours > 1 ? 's' : ''}`;
+  if (mins === 0) return t(hours === 1 ? 'duration.hour_one' : 'duration.hour_other', { count: hours });
+  return t('duration.hoursDecimal', { hours, mins: String(mins).padStart(2, '0') });
 };
 
-const getServiceDescription = (code, category) => {
-  if (code === 'oil_change') {
-    return 'Includes oil filter replacement, fluid top-off, and 25-point inspection.';
-  }
-  if (code === 'brake_pads') {
-    return 'Front or rear axle brake pads replacement with sensor check.';
-  }
-  if (code === 'diagnostics') {
-    return 'Full system scan for error codes and performance issues.';
-  }
+const getServiceDescription = (code, category, t) => {
+  if (code === 'oil_change') return t('serviceDescriptions.oil_change');
+  if (code === 'brake_pads') return t('serviceDescriptions.brake_pads');
+  if (code === 'diagnostics') return t('serviceDescriptions.diagnostics');
   return category;
 };
 
 export default function FullPriceList({ services }) {
+  const { t } = useTranslation('services');
   if (!services || services.length === 0) return null;
 
   return (
     <section className="price-list rounded-xl border border-border bg-card p-4 sm:rounded-2xl sm:p-6">
-      <h2 className="mb-3 text-base font-bold text-foreground sm:mb-4 sm:text-lg">Services & Prices</h2>
+      <h2 className="mb-3 text-base font-bold text-foreground sm:mb-4 sm:text-lg">{t('priceList.title')}</h2>
       <div className="price-list__container">
         {services.map((item) => (
           <div key={item.id} className="price-list__item">
@@ -35,32 +31,32 @@ export default function FullPriceList({ services }) {
               <div className="price-list__header">
                 <h3 className="price-list__name">{item.title}</h3>
                 {item.popular && (
-                  <span className="price-list__badge price-list__badge--popular">POPULAR</span>
+                  <span className="price-list__badge price-list__badge--popular">{t('priceList.popularBadge')}</span>
                 )}
                 {item.code === 'diagnostics' && !item.popular && (
-                  <span className="price-list__badge price-list__badge--hot">HOT</span>
+                  <span className="price-list__badge price-list__badge--hot">{t('priceList.hotBadge')}</span>
                 )}
               </div>
               {item.category && (
                 <p className="price-list__description">
-                  {getServiceDescription(item.code, item.category)}
+                  {getServiceDescription(item.code, item.category, t)}
                 </p>
               )}
               {item.durationMin && (
                 <div className="price-list__duration-row">
                   <Clock size={16} className="price-list__clock-icon" />
-                  <span className="price-list__duration">{formatDuration(item.durationMin)}</span>
+                  <span className="price-list__duration">{formatDuration(item.durationMin, t)}</span>
                 </div>
               )}
             </div>
             <div className="price-list__price">
               {item.priceFrom ? (
                 <>
-                  from {item.priceFrom}
+                  {t('priceList.from')} {item.priceFrom}
                   {item.currency || '€'}
                 </>
               ) : (
-                '—'
+                t('priceList.noPrice')
               )}
             </div>
           </div>

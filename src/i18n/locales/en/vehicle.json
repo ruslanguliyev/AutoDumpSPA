@@ -1,5 +1,6 @@
 {
   "title": "Vehicles",
+  "breadcrumbs": { "home": "Home", "cars": "Cars" },
   "selector": {
     "title": "Vehicle Selector",
     "vin": "VIN",
@@ -25,11 +26,25 @@
     "make": "Make",
     "allMakes": "All Makes",
     "model": "Model",
+    "modelPlaceholder": "Model",
+    "cityPlaceholder": "City / ZIP",
     "price": "Price",
     "registration": "Registration",
     "region": "Region",
     "city": "City",
-    "search": "Search"
+    "search": "Search",
+    "filters": "Filters",
+    "noLimit": "No limit",
+    "anyYear": "Any year",
+    "older": "Older",
+    "regions": {
+      "europe": "EU Europe",
+      "germany": "Germany",
+      "france": "France",
+      "italy": "Italy",
+      "spain": "Spain",
+      "uk": "United Kingdom"
+    }
   },
   "specs": {
     "title": "Specifications",
@@ -50,7 +65,15 @@
     "no": "No",
     "postedAt": "Published date",
     "views": "Views",
-    "ownerComment": "Owner comment"
+    "ownerComment": "Owner comment",
+    "noValue": "—"
+  },
+  "summary": {
+    "year": "Year",
+    "mileage": "Mileage",
+    "fuelType": "Fuel type",
+    "transmission": "Transmission",
+    "noValue": "—"
   },
   "details": {
     "title": "Vehicle Details",
@@ -60,13 +83,23 @@
   "card": {
     "viewDetails": "View details",
     "addToFavorites": "Add to favorites",
-    "removeFromFavorites": "Remove from favorites"
+    "removeFromFavorites": "Remove from favorites",
+    "hot": "HOT",
+    "addToFavoritesAria": "Add to favorites",
+    "removeFromFavoritesAria": "Remove from favorites"
+  },
+  "badges": { "hot": "HOT" },
+  "gallery": {
+    "loadingImages": "Loading images…",
+    "galleryAria": "{{name}} gallery"
   },
   "search": {
     "title": "Search Vehicles",
     "results": "Search Results",
+    "resultsWithCount": "Search Results {{count}}",
     "noResults": "No vehicles found",
     "resultsCount": "{{count}} vehicle found",
     "resultsCount_plural": "{{count}} vehicles found"
-  }
+  },
+  "home": { "availableVehicles": "Available Vehicles" }
 }

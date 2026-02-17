@@ -1,4 +1,5 @@
 import { IconSearch } from '@tabler/icons-react';
+import type { TFunction } from 'i18next';
 
 import { getDefaultFilters } from '../store/filters.defaults';
 import type { FilterOption, FiltersConfig } from '../types/filters.types';
@@ -13,22 +14,21 @@ type SellersFilterOptions = {
 };
 
 type SellersFiltersConfigArgs = {
+  t: TFunction<'sellers'>;
   options: SellersFilterOptions;
   total?: number;
   isLoading?: boolean;
 };
 
-const pluralize = (value: number, label: string) =>
-  `${value} ${label}${value === 1 ? '' : 's'}`;
-
 export const createSellersFiltersConfig = ({
+  t,
   options,
   total,
   isLoading,
 }: SellersFiltersConfigArgs): FiltersConfig => {
   const footerText = isLoading
-    ? 'Updating sellers…'
-    : `${pluralize(total ?? 0, 'seller')} available`;
+    ? t('filters.updating')
+    : t('filters.available', { count: total ?? 0 });
 
   return {
     domain: 'sellers',
@@ -37,9 +37,9 @@ export const createSellersFiltersConfig = ({
     primaryClassName: 'filter-primary',
     advancedClassName: 'filter-advanced',
     showAdvancedToggle: true,
-    advancedToggleLabel: 'Filters',
+    advancedToggleLabel: t('filters.filters'),
     showReset: true,
-    resetLabel: 'Reset filters',
+    resetLabel: t('filters.resetLabel'),
     footerText,
     primaryGroups: [
       {
@@ -48,7 +48,7 @@ export const createSellersFiltersConfig = ({
           {
             type: 'text',
             id: 'search',
-            placeholder: 'Search sellers (name, city)',
+            placeholder: t('filters.searchPlaceholder'),
             icon: IconSearch,
           },
           {
@@ -62,7 +62,7 @@ export const createSellersFiltersConfig = ({
     advancedGroups: [
       {
         id: 'sellerType',
-        label: 'Seller type',
+        label: t('filters.sellerType'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -74,7 +74,7 @@ export const createSellersFiltersConfig = ({
       },
       {
         id: 'rating',
-        label: 'Rating',
+        label: t('filters.rating'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -86,7 +86,7 @@ export const createSellersFiltersConfig = ({
       },
       {
         id: 'listings',
-        label: 'Listings',
+        label: t('filters.listings'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -98,7 +98,7 @@ export const createSellersFiltersConfig = ({
       },
       {
         id: 'city',
-        label: 'City',
+        label: t('filters.city'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -110,7 +110,7 @@ export const createSellersFiltersConfig = ({
       },
       {
         id: 'sort',
-        label: 'Sort by',
+        label: t('filters.sortBy'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -127,7 +127,7 @@ export const createSellersFiltersConfig = ({
           {
             type: 'toggle',
             id: 'verifiedOnly',
-            label: 'Verified sellers only',
+            label: t('filters.verifiedOnly'),
             variant: 'checkbox',
           },
         ],

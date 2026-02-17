@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CalendarDays, Clock, Heart, MapPin, Phone } from "lucide-react";
 import { useAutoDetails } from "@/vehicles/hooks/useAutoDetails";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
@@ -16,6 +17,7 @@ import "@/shared/blocks/TrustBlock/TrustBlock.scss";
 import "./VehicleDetail.scss";
 
 export default function VehicleDetail() {
+    const { t } = useTranslation(["sellers", "vehicle"]);
     const { id } = useParams();
     const { data: car } = useAutoDetails(id);
 
@@ -26,7 +28,7 @@ export default function VehicleDetail() {
 
     const [showPhone, setShowPhone] = useState(false);
 
-    if (!car) return <div>Not found</div>;
+    if (!car) return <div>{t("details.notFound", { ns: "vehicle" })}</div>;
 
     // 🔁 адаптер данных
     const media = car.image.map((src, index) => ({
@@ -44,7 +46,7 @@ export default function VehicleDetail() {
         e.stopPropagation();
     };
 
-    const favoriteLabel = isFavorite ? "Added to Favorites" : "Add to Favorites";
+    const favoriteLabel = isFavorite ? t("vehicle.addedToFavorites") : t("vehicle.addToFavorites");
 
     // Seller actions (phone button and favorite button)
     const sellerActions = (
@@ -56,11 +58,11 @@ export default function VehicleDetail() {
                 </div>
                 <div className="seller-card__metaRow">
                     <CalendarDays size={16} aria-hidden="true" />
-                    <span>Member since {car.seller?.memberSince ?? "—"}</span>
+                    <span>{t("vehicle.memberSince", { date: car.seller?.memberSince ?? "—" })}</span>
                 </div>
                 <div className="seller-card__metaRow">
                     <Clock size={16} aria-hidden="true" />
-                    <span>Usually responds within {car.seller?.responseTime ?? "—"}</span>
+                    <span>{t("vehicle.respondsWithin", { time: car.seller?.responseTime ?? "—" })}</span>
                 </div>
             </div>
 
@@ -74,7 +76,7 @@ export default function VehicleDetail() {
                     }}
                 >
                     <Phone size={18} aria-hidden="true" />
-                    {showPhone ? sellerPhone ?? "—" : "Show Phone Number"}
+                    {showPhone ? sellerPhone ?? "—" : t("vehicle.showPhoneNumber")}
                 </button>
 
                 <button
@@ -99,8 +101,8 @@ export default function VehicleDetail() {
     );
 
     const breadcrumbs = [
-        { label: "Home", to: "/" },
-        { label: "Cars", to: "/autosearch" },
+        { label: t("breadcrumbs.home", { ns: "vehicle" }), to: "/" },
+        { label: t("breadcrumbs.cars", { ns: "vehicle" }), to: "/autosearch" },
         { label: `${car.brand} ${car.model}` },
     ];
 
@@ -125,7 +127,7 @@ export default function VehicleDetail() {
                     {/* КАРУСЕЛЬ */}
                     <VehicleGallery
                         items={media}
-                        ariaLabel={`${car.brand} ${car.model} gallery`}
+                        ariaLabel={t("gallery.galleryAria", { ns: "vehicle", name: `${car.brand} ${car.model}` })}
                     />
 
                     <VehicleSummaryCard

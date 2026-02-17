@@ -1,0 +1,134 @@
+{
+  "title": "Auto Services",
+  "subtitle": "Find professional automotive services near you",
+  "meta": {
+    "title": "Auto Services"
+  },
+  "filters": {
+    "filters": "Filters",
+    "resetLabel": "Reset filters",
+    "updating": "Updating services…",
+    "available_one": "{{count}} service available",
+    "available_other": "{{count}} services available",
+    "cityPlaceholder": "City",
+    "openNow": "Open now",
+    "verified": "Verified",
+    "serviceType": "Service Type",
+    "brands": "Brands",
+    "searchBrandsPlaceholder": "Search brands...",
+    "services": "Services",
+    "showMore": "Show more ({{count}} more)",
+    "rating": "Rating",
+    "serviceTypes": {
+      "garage": "Garage",
+      "official": "Official",
+      "detailing": "Detailing",
+      "tire": "Tire",
+      "electric": "Electric",
+      "body": "Body"
+    },
+    "ratingOptions": {
+      "any": "Any rating",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "radiusOptions": {
+      "any": "Any distance",
+      "5": "5 km",
+      "10": "10 km",
+      "25": "25 km",
+      "50": "50 km",
+      "100": "100 km"
+    }
+  },
+  "list": {
+    "loading": "Loading services…",
+    "empty": "No services match these filters. Adjust search and try again.",
+    "errorFailed": "Failed to load services.",
+    "errorCheckEndpoint": "Check"
+  },
+  "card": {
+    "verified": "✓ Verified",
+    "avgCheck": "Avg. check",
+    "priceRange": "Price range",
+    "viewService": "View service →",
+    "fallbackType": "Service"
+  },
+  "detail": {
+    "loading": "Loading service details…",
+    "errorFailed": "Failed to load service.",
+    "notFound": "Service not found.",
+    "breadcrumbs": {
+      "home": "Home",
+      "services": "Services"
+    }
+  },
+  "header": {
+    "verified": "VERIFIED",
+    "reviews": "{{count}} reviews",
+    "share": "Share",
+    "shareAria": "Share service"
+  },
+  "priceList": {
+    "title": "Services & Prices",
+    "popularBadge": "POPULAR",
+    "hotBadge": "HOT",
+    "from": "from",
+    "noPrice": "—"
+  },
+  "popular": {
+    "title": "Popular Services",
+    "popularBadge": "POPULAR",
+    "from": "from",
+    "viewAll": "View all services →"
+  },
+  "serviceDescriptions": {
+    "oil_change": "Includes oil filter replacement, fluid top-off, and 25-point inspection.",
+    "brake_pads": "Front or rear axle brake pads replacement with sensor check.",
+    "diagnostics": "Full system scan for error codes and performance issues."
+  },
+  "duration": {
+    "mins": "{{count}} mins",
+    "hour_one": "{{count}} hour",
+    "hour_other": "{{count}} hours",
+    "hoursDecimal": "{{hours}}.{{mins}} hours"
+  },
+  "brands": {
+    "title": "Brands Serviced"
+  },
+  "reviews": {
+    "basedOn": "Based on {{count}} reviews",
+    "showAll": "Show all {{count}} reviews",
+    "agoWeeks": "{{count}} weeks ago",
+    "agoMonths": "{{count}} months ago",
+    "sampleReview1": "Excellent service. They diagnosed the issue with my X5 quickly and the repair was done within the estimated timeframe. Price was fair compared to other official dealers.",
+    "sampleReview2": "Good work, friendly staff. Waiting area is clean and has good coffee."
+  },
+  "sidebar": {
+    "status": "Status",
+    "openNow": "Open Now",
+    "closed": "Closed",
+    "closesAt": "Closes at",
+    "callNow": "Call Now",
+    "whatsapp": "WhatsApp",
+    "website": "Website",
+    "openingHours": "Opening Hours",
+    "contactDetails": "Contact Details",
+    "viewMap": "View Map",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "today": "(Today)"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  }
+}

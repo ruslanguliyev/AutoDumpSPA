@@ -1,5 +1,6 @@
 {
   "title": "Avtomobillər",
+  "breadcrumbs": { "home": "Ana səhifə", "cars": "Avtomobillər" },
   "selector": {
     "title": "Avtomobil seçimi",
     "vin": "VIN",
@@ -25,11 +26,25 @@
     "make": "Marka",
     "allMakes": "Bütün markalar",
     "model": "Model",
+    "modelPlaceholder": "Model",
+    "cityPlaceholder": "Şəhər / İndeks",
     "price": "Qiymət",
     "registration": "Qeydiyyat",
     "region": "Region",
     "city": "Şəhər",
-    "search": "Axtar"
+    "search": "Axtar",
+    "filters": "Filtrlər",
+    "noLimit": "Limitsiz",
+    "anyYear": "İstənilən il",
+    "older": "Köhnə",
+    "regions": {
+      "europe": "AB Avropa",
+      "germany": "Almaniya",
+      "france": "Fransa",
+      "italy": "İtaliya",
+      "spain": "İspaniya",
+      "uk": "Birləşmiş Krallıq"
+    }
   },
   "specs": {
     "title": "Xüsusiyyətlər",
@@ -39,7 +54,7 @@
     "code": "Avtomobil kodu",
     "year": "İl",
     "engine": "Mühərrik",
-    "transmission": "Ötürücü",
+    "transmission": "Sürət qutusu",
     "drive": "Sürücü",
     "mileage": "Yürüş",
     "km": "km",
@@ -50,7 +65,15 @@
     "no": "Xeyr",
     "postedAt": "Dərc tarixi",
     "views": "Baxışlar",
-    "ownerComment": "Sahibin şərhi"
+    "ownerComment": "Sahibin şərhi",
+    "noValue": "—"
+  },
+  "summary": {
+    "year": "İl",
+    "mileage": "Yürüş",
+    "fuelType": "Yanacaq növü",
+    "transmission": "Sürət qutusu",
+    "noValue": "—"
   },
   "details": {
     "title": "Avtomobil detalları",
@@ -60,13 +83,23 @@
   "card": {
     "viewDetails": "Detallara bax",
     "addToFavorites": "Seçilmişlərə əlavə et",
-    "removeFromFavorites": "Seçilmişlərdən sil"
+    "removeFromFavorites": "Seçilmişlərdən sil",
+    "hot": "HİT",
+    "addToFavoritesAria": "Seçilmişlərə əlavə et",
+    "removeFromFavoritesAria": "Seçilmişlərdən sil"
+  },
+  "badges": { "hot": "HİT" },
+  "gallery": {
+    "loadingImages": "Şəkillər yüklənir…",
+    "galleryAria": "{{name}} qalereyası"
   },
   "search": {
     "title": "Avtomobil axtar",
     "results": "Axtarış nəticələri",
+    "resultsWithCount": "Axtarış nəticələri {{count}}",
     "noResults": "Avtomobil tapılmadı",
     "resultsCount": "{{count}} avtomobil tapıldı",
     "resultsCount_plural": "{{count}} avtomobil tapıldı"
-  }
+  },
+  "home": { "availableVehicles": "Mövcud avtomobillər" }
 }

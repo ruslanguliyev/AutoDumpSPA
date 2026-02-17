@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import BackButton from '@/shared/ui/BackButton/BackButton';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { useService } from '@/services/hooks/useService';
@@ -11,6 +12,7 @@ import ServiceSidebar from '@/services/components/ServiceSidebar';
 import './ServiceDetailPage.scss';
 
 export default function ServiceDetailPage() {
+  const { t } = useTranslation('services');
   const { idOrSlug } = useParams();
   const { service, isLoading, error } = useService(idOrSlug);
 
@@ -18,9 +20,9 @@ export default function ServiceDetailPage() {
   const reviewsCount = Number.isFinite(service?.reviewsCount) ? service.reviewsCount : 0;
 
   const breadcrumbs = [
-    { label: 'Home', to: '/' },
+    { label: t('detail.breadcrumbs.home'), to: '/' },
     ...(service?.location?.city ? [{ label: service.location.city }] : []),
-    { label: 'Services', to: '/services' },
+    { label: t('detail.breadcrumbs.services'), to: '/services' },
     ...(service?.name ? [{ label: service.name }] : []),
   ];
 
@@ -29,7 +31,7 @@ export default function ServiceDetailPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            Loading service details…
+            {t('detail.loading')}
           </div>
         </div>
       </div>
@@ -42,7 +44,7 @@ export default function ServiceDetailPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
-            Failed to load service. {message ? <span>{message}</span> : null}
+            {t('detail.errorFailed')} {message ? <span>{message}</span> : null}
           </div>
           <BackButton fallback="/services" />
         </div>
@@ -55,7 +57,7 @@ export default function ServiceDetailPage() {
       <div className="w-full px-4 py-10">
         <div className="mx-auto w-full max-w-[1280px] space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            Service not found.
+            {t('detail.notFound')}
           </div>
           <BackButton fallback="/services" />
         </div>

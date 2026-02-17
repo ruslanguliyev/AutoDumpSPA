@@ -1,5 +1,6 @@
 {
   "title": "Автомобили",
+  "breadcrumbs": { "home": "Главная", "cars": "Автомобили" },
   "selector": {
     "title": "Выбор автомобиля",
     "vin": "VIN",
@@ -25,11 +26,25 @@
     "make": "Марка",
     "allMakes": "Все марки",
     "model": "Модель",
+    "modelPlaceholder": "Модель",
+    "cityPlaceholder": "Город / Индекс",
     "price": "Цена",
     "registration": "Регистрация",
     "region": "Регион",
     "city": "Город",
-    "search": "Поиск"
+    "search": "Поиск",
+    "filters": "Фильтры",
+    "noLimit": "Без ограничения",
+    "anyYear": "Любой год",
+    "older": "Старее",
+    "regions": {
+      "europe": "ЕС Европа",
+      "germany": "Германия",
+      "france": "Франция",
+      "italy": "Италия",
+      "spain": "Испания",
+      "uk": "Великобритания"
+    }
   },
   "specs": {
     "title": "Характеристики",
@@ -50,7 +65,15 @@
     "no": "Нет",
     "postedAt": "Дата публикации",
     "views": "Просмотры",
-    "ownerComment": "Комментарий владельца"
+    "ownerComment": "Комментарий владельца",
+    "noValue": "—"
+  },
+  "summary": {
+    "year": "Год",
+    "mileage": "Пробег",
+    "fuelType": "Тип топлива",
+    "transmission": "Коробка передач",
+    "noValue": "—"
   },
   "details": {
     "title": "Детали автомобиля",
@@ -60,13 +83,23 @@
   "card": {
     "viewDetails": "Посмотреть детали",
     "addToFavorites": "Добавить в избранное",
-    "removeFromFavorites": "Удалить из избранного"
+    "removeFromFavorites": "Удалить из избранного",
+    "hot": "ХИТ",
+    "addToFavoritesAria": "Добавить в избранное",
+    "removeFromFavoritesAria": "Удалить из избранного"
+  },
+  "badges": { "hot": "ХИТ" },
+  "gallery": {
+    "loadingImages": "Загрузка изображений…",
+    "galleryAria": "Галерея {{name}}"
   },
   "search": {
     "title": "Поиск автомобилей",
     "results": "Результаты поиска",
+    "resultsWithCount": "Результаты поиска {{count}}",
     "noResults": "Автомобили не найдены",
     "resultsCount": "Найден {{count}} автомобиль",
     "resultsCount_plural": "Найдено {{count}} автомобилей"
-  }
+  },
+  "home": { "availableVehicles": "Доступные автомобили" }
 }

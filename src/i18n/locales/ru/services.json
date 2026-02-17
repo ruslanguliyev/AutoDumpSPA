@@ -1,0 +1,134 @@
+{
+  "title": "Автосервисы",
+  "subtitle": "Профессиональные автоуслуги рядом с вами",
+  "meta": {
+    "title": "Автосервисы"
+  },
+  "filters": {
+    "filters": "Фильтры",
+    "resetLabel": "Сбросить фильтры",
+    "updating": "Обновление списка…",
+    "available_one": "{{count}} автосервис",
+    "available_other": "{{count}} автосервисов",
+    "cityPlaceholder": "Город",
+    "openNow": "Открыто сейчас",
+    "verified": "Проверенные",
+    "serviceType": "Тип сервиса",
+    "brands": "Бренды",
+    "searchBrandsPlaceholder": "Поиск брендов...",
+    "services": "Услуги",
+    "showMore": "Ещё ({{count}})",
+    "rating": "Рейтинг",
+    "serviceTypes": {
+      "garage": "Гараж",
+      "official": "Официальный",
+      "detailing": "Детейлинг",
+      "tire": "Шиномонтаж",
+      "electric": "Электрика",
+      "body": "Кузов"
+    },
+    "ratingOptions": {
+      "any": "Любой рейтинг",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "radiusOptions": {
+      "any": "Любое расстояние",
+      "5": "5 км",
+      "10": "10 км",
+      "25": "25 км",
+      "50": "50 км",
+      "100": "100 км"
+    }
+  },
+  "list": {
+    "loading": "Загрузка услуг…",
+    "empty": "Нет автосервисов по выбранным фильтрам. Измените параметры поиска.",
+    "errorFailed": "Ошибка загрузки услуг.",
+    "errorCheckEndpoint": "Проверьте"
+  },
+  "card": {
+    "verified": "✓ Проверен",
+    "avgCheck": "Средний чек",
+    "priceRange": "Ценовой диапазон",
+    "viewService": "Подробнее →",
+    "fallbackType": "Сервис"
+  },
+  "detail": {
+    "loading": "Загрузка деталей…",
+    "errorFailed": "Ошибка загрузки сервиса.",
+    "notFound": "Сервис не найден.",
+    "breadcrumbs": {
+      "home": "Главная",
+      "services": "Услуги"
+    }
+  },
+  "header": {
+    "verified": "ПРОВЕРЕН",
+    "reviews": "{{count}} отзывов",
+    "share": "Поделиться",
+    "shareAria": "Поделиться сервисом"
+  },
+  "priceList": {
+    "title": "Услуги и цены",
+    "popularBadge": "ПОПУЛЯРНО",
+    "hotBadge": "ХИТ",
+    "from": "от",
+    "noPrice": "—"
+  },
+  "popular": {
+    "title": "Популярные услуги",
+    "popularBadge": "ПОПУЛЯРНО",
+    "from": "от",
+    "viewAll": "Все услуги →"
+  },
+  "serviceDescriptions": {
+    "oil_change": "Замена масла и фильтра, долив жидкостей, 25-точечная проверка.",
+    "brake_pads": "Замена тормозных колодок (передняя/задняя ось) с проверкой датчиков.",
+    "diagnostics": "Полная диагностика кодов ошибок и проверка систем."
+  },
+  "duration": {
+    "mins": "{{count}} мин",
+    "hour_one": "{{count}} ч",
+    "hour_other": "{{count}} ч",
+    "hoursDecimal": "{{hours}},{{mins}} ч"
+  },
+  "brands": {
+    "title": "Обслуживаемые бренды"
+  },
+  "reviews": {
+    "basedOn": "На основе {{count}} отзывов",
+    "showAll": "Все {{count}} отзывов",
+    "agoWeeks": "{{count}} нед. назад",
+    "agoMonths": "{{count}} мес. назад",
+    "sampleReview1": "Отличный сервис. Быстро нашли причину неисправности X5 и отремонтировали в срок. Цена адекватная по сравнению с официальными дилерами.",
+    "sampleReview2": "Качественная работа, вежливый персонал. Зона ожидания чистая, хороший кофе."
+  },
+  "sidebar": {
+    "status": "Статус",
+    "openNow": "Открыто",
+    "closed": "Закрыто",
+    "closesAt": "Закрытие в",
+    "callNow": "Позвонить",
+    "whatsapp": "WhatsApp",
+    "website": "Сайт",
+    "openingHours": "Режим работы",
+    "contactDetails": "Контакты",
+    "viewMap": "Открыть карту",
+    "phone": "Телефон",
+    "email": "Email",
+    "address": "Адрес",
+    "today": "(сегодня)"
+  },
+  "days": {
+    "monday": "Понедельник",
+    "tuesday": "Вторник",
+    "wednesday": "Среда",
+    "thursday": "Четверг",
+    "friday": "Пятница",
+    "saturday": "Суббота",
+    "sunday": "Воскресенье"
+  }
+}

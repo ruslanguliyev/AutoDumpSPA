@@ -1,22 +1,18 @@
 import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 
-const TYPE_LABELS = {
-  garage: 'Garage',
-  official: 'Official',
-  detailing: 'Detailing',
-  tire: 'Tire',
-  electric: 'Electric',
-  body: 'Body',
-};
-
 const ServiceCard = ({ service }) => {
+  const { t } = useTranslation('services');
   if (!service) return null;
 
   const ratingValue = Number.isFinite(service.rating) ? service.rating : 0;
   const reviewsCount = Number.isFinite(service.reviewsCount) ? service.reviewsCount : 0;
-  const typeLabel = TYPE_LABELS[service.type] || service.type || 'Service';
+  const typeKey = service.type && ['garage', 'official', 'detailing', 'tire', 'electric', 'body'].includes(service.type)
+    ? `filters.serviceTypes.${service.type}`
+    : null;
+  const typeLabel = typeKey ? t(typeKey) : (service.type || t('card.fallbackType'));
   const city = service.location?.city || '';
   const cover = service.media?.cover;
 
@@ -46,7 +42,7 @@ const ServiceCard = ({ service }) => {
             ) : null}
             {verifiedBadge ? (
               <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${verifiedBadge}`}>
-                ✓ Verified
+                {t('card.verified')}
               </span>
             ) : null}
           </div>
@@ -84,11 +80,11 @@ const ServiceCard = ({ service }) => {
         {/* PRICE RANGE / AVG CHECK */}
         {service.avgCheck ? (
           <div className="flex items-start mt-2 text-sm text-muted-foreground">
-            Avg. check: {service.avgCheck} {service.services?.[0]?.currency || '€'}
+            {t('card.avgCheck')}: {service.avgCheck} {service.services?.[0]?.currency || '€'}
           </div>
         ) : service.priceRange ? (
           <div className="mt-2 text-sm text-muted-foreground">
-            Price range: {'$'.repeat(service.priceRange)}
+            {t('card.priceRange')}: {'$'.repeat(service.priceRange)}
           </div>
         ) : null}
 
@@ -103,7 +99,7 @@ const ServiceCard = ({ service }) => {
           to={`/services/${service.slug || service.id}`}
           className="rounded-xl bg-brand px-4 py-2.5 text-center text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
         >
-          View service →
+          {t('card.viewService')}
         </Link>
       </div>
     </article>

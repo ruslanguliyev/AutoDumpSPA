@@ -1,6 +1,8 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function ServiceContacts({ location, contacts }) {
+  const { t } = useTranslation('services');
   if (!location && !contacts) return null;
 
   return (
@@ -13,7 +15,7 @@ export default function ServiceContacts({ location, contacts }) {
           </div>
           <button type="button" className="map-button">
             <MapPin size={18} />
-            View Map
+            {t('sidebar.viewMap')}
           </button>
         </div>
       )}
@@ -21,7 +23,7 @@ export default function ServiceContacts({ location, contacts }) {
       {/* CONTACT DETAILS */}
       {(contacts?.phone || contacts?.email || location?.address) && (
         <div className="contact-details">
-          <h3 className="contact-title">Contact Details</h3>
+          <h3 className="contact-title">{t('sidebar.contactDetails')}</h3>
           <div>
             {contacts?.phone && (
               <div className="contact-item">
@@ -29,7 +31,7 @@ export default function ServiceContacts({ location, contacts }) {
                   <Phone size={18} />
                 </div>
                 <div className="contact-info">
-                  <p className="contact-label">Phone</p>
+                  <p className="contact-label">{t('sidebar.phone')}</p>
                   <p className="contact-value contact-value-bold">{contacts.phone}</p>
                 </div>
               </div>
@@ -40,7 +42,7 @@ export default function ServiceContacts({ location, contacts }) {
                   <Mail size={18} />
                 </div>
                 <div className="contact-info">
-                  <p className="contact-label">Email</p>
+                  <p className="contact-label">{t('sidebar.email')}</p>
                   <p className="contact-value contact-value-bold">{contacts.email}</p>
                 </div>
               </div>
@@ -51,7 +53,7 @@ export default function ServiceContacts({ location, contacts }) {
                   <MapPin size={18} />
                 </div>
                 <div className="contact-info">
-                  <p className="contact-label">Address</p>
+                  <p className="contact-label">{t('sidebar.address')}</p>
                   <p className="contact-value contact-value-regular">{location.address}</p>
                 </div>
               </div>

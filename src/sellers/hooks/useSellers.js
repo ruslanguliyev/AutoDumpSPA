@@ -1,41 +1,8 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { useSellersData } from '@/sellers/hooks/useSellersData';
-
-const DOMAIN_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'cars', label: 'Cars' },
-  { value: 'parts', label: 'Parts' },
-];
-
-// Private sellers don't have public pages — don't expose them in filters.
-const SELLER_TYPE_OPTIONS = [
-  { value: '', label: 'Any' },
-  { value: 'dealer', label: 'Dealer' },
-  { value: 'reseller', label: 'Reseller' },
-];
-
-const RATING_OPTIONS = [
-  { value: '', label: 'Any' },
-  { value: '4.5', label: '4.5+' },
-  { value: '4.0', label: '4.0+' },
-  { value: '3.5', label: '3.5+' },
-];
-
-const LISTING_OPTIONS = [
-  { value: 'any', label: 'Any' },
-  { value: '1-10', label: '1-10' },
-  { value: '10-50', label: '10-50' },
-  { value: '50+', label: '50+' },
-];
-
-const SORT_OPTIONS = [
-  { value: 'rating', label: 'Rating' },
-  { value: 'listings', label: 'Listings' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'az', label: 'A-Z' },
-];
 
 const DEFAULT_RATING = '4.5';
 const DEFAULT_LISTINGS = 'any';
@@ -43,9 +10,58 @@ const DEFAULT_LISTINGS = 'any';
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
 export const useSellers = ({ vehicles, parts } = {}) => {
+  const { t } = useTranslation('sellers');
   const filters = useFiltersStore((state) => state.filters.sellers);
   const sellers = useSellersData({ vehicles, parts });
   const safeSellers = Array.isArray(sellers) ? sellers : [];
+
+  const DOMAIN_OPTIONS = useMemo(
+    () => [
+      { value: 'all', label: t('filters.domain.all') },
+      { value: 'cars', label: t('filters.domain.cars') },
+      { value: 'parts', label: t('filters.domain.parts') },
+    ],
+    [t]
+  );
+
+  const SELLER_TYPE_OPTIONS = useMemo(
+    () => [
+      { value: '', label: t('filters.sellerTypeOptions.any') },
+      { value: 'dealer', label: t('filters.sellerTypeOptions.dealer') },
+      { value: 'reseller', label: t('filters.sellerTypeOptions.reseller') },
+    ],
+    [t]
+  );
+
+  const RATING_OPTIONS = useMemo(
+    () => [
+      { value: '', label: t('filters.ratingOptions.any') },
+      { value: '4.5', label: t('filters.ratingOptions.rating45') },
+      { value: '4.0', label: t('filters.ratingOptions.rating40') },
+      { value: '3.5', label: t('filters.ratingOptions.rating35') },
+    ],
+    [t]
+  );
+
+  const LISTING_OPTIONS = useMemo(
+    () => [
+      { value: 'any', label: t('filters.listingsOptions.any') },
+      { value: '1-10', label: t('filters.listingsOptions.1-10') },
+      { value: '10-50', label: t('filters.listingsOptions.10-50') },
+      { value: '50+', label: t('filters.listingsOptions.50+') },
+    ],
+    [t]
+  );
+
+  const SORT_OPTIONS = useMemo(
+    () => [
+      { value: 'rating', label: t('filters.sortOptions.rating') },
+      { value: 'listings', label: t('filters.sortOptions.listings') },
+      { value: 'newest', label: t('filters.sortOptions.newest') },
+      { value: 'az', label: t('filters.sortOptions.az') },
+    ],
+    [t]
+  );
 
   const filteredSellers = useMemo(() => {
     const ratingMin = Number(filters.rating);
@@ -101,8 +117,11 @@ export const useSellers = ({ vehicles, parts } = {}) => {
       const city = typeof seller?.city === 'string' ? seller.city.trim() : '';
       if (city) set.add(city);
     });
-    return [{ value: '', label: 'Any city' }, ...Array.from(set).sort().map((c) => ({ value: c, label: c }))];
-  }, [safeSellers]);
+    return [
+      { value: '', label: t('filters.cityOptions.any') },
+      ...Array.from(set).sort().map((c) => ({ value: c, label: c })),
+    ];
+  }, [safeSellers, t]);
 
   const filterOptions = useMemo(
     () => ({
@@ -113,7 +132,14 @@ export const useSellers = ({ vehicles, parts } = {}) => {
       cities: cityOptions,
       sorts: SORT_OPTIONS,
     }),
-    [cityOptions]
+    [
+      DOMAIN_OPTIONS,
+      SELLER_TYPE_OPTIONS,
+      RATING_OPTIONS,
+      LISTING_OPTIONS,
+      cityOptions,
+      SORT_OPTIONS,
+    ]
   );
 
   const isFiltering =

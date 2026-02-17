@@ -1,33 +1,8 @@
 import { IconMapPin, IconSearch } from '@tabler/icons-react';
+import type { TFunction } from 'i18next';
 
 import { getDefaultFilters } from '../store/filters.defaults';
 import type { FilterOption, FiltersConfig } from '../types/filters.types';
-
-const SERVICE_TYPES: FilterOption[] = [
-  { value: 'garage', label: 'Garage' },
-  { value: 'official', label: 'Official' },
-  { value: 'detailing', label: 'Detailing' },
-  { value: 'tire', label: 'Tire' },
-  { value: 'electric', label: 'Electric' },
-  { value: 'body', label: 'Body' },
-];
-
-const RATING_OPTIONS: FilterOption[] = [
-  { value: '', label: 'Any rating' },
-  { value: '3', label: '3.0+' },
-  { value: '3.5', label: '3.5+' },
-  { value: '4', label: '4.0+' },
-  { value: '4.5', label: '4.5+' },
-];
-
-const RADIUS_OPTIONS: FilterOption[] = [
-  { value: '', label: 'Any distance' },
-  { value: '5', label: '5 km' },
-  { value: '10', label: '10 km' },
-  { value: '25', label: '25 km' },
-  { value: '50', label: '50 km' },
-  { value: '100', label: '100 km' },
-];
 
 type ServicesFilterOptions = {
   serviceCodes: FilterOption[];
@@ -35,22 +10,47 @@ type ServicesFilterOptions = {
 };
 
 type ServicesFiltersConfigArgs = {
+  t: TFunction<'services'>;
   options: ServicesFilterOptions;
   total?: number;
   isLoading?: boolean;
 };
 
-const pluralize = (value: number, label: string) =>
-  `${value} ${label}${value === 1 ? '' : 's'}`;
-
 export const createServicesFiltersConfig = ({
+  t,
   options,
   total,
   isLoading,
 }: ServicesFiltersConfigArgs): FiltersConfig => {
   const footerText = isLoading
-    ? 'Updating services…'
-    : `${pluralize(total ?? 0, 'service')} available`;
+    ? t('filters.updating')
+    : t('filters.available', { count: total ?? 0 });
+
+  const SERVICE_TYPES: FilterOption[] = [
+    { value: 'garage', label: t('filters.serviceTypes.garage') },
+    { value: 'official', label: t('filters.serviceTypes.official') },
+    { value: 'detailing', label: t('filters.serviceTypes.detailing') },
+    { value: 'tire', label: t('filters.serviceTypes.tire') },
+    { value: 'electric', label: t('filters.serviceTypes.electric') },
+    { value: 'body', label: t('filters.serviceTypes.body') },
+  ];
+
+  const RATING_OPTIONS: FilterOption[] = [
+    { value: '', label: t('filters.ratingOptions.any') },
+    { value: '3', label: t('filters.ratingOptions.rating30') },
+    { value: '3.5', label: t('filters.ratingOptions.rating35') },
+    { value: '4', label: t('filters.ratingOptions.rating40') },
+    { value: '4.5', label: t('filters.ratingOptions.rating45') },
+  ];
+
+  const RADIUS_OPTIONS: FilterOption[] = [
+    { value: '', label: t('filters.radiusOptions.any') },
+    { value: '5', label: t('filters.radiusOptions.5') },
+    { value: '10', label: t('filters.radiusOptions.10') },
+    { value: '25', label: t('filters.radiusOptions.25') },
+    { value: '50', label: t('filters.radiusOptions.50') },
+    { value: '100', label: t('filters.radiusOptions.100') },
+  ];
 
   return {
     domain: 'services',
@@ -59,9 +59,9 @@ export const createServicesFiltersConfig = ({
     primaryClassName: 'filter-top-bar',
     advancedClassName: 'filter-panel',
     showAdvancedToggle: true,
-    advancedToggleLabel: 'Filters',
+    advancedToggleLabel: t('filters.filters'),
     showReset: true,
-    resetLabel: 'Reset filters',
+    resetLabel: t('filters.resetLabel'),
     footerText,
     primaryGroups: [
       {
@@ -70,15 +70,15 @@ export const createServicesFiltersConfig = ({
           {
             type: 'text',
             id: 'city',
-            placeholder: 'City',
+            placeholder: t('filters.cityPlaceholder'),
             icon: IconMapPin,
           },
           { type: 'select', id: 'radiusKm', options: RADIUS_OPTIONS },
-          { type: 'toggle', id: 'openNow', label: 'Open now', variant: 'switch' },
+          { type: 'toggle', id: 'openNow', label: t('filters.openNow'), variant: 'switch' },
           {
             type: 'toggle',
             id: 'verifiedOnly',
-            label: 'Verified',
+            label: t('filters.verified'),
             variant: 'switch',
           },
         ],
@@ -87,7 +87,7 @@ export const createServicesFiltersConfig = ({
     advancedGroups: [
       {
         id: 'serviceType',
-        label: 'Service Type',
+        label: t('filters.serviceType'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -103,7 +103,7 @@ export const createServicesFiltersConfig = ({
       },
       {
         id: 'brands',
-        label: 'Brands',
+        label: t('filters.brands'),
         containerClassName: 'collapsible-section',
         collapsible: true,
         defaultCollapsed: true,
@@ -114,7 +114,7 @@ export const createServicesFiltersConfig = ({
             options: options.brands ?? [],
             multiple: true,
             searchable: true,
-            placeholder: 'Search brands...',
+            placeholder: t('filters.searchBrandsPlaceholder'),
             searchIcon: IconSearch,
             listClassName: 'chips-grid',
             itemClassName: 'chip',
@@ -124,7 +124,7 @@ export const createServicesFiltersConfig = ({
       },
       {
         id: 'serviceCodes',
-        label: 'Services',
+        label: t('filters.services'),
         containerClassName: 'filter-section',
         controls: [
           {
@@ -133,7 +133,7 @@ export const createServicesFiltersConfig = ({
             options: options.serviceCodes ?? [],
             multiple: true,
             maxVisible: 6,
-            showMoreLabel: (hidden) => `Show more (${hidden} more)`,
+            showMoreLabel: (hidden) => t('filters.showMore', { count: hidden }),
             listClassName: 'chips-grid',
             itemClassName: 'chip',
             itemActiveClassName: 'chip-selected',
@@ -142,7 +142,7 @@ export const createServicesFiltersConfig = ({
       },
       {
         id: 'rating',
-        label: 'Rating',
+        label: t('filters.rating'),
         containerClassName: 'filter-section',
         controls: [
           {

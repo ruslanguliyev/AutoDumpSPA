@@ -1,0 +1,110 @@
+{
+  "title": "Satıcılar",
+  "subtitle": "ictimai səhifəsi olan",
+  "meta": {
+    "title": "Satıcılar"
+  },
+  "filters": {
+    "searchPlaceholder": "Satıcı axtarışı (ad, şəhər)",
+    "filters": "Filtrlər",
+    "resetLabel": "Filtrləri sıfırla",
+    "sellerType": "Satıcı növü",
+    "rating": "Reytinq",
+    "listings": "Elanlar",
+    "city": "Şəhər",
+    "sortBy": "Çeşidlə",
+    "verifiedOnly": "Yalnız təsdiqlənmişlər",
+    "updating": "Siyahı yenilənir…",
+    "available_one": "{{count}} satıcı",
+    "available_other": "{{count}} satıcı",
+    "domain": {
+      "all": "Hamısı",
+      "cars": "Avtomobillər",
+      "parts": "Ehtiyat hissələri"
+    },
+    "sellerTypeOptions": {
+      "any": "İstənilən",
+      "dealer": "Diler",
+      "reseller": "Reseller"
+    },
+    "ratingOptions": {
+      "any": "İstənilən",
+      "rating45": "4.5+",
+      "rating40": "4.0+",
+      "rating35": "3.5+"
+    },
+    "listingsOptions": {
+      "any": "İstənilən",
+      "1-10": "1-10",
+      "10-50": "10-50",
+      "50+": "50+"
+    },
+    "sortOptions": {
+      "rating": "Reytinqə görə",
+      "listings": "Elan sayına görə",
+      "newest": "Əvvəlcə yenilər",
+      "az": "A-Z"
+    },
+    "cityOptions": {
+      "any": "İstənilən şəhər"
+    }
+  },
+  "list": {
+    "loading": "Satıcılar yüklənir…",
+    "empty": "Seçilmiş filtrlərə uyğun satıcı tapılmadı.",
+    "countFiltered": "{{total}} / {{totalAll}} satıcı",
+    "countAll_one": "{{count}} satıcı",
+    "countAll_other": "{{count}} satıcı"
+  },
+  "card": {
+    "verifiedDealer": "Təsdiqlənmiş diler",
+    "reviews_one": "{{count}} rəy",
+    "reviews_other": "{{count}} rəy",
+    "location": "Ünvan",
+    "activeSeller": "Aktiv satıcı",
+    "yrs": "il",
+    "showNumber": "Nömrəni göstər",
+    "whatsapp": "WhatsApp",
+    "addToFavorites": "Seçilmişlərə əlavə et",
+    "removeFromFavorites": "Seçilmişlərdən sil",
+    "share": "Paylaş",
+    "instagram": "Instagram"
+  },
+  "detail": {
+    "fallbackName": "Satıcı",
+    "missingId": "Satıcı identifikatoru göstərilməyib.",
+    "backToSellers": "← Siyahıya qayıt",
+    "notFound": "Satıcı tapılmadı",
+    "notAvailable": "Satıcı {{id}} mövcud deyil.",
+    "tabs": {
+      "stock": "Anbar",
+      "reviews": "Rəylər",
+      "about": "Haqqında"
+    },
+    "searchPlaceholder": "Anbarda axtarış (məs. BMW X5…)",
+    "empty": {
+      "nothingFound": "Heç nə tapılmadı",
+      "noListings": "Elan yoxdur",
+      "reviewsSoon": "Rəylər tezliklə əlavə olunacaq",
+      "aboutSoon": "Satıcı haqqında məlumat tezliklə əlavə olunacaq"
+    },
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "sellers": "Satıcılar"
+    }
+  },
+  "vehicle": {
+    "memberSince": "Saytda {{date}} tarixindən",
+    "respondsWithin": "Adətən {{time}} ərzində cavab verir",
+    "showPhoneNumber": "Telefon nömrəsini göstər",
+    "addedToFavorites": "Seçilmişlərdə",
+    "addToFavorites": "Seçilmişlərə"
+  },
+  "errors": {
+    "loadFailed": "Satıcılar səhifəsi yüklənərkən xəta baş verdi"
+  },
+  "notFound": {
+    "dealerPage": "Bu satıcının ictimai diler səhifəsi yoxdur.",
+    "goHomepage": "Ana səhifəyə"
+  }
+}

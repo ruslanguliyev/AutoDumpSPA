@@ -1,0 +1,111 @@
+{
+  "title": "Продавцы",
+  "subtitle": "с публичными страницами",
+  "meta": {
+    "title": "Продавцы"
+  },
+  "filters": {
+    "searchPlaceholder": "Поиск продавцов (имя, город)",
+    "filters": "Фильтры",
+    "resetLabel": "Сбросить фильтры",
+    "sellerType": "Тип продавца",
+    "rating": "Рейтинг",
+    "listings": "Объявлений",
+    "city": "Город",
+    "sortBy": "Сортировка",
+    "verifiedOnly": "Только проверенные",
+    "updating": "Обновление списка…",
+    "available_one": "{{count}} продавец",
+    "available_other": "{{count}} продавцов",
+    "domain": {
+      "all": "Все",
+      "cars": "Автомобили",
+      "parts": "Запчасти"
+    },
+    "sellerTypeOptions": {
+      "any": "Любой",
+      "dealer": "Дилер",
+      "reseller": "Реселлер"
+    },
+    "ratingOptions": {
+      "any": "Любой",
+      "rating45": "4.5+",
+      "rating40": "4.0+",
+      "rating35": "3.5+"
+    },
+    "listingsOptions": {
+      "any": "Любое",
+      "1-10": "1-10",
+      "10-50": "10-50",
+      "50+": "50+"
+    },
+    "sortOptions": {
+      "rating": "По рейтингу",
+      "listings": "По количеству",
+      "newest": "Сначала новые",
+      "az": "А-Я"
+    },
+    "cityOptions": {
+      "any": "Любой город"
+    }
+  },
+  "list": {
+    "loading": "Загрузка продавцов…",
+    "empty": "Нет продавцов по выбранным фильтрам.",
+    "countFiltered": "{{total}} из {{totalAll}} продавцов",
+    "countAll_one": "{{count}} продавец",
+    "countAll_other": "{{count}} продавцов"
+  },
+  "card": {
+    "verifiedDealer": "Проверенный дилер",
+    "reviews_one": "{{count}} отзыв",
+    "reviews_few": "{{count}} отзыва",
+    "reviews_many": "{{count}} отзывов",
+    "location": "Расположение",
+    "activeSeller": "Активный продавец",
+    "yrs": "лет",
+    "showNumber": "Показать номер",
+    "whatsapp": "WhatsApp",
+    "addToFavorites": "Добавить в избранное",
+    "removeFromFavorites": "Удалить из избранного",
+    "share": "Поделиться",
+    "instagram": "Instagram"
+  },
+  "detail": {
+    "fallbackName": "Продавец",
+    "missingId": "Не указан идентификатор продавца.",
+    "backToSellers": "← Назад к списку",
+    "notFound": "Продавец не найден",
+    "notAvailable": "Продавец {{id}} недоступен.",
+    "tabs": {
+      "stock": "Товар",
+      "reviews": "Отзывы",
+      "about": "О продавце"
+    },
+    "searchPlaceholder": "Поиск по складу (напр. BMW X5…)",
+    "empty": {
+      "nothingFound": "Ничего не найдено",
+      "noListings": "Нет объявлений",
+      "reviewsSoon": "Отзывы скоро появятся",
+      "aboutSoon": "Информация о продавце скоро появится"
+    },
+    "breadcrumbs": {
+      "home": "Главная",
+      "sellers": "Продавцы"
+    }
+  },
+  "vehicle": {
+    "memberSince": "На сайте с {{date}}",
+    "respondsWithin": "Обычно отвечает в течение {{time}}",
+    "showPhoneNumber": "Показать номер телефона",
+    "addedToFavorites": "В избранном",
+    "addToFavorites": "В избранное"
+  },
+  "errors": {
+    "loadFailed": "Ошибка загрузки страницы продавцов"
+  },
+  "notFound": {
+    "dealerPage": "У этого продавца нет публичной страницы дилера.",
+    "goHomepage": "На главную"
+  }
+}

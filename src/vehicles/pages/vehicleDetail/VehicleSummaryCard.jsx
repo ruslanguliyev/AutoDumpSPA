@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { formatInt } from "@/vehicles/pages/vehicleDetail/utils/formatInt";
 import { formatPrice } from "@/vehicles/pages/vehicleDetail/utils/formatPrice";
 
@@ -11,9 +12,11 @@ const VehicleSummaryCard = ({
   transmission,
   engine,
 }) => {
+  const { t } = useTranslation("vehicle");
   const formattedMileage = formatInt(mileage);
-  const displayFuelType = fuelType || "—";
-  const displayTransmission = transmission || "—";
+  const noValue = t("summary.noValue");
+  const displayFuelType = fuelType || noValue;
+  const displayTransmission = transmission || noValue;
   const subtitle = [engine, transmission].filter(Boolean).join(" • ");
 
   return (
@@ -24,7 +27,7 @@ const VehicleSummaryCard = ({
             {title}
           </h1>
           <p className="m-0 w-full self-start text-left text-sm text-muted-foreground">
-            {subtitle || "—"}
+            {subtitle || noValue}
           </p>
         </div>
 
@@ -38,21 +41,21 @@ const VehicleSummaryCard = ({
       <dl className="mt-4 grid grid-cols-4 gap-3">
         <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Year
+            {t("summary.year")}
           </dt>
           <dd className="mt-1 text-sm font-semibold text-foreground">{year}</dd>
         </div>
         <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Mileage
+            {t("summary.mileage")}
           </dt>
           <dd className="mt-1 text-sm font-semibold text-foreground">
-            {formattedMileage} km
+            {formattedMileage} {t("specs.km")}
           </dd>
         </div>
         <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Fuel type
+            {t("summary.fuelType")}
           </dt>
           <dd className="mt-1 text-sm font-semibold text-foreground">
             {displayFuelType}
@@ -60,7 +63,7 @@ const VehicleSummaryCard = ({
         </div>
         <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Transmission
+            {t("summary.transmission")}
           </dt>
           <dd className="mt-1 text-sm font-semibold text-foreground">
             {displayTransmission}

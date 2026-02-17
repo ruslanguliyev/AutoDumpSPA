@@ -1,7 +1,9 @@
 import { Share2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 
 export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
+  const { t } = useTranslation('services');
   const location = service.location;
 
   return (
@@ -11,18 +13,22 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <h1 className="service-name">{service.name}</h1>
             {service.verified && (
-              <span className="verified-badge flex-shrink-0">VERIFIED</span>
+              <span className="verified-badge flex-shrink-0">{t('header.verified')}</span>
             )}
           </div>
 
           <div className="service-meta">
-            <span className="capitalize">{service.type}</span>
+            <span className="capitalize">
+              {service.type && ['garage', 'official', 'detailing', 'tire', 'electric', 'body'].includes(service.type)
+                ? t(`filters.serviceTypes.${service.type}`)
+                : (service.type || '')}
+            </span>
             {ratingValue > 0 && (
               <>
                 <span className="text-muted-foreground">•</span>
                 <RatingStars value={ratingValue} count={0} />
                 {reviewsCount > 0 && (
-                  <span className="text-muted-foreground">({reviewsCount} reviews)</span>
+                  <span className="text-muted-foreground">({t('header.reviews', { count: reviewsCount })})</span>
                 )}
               </>
             )}
@@ -39,10 +45,10 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
           <button
             type="button"
             className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-foreground hover:bg-muted sm:gap-2 sm:px-3 sm:text-sm"
-            aria-label="Share service"
+            aria-label={t('header.shareAria')}
           >
             <Share2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-            <span className="hidden min-[425px]:inline">Share</span>
+            <span className="hidden min-[425px]:inline">{t('header.share')}</span>
           </button>
         </div>
       </div>

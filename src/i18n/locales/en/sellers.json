@@ -1,0 +1,110 @@
+{
+  "title": "Sellers",
+  "subtitle": "with public pages",
+  "meta": {
+    "title": "Sellers"
+  },
+  "filters": {
+    "searchPlaceholder": "Search sellers (name, city)",
+    "filters": "Filters",
+    "resetLabel": "Reset filters",
+    "sellerType": "Seller type",
+    "rating": "Rating",
+    "listings": "Listings",
+    "city": "City",
+    "sortBy": "Sort by",
+    "verifiedOnly": "Verified sellers only",
+    "updating": "Updating sellers…",
+    "available_one": "{{count}} seller available",
+    "available_other": "{{count}} sellers available",
+    "domain": {
+      "all": "All",
+      "cars": "Cars",
+      "parts": "Parts"
+    },
+    "sellerTypeOptions": {
+      "any": "Any",
+      "dealer": "Dealer",
+      "reseller": "Reseller"
+    },
+    "ratingOptions": {
+      "any": "Any",
+      "rating45": "4.5+",
+      "rating40": "4.0+",
+      "rating35": "3.5+"
+    },
+    "listingsOptions": {
+      "any": "Any",
+      "1-10": "1-10",
+      "10-50": "10-50",
+      "50+": "50+"
+    },
+    "sortOptions": {
+      "rating": "Rating",
+      "listings": "Listings",
+      "newest": "Newest",
+      "az": "A-Z"
+    },
+    "cityOptions": {
+      "any": "Any city"
+    }
+  },
+  "list": {
+    "loading": "Loading sellers...",
+    "empty": "No sellers match the selected filters.",
+    "countFiltered": "{{total}} of {{totalAll}} sellers",
+    "countAll_one": "{{count}} seller",
+    "countAll_other": "{{count}} sellers"
+  },
+  "card": {
+    "verifiedDealer": "Verified Dealer",
+    "reviews_one": "{{count}} Review",
+    "reviews_other": "{{count}} Reviews",
+    "location": "Location",
+    "activeSeller": "Active Seller",
+    "yrs": "Yrs",
+    "showNumber": "Show Number",
+    "whatsapp": "WhatsApp",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "share": "Share",
+    "instagram": "Instagram"
+  },
+  "detail": {
+    "fallbackName": "Seller",
+    "missingId": "Missing seller id.",
+    "backToSellers": "← Back to sellers",
+    "notFound": "Seller not found",
+    "notAvailable": "Seller {{id}} is not available.",
+    "tabs": {
+      "stock": "Stock",
+      "reviews": "Reviews",
+      "about": "About"
+    },
+    "searchPlaceholder": "Search inventory (e.g. BMW X5…)",
+    "empty": {
+      "nothingFound": "Nothing found",
+      "noListings": "No listings",
+      "reviewsSoon": "Reviews coming soon",
+      "aboutSoon": "About section coming soon"
+    },
+    "breadcrumbs": {
+      "home": "Home",
+      "sellers": "Sellers"
+    }
+  },
+  "vehicle": {
+    "memberSince": "Member since {{date}}",
+    "respondsWithin": "Usually responds within {{time}}",
+    "showPhoneNumber": "Show Phone Number",
+    "addedToFavorites": "Added to Favorites",
+    "addToFavorites": "Add to Favorites"
+  },
+  "errors": {
+    "loadFailed": "Error loading sellers page"
+  },
+  "notFound": {
+    "dealerPage": "This seller does not have a public dealer page.",
+    "goHomepage": "Go to homepage"
+  }
+}
