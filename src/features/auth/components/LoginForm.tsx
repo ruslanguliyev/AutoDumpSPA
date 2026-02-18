@@ -1,5 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AlertCircle, Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 
 import { useLogin } from '@/features/auth/api/useLogin';
@@ -7,17 +8,20 @@ import { useCurrentUser } from '@/features/auth/api/useCurrentUser';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { validateLogin } from '@/features/auth/utils/validation';
 
+import './AuthFormFields.scss';
+
 type TouchedState = {
   email: boolean;
   password: boolean;
 };
 
-/* Иконка: left-4 (16px), ширина 16px → заканчивается на 32px. Отступ текста от иконки: pl-16 (64px) → зазор 32px. Справа для кнопки/иконки: pr-16. */
+/* Левый отступ текста от иконки задаётся в AuthFormFields.scss (.auth-input-with-left-icon). Справа для кнопки/иконки: pr-16. */
 const inputBase =
-  'box-border w-full rounded-xl border border-border bg-secondary/80 py-3 pl-16 pr-16 text-sm text-foreground placeholder:text-muted-foreground shadow-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+  'auth-input-with-left-icon box-border w-full rounded-xl border border-border bg-secondary/80 py-3 pr-16 text-sm text-foreground placeholder:text-muted-foreground shadow-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const iconLeft = 'absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/80 shrink-0';
 
 const LoginForm = () => {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const setUser = useAuthStore((state) => state.setUser);
@@ -48,8 +52,13 @@ const LoginForm = () => {
 
   const isValid = Object.keys(errors).length === 0;
   const isSubmitting = loginMutation.isPending || currentUserQuery.isFetching;
-  const serverError =
+  const rawServerError =
     loginMutation.error instanceof Error ? loginMutation.error.message : null;
+  const serverError = useMemo(() => {
+    if (!rawServerError) return null;
+    if (rawServerError === 'Invalid email or password') return t('errors.invalidCredentials');
+    return rawServerError;
+  }, [rawServerError, t]);
 
   const showError = (field: keyof TouchedState) => touched[field] && errors[field];
 
@@ -85,7 +94,7 @@ const LoginForm = () => {
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Email
+          {t('login.email')}
         </label>
         <div className="relative">
           <Mail className={iconLeft} aria-hidden="true" />
@@ -97,7 +106,7 @@ const LoginForm = () => {
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
             }`}
-            placeholder="name@company.com"
+            placeholder={t('login.emailPlaceholder')}
             value={values.email}
             onChange={(event) => {
               setValues((prev) => ({ ...prev, email: event.target.value }));
@@ -116,14 +125,14 @@ const LoginForm = () => {
         </div>
         {showError('email') ? (
           <p id="login-email-error" className="mt-1 text-xs text-destructive">
-            {errors.email}
+            {t(errors.email!)}
           </p>
         ) : null}
       </div>
 
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Password
+          {t('login.password')}
         </label>
         <div className="relative">
           <Lock className={iconLeft} aria-hidden="true" />
@@ -135,7 +144,7 @@ const LoginForm = () => {
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
             }`}
-            placeholder="••••••••"
+            placeholder={t('login.passwordPlaceholder')}
             value={values.password}
             onChange={(event) => {
               setValues((prev) => ({ ...prev, password: event.target.value }));
@@ -149,14 +158,14 @@ const LoginForm = () => {
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-4 top-1/2 -translate-y-1/2 shrink-0 text-foreground/70 transition hover:text-foreground"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t('common.hidePassword') : t('common.showPassword')}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         {showError('password') ? (
           <p id="login-password-error" className="mt-1 text-xs text-destructive">
-            {errors.password}
+            {t(errors.password!)}
           </p>
         ) : null}
       </div>
@@ -171,14 +180,14 @@ const LoginForm = () => {
             }
             className="h-4 w-4 accent-primary"
           />
-          Remember me
+          {t('login.rememberMe')}
         </label>
         <button
           type="button"
           className="text-primary transition hover:text-primary/80"
           onClick={() => console.info('Password reset not implemented yet.')}
         >
-          Forgot password?
+          {t('login.forgotPassword')}
         </button>
       </div>
 
@@ -199,16 +208,16 @@ const LoginForm = () => {
         {isSubmitting ? (
           <>
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/60 border-t-transparent" />
-            Signing in...
+            {t('login.submitLoading')}
           </>
         ) : (
-          'Sign In'
+          t('login.submit')
         )}
       </button>
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
-        Or continue with
+        {t('login.orContinueWith')}
         <span className="h-px flex-1 bg-border" />
       </div>
 
@@ -220,20 +229,20 @@ const LoginForm = () => {
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-background text-base font-bold text-foreground">
           G
         </span>
-        Continue with Google
+        {t('login.continueWithGoogle')}
       </button>
 
       <div className="rounded-xl border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
         <div className="flex items-center justify-center gap-2">
           <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
-          Your data is securely encrypted and never shared.
+          {t('login.securityNote')}
         </div>
       </div>
 
       <div className="text-center text-xs text-muted-foreground">
-        Don&apos;t have an account?{' '}
+        {t('login.noAccount')}{' '}
         <Link className="text-primary transition hover:text-primary/80" to="/register">
-          Register
+          {t('login.registerLink')}
         </Link>
       </div>
     </form>

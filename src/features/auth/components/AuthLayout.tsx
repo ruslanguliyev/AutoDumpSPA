@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type AuthLayoutProps = {
   title: string;
@@ -8,6 +9,7 @@ type AuthLayoutProps = {
 };
 
 const AuthLayout = ({ title, subtitle, children, footerNote }: AuthLayoutProps) => {
+  const { t } = useTranslation('auth');
   return (
     <div data-theme="dark" className="min-h-screen bg-background text-foreground">
       <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
@@ -22,9 +24,9 @@ const AuthLayout = ({ title, subtitle, children, footerNote }: AuthLayoutProps) 
         <div className="relative w-full max-w-[420px] rounded-2xl border border-border bg-card/95 p-6 shadow-[var(--shadow)] backdrop-blur sm:p-8">
           <div className="mb-6 flex flex-col items-center text-center">
             <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
-              AD
+              AB
             </div>
-            <div className="text-sm font-semibold text-muted-foreground">AutoDump</div>
+            <div className="text-sm font-semibold text-muted-foreground">{t('common.appName')}</div>
             <h1 className="mt-3 text-2xl font-semibold text-foreground">{title}</h1>
             {subtitle ? (
               <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>

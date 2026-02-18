@@ -1,12 +1,15 @@
+import { useTranslation } from 'react-i18next';
+
 import AuthLayout from '@/features/auth/components/AuthLayout';
 import LoginForm from '@/features/auth/components/LoginForm';
 
 const LoginPage = () => {
+  const { t } = useTranslation('auth');
   return (
     <AuthLayout
-      title="Sign in to AutoDump"
-      subtitle="Access your listings, profiles and drafts."
-      footerNote="© 2024 AutoDump Enterprise Solutions. All rights reserved."
+      title={t('login.title')}
+      subtitle={t('login.subtitle')}
+      footerNote={t('login.footerNote')}
     >
       <LoginForm />
     </AuthLayout>

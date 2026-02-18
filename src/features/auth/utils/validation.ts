@@ -23,49 +23,51 @@ export type RegisterValues = {
   termsAccepted: boolean;
 };
 
+/** Returns i18n keys under auth namespace, e.g. "validation.emailRequired". */
 export const validateLogin = (values: LoginValues) => {
   const errors: Partial<Record<keyof LoginValues, string>> = {};
 
   if (!values.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = 'validation.emailRequired';
   } else if (!isValidEmail(values.email)) {
-    errors.email = 'Invalid email address';
+    errors.email = 'validation.invalidEmail';
   }
 
   if (!values.password) {
-    errors.password = 'Password is required';
+    errors.password = 'validation.passwordRequired';
   }
 
   return errors;
 };
 
+/** Returns i18n keys under auth namespace, e.g. "validation.fullNameRequired". */
 export const validateRegister = (values: RegisterValues) => {
   const errors: Partial<Record<keyof RegisterValues, string>> = {};
 
   if (!values.fullName.trim()) {
-    errors.fullName = 'Full name is required';
+    errors.fullName = 'validation.fullNameRequired';
   }
 
   if (!values.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = 'validation.emailRequired';
   } else if (!isValidEmail(values.email)) {
-    errors.email = 'Invalid email address';
+    errors.email = 'validation.invalidEmail';
   }
 
   if (!values.password) {
-    errors.password = 'Password is required';
+    errors.password = 'validation.passwordRequired';
   } else if (!isValidPassword(values.password)) {
-    errors.password = 'Password must be at least 8 characters and include a number';
+    errors.password = 'validation.passwordMin';
   }
 
   if (!values.confirmPassword) {
-    errors.confirmPassword = 'Please confirm your password';
+    errors.confirmPassword = 'validation.confirmPasswordRequired';
   } else if (values.confirmPassword !== values.password) {
-    errors.confirmPassword = 'Passwords do not match';
+    errors.confirmPassword = 'validation.passwordMismatch';
   }
 
   if (!values.termsAccepted) {
-    errors.termsAccepted = 'You must accept the terms to continue';
+    errors.termsAccepted = 'validation.termsRequired';
   }
 
   return errors;

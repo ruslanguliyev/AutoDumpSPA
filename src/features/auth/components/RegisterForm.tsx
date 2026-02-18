@@ -1,11 +1,14 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Lock, Mail, ShieldCheck, User } from 'lucide-react';
 
 import { useRegister } from '@/features/auth/api/useRegister';
 import { useCurrentUser } from '@/features/auth/api/useCurrentUser';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { validateRegister } from '@/features/auth/utils/validation';
+
+import './AuthFormFields.scss';
 
 type TouchedState = {
   fullName: boolean;
@@ -15,12 +18,13 @@ type TouchedState = {
   termsAccepted: boolean;
 };
 
-/* Иконка слева: left-4 (16px) + 16px ширина → до 32px. pl-16 (64px) → зазор 32px между иконкой и текстом. Поле с иконкой справа (пароль): pr-16. */
+/* Левый отступ текста от иконки задаётся в AuthFormFields.scss (.auth-input-with-left-icon). Поле с иконкой справа (пароль): pr-16. */
 const inputBase =
-  'box-border w-full rounded-xl border border-border bg-secondary/80 py-3 pl-16 pr-4 text-sm text-foreground placeholder:text-muted-foreground shadow-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+  'auth-input-with-left-icon box-border w-full rounded-xl border border-border bg-secondary/80 py-3 pr-4 text-sm text-foreground placeholder:text-muted-foreground shadow-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const iconLeft = 'absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/80 shrink-0';
 
 const RegisterForm = () => {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const setUser = useAuthStore((state) => state.setUser);
@@ -59,8 +63,14 @@ const RegisterForm = () => {
 
   const isValid = Object.keys(errors).length === 0;
   const isSubmitting = registerMutation.isPending || currentUserQuery.isFetching;
-  const serverError =
+  const rawServerError =
     registerMutation.error instanceof Error ? registerMutation.error.message : null;
+  const serverError = useMemo(() => {
+    if (!rawServerError) return null;
+    if (rawServerError === 'Account already exists for this email') return t('errors.emailExists');
+    if (rawServerError === 'Email is required') return t('validation.emailRequired');
+    return rawServerError;
+  }, [rawServerError, t]);
 
   const showError = (field: keyof TouchedState) => touched[field] && errors[field];
 
@@ -103,19 +113,18 @@ const RegisterForm = () => {
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Full name
+          {t('register.fullName')}
         </label>
         <div className="relative">
           <User className={iconLeft} aria-hidden="true" />
           <input
             type="text"
             autoComplete="name"
-            className={`${inputBase} ${
-              showError('fullName')
+            className={`${inputBase} ${showError('fullName')
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
-            }`}
-            placeholder="Enter your full name"
+              }`}
+            placeholder={t('register.fullNamePlaceholder')}
             value={values.fullName}
             onChange={(event) => {
               setValues((prev) => ({ ...prev, fullName: event.target.value }));
@@ -128,26 +137,25 @@ const RegisterForm = () => {
         </div>
         {showError('fullName') ? (
           <p id="register-fullname-error" className="mt-1 text-xs text-destructive">
-            {errors.fullName}
+            {t(errors.fullName!)}
           </p>
         ) : null}
       </div>
 
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Email address
+          {t('register.email')}
         </label>
         <div className="relative">
           <Mail className={iconLeft} aria-hidden="true" />
           <input
             type="email"
             autoComplete="email"
-            className={`${inputBase} ${
-              showError('email')
+            className={`${inputBase} ${showError('email')
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
-            }`}
-            placeholder="name@company.com"
+              }`}
+            placeholder={t('register.emailPlaceholder')}
             value={values.email}
             onChange={(event) => {
               setValues((prev) => ({ ...prev, email: event.target.value }));
@@ -160,26 +168,25 @@ const RegisterForm = () => {
         </div>
         {showError('email') ? (
           <p id="register-email-error" className="mt-1 text-xs text-destructive">
-            {errors.email}
+            {t(errors.email!)}
           </p>
         ) : null}
       </div>
 
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Password
+          {t('register.password')}
         </label>
         <div className="relative">
           <Lock className={iconLeft} aria-hidden="true" />
           <input
             type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
-            className={`${inputBase} pr-16 ${
-              showError('password')
+            className={`${inputBase} pr-16 ${showError('password')
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
-            }`}
-            placeholder="••••••••"
+              }`}
+            placeholder={t('register.passwordPlaceholder')}
             value={values.password}
             onChange={(event) => {
               setValues((prev) => ({ ...prev, password: event.target.value }));
@@ -193,33 +200,32 @@ const RegisterForm = () => {
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-4 top-1/2 -translate-y-1/2 shrink-0 text-foreground/70 transition hover:text-foreground"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t('common.hidePassword') : t('common.showPassword')}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         {showError('password') ? (
           <p id="register-password-error" className="mt-1 text-xs text-destructive">
-            {errors.password}
+            {t(errors.password!)}
           </p>
         ) : null}
       </div>
 
       <div>
         <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Confirm password
+          {t('register.confirmPassword')}
         </label>
         <div className="relative">
           <Lock className={iconLeft} aria-hidden="true" />
           <input
             type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
-            className={`${inputBase} ${
-              showError('confirmPassword')
+            className={`${inputBase} ${showError('confirmPassword')
                 ? 'border-destructive focus-visible:ring-destructive'
                 : 'border-border'
-            }`}
-            placeholder="Confirm your password"
+              }`}
+            placeholder={t('register.confirmPasswordPlaceholder')}
             value={values.confirmPassword}
             onChange={(event) => {
               setValues((prev) => ({
@@ -237,13 +243,13 @@ const RegisterForm = () => {
         </div>
         {showError('confirmPassword') ? (
           <p id="register-confirm-error" className="mt-1 text-xs text-destructive">
-            {errors.confirmPassword}
+            {t(errors.confirmPassword!)}
           </p>
         ) : null}
       </div>
 
       <div>
-        <label className="flex items-start gap-2 text-xs text-muted-foreground">
+        <label className="flex cursor-pointer items-center gap-4 text-xs text-muted-foreground">
           <input
             type="checkbox"
             checked={values.termsAccepted}
@@ -252,30 +258,30 @@ const RegisterForm = () => {
               registerMutation.reset();
             }}
             onBlur={() => setTouched((prev) => ({ ...prev, termsAccepted: true }))}
-            className="mt-0.5 h-4 w-4 accent-primary"
+            className="h-4 w-4 shrink-0 rounded-full border-2 border-muted-foreground/50 bg-secondary/80 accent-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
-          <span>
-            I agree to the{' '}
+          <span className="ml-2 leading-tight">
+            {t('register.termsPrefix')}{' '}
             <button
               type="button"
               onClick={() => console.info('Terms of Service not implemented yet.')}
-              className="text-primary transition hover:text-primary/80"
+              className="font-semibold text-foreground transition hover:text-primary"
             >
-              Terms of Service
+              {t('register.termsLink')}
             </button>{' '}
-            and{' '}
+            {t('register.and')}{' '}
             <button
               type="button"
               onClick={() => console.info('Privacy Policy not implemented yet.')}
-              className="text-primary transition hover:text-primary/80"
+              className="font-semibold text-foreground transition hover:text-primary"
             >
-              Privacy Policy
+              {t('register.privacyLink')}
             </button>
-            .
+            {t('register.termsSuffix')}
           </span>
         </label>
         {showError('termsAccepted') ? (
-          <p className="mt-1 text-xs text-destructive">{errors.termsAccepted}</p>
+          <p className="mt-1 text-xs text-destructive">{t(errors.termsAccepted!)}</p>
         ) : null}
       </div>
 
@@ -296,10 +302,10 @@ const RegisterForm = () => {
         {isSubmitting ? (
           <>
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/60 border-t-transparent" />
-            Creating account...
+            {t('register.submitLoading')}
           </>
         ) : (
-          'Create Account'
+          t('register.submit')
         )}
       </button>
 
@@ -311,20 +317,20 @@ const RegisterForm = () => {
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-background text-base font-bold text-foreground">
           G
         </span>
-        Sign up with Google
+        {t('register.signUpWithGoogle')}
       </button>
 
       <div className="rounded-xl border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
         <div className="flex items-center justify-center gap-2">
           <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
-          Your data is securely encrypted and never shared.
+          {t('register.securityNote')}
         </div>
       </div>
 
       <div className="text-center text-xs text-muted-foreground">
-        Already have an account?{' '}
+        {t('register.haveAccount')}{' '}
         <Link className="text-primary transition hover:text-primary/80" to="/login">
-          Sign In
+          {t('register.loginLink')}
         </Link>
       </div>
     </form>
