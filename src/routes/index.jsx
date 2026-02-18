@@ -119,6 +119,8 @@ const createAppRoutes = () => [
       </ProtectedRoute>
     ),
   },
+  { path: 'login', element: <LoginPage /> },
+  { path: 'register', element: <RegisterPage /> },
 ];
 
 const router = createBrowserRouter([
@@ -134,8 +136,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: 'login', element: <LoginPage /> },
-  { path: 'register', element: <RegisterPage /> },
 ]);
 
 const AppRoutes = () => <RouterProvider router={router} />;
