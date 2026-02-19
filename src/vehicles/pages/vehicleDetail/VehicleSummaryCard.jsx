@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { formatInt } from "@/vehicles/pages/vehicleDetail/utils/formatInt";
 import { formatPrice } from "@/vehicles/pages/vehicleDetail/utils/formatPrice";
+import "./VehicleSummaryCard.scss";
 
 const VehicleSummaryCard = ({
   title,
@@ -20,19 +21,19 @@ const VehicleSummaryCard = ({
   const subtitle = [engine, transmission].filter(Boolean).join(" • ");
 
   return (
-    <article className="min-w-0 w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)] transition-shadow hover:shadow-[var(--shadow)]">
-      <header className="flex w-full items-start justify-between gap-4">
+    <article className="vehicle-summary-card min-w-0 w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)] transition-shadow hover:shadow-[var(--shadow)]">
+      <header className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <h1 className="truncate text-lg font-semibold leading-tight text-foreground">
+          <h1 className="vehicle-summary-card__title font-semibold leading-tight text-foreground">
             {title}
           </h1>
-          <p className="m-0 w-full self-start text-left text-sm text-muted-foreground">
+          <p className="m-0 text-sm text-muted-foreground">
             {subtitle || noValue}
           </p>
         </div>
 
-        <div className="flex flex-col items-end text-right shrink-0">
-          <p className="whitespace-nowrap text-3xl font-bold tracking-tight text-chart-1">
+        <div className="flex flex-col items-start shrink-0 sm:items-end sm:text-right">
+          <p className="whitespace-nowrap text-2xl font-bold tracking-tight text-chart-1 sm:text-3xl">
             {formatPrice(price, currency)}
           </p>
         </div>

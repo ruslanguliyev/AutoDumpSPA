@@ -310,9 +310,8 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
 
       {config.contentClassName ? (
         <div
-          className={`${config.contentClassName} ${
-            panelOpen ? config.contentOpenClassName ?? '' : ''
-          }`.trim()}
+          className={`${config.contentClassName} ${panelOpen ? config.contentOpenClassName ?? '' : ''
+            }`.trim()}
         >
           {config.contentInnerClassName ? (
             <div className={config.contentInnerClassName}>{content}</div>
