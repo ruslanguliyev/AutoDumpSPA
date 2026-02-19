@@ -20,7 +20,7 @@ const VehicleSummaryCard = ({
   const subtitle = [engine, transmission].filter(Boolean).join(" • ");
 
   return (
-    <article className="w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)] transition-shadow hover:shadow-[var(--shadow)]">
+    <article className="min-w-0 w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)] transition-shadow hover:shadow-[var(--shadow)]">
       <header className="flex w-full items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h1 className="truncate text-lg font-semibold leading-tight text-foreground">
@@ -38,34 +38,34 @@ const VehicleSummaryCard = ({
         </div>
       </header>
 
-      <dl className="mt-4 grid grid-cols-4 gap-3">
-        <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
-          <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex min-h-[4.5rem] min-w-0 w-full flex-col items-start justify-center overflow-hidden rounded-xl border border-border/70 bg-muted px-3 py-2.5">
+          <dt className="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {t("summary.year")}
           </dt>
-          <dd className="mt-1 text-sm font-semibold text-foreground">{year}</dd>
+          <dd className="mt-1 min-w-0 truncate text-sm font-semibold text-foreground">{year}</dd>
         </div>
-        <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
-          <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="flex min-h-[4.5rem] min-w-0 w-full flex-col items-start justify-center overflow-hidden rounded-xl border border-border/70 bg-muted px-3 py-2.5">
+          <dt className="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {t("summary.mileage")}
           </dt>
-          <dd className="mt-1 text-sm font-semibold text-foreground">
+          <dd className="mt-1 min-w-0 truncate text-sm font-semibold text-foreground">
             {formattedMileage} {t("specs.km")}
           </dd>
         </div>
-        <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
-          <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="flex min-h-[4.5rem] min-w-0 w-full flex-col items-start justify-center overflow-hidden rounded-xl border border-border/70 bg-muted px-3 py-2.5">
+          <dt className="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {t("summary.fuelType")}
           </dt>
-          <dd className="mt-1 text-sm font-semibold text-foreground">
+          <dd className="mt-1 min-w-0 truncate text-sm font-semibold text-foreground">
             {displayFuelType}
           </dd>
         </div>
-        <div className="rounded-xl border border-border/70 bg-muted px-3 py-2.5">
-          <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="flex min-h-[4.5rem] min-w-0 w-full flex-col items-start justify-center overflow-hidden rounded-xl border border-border/70 bg-muted px-3 py-2.5">
+          <dt className="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {t("summary.transmission")}
           </dt>
-          <dd className="mt-1 text-sm font-semibold text-foreground">
+          <dd className="mt-1 min-w-0 truncate text-sm font-semibold text-foreground">
             {displayTransmission}
           </dd>
         </div>

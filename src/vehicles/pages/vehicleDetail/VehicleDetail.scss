@@ -13,6 +13,7 @@
   gap: 32px;
 
   width: 100%;
+  min-width: 0;
   max-width: 100%;
   overflow-x: clip;
 
@@ -25,6 +26,7 @@
 /* Левая часть */
 .vehicle-left {
   width: 100%;
+  min-width: 0; /* позволяет сжиматься внутри grid, предотвращает overflow справа */
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -144,6 +146,7 @@
 /* Правая часть */
 .vehicle-right {
   position: relative;
+  min-width: 0;
 }
 
 .vehicle-info {
@@ -168,7 +171,7 @@
 
 @media (max-width: 900px) {
   .vehicle-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr); /* minmax(0,1fr) — колонка может сжиматься, сохраняя padding справа */
   }
 
   .vehicle-info {
