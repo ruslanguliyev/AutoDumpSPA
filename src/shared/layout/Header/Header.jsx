@@ -7,6 +7,8 @@ import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
 import Button from "@/shared/ui/button";
 import { useTranslation } from "react-i18next";
 import logoUrl from "@/assets/images/autodump-logo.PNG";
+import { MegaMenu } from "@/components/navigation";
+import { PARTS_MEGA_MENU, AUTO_SERVICES_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
 import "./header.scss";
 
 const useMediaQuery = (query) => {
@@ -58,13 +60,15 @@ export default function Header() {
         return t('labels.favoritesCount', { count });
     }, [favoriteItems, t]);
 
+    const [expandedMobileMenu, setExpandedMobileMenu] = useState(null); // 'parts' | 'auto_services' | null
+
     const mobileMenuItems = useMemo(
         () => [
             { to: "/add", label: t('nav.addListing'), Icon: Plus },
             { to: "/", label: t('nav.home'), Icon: Home },
             { to: "/sellers", label: t('nav.sellers'), Icon: Info },
-            { to: "/parts", label: t('nav.parts'), Icon: Package },
-            { to: "/services", label: t('nav.services'), Icon: Wrench },
+            { to: "/parts", label: t('nav.parts'), Icon: Package, megaMenu: PARTS_MEGA_MENU },
+            { to: "/services", label: t('nav.auto_services'), Icon: Wrench, megaMenu: AUTO_SERVICES_MEGA_MENU },
             { to: "/favorites", label: t('nav.favorites'), Icon: Heart },
             { to: "/account", label: t('nav.account'), Icon: User },
         ],
@@ -84,18 +88,20 @@ export default function Header() {
     useEffect(() => {
         setIsDrawerOpen(false);
         setOpenPopover(null);
+        setExpandedMobileMenu(null);
     }, [location.pathname, isMobile]);
 
     // ESC to close
     useEffect(() => {
         const onKeyDown = (e) => {
             if (e.key !== "Escape") return;
+            setExpandedMobileMenu(null);
             setIsDrawerOpen(false);
             setOpenPopover(null);
         };
-        if (isDrawerOpen || openPopover) window.addEventListener("keydown", onKeyDown);
+        if (isDrawerOpen || openPopover || expandedMobileMenu) window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [isDrawerOpen, openPopover]);
+    }, [isDrawerOpen, openPopover, expandedMobileMenu]);
 
     // Click outside closes desktop popovers
     useEffect(() => {
@@ -136,11 +142,16 @@ export default function Header() {
                     {!isMobile ? (
                         <div className="header__desktop" ref={popoverRootRef}>
                             <nav className="header__nav" aria-label={t('labels.primaryNavigation')}>
-                                <Link to="/">{t('nav.home')}</Link>
-                                <Link to="/sellers">{t('nav.sellers')}</Link>
                                 <Link to="/autosearch">{t('nav.cars')}</Link>
-                                <Link to="/parts">{t('nav.parts')}</Link>
-                                <Link to="/services">{t('nav.services')}</Link>
+                                <MegaMenu
+                                    config={PARTS_MEGA_MENU}
+                                    labelKey="nav.parts"
+                                />
+                                <MegaMenu
+                                    config={AUTO_SERVICES_MEGA_MENU}
+                                    labelKey="nav.auto_services"
+                                />
+                                <Link to="/sellers">{t('nav.sellers')}</Link>
                             </nav>
 
                             <div className="header__actions" aria-label={t('labels.headerActions')}>
@@ -345,8 +356,27 @@ export default function Header() {
                         </div>
 
                         <nav className="mobile-drawer__nav" aria-label="Mobile navigation links">
-                            {mobileMenuItems.map(({ to, label, Icon }) => {
+                            {mobileMenuItems.map((item) => {
+                                const { to, label, Icon, megaMenu } = item;
                                 const badgeCount = to === "/favorites" ? favoritesCount : 0;
+                                if (megaMenu) {
+                                    return (
+                                        <div key={megaMenu.id} className="mobile-drawer__megaItem">
+                                            <MegaMenu
+                                                config={megaMenu}
+                                                labelKey={megaMenu.id === 'parts' ? 'nav.parts' : 'nav.auto_services'}
+                                                isMobile
+                                                isExpanded={expandedMobileMenu === megaMenu.id}
+                                                onToggle={() =>
+                                                    setExpandedMobileMenu((prev) =>
+                                                        prev === megaMenu.id ? null : megaMenu.id
+                                                    )
+                                                }
+                                                onClose={() => setExpandedMobileMenu(null)}
+                                            />
+                                        </div>
+                                    );
+                                }
                                 return (
                                     <Link key={to} to={to} onClick={closeDrawer}>
                                         <Icon size={18} />

@@ -16,7 +16,7 @@
     "serviceType": "Service Type",
     "brands": "Brands",
     "searchBrandsPlaceholder": "Search brands...",
-    "services": "Services",
+    "services": "Auto Services",
     "showMore": "Show more ({{count}} more)",
     "rating": "Rating",
     "serviceTypes": {

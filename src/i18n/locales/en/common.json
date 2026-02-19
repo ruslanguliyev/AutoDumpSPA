@@ -4,11 +4,63 @@
     "sellers": "Sellers",
     "cars": "Cars",
     "parts": "Parts",
-    "services": "Services",
+    "auto_services": "Auto Services",
     "favorites": "Favorites",
     "account": "Account",
     "about": "About",
-    "addListing": "Add Listing"
+    "addListing": "Add Listing",
+    "megaMenu": {
+      "parts": {
+        "sections": {
+          "categories": "Categories",
+          "byCar": "By Car",
+          "brands": "Brands",
+          "popular": "Popular"
+        },
+        "categories": {
+          "engine": "Engine",
+          "transmission": "Transmission",
+          "suspension": "Suspension & Steering",
+          "brake": "Brake System",
+          "electronics": "Electronics",
+          "body": "Body Parts",
+          "lighting": "Lighting",
+          "interior": "Interior",
+          "oils": "Oils & Fluids",
+          "tire": "Tire & Wheel",
+          "accessories": "Accessories"
+        },
+        "byCar": {
+          "brand": "Brand",
+          "model": "Model",
+          "year": "Year"
+        },
+        "brands": {
+          "bosch": "Bosch",
+          "brembo": "Brembo",
+          "valeo": "Valeo",
+          "ngk": "NGK",
+          "denso": "Denso"
+        },
+        "popular": {
+          "headlight": "Headlight",
+          "bumper": "Bumper",
+          "shock": "Shock absorber",
+          "battery": "Battery"
+        }
+      },
+      "autoServices": {
+        "section": "Services",
+        "serviceCenters": "Service Centers",
+        "tuning": "Tuning & Custom",
+        "detailing": "Detailing",
+        "diagnostics": "Diagnostics",
+        "tireService": "Tire & Wheel Service",
+        "electrician": "Electrician",
+        "ac": "Auto AC",
+        "mobileService": "Mobile Service"
+      }
+    }
   },
   "buttons": {
     "search": "Search",
@@ -73,7 +125,7 @@
   },
   "footer": {
     "company": "Company",
-    "services": "Services",
+    "auto_services": "Auto Services",
     "auctions": "Auctions",
     "about": "About us",
     "press": "Press",

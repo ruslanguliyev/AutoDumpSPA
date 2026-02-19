@@ -4,11 +4,63 @@
     "sellers": "Satıcılar",
     "cars": "Avtomobillər",
     "parts": "Ehtiyat hissələri",
-    "services": "Xidmətlər",
+    "auto_services": "Auto Xidmətləri",
     "favorites": "Seçilmişlər",
     "account": "Hesab",
     "about": "Haqqımızda",
-    "addListing": "Elan əlavə et"
+    "addListing": "Elan əlavə et",
+    "megaMenu": {
+      "parts": {
+        "sections": {
+          "categories": "Kateqoriyalar",
+          "byCar": "Avtomobilə görə",
+          "brands": "Brendlər",
+          "popular": "Populyar"
+        },
+        "categories": {
+          "engine": "Mühərrik",
+          "transmission": "Transmissiya",
+          "suspension": "Asqı və Sükan",
+          "brake": "Əyləc sistemi",
+          "electronics": "Elektronika",
+          "body": "Kuzov hissələri",
+          "lighting": "İşıqlandırma",
+          "interior": "Salon",
+          "oils": "Yağlar və mayelər",
+          "tire": "Təkər və Disk",
+          "accessories": "Aksesuarlar"
+        },
+        "byCar": {
+          "brand": "Marka",
+          "model": "Model",
+          "year": "İl"
+        },
+        "brands": {
+          "bosch": "Bosch",
+          "brembo": "Brembo",
+          "valeo": "Valeo",
+          "ngk": "NGK",
+          "denso": "Denso"
+        },
+        "popular": {
+          "headlight": "Fara",
+          "bumper": "Bumper",
+          "shock": "Amortizator",
+          "battery": "Akkumulyator"
+        }
+      },
+      "autoServices": {
+        "section": "Xidmətlər",
+        "serviceCenters": "Servis mərkəzləri",
+        "tuning": "Tuning & Custom",
+        "detailing": "Detailing",
+        "diagnostics": "Diaqnostika",
+        "tireService": "Şin və Disk xidməti",
+        "electrician": "Elektrik ustası",
+        "ac": "Avto kondisioner",
+        "mobileService": "Mobil servis"
+      }
+    }
   },
   "buttons": {
     "search": "Axtar",
@@ -73,7 +125,7 @@
   },
   "footer": {
     "company": "Şirkət",
-    "services": "Xidmətlər",
+    "auto_services": "Auto Xidmətləri",
     "auctions": "Auksionlar",
     "about": "Haqqımızda",
     "press": "Mətbuat",

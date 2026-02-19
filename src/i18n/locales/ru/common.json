@@ -4,11 +4,63 @@
     "sellers": "Продавцы",
     "cars": "Автомобили",
     "parts": "Запчасти",
-    "services": "Услуги",
+    "auto_services": "Автоуслуги",
     "favorites": "Избранное",
     "account": "Аккаунт",
     "about": "О нас",
-    "addListing": "Добавить объявление"
+    "addListing": "Добавить объявление",
+    "megaMenu": {
+      "parts": {
+        "sections": {
+          "categories": "Категории",
+          "byCar": "По автомобилю",
+          "brands": "Бренды",
+          "popular": "Популярное"
+        },
+        "categories": {
+          "engine": "Двигатель",
+          "transmission": "Трансмиссия",
+          "suspension": "Подвеска и рулевое",
+          "brake": "Тормозная система",
+          "electronics": "Электроника",
+          "body": "Кузов",
+          "lighting": "Освещение",
+          "interior": "Салон",
+          "oils": "Масла и жидкости",
+          "tire": "Шины и диски",
+          "accessories": "Аксессуары"
+        },
+        "byCar": {
+          "brand": "Марка",
+          "model": "Модель",
+          "year": "Год"
+        },
+        "brands": {
+          "bosch": "Bosch",
+          "brembo": "Brembo",
+          "valeo": "Valeo",
+          "ngk": "NGK",
+          "denso": "Denso"
+        },
+        "popular": {
+          "headlight": "Фара",
+          "bumper": "Бампер",
+          "shock": "Амортизатор",
+          "battery": "Аккумулятор"
+        }
+      },
+      "autoServices": {
+        "section": "Услуги",
+        "serviceCenters": "Сервисные центры",
+        "tuning": "Тюнинг и кастом",
+        "detailing": "Детейлинг",
+        "diagnostics": "Диагностика",
+        "tireService": "Шиномонтаж",
+        "electrician": "Электрик",
+        "ac": "Автокондиционер",
+        "mobileService": "Мобильный сервис"
+      }
+    }
   },
   "buttons": {
     "search": "Поиск",
@@ -73,7 +125,7 @@
   },
   "footer": {
     "company": "Компания",
-    "services": "Услуги",
+    "auto_services": "Автоуслуги",
     "auctions": "Аукционы",
     "about": "О нас",
     "press": "Пресса",

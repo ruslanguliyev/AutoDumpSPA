@@ -16,7 +16,7 @@
     "serviceType": "Тип сервиса",
     "brands": "Бренды",
     "searchBrandsPlaceholder": "Поиск брендов...",
-    "services": "Услуги",
+    "services": "Автоуслуги",
     "showMore": "Ещё ({{count}})",
     "rating": "Рейтинг",
     "serviceTypes": {

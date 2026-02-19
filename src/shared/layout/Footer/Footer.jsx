@@ -29,7 +29,7 @@ const Footer = () => {
 
                     {/* Услуги */}
                     <div className="col-12 col-md-6 col-lg-3">
-                        <h6 className="text-uppercase text-muted-foreground mb-3">{t('footer.services')}</h6>
+                        <h6 className="text-uppercase text-muted-foreground mb-3">{t('footer.auto_services')}</h6>
                         <ul className="list-unstyled mb-0">
                             <li><a href="#" className="footer__link">{t('footer.forBuyers')}</a></li>
                             <li><a href="#" className="footer__link">{t('footer.forSellers')}</a></li>
