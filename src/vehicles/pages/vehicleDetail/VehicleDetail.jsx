@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CalendarDays, Clock, Heart, MapPin, Phone } from "lucide-react";
 import { useAutoDetails } from "@/vehicles/hooks/useAutoDetails";
+import { useSpecialistsQuery } from "@/specialists/hooks/useSpecialists";
+import SpecialistCard from "@/specialists/components/SpecialistCard";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
 import { SellerCard } from "@/shared/components/SellerCard/SellerCard";
@@ -17,7 +19,7 @@ import "@/shared/blocks/TrustBlock/TrustBlock.scss";
 import "./VehicleDetail.scss";
 
 export default function VehicleDetail() {
-    const { t } = useTranslation(["sellers", "vehicle"]);
+    const { t } = useTranslation(["sellers", "vehicle", "specialists"]);
     const { id } = useParams();
     const { data: car } = useAutoDetails(id);
 
@@ -27,6 +29,27 @@ export default function VehicleDetail() {
     );
 
     const [showPhone, setShowPhone] = useState(false);
+    const vehicleFilters = useMemo(
+        () => ({
+            brand: car?.brand ?? null,
+            model: car?.model ?? null,
+            year: car?.year ? Number(car.year) : null,
+        }),
+        [car?.brand, car?.model, car?.year]
+    );
+
+    const {
+        specialists: matchingSpecialists,
+        isLoading: isMatchingLoading,
+        error: matchingError,
+    } = useSpecialistsQuery(vehicleFilters, { enabled: Boolean(car) });
+
+    const topSpecialists = useMemo(() => {
+        if (!matchingSpecialists?.length) return [];
+        return [...matchingSpecialists]
+            .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+            .slice(0, 3);
+    }, [matchingSpecialists]);
 
     if (!car) return <div>{t("details.notFound", { ns: "vehicle" })}</div>;
 
@@ -142,6 +165,32 @@ export default function VehicleDetail() {
                     />
 
                     <VehicleSpecs car={car} />
+
+                    <section className="mt-6 rounded-2xl border border-border bg-card p-5 sm:p-6">
+                        <h2 className="text-lg font-semibold text-foreground">
+                            {t("match.title", { ns: "specialists" })}
+                        </h2>
+
+                        {isMatchingLoading ? (
+                            <div className="mt-4 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
+                                {t("match.loading", { ns: "specialists" })}
+                            </div>
+                        ) : matchingError ? (
+                            <div className="mt-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-6 text-sm text-destructive">
+                                {t("match.errorFailed", { ns: "specialists" })}
+                            </div>
+                        ) : topSpecialists.length ? (
+                            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+                                {topSpecialists.map((specialist) => (
+                                    <SpecialistCard key={specialist.id} specialist={specialist} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="mt-4 rounded-xl border border-dashed border-border bg-muted/40 px-4 py-6 text-sm text-muted-foreground">
+                                {t("match.empty", { ns: "specialists" })}
+                            </div>
+                        )}
+                    </section>
                 </div>
 
                 {/* ПРАВАЯ ЧАСТЬ (sticky) */}

@@ -1,0 +1,84 @@
+{
+  "title": "Мастера",
+  "subtitle": "Найдите проверенных авто-мастеров для вашего автомобиля",
+  "filters": {
+    "title": "Фильтры",
+    "subtitle": "Уточните автомобиль и тип услуги",
+    "brand": "Марка",
+    "brandPlaceholder": "Марка",
+    "model": "Модель",
+    "modelPlaceholder": "Модель",
+    "year": "Год",
+    "yearPlaceholder": "Год",
+    "specialization": "Тип услуги",
+    "specializationAny": "Любая специализация",
+    "city": "Город",
+    "cityPlaceholder": "Город",
+    "minRating": "Рейтинг ≥",
+    "minRatingPlaceholder": "Рейтинг ≥",
+    "ratingOptions": {
+      "any": "Любой рейтинг",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "clear": "Очистить фильтры"
+  },
+  "list": {
+    "loading": "Загрузка мастеров…",
+    "empty": "Нет мастеров по выбранным фильтрам. Попробуйте изменить поиск.",
+    "errorFailed": "Не удалось загрузить мастеров.",
+    "errorCheckEndpoint": "Проверьте"
+  },
+  "card": {
+    "verified": "Проверен",
+    "mobileService": "Выездной сервис",
+    "experience": "{{count}} год опыта",
+    "experience_plural": "{{count}} лет опыта",
+    "reviews": "{{count}} отзыв",
+    "reviews_plural": "{{count}} отзывов",
+    "viewProfile": "Смотреть профиль"
+  },
+  "detail": {
+    "loading": "Загрузка профиля мастера…",
+    "errorFailed": "Не удалось загрузить мастера.",
+    "notFound": "Мастер не найден.",
+    "description": "Описание",
+    "specializations": "Специализации",
+    "supportedVehicles": "Поддерживаемые автомобили",
+    "services": "Сервисы",
+    "servicesLoading": "Загрузка сервисов…",
+    "servicesError": "Не удалось загрузить сервисы.",
+    "portfolio": "Портфолио",
+    "reviews": "Отзывы",
+    "call": "Позвонить",
+    "whatsapp": "WhatsApp",
+    "reviewsAnonymous": "Аноним",
+    "empty": {
+      "description": "Описание пока не указано.",
+      "specializations": "Специализации пока не указаны.",
+      "supportedVehicles": "Поддерживаемые автомобили пока не указаны.",
+      "services": "Сервисы пока не указаны.",
+      "portfolio": "Портфолио пустое.",
+      "reviews": "Отзывов пока нет."
+    }
+  },
+  "specializations": {
+    "ENGINE": "Двигатель",
+    "TRANSMISSION": "Трансмиссия",
+    "ELECTRICAL": "Электрика",
+    "DETAILING": "Детейлинг",
+    "TUNING": "Тюнинг",
+    "SUSPENSION": "Подвеска",
+    "BRAKES": "Тормоза",
+    "AC": "Кондиционер",
+    "DIAGNOSTICS": "Диагностика"
+  },
+  "match": {
+    "title": "Подходящие мастера для этого авто",
+    "loading": "Загрузка мастеров…",
+    "empty": "Пока нет подходящих мастеров для этого автомобиля.",
+    "errorFailed": "Не удалось загрузить подходящих мастеров."
+  }
+}

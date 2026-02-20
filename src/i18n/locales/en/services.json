@@ -63,6 +63,12 @@
     "breadcrumbs": {
       "home": "Home",
       "services": "Services"
+    },
+    "specialists": {
+      "title": "Specialists",
+      "loading": "Loading specialists…",
+      "empty": "No specialists listed for this service yet.",
+      "error": "Failed to load specialists."
     }
   },
   "header": {

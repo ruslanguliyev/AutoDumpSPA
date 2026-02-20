@@ -1,0 +1,84 @@
+{
+  "title": "Ustalar",
+  "subtitle": "Avtomobiliniz üçün təsdiqlənmiş ustaları tapın",
+  "filters": {
+    "title": "Filtrlər",
+    "subtitle": "Avtomobil və xidmət növünə görə dəqiqləşdirin",
+    "brand": "Marka",
+    "brandPlaceholder": "Marka",
+    "model": "Model",
+    "modelPlaceholder": "Model",
+    "year": "İl",
+    "yearPlaceholder": "İl",
+    "specialization": "Xidmət növü",
+    "specializationAny": "İstənilən ixtisas",
+    "city": "Şəhər",
+    "cityPlaceholder": "Şəhər",
+    "minRating": "Reytinq ≥",
+    "minRatingPlaceholder": "Reytinq ≥",
+    "ratingOptions": {
+      "any": "İstənilən reytinq",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "clear": "Filtrləri təmizlə"
+  },
+  "list": {
+    "loading": "Ustalar yüklənir…",
+    "empty": "Bu filtrlərə uyğun usta tapılmadı. Axtarışı dəyişin.",
+    "errorFailed": "Ustaları yükləmək mümkün olmadı.",
+    "errorCheckEndpoint": "Yoxlayın"
+  },
+  "card": {
+    "verified": "Təsdiqlənmiş",
+    "mobileService": "Mobil servis",
+    "experience": "{{count}} il təcrübə",
+    "experience_plural": "{{count}} il təcrübə",
+    "reviews": "{{count}} rəy",
+    "reviews_plural": "{{count}} rəy",
+    "viewProfile": "Profilə bax"
+  },
+  "detail": {
+    "loading": "Ustanın profili yüklənir…",
+    "errorFailed": "Ustanı yükləmək mümkün olmadı.",
+    "notFound": "Usta tapılmadı.",
+    "description": "Təsvir",
+    "specializations": "İxtisaslar",
+    "supportedVehicles": "Uyğun avtomobillər",
+    "services": "Servislər",
+    "servicesLoading": "Servislər yüklənir…",
+    "servicesError": "Servisləri yükləmək mümkün olmadı.",
+    "portfolio": "Portfel",
+    "reviews": "Rəylər",
+    "call": "Zəng et",
+    "whatsapp": "WhatsApp",
+    "reviewsAnonymous": "Anonim",
+    "empty": {
+      "description": "Təsvir hələ əlavə olunmayıb.",
+      "specializations": "İxtisaslar hələ əlavə olunmayıb.",
+      "supportedVehicles": "Uyğun avtomobillər hələ əlavə olunmayıb.",
+      "services": "Servislər hələ əlavə olunmayıb.",
+      "portfolio": "Portfel boşdur.",
+      "reviews": "Hələ rəy yoxdur."
+    }
+  },
+  "specializations": {
+    "ENGINE": "Mühərrik",
+    "TRANSMISSION": "Transmissiya",
+    "ELECTRICAL": "Elektrika",
+    "DETAILING": "Detailing",
+    "TUNING": "Tuning",
+    "SUSPENSION": "Asqı",
+    "BRAKES": "Əyləc",
+    "AC": "Kondisioner",
+    "DIAGNOSTICS": "Diaqnostika"
+  },
+  "match": {
+    "title": "Bu avtomobil üçün uyğun ustalar",
+    "loading": "Ustalar yüklənir…",
+    "empty": "Bu avtomobil üçün uyğun usta tapılmadı.",
+    "errorFailed": "Uyğun ustaları yükləmək mümkün olmadı."
+  }
+}

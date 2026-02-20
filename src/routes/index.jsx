@@ -27,6 +27,12 @@ const ServicesListPage = lazy(() => import('@/services/pages/ServicesListPage'))
 const ServiceDetailPage = lazy(
   () => import('@/services/pages/ServiceDetailPage')
 );
+const SpecialistsListPage = lazy(
+  () => import('@/specialists/pages/SpecialistsListPage')
+);
+const SpecialistDetailPage = lazy(
+  () => import('@/specialists/pages/SpecialistDetailPage')
+);
 const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
 const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
@@ -103,6 +109,8 @@ const createAppRoutes = () => [
   { path: 'dealers/:sellerId', element: <SellerDetailPageRoute /> },
   { path: 'services', element: <ServicesListPage /> },
   { path: 'services/:idOrSlug', element: <ServiceDetailPage /> },
+  { path: 'specialists', element: <SpecialistsListPage /> },
+  { path: 'specialists/:slug', element: <SpecialistDetailPage /> },
   {
     path: 'add',
     element: (

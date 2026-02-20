@@ -63,6 +63,12 @@
     "breadcrumbs": {
       "home": "Ana səhifə",
       "services": "Xidmətlər"
+    },
+    "specialists": {
+      "title": "Ustalar",
+      "loading": "Ustalar yüklənir…",
+      "empty": "Bu servis üçün ustalar hələ əlavə edilməyib.",
+      "error": "Ustaları yükləmək mümkün olmadı."
     }
   },
   "header": {

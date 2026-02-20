@@ -5,4 +5,5 @@ export {
   getServiceBySlug,
   getServicesByBrand,
   getServicesByServiceCode,
+  getServicesByIds,
 } from './services.api.js';

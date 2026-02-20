@@ -1,0 +1,84 @@
+{
+  "title": "Specialists",
+  "subtitle": "Find verified auto specialists for your vehicle",
+  "filters": {
+    "title": "Filters",
+    "subtitle": "Refine by vehicle and service type",
+    "brand": "Brand",
+    "brandPlaceholder": "Brand",
+    "model": "Model",
+    "modelPlaceholder": "Model",
+    "year": "Year",
+    "yearPlaceholder": "Year",
+    "specialization": "Service type",
+    "specializationAny": "Any specialization",
+    "city": "City",
+    "cityPlaceholder": "City",
+    "minRating": "Rating ≥",
+    "minRatingPlaceholder": "Rating ≥",
+    "ratingOptions": {
+      "any": "Any rating",
+      "rating30": "3.0+",
+      "rating35": "3.5+",
+      "rating40": "4.0+",
+      "rating45": "4.5+"
+    },
+    "clear": "Clear filters"
+  },
+  "list": {
+    "loading": "Loading specialists…",
+    "empty": "No specialists match these filters. Try adjusting your search.",
+    "errorFailed": "Failed to load specialists.",
+    "errorCheckEndpoint": "Check"
+  },
+  "card": {
+    "verified": "Verified",
+    "mobileService": "Mobile service",
+    "experience": "{{count}} yrs experience",
+    "experience_plural": "{{count}} yrs experience",
+    "reviews": "{{count}} review",
+    "reviews_plural": "{{count}} reviews",
+    "viewProfile": "View profile"
+  },
+  "detail": {
+    "loading": "Loading specialist profile…",
+    "errorFailed": "Failed to load specialist.",
+    "notFound": "Specialist not found.",
+    "description": "Description",
+    "specializations": "Specializations",
+    "supportedVehicles": "Supported vehicles",
+    "services": "Services",
+    "servicesLoading": "Loading services…",
+    "servicesError": "Failed to load services.",
+    "portfolio": "Portfolio",
+    "reviews": "Reviews",
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "reviewsAnonymous": "Anonymous",
+    "empty": {
+      "description": "Description not provided yet.",
+      "specializations": "Specializations are not listed yet.",
+      "supportedVehicles": "No supported vehicles listed yet.",
+      "services": "No services listed yet.",
+      "portfolio": "Portfolio is empty.",
+      "reviews": "No reviews yet."
+    }
+  },
+  "specializations": {
+    "ENGINE": "Engine",
+    "TRANSMISSION": "Transmission",
+    "ELECTRICAL": "Electrical",
+    "DETAILING": "Detailing",
+    "TUNING": "Tuning",
+    "SUSPENSION": "Suspension",
+    "BRAKES": "Brakes",
+    "AC": "AC",
+    "DIAGNOSTICS": "Diagnostics"
+  },
+  "match": {
+    "title": "Specialists for this vehicle",
+    "loading": "Loading specialists…",
+    "empty": "No specialists found for this vehicle yet.",
+    "errorFailed": "Failed to load matching specialists."
+  }
+}

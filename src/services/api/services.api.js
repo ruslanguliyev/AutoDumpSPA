@@ -135,6 +135,19 @@ export const getServiceBySlug = async (slug) => {
 };
 
 /**
+ * Fetch services by a list of ids.
+ */
+export const getServicesByIds = async (ids = []) => {
+  const safeIds = Array.from(
+    new Set((ids ?? []).map((id) => String(id).trim()).filter(Boolean))
+  );
+  if (safeIds.length === 0) return [];
+
+  const services = await getServices();
+  return services.filter((service) => safeIds.includes(String(service.id)));
+};
+
+/**
  * Fetch services by brand (for VehicleDetail integration)
  */
 export const getServicesByBrand = async (brand, filters = {}) => {

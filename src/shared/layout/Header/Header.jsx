@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, Home, Info, Menu, Package, Plus, X, User, Wrench } from "lucide-react";
+import { Hammer, Heart, Home, Info, Menu, Package, Plus, X, User, Wrench } from "lucide-react";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
@@ -69,6 +69,7 @@ export default function Header() {
             { to: "/sellers", label: t('nav.sellers'), Icon: Info },
             { to: "/parts", label: t('nav.parts'), Icon: Package, megaMenu: PARTS_MEGA_MENU },
             { to: "/services", label: t('nav.auto_services'), Icon: Wrench, megaMenu: AUTO_SERVICES_MEGA_MENU },
+            { to: "/specialists", label: t('nav.specialists'), Icon: Hammer },
             { to: "/favorites", label: t('nav.favorites'), Icon: Heart },
             { to: "/account", label: t('nav.account'), Icon: User },
         ],
@@ -151,6 +152,7 @@ export default function Header() {
                                     config={AUTO_SERVICES_MEGA_MENU}
                                     labelKey="nav.auto_services"
                                 />
+                                <Link to="/specialists">{t('nav.specialists')}</Link>
                                 <Link to="/sellers">{t('nav.sellers')}</Link>
                             </nav>
 

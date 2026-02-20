@@ -6,6 +6,7 @@ import enVehicle from './locales/en/vehicle.json';
 import enPart from './locales/en/part.json';
 import enSellers from './locales/en/sellers.json';
 import enServices from './locales/en/services.json';
+import enSpecialists from './locales/en/specialists.json';
 import enAddListing from './locales/en/addListing.json';
 import enAddItem from './locales/en/addItem.json';
 import enAuth from './locales/en/auth.json';
@@ -14,6 +15,7 @@ import ruVehicle from './locales/ru/vehicle.json';
 import ruPart from './locales/ru/part.json';
 import ruSellers from './locales/ru/sellers.json';
 import ruServices from './locales/ru/services.json';
+import ruSpecialists from './locales/ru/specialists.json';
 import ruAddListing from './locales/ru/addListing.json';
 import ruAddItem from './locales/ru/addItem.json';
 import ruAuth from './locales/ru/auth.json';
@@ -22,18 +24,19 @@ import azVehicle from './locales/az/vehicle.json';
 import azPart from './locales/az/part.json';
 import azSellers from './locales/az/sellers.json';
 import azServices from './locales/az/services.json';
+import azSpecialists from './locales/az/specialists.json';
 import azAddListing from './locales/az/addListing.json';
 import azAddItem from './locales/az/addItem.json';
 import azAuth from './locales/az/auth.json';
 
 export const SUPPORTED_LANGUAGES = ['en', 'ru', 'az'];
 export const DEFAULT_LANGUAGE = 'en';
-export const NAMESPACES = ['common', 'part', 'vehicle', 'sellers', 'services', 'addListing', 'addItem', 'auth'];
+export const NAMESPACES = ['common', 'part', 'vehicle', 'sellers', 'services', 'specialists', 'addListing', 'addItem', 'auth'];
 
 const resources = {
-  en: { common: enCommon, vehicle: enVehicle, part: enPart, sellers: enSellers, services: enServices, addListing: enAddListing, addItem: enAddItem, auth: enAuth },
-  ru: { common: ruCommon, vehicle: ruVehicle, part: ruPart, sellers: ruSellers, services: ruServices, addListing: ruAddListing, addItem: ruAddItem, auth: ruAuth },
-  az: { common: azCommon, vehicle: azVehicle, part: azPart, sellers: azSellers, services: azServices, addListing: azAddListing, addItem: azAddItem, auth: azAuth },
+  en: { common: enCommon, vehicle: enVehicle, part: enPart, sellers: enSellers, services: enServices, specialists: enSpecialists, addListing: enAddListing, addItem: enAddItem, auth: enAuth },
+  ru: { common: ruCommon, vehicle: ruVehicle, part: ruPart, sellers: ruSellers, services: ruServices, specialists: ruSpecialists, addListing: ruAddListing, addItem: ruAddItem, auth: ruAuth },
+  az: { common: azCommon, vehicle: azVehicle, part: azPart, sellers: azSellers, services: azServices, specialists: azSpecialists, addListing: azAddListing, addItem: azAddItem, auth: azAuth },
 };
 
 // Get initial language from localStorage (via Zustand persist) or default
