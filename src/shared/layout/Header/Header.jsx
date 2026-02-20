@@ -4,7 +4,6 @@ import { Hammer, Heart, Home, Info, Menu, Package, Plus, X, User, Wrench } from 
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
-import Button from "@/shared/ui/button";
 import { useTranslation } from "react-i18next";
 import logoUrl from "@/assets/images/autodump-logo.PNG";
 import { MegaMenu } from "@/components/navigation";
@@ -158,25 +157,19 @@ export default function Header() {
 
                             <div className="header__actions" aria-label={t('labels.headerActions')}>
                                 <div className="header__action">
-                                    <Button
-                                        asChild
-                                        variant="primary"
-                                        size="sm"
-                                        className="h-12 px-6 rounded-xl transition-all duration-200 hover:brightness-110 hover:shadow hover:-translate-y-px group"
+                                    <Link
+                                        to="/add"
+                                        className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/20 hover:bg-white/10 transition-colors"
+                                        style={{ textDecoration: 'none' }}
+                                        aria-label={t('nav.addListing')}
                                     >
-                                        <Link to="/add" className="inline-flex items-center gap-2">
-                                            <Plus
-                                                size={18}
-                                                className="shrink-0 transition-transform duration-200 group-hover:scale-105"
-                                                aria-hidden
-                                            />
-                                            <span>{t('nav.addListing')}</span>
-                                        </Link>
-                                    </Button>
+                                        <Plus size={18} className="shrink-0" aria-hidden />
+                                        <span>{t('nav.add')}</span>
+                                    </Link>
                                 </div>
-                                <HeaderLanguageSelector 
-                                    value={language} 
-                                    onChange={setLanguage} 
+                                <HeaderLanguageSelector
+                                    value={language} F
+                                    onChange={setLanguage}
                                     onOpen={closePopover}
                                 />
                                 <HeaderThemeToggle />
@@ -191,7 +184,7 @@ export default function Header() {
                                         aria-controls="popover-user"
                                         onClick={() => togglePopover("user")}
                                     >
-                                <User size={22} />
+                                        <User size={22} />
                                     </button>
                                     {openPopover === "user" ? (
                                         <div id="popover-user" className="header__popover" role="menu">
@@ -348,10 +341,10 @@ export default function Header() {
 
                         {/* Mobile utilities (compact, no layout shift in the top header) */}
                         <div className="flex items-center gap-2 px-4 pb-2" style={{ flexWrap: 'wrap' }}>
-                            <HeaderLanguageSelector 
-                                value={language} 
-                                onChange={setLanguage} 
-                                compact 
+                            <HeaderLanguageSelector
+                                value={language}
+                                onChange={setLanguage}
+                                compact
                                 onOpen={closePopover}
                             />
                             <HeaderThemeToggle />
