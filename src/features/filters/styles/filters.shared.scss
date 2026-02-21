@@ -1,11 +1,43 @@
 .parts-filter,
 .sellers-filter,
-.services-filter {
+.services-filter,
+.specialists-filter {
   background: rgb(var(--card));
   border: 1px solid rgb(var(--border));
   border-radius: 16px;
   padding: 20px;
   box-shadow: var(--shadow);
+}
+
+.filter-primary {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filter-primary-controls {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.filter-advanced {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(var(--border));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
 }
 
 .filters-bar {

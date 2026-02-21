@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-export type FilterDomain = 'cars' | 'parts' | 'sellers' | 'services';
+export type FilterDomain = 'cars' | 'parts' | 'sellers' | 'services' | 'specialists';
 
 export type FilterValue =
   | string

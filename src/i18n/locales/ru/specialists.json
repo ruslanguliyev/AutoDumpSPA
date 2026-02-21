@@ -4,6 +4,8 @@
   "filters": {
     "title": "Фильтры",
     "subtitle": "Уточните автомобиль и тип услуги",
+    "filters": "Фильтры",
+    "searchPlaceholder": "Поиск по марке...",
     "brand": "Марка",
     "brandPlaceholder": "Марка",
     "model": "Модель",
@@ -14,7 +16,7 @@
     "specializationAny": "Любая специализация",
     "city": "Город",
     "cityPlaceholder": "Город",
-    "minRating": "Рейтинг ≥",
+    "minRating": "Рейтинг",
     "minRatingPlaceholder": "Рейтинг ≥",
     "ratingOptions": {
       "any": "Любой рейтинг",
@@ -23,7 +25,11 @@
       "rating40": "4.0+",
       "rating45": "4.5+"
     },
-    "clear": "Очистить фильтры"
+    "clear": "Сбросить",
+    "updating": "Обновление...",
+    "available": "Найдено: {{count}} мастеров",
+    "available_one": "Найден: {{count}} мастер",
+    "available_few": "Найдено: {{count}} мастера"
   },
   "list": {
     "loading": "Загрузка мастеров…",

@@ -1,36 +1,52 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+
 import { specialistsApi } from '@/specialists/api';
-import { useSpecialistFiltersStore } from '@/specialists/store/useSpecialistFiltersStore';
+import { useFilters } from '@/features/filters/store/useFiltersStore';
 import type { SpecialistsFiltersInput } from '@/specialists/api/specialists.types';
 import type { SpecialistDetail, SpecialistProfile } from '@/specialists/types/specialist.types';
+import type { DomainFilters } from '@/features/filters/types/filters.types';
 
 const SPECIALISTS_QUERY_KEY = 'specialists';
 const SPECIALIST_QUERY_KEY = 'specialist';
-const SPECIALISTS_BY_IDS_QUERY_KEY = 'specialists';
+const SPECIALISTS_BY_IDS_QUERY_KEY = 'specialists-by-ids';
 
-const toNumberOrNull = (value: string) => {
+const toNumberOrNull = (value: unknown): number | null => {
+  if (value === '' || value === null || value === undefined) return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 };
 
-const normalizeFilters = (
-  filters: ReturnType<typeof useSpecialistFiltersStore.getState>['filters']
-): SpecialistsFiltersInput => ({
-  brand: filters.brand.trim() || null,
-  model: filters.model.trim() || null,
-  year: filters.year ? toNumberOrNull(filters.year) : null,
-  specialization: filters.specialization || null,
-  city: filters.city.trim() || null,
-  minRating: filters.minRating ? toNumberOrNull(filters.minRating) : null,
+const toString = (value: unknown): string => {
+  if (value === null || value === undefined) return '';
+  return String(value).trim();
+};
+
+const normalizeFilters = (filters: DomainFilters): SpecialistsFiltersInput => ({
+  brand: toString(filters.brand) || null,
+  model: toString(filters.model) || null,
+  year: toNumberOrNull(filters.year),
+  specialization: toString(filters.specialization) || null,
+  city: toString(filters.city) || null,
+  minRating: toNumberOrNull(filters.minRating),
 });
+
+const createStableQueryKey = (filters: SpecialistsFiltersInput) => {
+  const entries = Object.entries(filters)
+    .filter(([, v]) => v !== null && v !== undefined && v !== '')
+    .sort(([a], [b]) => a.localeCompare(b));
+
+  return entries.length > 0 ? Object.fromEntries(entries) : null;
+};
 
 export const useSpecialistsQuery = (
   filters: SpecialistsFiltersInput,
   options: { enabled?: boolean } = {}
 ) => {
+  const stableKey = useMemo(() => createStableQueryKey(filters), [filters]);
+
   const query = useQuery({
-    queryKey: [SPECIALISTS_QUERY_KEY, filters],
+    queryKey: [SPECIALISTS_QUERY_KEY, stableKey],
     queryFn: () => specialistsApi.getSpecialists(filters),
     staleTime: 30_000,
     keepPreviousData: true,
@@ -46,7 +62,7 @@ export const useSpecialistsQuery = (
 };
 
 export const useSpecialists = () => {
-  const filters = useSpecialistFiltersStore((state) => state.filters);
+  const filters = useFilters('specialists');
   const normalizedFilters = useMemo(() => normalizeFilters(filters), [filters]);
   const query = useSpecialistsQuery(normalizedFilters);
 
@@ -85,7 +101,7 @@ export const useSpecialistsByIds = (
   );
 
   const query = useQuery({
-    queryKey: [SPECIALISTS_BY_IDS_QUERY_KEY, { ids: normalizedIds }],
+    queryKey: [SPECIALISTS_BY_IDS_QUERY_KEY, normalizedIds],
     queryFn: () => specialistsApi.getSpecialistsByIds(normalizedIds),
     enabled: normalizedIds.length > 0 && (options.enabled ?? true),
     staleTime: 30_000,

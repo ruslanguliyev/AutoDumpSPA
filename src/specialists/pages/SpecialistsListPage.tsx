@@ -1,13 +1,28 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import FiltersPanel from '@/features/filters/components/FiltersPanel';
+import { createSpecialistsFiltersConfig } from '@/features/filters/config/specialists.filters';
+import { useSpecialistsFiltersUrlSync } from '@/features/filters/hooks/useSpecialistsFiltersUrlSync';
 import SpecialistCard from '@/specialists/components/SpecialistCard';
-import SpecialistFilters from '@/specialists/components/SpecialistFilters';
 import { useSpecialists } from '@/specialists/hooks/useSpecialists';
-import { useSpecialistFiltersUrlSync } from '@/specialists/store/useSpecialistFiltersStore';
 
 const SpecialistsListPage = () => {
   const { t } = useTranslation('specialists');
   const { specialists, isLoading, error } = useSpecialists();
-  useSpecialistFiltersUrlSync();
+  useSpecialistsFiltersUrlSync();
+
+  const total = specialists.length;
+
+  const filtersConfig = useMemo(
+    () =>
+      createSpecialistsFiltersConfig({
+        t,
+        total,
+        isLoading,
+      }),
+    [t, total, isLoading]
+  );
 
   const errorMessage = error instanceof Error ? error.message : error ? String(error) : null;
 
@@ -20,7 +35,7 @@ const SpecialistsListPage = () => {
             <p className="mt-1 text-sm text-muted-foreground">{t('subtitle')}</p>
           </div>
 
-          <SpecialistFilters />
+          <FiltersPanel domain="specialists" config={filtersConfig} total={total} />
         </header>
 
         {error ? (
@@ -34,11 +49,11 @@ const SpecialistsListPage = () => {
           </div>
         ) : null}
 
-        {isLoading ? (
+        {isLoading && specialists.length === 0 ? (
           <div className="rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
             {t('list.loading')}
           </div>
-        ) : specialists.length === 0 ? (
+        ) : !isLoading && specialists.length === 0 ? (
           <div className="rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
             {t('list.empty')}
           </div>

@@ -13,7 +13,7 @@ import SelectFilter from './controls/SelectFilter';
 import RangeFilter from './controls/RangeFilter';
 import ToggleFilter from './controls/ToggleFilter';
 import ChipsFilter from './controls/ChipsFilter';
-import { useFiltersStore } from '../store/useFiltersStore';
+import { useFiltersStore, useFilters, useFiltersUi } from '../store/useFiltersStore';
 import { Fragment } from 'react';
 import type {
   FilterControlConfig,
@@ -42,8 +42,8 @@ const resolveOptions = (
 ) => (typeof options === 'function' ? options(filters) : options || []);
 
 const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
-  const filters = useFiltersStore((state) => state.filters[domain]);
-  const ui = useFiltersStore((state) => state.ui[domain]);
+  const filters = useFilters(domain);
+  const ui = useFiltersUi(domain);
   const setFilter = useFiltersStore((state) => state.setFilter);
   const setFilters = useFiltersStore((state) => state.setFilters);
   const toggleFilterValue = useFiltersStore((state) => state.toggleFilterValue);
@@ -53,7 +53,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
   const setChipsSearch = useFiltersStore((state) => state.setChipsSearch);
   const setChipsShowAll = useFiltersStore((state) => state.setChipsShowAll);
 
-  const panelOpen = ui?.panelOpen ?? false;
+  const panelOpen = ui.panelOpen;
 
   const applyValueChange = (key: string, value: FilterValue) => {
     const resets = config.resetOnChange?.[key];
@@ -77,7 +77,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
       ? control.dependsOn
       : [control.dependsOn];
 
-    return dependencies.some((key) => isEmptyValue(filters?.[key]));
+    return dependencies.some((key) => isEmptyValue(filters[key]));
   };
 
   const renderControl = (control: FilterControlConfig) => {
@@ -87,7 +87,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
       return (
         <TextFilter
           key={control.id}
-          value={filters?.[control.id] as string}
+          value={filters[control.id] as string}
           placeholder={control.placeholder}
           icon={control.icon}
           inputType={control.inputType}
@@ -102,7 +102,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
       return (
         <SelectFilter
           key={control.id}
-          value={filters?.[control.id] as string}
+          value={filters[control.id] as string}
           placeholder={control.placeholder}
           options={options}
           onChange={(value) => applyValueChange(control.id, value)}
@@ -115,8 +115,8 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
       return (
         <RangeFilter
           key={control.id}
-          minValue={filters?.[control.minKey] as string}
-          maxValue={filters?.[control.maxKey] as string}
+          minValue={filters[control.minKey] as string}
+          maxValue={filters[control.maxKey] as string}
           minPlaceholder={control.minPlaceholder}
           maxPlaceholder={control.maxPlaceholder}
           inputType={control.inputType}
@@ -131,7 +131,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
       return (
         <ToggleFilter
           key={control.id}
-          checked={Boolean(filters?.[control.id])}
+          checked={Boolean(filters[control.id])}
           label={control.label}
           variant={control.variant}
           onChange={(value) => applyValueChange(control.id, value)}
@@ -142,9 +142,9 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
 
     if (control.type === 'chips') {
       const options = resolveOptions(control.options, filters) as FilterOption[];
-      const selected = filters?.[control.id];
-      const searchValue = ui?.chipsSearch?.[control.id] ?? '';
-      const showAll = ui?.chipsShowAll?.[control.id] ?? false;
+      const selected = filters[control.id];
+      const searchValue = ui.chipsSearch[control.id] ?? '';
+      const showAll = ui.chipsShowAll[control.id] ?? false;
 
       return (
         <ChipsFilter
@@ -190,7 +190,7 @@ const FiltersPanel = ({ domain, config, total }: FiltersPanelProps) => {
     const labelClassName = group.labelClassName ?? 'filter-label';
 
     if (group.collapsible) {
-      const collapsed = ui?.collapsedGroups?.[group.id] ?? group.defaultCollapsed ?? false;
+      const collapsed = ui.collapsedGroups[group.id] ?? group.defaultCollapsed ?? false;
 
       return (
         <div

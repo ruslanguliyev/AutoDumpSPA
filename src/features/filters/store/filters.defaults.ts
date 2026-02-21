@@ -47,6 +47,14 @@ export const FILTER_DEFAULTS: FiltersByDomain = {
     verifiedOnly: false,
     openNow: false,
   },
+  specialists: {
+    brand: '',
+    model: '',
+    year: '',
+    specialization: '',
+    city: '',
+    minRating: '',
+  },
 };
 
 export const cloneFilters = (filters: DomainFilters): DomainFilters =>
@@ -60,9 +68,10 @@ export const cloneFilters = (filters: DomainFilters): DomainFilters =>
 export const getDefaultFilters = (domain: FilterDomain): DomainFilters =>
   cloneFilters(FILTER_DEFAULTS[domain]);
 
-export const createDefaultFiltersState = (): FiltersByDomain => ({
-  cars: getDefaultFilters('cars'),
-  parts: getDefaultFilters('parts'),
-  sellers: getDefaultFilters('sellers'),
-  services: getDefaultFilters('services'),
-});
+export const createDefaultFiltersState = (): FiltersByDomain =>
+  Object.fromEntries(
+    Object.keys(FILTER_DEFAULTS).map((domain) => [
+      domain,
+      getDefaultFilters(domain as FilterDomain),
+    ])
+  ) as FiltersByDomain;

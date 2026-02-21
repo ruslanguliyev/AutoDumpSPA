@@ -1,9 +1,8 @@
 import { create } from 'zustand';
-import type { FilterDomain, FilterValue } from '../types/filters.types';
-import {
-  createDefaultFiltersState,
-  getDefaultFilters,
-} from './filters.defaults';
+import { shallow } from 'zustand/shallow';
+
+import type { DomainFilters, FilterDomain, FilterValue } from '../types/filters.types';
+import { FILTER_DEFAULTS, getDefaultFilters } from './filters.defaults';
 
 type FiltersUIState = {
   panelOpen: boolean;
@@ -13,47 +12,25 @@ type FiltersUIState = {
 };
 
 type FiltersStoreState = {
-  filters: ReturnType<typeof createDefaultFiltersState>;
-  ui: Record<FilterDomain, FiltersUIState>;
+  filters: Record<string, DomainFilters>;
+  ui: Record<string, FiltersUIState>;
   setFilter: (domain: FilterDomain, key: string, value: FilterValue) => void;
-  setFilters: (
-    domain: FilterDomain,
-    next: Record<string, FilterValue>
-  ) => void;
-  toggleFilterValue: (
-    domain: FilterDomain,
-    key: string,
-    value: string | number
-  ) => void;
+  setFilters: (domain: FilterDomain, next: Record<string, FilterValue>) => void;
+  toggleFilterValue: (domain: FilterDomain, key: string, value: string | number) => void;
   resetFilters: (domain: FilterDomain, defaults?: Record<string, FilterValue>) => void;
   setPanelOpen: (domain: FilterDomain, isOpen: boolean) => void;
   togglePanel: (domain: FilterDomain) => void;
-  setGroupCollapsed: (
-    domain: FilterDomain,
-    groupId: string,
-    collapsed: boolean
-  ) => void;
+  setGroupCollapsed: (domain: FilterDomain, groupId: string, collapsed: boolean) => void;
   setChipsSearch: (domain: FilterDomain, filterId: string, value: string) => void;
-  setChipsShowAll: (
-    domain: FilterDomain,
-    filterId: string,
-    value: boolean
-  ) => void;
+  setChipsShowAll: (domain: FilterDomain, filterId: string, value: boolean) => void;
 };
 
-const createUiState = (): FiltersUIState => ({
+const DEFAULT_UI_STATE: FiltersUIState = {
   panelOpen: false,
   collapsedGroups: {},
   chipsSearch: {},
   chipsShowAll: {},
-});
-
-const createUiStateByDomain = (): FiltersStoreState['ui'] => ({
-  cars: createUiState(),
-  parts: createUiState(),
-  sellers: createUiState(),
-  services: createUiState(),
-});
+};
 
 const toArray = (value: FilterValue): Array<string | number> => {
   if (Array.isArray(value)) return value;
@@ -63,34 +40,41 @@ const toArray = (value: FilterValue): Array<string | number> => {
 };
 
 export const useFiltersStore = create<FiltersStoreState>((set) => ({
-  filters: createDefaultFiltersState(),
-  ui: createUiStateByDomain(),
+  filters: { ...FILTER_DEFAULTS },
+  ui: {},
 
   setFilter: (domain, key, value) =>
-    set((state) => ({
-      filters: {
-        ...state.filters,
-        [domain]: {
-          ...state.filters[domain],
-          [key]: value,
+    set((state) => {
+      const currentFilters = state.filters[domain] ?? FILTER_DEFAULTS[domain] ?? {};
+      return {
+        filters: {
+          ...state.filters,
+          [domain]: {
+            ...currentFilters,
+            [key]: value,
+          },
         },
-      },
-    })),
+      };
+    }),
 
   setFilters: (domain, next) =>
-    set((state) => ({
-      filters: {
-        ...state.filters,
-        [domain]: {
-          ...state.filters[domain],
-          ...next,
+    set((state) => {
+      const currentFilters = state.filters[domain] ?? FILTER_DEFAULTS[domain] ?? {};
+      return {
+        filters: {
+          ...state.filters,
+          [domain]: {
+            ...currentFilters,
+            ...next,
+          },
         },
-      },
-    })),
+      };
+    }),
 
   toggleFilterValue: (domain, key, value) =>
     set((state) => {
-      const current = toArray(state.filters[domain]?.[key]);
+      const domainFilters = state.filters[domain] ?? FILTER_DEFAULTS[domain] ?? {};
+      const current = toArray(domainFilters[key]);
       const exists = current.includes(value);
       const nextValue = exists
         ? current.filter((item) => item !== value)
@@ -100,7 +84,7 @@ export const useFiltersStore = create<FiltersStoreState>((set) => ({
         filters: {
           ...state.filters,
           [domain]: {
-            ...state.filters[domain],
+            ...domainFilters,
             [key]: nextValue,
           },
         },
@@ -116,63 +100,78 @@ export const useFiltersStore = create<FiltersStoreState>((set) => ({
     })),
 
   setPanelOpen: (domain, isOpen) =>
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        [domain]: { ...state.ui[domain], panelOpen: isOpen },
-      },
-    })),
+    set((state) => {
+      const currentUi = state.ui[domain] ?? DEFAULT_UI_STATE;
+      return {
+        ui: {
+          ...state.ui,
+          [domain]: { ...currentUi, panelOpen: isOpen },
+        },
+      };
+    }),
 
   togglePanel: (domain) =>
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        [domain]: {
-          ...state.ui[domain],
-          panelOpen: !state.ui[domain].panelOpen,
+    set((state) => {
+      const currentUi = state.ui[domain] ?? DEFAULT_UI_STATE;
+      return {
+        ui: {
+          ...state.ui,
+          [domain]: { ...currentUi, panelOpen: !currentUi.panelOpen },
         },
-      },
-    })),
+      };
+    }),
 
   setGroupCollapsed: (domain, groupId, collapsed) =>
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        [domain]: {
-          ...state.ui[domain],
-          collapsedGroups: {
-            ...state.ui[domain].collapsedGroups,
-            [groupId]: collapsed,
+    set((state) => {
+      const currentUi = state.ui[domain] ?? DEFAULT_UI_STATE;
+      return {
+        ui: {
+          ...state.ui,
+          [domain]: {
+            ...currentUi,
+            collapsedGroups: { ...currentUi.collapsedGroups, [groupId]: collapsed },
           },
         },
-      },
-    })),
+      };
+    }),
 
   setChipsSearch: (domain, filterId, value) =>
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        [domain]: {
-          ...state.ui[domain],
-          chipsSearch: {
-            ...state.ui[domain].chipsSearch,
-            [filterId]: value,
+    set((state) => {
+      const currentUi = state.ui[domain] ?? DEFAULT_UI_STATE;
+      return {
+        ui: {
+          ...state.ui,
+          [domain]: {
+            ...currentUi,
+            chipsSearch: { ...currentUi.chipsSearch, [filterId]: value },
           },
         },
-      },
-    })),
+      };
+    }),
 
   setChipsShowAll: (domain, filterId, value) =>
-    set((state) => ({
-      ui: {
-        ...state.ui,
-        [domain]: {
-          ...state.ui[domain],
-          chipsShowAll: {
-            ...state.ui[domain].chipsShowAll,
-            [filterId]: value,
+    set((state) => {
+      const currentUi = state.ui[domain] ?? DEFAULT_UI_STATE;
+      return {
+        ui: {
+          ...state.ui,
+          [domain]: {
+            ...currentUi,
+            chipsShowAll: { ...currentUi.chipsShowAll, [filterId]: value },
           },
         },
-      },
-    })),
+      };
+    }),
 }));
+
+export const useFilters = (domain: FilterDomain): DomainFilters =>
+  useFiltersStore(
+    (state) => state.filters[domain] ?? FILTER_DEFAULTS[domain],
+    shallow
+  );
+
+export const useFiltersUi = (domain: FilterDomain): FiltersUIState =>
+  useFiltersStore(
+    (state) => state.ui[domain] ?? DEFAULT_UI_STATE,
+    shallow
+  );
