@@ -7,7 +7,7 @@ import PartCard from '@/parts/components/PartCard/PartCard';
 import SectionHeader from '@/shared/ui/SectionHeader';
 import Skeleton from '@/shared/ui/Skeleton';
 
-const RECOMMENDED_LIMIT = 5;
+const RECOMMENDED_LIMIT = 4;
 
 const useRecommendedParts = () => {
   return useQuery({
@@ -31,11 +31,9 @@ const YouMayAlsoLike = () => {
     return (
       <section className="py-8">
         <SectionHeader title={t('sections.youMayAlsoLike', 'You May Also Like')} />
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: RECOMMENDED_LIMIT }).map((_, i) => (
-            <div key={i} className="w-[220px] shrink-0">
-              <Skeleton className="h-[320px] w-full" />
-            </div>
+            <Skeleton key={i} className="h-[320px] w-full" />
           ))}
         </div>
       </section>
@@ -53,11 +51,9 @@ const YouMayAlsoLike = () => {
         linkText={t('common.seeMore', 'See More')}
         linkHref="/parts"
       />
-      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {recommendedParts.map((part) => (
-          <div key={part.id} className="w-[220px] shrink-0">
-            <PartCard part={part} />
-          </div>
+          <PartCard key={part.id} part={part} />
         ))}
       </div>
     </section>

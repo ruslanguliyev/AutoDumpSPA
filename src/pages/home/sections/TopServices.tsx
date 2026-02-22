@@ -5,7 +5,7 @@ import ServiceCard from '@/services/components/ServiceCard';
 import SectionHeader from '@/shared/ui/SectionHeader';
 import Skeleton from '@/shared/ui/Skeleton';
 
-const SERVICES_LIMIT = 3;
+const SERVICES_LIMIT = 4;
 
 const TopServices = () => {
   const { t } = useTranslation('home');
@@ -19,7 +19,7 @@ const TopServices = () => {
     return (
       <section className="py-8">
         <SectionHeader title={t('sections.topAutoServices', 'Top Auto Services')} />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: SERVICES_LIMIT }).map((_, i) => (
             <Skeleton key={i} className="h-[380px] w-full" />
           ))}
@@ -39,7 +39,7 @@ const TopServices = () => {
         linkText={t('common.findServices', 'Find Services')}
         linkHref="/services"
       />
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {topServices.map((service) => (
           <ServiceCard key={service.id} service={service} />
         ))}

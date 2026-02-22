@@ -2,6 +2,7 @@ import { ArrowRight, BadgeCheck, Clock, MapPin, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { SpecialistProfile } from '@/specialists/types/specialist.types';
+import './SpecialistCard.scss';
 
 type SpecialistCardProps = {
   specialist: SpecialistProfile;
@@ -104,7 +105,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
           {safeSpecializations.slice(0, 3).map((spec) => (
             <span
               key={spec}
-              className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-400"
+              className="specialist-card__specialization rounded-full border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-1 text-xs font-medium text-cyan-400"
             >
               {spec}
             </span>
