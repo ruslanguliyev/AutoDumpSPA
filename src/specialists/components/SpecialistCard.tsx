@@ -32,7 +32,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
   return (
     <article
       className={`
-        flex flex-col rounded-2xl border border-border bg-card p-6
+        flex flex-col rounded-2xl bg-card p-6
         shadow-[var(--shadow)] transition-all duration-300
         hover:-translate-y-1 hover:shadow-lg
         ${className}
@@ -41,7 +41,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
       {/* Header: Avatar + Verified Pill */}
       <div className="flex items-start justify-between">
         <div className="relative">
-          <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-border bg-muted">
+          <div className="h-20 w-20 overflow-hidden rounded-full border-2 border-border bg-muted">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
@@ -50,32 +50,32 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
                 loading="lazy"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-lg font-semibold text-muted-foreground">
+              <div className="flex h-full w-full items-center justify-center text-xl font-semibold text-muted-foreground">
                 {(name ?? '').slice(0, 2).toUpperCase()}
               </div>
             )}
           </div>
           {verified && (
-            <span className="absolute -bottom-0.5 left-1/2 flex h-5 w-5 -translate-x-1/2 items-center justify-center rounded-full bg-success text-success-foreground">
-              <BadgeCheck size={12} aria-hidden="true" />
+            <span className="absolute bottom-0 left-0 flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-foreground">
+              <BadgeCheck size={14} aria-hidden="true" />
             </span>
           )}
         </div>
 
         {verified && (
           <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            <BadgeCheck size={12} aria-hidden="true" />
+            <BadgeCheck size={14} aria-hidden="true" />
             {t('card.verified')}
           </span>
         )}
       </div>
 
       {/* Name */}
-      <h3 className="mt-5 text-2xl font-semibold text-foreground">{name}</h3>
+      <h3 className="text-xl font-semibold text-foreground">{name}</h3>
 
       {/* Rating */}
-      <div className="mt-2 flex items-center gap-2">
-        <Star size={18} className="fill-warning text-warning" aria-hidden="true" />
+      <div className="flex items-center gap-1.5">
+        <Star size={16} className="fill-warning text-warning" aria-hidden="true" />
         <span className="text-base font-semibold text-foreground">
           {displayRating.toFixed(1)}
         </span>
@@ -85,13 +85,13 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
       </div>
 
       {/* Meta: Experience + Location */}
-      <div className="mt-4 space-y-2">
-        <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
+      <div className="mt-3 space-y-2">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock size={16} aria-hidden="true" />
           <span>{t('card.experience', { count: displayExperience })}</span>
         </div>
         {location && (
-          <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin size={16} aria-hidden="true" />
             <span>{location}</span>
           </div>
@@ -100,11 +100,11 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
 
       {/* Specializations */}
       {safeSpecializations.length > 0 && (
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           {safeSpecializations.slice(0, 3).map((spec) => (
             <span
               key={spec}
-              className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+              className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-400"
             >
               {spec}
             </span>
@@ -115,7 +115,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
       {/* CTA Button */}
       <Link
         to={`/specialists/${slug || id}`}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border-none bg-primary px-4 py-3.5 text-sm font-semibold text-primary-foreground no-underline outline-none transition-all hover:brightness-110 hover:no-underline"
       >
         {t('card.viewProfile')}
         <ArrowRight size={16} aria-hidden="true" />

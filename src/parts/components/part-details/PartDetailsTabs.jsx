@@ -1,5 +1,37 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const useDragScroll = () => {
+  const ref = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const onMouseDown = useCallback((e) => {
+    if (!ref.current) return;
+    setIsDragging(true);
+    startX.current = e.pageX - ref.current.offsetLeft;
+    scrollLeft.current = ref.current.scrollLeft;
+  }, []);
+
+  const onMouseMove = useCallback((e) => {
+    if (!isDragging || !ref.current) return;
+    e.preventDefault();
+    const x = e.pageX - ref.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    ref.current.scrollLeft = scrollLeft.current - walk;
+  }, [isDragging]);
+
+  const onMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  return { ref, isDragging, onMouseDown, onMouseMove, onMouseUp, onMouseLeave };
+};
 
 export const PartDetailsTabs = ({
   description,
@@ -9,6 +41,8 @@ export const PartDetailsTabs = ({
   initialTab = 'description',
 }) => {
   const { t } = useTranslation('part');
+  const { ref: scrollRef, isDragging, onMouseDown, onMouseMove, onMouseUp, onMouseLeave } = useDragScroll();
+  
   const tabs = useMemo(() => [
     { key: 'description', label: t('tabs.description') },
     { key: 'specs', label: t('tabs.specs') },
@@ -33,8 +67,15 @@ export const PartDetailsTabs = ({
         aria-label={t('tabs.ariaLabel')}
       >
         {/* Mobile: horizontal swipe (carousel). Desktop: segmented full width. */}
-        <div className="w-full overflow-x-auto sm:overflow-hidden">
-          <div className="flex w-max min-w-full snap-x snap-mandatory overflow-hidden rounded-xl border border-border bg-secondary/40">
+        <div
+          ref={scrollRef}
+          className={`scrollbar-hide w-full overflow-x-scroll ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} sm:cursor-default sm:overflow-hidden`}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+        >
+          <div className="flex w-max min-w-full snap-x snap-mandatory rounded-xl border border-border bg-secondary/40">
             {tabs.map((tab, index) => {
             const isActive = tab.key === active;
             const withDivider = index !== tabs.length - 1;

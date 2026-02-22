@@ -28,6 +28,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: true,
     mobileService: true,
     priceFrom: 25,
+    location: 'Baku, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -69,6 +70,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: true,
     mobileService: false,
     priceFrom: 40,
+    location: 'Sumgait, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -102,6 +104,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: false,
     mobileService: true,
     priceFrom: 20,
+    location: 'Ganja, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -127,6 +130,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: true,
     mobileService: false,
     priceFrom: 60,
+    location: 'Baku, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -160,6 +164,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: true,
     mobileService: true,
     priceFrom: 30,
+    location: 'Lankaran, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -194,6 +199,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
     verified: false,
     mobileService: false,
     priceFrom: 90,
+    location: 'Baku, AZ',
     avatarUrl:
       'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80',
     coverImage:
@@ -313,6 +319,8 @@ const toProfile = (specialist: SpecialistDetail): SpecialistProfile => ({
   priceFrom: specialist.priceFrom,
   avatarUrl: specialist.avatarUrl,
   coverImage: specialist.coverImage,
+  location: specialist.location,
+  specializations: specialist.specializations,
 });
 
 export const specialistsMockApi: SpecialistsDataProvider = {
