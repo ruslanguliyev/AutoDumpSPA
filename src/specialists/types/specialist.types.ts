@@ -30,6 +30,8 @@ export type SpecialistProfile = {
   priceFrom?: number | null;
   avatarUrl?: string | null;
   coverImage?: string | null;
+  location?: string | null;
+  specializations?: string[];
 };
 
 export type SpecialistReview = {
