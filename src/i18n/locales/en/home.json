@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "featuredCategories": "Featured Categories",
+    "sponsoredProducts": "Sponsored Products",
+    "youMayAlsoLike": "You May Also Like",
+    "featuredVehicles": "Featured Vehicles",
+    "topAutoServices": "Top Auto Services",
+    "topSpecialists": "Top Specialists"
+  },
+  "common": {
+    "viewAll": "View All",
+    "seeMore": "See More",
+    "viewInventory": "View Inventory",
+    "findServices": "Find Services",
+    "findSpecialists": "Find Specialists"
+  }
+}

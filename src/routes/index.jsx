@@ -11,7 +11,7 @@ import { PARTS_DEFAULT_FILTER } from '@/parts/utils/parts.constants';
 import { getAutos } from '@/vehicles/api/autos';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
 
-const Home = lazy(() => import('@/vehicles/pages/home/Home'));
+const Home = lazy(() => import('@/pages/home'));
 const About = lazy(() => import('@/app/pages/about/About'));
 const AutoSearchResults = lazy(
   () => import('@/vehicles/pages/AutoSearchResults/AutoSearchResults')

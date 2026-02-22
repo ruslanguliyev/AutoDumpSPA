@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "featuredCategories": "Seçilmiş Kateqoriyalar",
+    "sponsoredProducts": "Sponsorlu Məhsullar",
+    "youMayAlsoLike": "Sizə Maraqlı Ola Bilər",
+    "featuredVehicles": "Seçilmiş Avtomobillər",
+    "topAutoServices": "Ən Yaxşı Avtoservis",
+    "topSpecialists": "Ən Yaxşı Mütəxəssislər"
+  },
+  "common": {
+    "viewAll": "Hamısına Bax",
+    "seeMore": "Daha Çox",
+    "viewInventory": "Kataloqa Bax",
+    "findServices": "Servisləri Tap",
+    "findSpecialists": "Mütəxəssisləri Tap"
+  }
+}

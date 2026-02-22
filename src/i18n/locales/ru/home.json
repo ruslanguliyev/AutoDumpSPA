@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "featuredCategories": "Популярные категории",
+    "sponsoredProducts": "Рекомендуемые товары",
+    "youMayAlsoLike": "Вам также может понравиться",
+    "featuredVehicles": "Избранные автомобили",
+    "topAutoServices": "Лучшие автосервисы",
+    "topSpecialists": "Лучшие специалисты"
+  },
+  "common": {
+    "viewAll": "Смотреть все",
+    "seeMore": "Показать ещё",
+    "viewInventory": "Смотреть каталог",
+    "findServices": "Найти сервисы",
+    "findSpecialists": "Найти специалистов"
+  }
+}

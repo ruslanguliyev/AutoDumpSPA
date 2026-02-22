@@ -71,7 +71,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
       </div>
 
       {/* Name */}
-      <h3 className="text-xl font-semibold text-foreground">{name}</h3>
+      <h4 className="text-xl font-semibold text-foreground">{name}</h4>
 
       {/* Rating */}
       <div className="flex items-center gap-1.5">
