@@ -1,8 +1,10 @@
-import { ArrowRight, BadgeCheck, Clock, MapPin, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowRight, BadgeCheck, Clock, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SpecialistProfile } from '@/specialists/types/specialist.types';
-import './SpecialistCard.scss';
+import { CardWrapper } from '@/shared/ui/CardWrapper';
+import { Badge } from '@/shared/ui/Badge';
+import { LocationBadge } from '@/shared/ui/LocationBadge';
+import { CardCTA } from '@/shared/ui/CardCTA';
 
 type SpecialistCardProps = {
   specialist: SpecialistProfile;
@@ -31,14 +33,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
   const safeSpecializations = specializations ?? [];
 
   return (
-    <article
-      className={`
-        flex flex-col rounded-2xl bg-card p-6
-        shadow-[var(--shadow)] transition-all duration-300
-        hover:-translate-y-1 hover:shadow-lg
-        ${className}
-      `}
-    >
+    <CardWrapper hover className={`flex flex-col p-6 ${className}`}>
       {/* Header: Avatar + Verified Pill */}
       <div className="flex items-start justify-between">
         <div className="relative">
@@ -64,10 +59,10 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         </div>
 
         {verified && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            <BadgeCheck size={14} aria-hidden="true" />
+          <Badge variant="verified">
+            <BadgeCheck size={12} aria-hidden="true" />
             {t('card.verified')}
-          </span>
+          </Badge>
         )}
       </div>
 
@@ -91,12 +86,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
           <Clock size={16} aria-hidden="true" />
           <span>{t('card.experience', { count: displayExperience })}</span>
         </div>
-        {location && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin size={16} aria-hidden="true" />
-            <span>{location}</span>
-          </div>
-        )}
+        {location && <LocationBadge location={location} size="md" className="flex" />}
       </div>
 
       {/* Specializations */}
@@ -105,7 +95,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
           {safeSpecializations.slice(0, 3).map((spec) => (
             <span
               key={spec}
-              className="specialist-card__specialization rounded-full border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-1 text-xs font-medium text-cyan-400"
+              className="rounded-full border border-primary/30 bg-primary/10 px-1.5 py-1 text-xs font-medium text-primary"
             >
               {spec}
             </span>
@@ -113,15 +103,20 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         </div>
       )}
 
+      {/* Spacer to push button to bottom */}
+      <div className="flex-1" />
+
       {/* CTA Button */}
-      <Link
+      <CardCTA
         to={`/specialists/${slug || id}`}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full border-none bg-primary px-4 py-3.5 text-sm font-semibold text-primary-foreground no-underline outline-none transition-all hover:brightness-110 hover:no-underline"
+        variant="primary"
+        fullWidth
+        className="mt-6 gap-2 py-3.5 text-sm"
       >
         {t('card.viewProfile')}
         <ArrowRight size={16} aria-hidden="true" />
-      </Link>
-    </article>
+      </CardCTA>
+    </CardWrapper>
   );
 };
 

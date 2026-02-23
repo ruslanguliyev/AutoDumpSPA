@@ -33,7 +33,7 @@ import azAuth from './locales/az/auth.json';
 import azHome from './locales/az/home.json';
 
 export const SUPPORTED_LANGUAGES = ['en', 'ru', 'az'];
-export const DEFAULT_LANGUAGE = 'en';
+export const DEFAULT_LANGUAGE = 'az';
 export const NAMESPACES = ['common', 'part', 'vehicle', 'sellers', 'services', 'specialists', 'addListing', 'addItem', 'auth', 'home'];
 
 const resources = {

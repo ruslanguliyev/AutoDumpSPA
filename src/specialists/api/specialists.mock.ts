@@ -189,8 +189,8 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
   },
   {
     id: 'spec-006',
-    name: 'TurboLine Performance',
-    slug: 'turboline-performance',
+    name: 'TurboLine',
+    slug: 'turboline',
     description:
       'Performance tuning, turbo upgrades, and dyno-tested ECU remaps.',
     experienceYears: 8,
