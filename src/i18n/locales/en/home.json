@@ -13,5 +13,19 @@
     "viewInventory": "View Inventory",
     "findServices": "Find Services",
     "findSpecialists": "Find Specialists"
+  },
+  "categories": {
+    "brakeRotors": "Brake Rotors",
+    "engineOil": "Engine Oil",
+    "sparkPlugs": "Spark Plugs",
+    "batteries": "Batteries",
+    "tires": "Tires",
+    "suspension": "Suspension",
+    "headlights": "Headlights",
+    "filters": "Filters",
+    "exhaust": "Exhaust",
+    "wheels": "Wheels",
+    "interior": "Interior",
+    "electronics": "Electronics"
   }
 }

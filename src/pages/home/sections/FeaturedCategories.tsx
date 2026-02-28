@@ -17,18 +17,18 @@ import CategoryCard from '@/shared/ui/CategoryCard';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 const CATEGORIES = [
-  { icon: Disc, label: 'Brake Rotors', slug: 'brake-rotors' },
-  { icon: Droplet, label: 'Engine Oil', slug: 'engine-oil' },
-  { icon: Zap, label: 'Spark Plugs', slug: 'spark-plugs' },
-  { icon: Battery, label: 'Batteries', slug: 'batteries' },
-  { icon: CircleDot, label: 'Tires', slug: 'tires' },
-  { icon: Gauge, label: 'Suspension', slug: 'suspension' },
-  { icon: Lightbulb, label: 'Headlights', slug: 'headlights' },
-  { icon: Filter, label: 'Filters', slug: 'filters' },
-  { icon: Wind, label: 'Exhaust', slug: 'exhaust' },
-  { icon: CircleOff, label: 'Wheels', slug: 'wheels' },
-  { icon: Armchair, label: 'Interior', slug: 'interior' },
-  { icon: Cpu, label: 'Electronics', slug: 'electronics' },
+  { icon: Disc, labelKey: 'categories.brakeRotors', slug: 'brake-rotors' },
+  { icon: Droplet, labelKey: 'categories.engineOil', slug: 'engine-oil' },
+  { icon: Zap, labelKey: 'categories.sparkPlugs', slug: 'spark-plugs' },
+  { icon: Battery, labelKey: 'categories.batteries', slug: 'batteries' },
+  { icon: CircleDot, labelKey: 'categories.tires', slug: 'tires' },
+  { icon: Gauge, labelKey: 'categories.suspension', slug: 'suspension' },
+  { icon: Lightbulb, labelKey: 'categories.headlights', slug: 'headlights' },
+  { icon: Filter, labelKey: 'categories.filters', slug: 'filters' },
+  { icon: Wind, labelKey: 'categories.exhaust', slug: 'exhaust' },
+  { icon: CircleOff, labelKey: 'categories.wheels', slug: 'wheels' },
+  { icon: Armchair, labelKey: 'categories.interior', slug: 'interior' },
+  { icon: Cpu, labelKey: 'categories.electronics', slug: 'electronics' },
 ];
 
 const FeaturedCategories = () => {
@@ -46,7 +46,7 @@ const FeaturedCategories = () => {
           <CategoryCard
             key={category.slug}
             icon={<category.icon size={28} strokeWidth={1.5} />}
-            label={category.label}
+            label={t(category.labelKey)}
             href={`/parts?category=${category.slug}`}
           />
         ))}

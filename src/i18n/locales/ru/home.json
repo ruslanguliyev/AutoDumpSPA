@@ -13,5 +13,19 @@
     "viewInventory": "Смотреть каталог",
     "findServices": "Найти сервисы",
     "findSpecialists": "Найти специалистов"
+  },
+  "categories": {
+    "brakeRotors": "Тормозные диски",
+    "engineOil": "Моторное масло",
+    "sparkPlugs": "Свечи зажигания",
+    "batteries": "Аккумуляторы",
+    "tires": "Шины",
+    "suspension": "Подвеска",
+    "headlights": "Фары",
+    "filters": "Фильтры",
+    "exhaust": "Выхлопная система",
+    "wheels": "Диски",
+    "interior": "Салон",
+    "electronics": "Электроника"
   }
 }
