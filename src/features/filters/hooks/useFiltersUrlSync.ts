@@ -29,7 +29,8 @@ const defaultSerialize = (value: FilterValue): string | null => {
   return String(value);
 };
 
-const buildFiltersFromParams = (
+/** Exported for useParts to read URL params synchronously on first render */
+export const buildFiltersFromParams = (
   params: URLSearchParams,
   defaults: DomainFilters,
   paramMap: UrlParamMapping[]

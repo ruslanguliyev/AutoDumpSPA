@@ -1,11 +1,25 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import FiltersPanel from '@/features/filters/components/FiltersPanel';
 import { createPartsFiltersConfig } from '@/features/filters/config/parts.filters';
+import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import PartCard from '@/parts/components/PartCard/PartCard.jsx';
 import { useParts } from '@/parts/hooks/useParts';
+import { CATEGORY_SLUG_TO_VALUE } from '@/parts/config/categorySlugMap';
 
 const PartsPage = () => {
+  const [searchParams] = useSearchParams();
+  const categoryFromUrl = searchParams.get('category');
+  const setFilter = useFiltersStore((s) => s.setFilter);
+
+  useEffect(() => {
+    if (categoryFromUrl) {
+      const value = CATEGORY_SLUG_TO_VALUE[categoryFromUrl] ?? categoryFromUrl;
+      setFilter('parts', 'category', value);
+    }
+  }, [categoryFromUrl, setFilter]);
+
   const { t } = useTranslation('part');
   const { parts, total, isLoading, error, selectOptions } = useParts();
 

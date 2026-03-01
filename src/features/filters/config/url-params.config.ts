@@ -1,5 +1,9 @@
 import type { FiltersUrlSyncConfig } from '../hooks/useFiltersUrlSync';
 import type { FilterDomain, FilterValue } from '../types/filters.types';
+import {
+  CATEGORY_SLUG_TO_VALUE,
+  CATEGORY_VALUE_TO_SLUG,
+} from '@/parts/config/categorySlugMap';
 import { Specialization } from '@/specialists/types/specialist.types';
 
 const parseCommaSeparated = (value: string): FilterValue =>
@@ -11,6 +15,15 @@ const VALID_SPECIALIZATIONS = new Set(
 
 const parseSpecialization = (value: string): FilterValue =>
   VALID_SPECIALIZATIONS.has(value) ? value : '';
+
+const parseCategory = (slug: string): FilterValue =>
+  CATEGORY_SLUG_TO_VALUE[slug] ?? '';
+
+const serializeCategory = (value: FilterValue): string | null => {
+  if (value === null || value === undefined || value === '') return null;
+  const slug = CATEGORY_VALUE_TO_SLUG[String(value)];
+  return slug ?? (String(value) || null);
+};
 
 export const URL_PARAMS_CONFIG: Record<FilterDomain, FiltersUrlSyncConfig> = {
   cars: {
@@ -39,7 +52,12 @@ export const URL_PARAMS_CONFIG: Record<FilterDomain, FiltersUrlSyncConfig> = {
   parts: {
     paramMap: [
       { param: 'q', key: 'search' },
-      { param: 'category', key: 'category' },
+      {
+        param: 'category',
+        key: 'category',
+        parse: parseCategory,
+        serialize: serializeCategory,
+      },
       { param: 'brand', key: 'brand' },
       { param: 'model', key: 'model' },
       { param: 'condition', key: 'condition' },
