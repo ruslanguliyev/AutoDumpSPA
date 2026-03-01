@@ -1,0 +1,95 @@
+{
+  "header": {
+    "title": "İdarə paneli"
+  },
+  "overview": {
+    "title": "Ümumi baxış",
+    "subtitle": "Fəaliyyətinizin ümumi görünüşü"
+  },
+  "stats": {
+    "activeListings": "Aktiv elanlar",
+    "totalViews": "Baxışlar (7 gün)",
+    "pendingModeration": "Moderasiyada",
+    "favorites": "Seçilmişlər",
+    "messages": "Mesajlar",
+    "revenue": "Gəlir",
+    "vsLastMonth": "keçən aya nisbətən"
+  },
+  "activity": {
+    "title": "Son fəaliyyət",
+    "empty": "Son fəaliyyət yoxdur",
+    "viewedListing": "Elan baxıldı",
+    "newBid": "Yeni təklif",
+    "newMessage": "Yeni mesaj",
+    "listingApproved": "Elan təsdiqləndi",
+    "listingPublished": "Elan dərc edildi",
+    "addedToFavorites": "Seçilmişlərə əlavə edildi"
+  },
+  "chart": {
+    "title": "Səmərəlilik",
+    "empty": "Hələ məlumat yoxdur"
+  },
+  "revenue": {
+    "title": "Gəlir",
+    "period": "Bu {{period}}"
+  },
+  "serviceBookings": {
+    "title": "Qeydiyyatlar",
+    "upcoming": "Gələn",
+    "completed": "Tamamlandı",
+    "cancelled": "Ləğv edildi"
+  },
+  "quickActions": {
+    "title": "Sürətli hərəkətlər",
+    "addVehicle": "Avtomobil əlavə et",
+    "addService": "Xidmət əlavə et",
+    "boostListing": "Elanı gücləndir"
+  },
+  "profileSwitcher": {
+    "ariaLabel": "Profili dəyiş",
+    "user": "Şəxsi",
+    "seller:s1": "Satıcı hesabı",
+    "service:sv1": "Xidmət hesabı"
+  },
+  "topbar": {
+    "lightMode": "Açıq tema",
+    "darkMode": "Qaranlıq tema"
+  },
+  "sidebar": {
+    "expand": "Menunu aç",
+    "collapse": "Menunu yığ"
+  },
+  "nav": {
+    "overview": "Ümumi baxış",
+    "vehicles": "Mənim avtomobillərim",
+    "parts": "Mənim ehtiyyat hissələrim",
+    "services": "Mənim xidmətlərim",
+    "favorites": "Seçilmişlər",
+    "settings": "Parametrlər"
+  },
+  "vehicles": {
+    "title": "Mənim avtomobillərim",
+    "subtitle": "Elanları idarə edin",
+    "empty": "Hələ elan yoxdur. İlk elanı əlavə edin."
+  },
+  "parts": {
+    "title": "Mənim ehtiyyat hissələrim",
+    "subtitle": "Ehtiyyat hissələrini idarə edin",
+    "empty": "Hələ ehtiyyat hissəsi yoxdur. İlk elanı əlavə edin."
+  },
+  "services": {
+    "title": "Mənim xidmətlərim",
+    "subtitle": "Xidmətləri idarə edin",
+    "empty": "Hələ xidmət yoxdur. İlk xidməti əlavə edin."
+  },
+  "favorites": {
+    "title": "Seçilmişlər",
+    "subtitle": "Saxladığınız elanlar",
+    "empty": "Hələ seçilmiş yoxdur."
+  },
+  "settings": {
+    "title": "Parametrlər",
+    "subtitle": "Hesab və seçimlər",
+    "content": "Parametrlər tezliklə mövcud olacaq."
+  }
+}

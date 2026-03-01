@@ -38,6 +38,28 @@ const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 
+const DashboardLayout = lazy(() =>
+  import('@/layouts/DashboardLayout').then((m) => ({ default: m.DashboardLayout }))
+);
+const DashboardOverviewPage = lazy(() =>
+  import('@/dashboard/pages/DashboardOverviewPage').then((m) => ({ default: m.DashboardOverviewPage }))
+);
+const MyVehiclesPage = lazy(() =>
+  import('@/dashboard/pages/MyVehiclesPage').then((m) => ({ default: m.MyVehiclesPage }))
+);
+const MyPartsPage = lazy(() =>
+  import('@/dashboard/pages/MyPartsPage').then((m) => ({ default: m.MyPartsPage }))
+);
+const MyServicesPage = lazy(() =>
+  import('@/dashboard/pages/MyServicesPage').then((m) => ({ default: m.MyServicesPage }))
+);
+const FavoritesPage = lazy(() =>
+  import('@/dashboard/pages/FavoritesPage').then((m) => ({ default: m.FavoritesPage }))
+);
+const SettingsPage = lazy(() =>
+  import('@/dashboard/pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+);
+
 const AUTOS_QUERY_KEY = 'autos';
 const PARTS_QUERY_KEY = 'parts';
 const EMPTY_LIST = [];
@@ -96,6 +118,25 @@ const SellerDetailPageRoute = () => {
   return <SellerDetailPage vehicles={autosItems} parts={partsItems} />;
 };
 
+const dashboardRoutes = [
+  {
+    path: 'dashboard',
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <DashboardOverviewPage /> },
+      { path: 'vehicles', element: <MyVehiclesPage /> },
+      { path: 'parts', element: <MyPartsPage /> },
+      { path: 'services', element: <MyServicesPage /> },
+      { path: 'favorites', element: <FavoritesPage /> },
+      { path: 'settings', element: <SettingsPage /> },
+    ],
+  },
+];
+
 const createAppRoutes = () => [
   { index: true, element: <Home /> },
   { path: 'about', element: <About /> },
@@ -137,10 +178,11 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
     children: [
       ...createAppRoutes(),
+      ...dashboardRoutes,
       {
         path: ':lang',
         element: <LanguageRoute />,
-        children: createAppRoutes(),
+        children: [...createAppRoutes(), ...dashboardRoutes],
       },
     ],
   },

@@ -1,0 +1,95 @@
+{
+  "header": {
+    "title": "Dashboard"
+  },
+  "overview": {
+    "title": "Overview",
+    "subtitle": "Your activity at a glance"
+  },
+  "stats": {
+    "activeListings": "Active Listings",
+    "totalViews": "Total Views (7d)",
+    "pendingModeration": "Pending Moderation",
+    "favorites": "Favorites",
+    "messages": "Messages",
+    "revenue": "Revenue",
+    "vsLastMonth": "vs last month"
+  },
+  "activity": {
+    "title": "Recent Activity",
+    "empty": "No recent activity",
+    "viewedListing": "Viewed listing",
+    "newBid": "New bid received",
+    "newMessage": "New message",
+    "listingApproved": "Listing approved",
+    "listingPublished": "Listing published",
+    "addedToFavorites": "Added to favorites"
+  },
+  "chart": {
+    "title": "Performance",
+    "empty": "No data yet"
+  },
+  "revenue": {
+    "title": "Revenue",
+    "period": "This {{period}}"
+  },
+  "serviceBookings": {
+    "title": "Bookings",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "addVehicle": "Add vehicle",
+    "addService": "Add service",
+    "boostListing": "Boost listing"
+  },
+  "profileSwitcher": {
+    "ariaLabel": "Switch profile",
+    "user": "Personal",
+    "seller:s1": "Seller Account",
+    "service:sv1": "Service Account"
+  },
+  "topbar": {
+    "lightMode": "Switch to light mode",
+    "darkMode": "Switch to dark mode"
+  },
+  "sidebar": {
+    "expand": "Expand sidebar",
+    "collapse": "Collapse sidebar"
+  },
+  "nav": {
+    "overview": "Overview",
+    "vehicles": "My Vehicles",
+    "parts": "My Parts",
+    "services": "My Services",
+    "favorites": "Favorites",
+    "settings": "Settings"
+  },
+  "vehicles": {
+    "title": "My Vehicles",
+    "subtitle": "Manage your vehicle listings",
+    "empty": "No vehicles yet. Add your first listing."
+  },
+  "parts": {
+    "title": "My Parts",
+    "subtitle": "Manage your parts listings",
+    "empty": "No parts yet. Add your first listing."
+  },
+  "services": {
+    "title": "My Services",
+    "subtitle": "Manage your service offerings",
+    "empty": "No services yet. Add your first service."
+  },
+  "favorites": {
+    "title": "Favorites",
+    "subtitle": "Items you've saved",
+    "empty": "No favorites yet."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Account and preferences",
+    "content": "Settings content will be available soon."
+  }
+}

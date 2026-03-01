@@ -70,7 +70,7 @@ export default function Header() {
             { to: "/services", label: t('nav.auto_services'), Icon: Wrench, megaMenu: AUTO_SERVICES_MEGA_MENU },
             { to: "/specialists", label: t('nav.specialists'), Icon: Hammer },
             { to: "/favorites", label: t('nav.favorites'), Icon: Heart },
-            { to: "/account", label: t('nav.account'), Icon: User },
+            { to: "/dashboard", label: t('nav.account'), Icon: User },
         ],
         [t]
     );
@@ -168,7 +168,7 @@ export default function Header() {
                                     </Link>
                                 </div>
                                 <HeaderLanguageSelector
-                                    value={language} F
+                                    value={language}
                                     onChange={setLanguage}
                                     onOpen={closePopover}
                                 />

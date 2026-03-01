@@ -1,0 +1,95 @@
+{
+  "header": {
+    "title": "Панель управления"
+  },
+  "overview": {
+    "title": "Обзор",
+    "subtitle": "Ваша активность в одном месте"
+  },
+  "stats": {
+    "activeListings": "Активные объявления",
+    "totalViews": "Просмотры (7 дн.)",
+    "pendingModeration": "На модерации",
+    "favorites": "Избранное",
+    "messages": "Сообщения",
+    "revenue": "Доход",
+    "vsLastMonth": "к прошлому месяцу"
+  },
+  "activity": {
+    "title": "Недавняя активность",
+    "empty": "Нет недавней активности",
+    "viewedListing": "Просмотр объявления",
+    "newBid": "Новая ставка",
+    "newMessage": "Новое сообщение",
+    "listingApproved": "Объявление одобрено",
+    "listingPublished": "Объявление опубликовано",
+    "addedToFavorites": "Добавлено в избранное"
+  },
+  "chart": {
+    "title": "Эффективность",
+    "empty": "Пока нет данных"
+  },
+  "revenue": {
+    "title": "Доход",
+    "period": "За {{period}}"
+  },
+  "serviceBookings": {
+    "title": "Записи",
+    "upcoming": "Предстоящие",
+    "completed": "Выполнено",
+    "cancelled": "Отменено"
+  },
+  "quickActions": {
+    "title": "Быстрые действия",
+    "addVehicle": "Добавить авто",
+    "addService": "Добавить услугу",
+    "boostListing": "Продвинуть объявление"
+  },
+  "profileSwitcher": {
+    "ariaLabel": "Переключить профиль",
+    "user": "Личный",
+    "seller:s1": "Продавец",
+    "service:sv1": "Сервис"
+  },
+  "topbar": {
+    "lightMode": "Светлая тема",
+    "darkMode": "Тёмная тема"
+  },
+  "sidebar": {
+    "expand": "Развернуть меню",
+    "collapse": "Свернуть меню"
+  },
+  "nav": {
+    "overview": "Обзор",
+    "vehicles": "Мои авто",
+    "parts": "Мои запчасти",
+    "services": "Мои услуги",
+    "favorites": "Избранное",
+    "settings": "Настройки"
+  },
+  "vehicles": {
+    "title": "Мои авто",
+    "subtitle": "Управление объявлениями",
+    "empty": "Нет объявлений. Добавьте первое."
+  },
+  "parts": {
+    "title": "Мои запчасти",
+    "subtitle": "Управление запчастями",
+    "empty": "Нет запчастей. Добавьте первое объявление."
+  },
+  "services": {
+    "title": "Мои услуги",
+    "subtitle": "Управление услугами",
+    "empty": "Нет услуг. Добавьте первую."
+  },
+  "favorites": {
+    "title": "Избранное",
+    "subtitle": "Сохранённые объявления",
+    "empty": "Пока ничего нет."
+  },
+  "settings": {
+    "title": "Настройки",
+    "subtitle": "Аккаунт и предпочтения",
+    "content": "Настройки скоро будут доступны."
+  }
+}
