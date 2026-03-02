@@ -114,8 +114,18 @@ const SellerDetailPageRoute = () => {
   const partsQuery = useSellersPartsQuery();
   const autosItems = autosQuery.data ?? EMPTY_LIST;
   const partsItems = partsQuery.data?.items ?? EMPTY_LIST;
+  const isLoading = autosQuery.isLoading || partsQuery.isLoading;
+  const isError = autosQuery.isError || partsQuery.isError;
+  const error = autosQuery.error ?? partsQuery.error ?? null;
 
-  return <SellerDetailPage vehicles={autosItems} parts={partsItems} />;
+  return (
+    <SellerDetailPage
+      vehicles={autosItems}
+      parts={partsItems}
+      isLoading={isLoading}
+      error={isError ? error : null}
+    />
+  );
 };
 
 const dashboardRoutes = [

@@ -111,7 +111,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         to={`/specialists/${slug || id}`}
         variant="primary"
         fullWidth
-        className="mt-6 gap-2 py-3.5 text-sm"
+        className="mt-6 py-3.5 text-sm"
       >
         {t('card.viewProfile')}
         <ArrowRight size={16} aria-hidden="true" />

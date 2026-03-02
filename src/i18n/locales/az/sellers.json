@@ -58,6 +58,7 @@
   },
   "card": {
     "verifiedDealer": "Təsdiqlənmiş diler",
+    "verifiedPartsSeller": "Təsdiqlənmiş ehtiyat hissələri satıcısı",
     "reviews_one": "{{count}} rəy",
     "reviews_other": "{{count}} rəy",
     "location": "Ünvan",
@@ -71,6 +72,7 @@
     "instagram": "Instagram"
   },
   "detail": {
+    "loading": "Satıcı yüklənir…",
     "fallbackName": "Satıcı",
     "missingId": "Satıcı identifikatoru göstərilməyib.",
     "backToSellers": "← Siyahıya qayıt",
@@ -78,13 +80,17 @@
     "notAvailable": "Satıcı {{id}} mövcud deyil.",
     "tabs": {
       "stock": "Anbar",
+      "parts": "Ehtiyat hissələri",
       "reviews": "Rəylər",
       "about": "Haqqında"
     },
     "searchPlaceholder": "Anbarda axtarış (məs. BMW X5…)",
+    "searchPlaceholderParts": "Ehtiyat hissələrində axtarış (məs. əyləc lövhələri, BMW E90, OEM…)",
+    "descriptionPlaceholderParts": "Ehtiyat hissələri satıcısı. Kataloq aşağıdadır.",
     "empty": {
       "nothingFound": "Heç nə tapılmadı",
       "noListings": "Elan yoxdur",
+      "noParts": "Ehtiyat hissələri yoxdur",
       "reviewsSoon": "Rəylər tezliklə əlavə olunacaq",
       "aboutSoon": "Satıcı haqqında məlumat tezliklə əlavə olunacaq"
     },

@@ -58,6 +58,7 @@
   },
   "card": {
     "verifiedDealer": "Проверенный дилер",
+    "verifiedPartsSeller": "Проверенный продавец запчастей",
     "reviews_one": "{{count}} отзыв",
     "reviews_few": "{{count}} отзыва",
     "reviews_many": "{{count}} отзывов",
@@ -72,6 +73,7 @@
     "instagram": "Instagram"
   },
   "detail": {
+    "loading": "Загрузка продавца…",
     "fallbackName": "Продавец",
     "missingId": "Не указан идентификатор продавца.",
     "backToSellers": "← Назад к списку",
@@ -79,13 +81,17 @@
     "notAvailable": "Продавец {{id}} недоступен.",
     "tabs": {
       "stock": "Товар",
+      "parts": "Запчасти",
       "reviews": "Отзывы",
       "about": "О продавце"
     },
     "searchPlaceholder": "Поиск по складу (напр. BMW X5…)",
+    "searchPlaceholderParts": "Поиск запчастей (напр. тормозные колодки, BMW E90, OEM…)",
+    "descriptionPlaceholderParts": "Продавец автозапчастей. Каталог ниже.",
     "empty": {
       "nothingFound": "Ничего не найдено",
       "noListings": "Нет объявлений",
+      "noParts": "Нет запчастей",
       "reviewsSoon": "Отзывы скоро появятся",
       "aboutSoon": "Информация о продавце скоро появится"
     },

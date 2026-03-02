@@ -185,6 +185,11 @@
   --bs-link-hover-color-rgb: var(--primary);
 }
 
+/* Override Bootstrap link underline for card CTA buttons (specialists, services) */
+a.card-cta {
+  text-decoration: none !important;
+}
+
 /* Ensure the app canvas always follows theme (unlayered override for Bootstrap) */
 html,
 body {

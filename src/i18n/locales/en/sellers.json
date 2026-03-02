@@ -58,6 +58,7 @@
   },
   "card": {
     "verifiedDealer": "Verified Dealer",
+    "verifiedPartsSeller": "Verified Parts Seller",
     "reviews_one": "{{count}} Review",
     "reviews_other": "{{count}} Reviews",
     "location": "Location",
@@ -71,6 +72,7 @@
     "instagram": "Instagram"
   },
   "detail": {
+    "loading": "Loading seller…",
     "fallbackName": "Seller",
     "missingId": "Missing seller id.",
     "backToSellers": "← Back to sellers",
@@ -78,13 +80,17 @@
     "notAvailable": "Seller {{id}} is not available.",
     "tabs": {
       "stock": "Stock",
+      "parts": "Parts",
       "reviews": "Reviews",
       "about": "About"
     },
     "searchPlaceholder": "Search inventory (e.g. BMW X5…)",
+    "searchPlaceholderParts": "Search parts (e.g. brake pads, BMW E90, OEM code…)",
+    "descriptionPlaceholderParts": "Auto parts reseller. Browse catalog below.",
     "empty": {
       "nothingFound": "Nothing found",
       "noListings": "No listings",
+      "noParts": "No parts listed",
       "reviewsSoon": "Reviews coming soon",
       "aboutSoon": "About section coming soon"
     },

@@ -7,25 +7,34 @@
   .seller-hero {
     position: relative;
     width: 100%;
-    min-height: 280px;
+    min-height: 180px;
     background: rgb(var(--foreground));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
     @media (min-width: 768px) {
-      min-height: 360px;
+      min-height: 220px;
     }
 
     @media (min-width: 1200px) {
-      min-height: 420px;
+      min-height: 260px;
     }
 
     &__overlay {
       position: absolute;
       inset: 0;
       background: rgb(var(--shadow-color) / 0.35);
-    
+    }
+
+    // Parts sellers: subtle gradient when no cover image (distinct from car dealers)
+    &--parts:not([style*="background-image"]) {
+      background: linear-gradient(
+          160deg,
+          rgb(var(--foreground)) 0%,
+          rgb(var(--muted) / 0.6) 50%,
+          rgb(var(--foreground)) 100%
+        );
     }
 
     &__breadcrumbs {

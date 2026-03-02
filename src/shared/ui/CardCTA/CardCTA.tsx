@@ -12,7 +12,8 @@ type CardCTAProps = {
   className?: string;
 };
 
-const baseClasses = 'inline-flex items-center justify-center font-semibold transition hover:brightness-110';
+const baseClasses =
+  'card-cta inline-flex flex-nowrap items-center justify-center gap-2 font-semibold whitespace-nowrap !no-underline transition hover:brightness-110';
 
 const shapeClasses = {
   default: 'rounded-full px-4 py-2',

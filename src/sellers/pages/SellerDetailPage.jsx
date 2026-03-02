@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,6 +14,8 @@ import {
 
 import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
 import AutoCard from "@/vehicles/components/AutoCardComponent/AutoCard";
 import PartCard from "@/parts/components/PartCard/PartCard";
 import "./SellerDetailPage.scss";
@@ -24,23 +26,21 @@ const getInitials = (name) => {
   return safe.slice(0, 2).toUpperCase();
 };
 
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
+/** Returns years active or null if invalid. */
+const getYearsActive = (memberSince) => {
+  if (!memberSince) return null;
+  const date = new Date(memberSince);
+  if (Number.isNaN(date.getTime())) return null;
+  const years = new Date().getFullYear() - date.getFullYear();
+  return Number.isFinite(years) && years >= 0 ? years : null;
 };
 
-export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
+export default function SellerDetailPage({
+  vehicles = [],
+  parts = [],
+  isLoading = false,
+  error = null,
+} = {}) {
   const { t } = useTranslation("sellers");
   const params = useParams();
   const sellerId = String(params?.sellerId ?? "").trim();
@@ -74,8 +74,12 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
     if (!sellerId) return null;
     const aggregated = sellers.find((s) => String(s.id) === sellerId) ?? null;
     if (!aggregated || !fullSellerData) return aggregated;
-    // Merge aggregated data with full seller data
-    return { ...aggregated, ...fullSellerData };
+    // Merge: fullSellerData overwrites, but preserve aggregated.listingsCount (not in raw seller)
+    return {
+      ...aggregated,
+      ...fullSellerData,
+      listingsCount: aggregated.listingsCount,
+    };
   }, [sellers, sellerId, fullSellerData]);
 
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
@@ -104,6 +108,8 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
   const instagramUrl = seller?.instagramUrl || null;
   const verified = seller?.verified !== false && seller?.hasPublicPage === true;
   const memberSince = seller?.memberSince || null;
+  const yearsActive = getYearsActive(memberSince);
+  const isPartsSeller = seller?.domain === "parts";
 
   // Get seller's listings (vehicles/parts)
   const sellerListings = useMemo(() => {
@@ -194,6 +200,35 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
     );
   }
 
+  if (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return (
+      <div className="seller-detail">
+        <div className="seller-detail__container">
+          <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
+            <div className="font-semibold">{t("errors.loadFailed")}</div>
+            <div className="mt-1">{message}</div>
+          </div>
+          <Link to="/sellers" className="mt-4 inline-block text-sm underline">
+            {t("detail.backToSellers")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="seller-detail">
+        <div className="seller-detail__container">
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+            {t("detail.loading")}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!seller) {
     return (
       <div className="seller-detail">
@@ -214,11 +249,22 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
     { label: seller?.name || t("detail.fallbackName") },
   ];
 
+  const searchPlaceholder = isPartsSeller
+    ? t("detail.searchPlaceholderParts")
+    : t("detail.searchPlaceholder");
+  const stockTabLabel = isPartsSeller ? t("detail.tabs.parts") : t("detail.tabs.stock");
+  const verifiedLabel = isPartsSeller
+    ? t("card.verifiedPartsSeller")
+    : t("card.verifiedDealer");
+  const displayDescription =
+    description || (isPartsSeller ? t("detail.descriptionPlaceholderParts") : null);
+  const emptyListingsKey = isPartsSeller ? "detail.empty.noParts" : "detail.empty.noListings";
+
   return (
-    <div className="seller-detail">
+    <div className="seller-detail" data-seller-domain={seller?.domain ?? undefined}>
       {/* Hero Section */}
       <section
-        className="seller-hero"
+        className={`seller-hero ${isPartsSeller ? "seller-hero--parts" : ""}`}
         style={
           coverImage
             ? {
@@ -251,7 +297,7 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                   {verified && (
                     <span className="seller-card__verified">
                       <BadgeCheck size={14} />
-                      {t("card.verifiedDealer")}
+                      {verifiedLabel}
                     </span>
                   )}
                 </div>
@@ -304,14 +350,14 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                     </div>
                   )}
 
-                  {memberSince && (
+                  {yearsActive != null && (
                     <div className="seller-card__meta-item seller-card__meta-item--member">
                       <div className="seller-card__meta-icon">
                         <Calendar size={18} />
                       </div>
                       <div className="seller-card__meta-content">
                         <div className="seller-card__meta-value">
-                          {new Date().getFullYear() - new Date(memberSince).getFullYear()} {t("card.yrs")}
+                          {yearsActive} {t("card.yrs")}
                         </div>
                         <div className="seller-card__meta-label">
                           {t("card.activeSeller")}
@@ -320,9 +366,11 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                     </div>
                   )}
                 </div>
-                <div className="seller-card__description">
-                  <p className="seller-card__description-text">{description}</p>
-                </div>
+                {displayDescription && (
+                  <div className="seller-card__description">
+                    <p className="seller-card__description-text">{displayDescription}</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -403,6 +451,7 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
 
       {/* Main Content */}
       <div className="seller-detail__container">
+        <Breadcrumbs items={breadcrumbs} />
         {/* Tabs and Search */}
         <div className="seller-tabs">
           <div className="seller-tabs__container">
@@ -413,7 +462,7 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                   }`}
                 type="button"
               >
-                {t("detail.tabs.stock")} ({listingsCount ?? 0})
+                {stockTabLabel} ({listingsCount ?? 0})
               </button>
               <button
                 onClick={() => setActiveTab("reviews")}
@@ -441,7 +490,7 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t("detail.searchPlaceholder")}
+                  placeholder={searchPlaceholder}
                   className="seller-tabs__search-input"
                 />
               </div>
@@ -477,7 +526,7 @@ export default function SellerDetailPage({ vehicles = [], parts = [] } = {}) {
                 <div className="seller-listings__empty">
                   {debouncedSearchQuery.trim()
                     ? t("detail.empty.nothingFound")
-                    : t("detail.empty.noListings")}
+                    : t(emptyListingsKey)}
                 </div>
               )}
             </>
