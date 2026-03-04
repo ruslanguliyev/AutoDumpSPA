@@ -60,7 +60,7 @@ const SpecialistHighlights = ({
 
       {/* Highlights */}
       <div>
-        <h2 className="text-base font-semibold text-foreground">{t('detail.highlights')}</h2>
+        <h2 className="text-base text-center font-semibold text-foreground">{t('detail.highlights')}</h2>
         <ul className="mt-3 space-y-3">
           {highlights.map((item) => (
             <li key={item.id} className="flex items-start gap-3">

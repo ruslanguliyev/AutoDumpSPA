@@ -78,6 +78,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               href={`tel:${sanitizePhone(phone)}`}
               aria-label={t('detail.bookConsultation')}
               className={`${btnBase} ${btnPrimary}`}
+              style={{ textDecoration: 'none' }}
             >
               {t('detail.bookConsultation')}
             </a>
@@ -99,6 +100,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               rel="noopener noreferrer"
               aria-label={t('detail.sendMessage')}
               className={`${btnBase} ${btnOutline}`}
+              style={{ textDecoration: 'none' }}
             >
               <MessageCircle size={16} aria-hidden="true" />
               {t('detail.sendMessage')}
@@ -108,6 +110,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               href={`tel:${sanitizePhone(phone)}`}
               aria-label={t('detail.call')}
               className={`${btnBase} ${btnOutline}`}
+              style={{ textDecoration: 'none' }}
             >
               <PhoneCall size={16} aria-hidden="true" />
               {t('detail.call')}
@@ -165,7 +168,8 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               <div>
                 <a
                   href={`tel:${sanitizePhone(phone)}`}
-                  className="text-primary no-underline hover:no-underline"
+                  className="text-primary"
+                  style={{ textDecoration: 'none' }}
                 >
                   {phone}
                 </a>
