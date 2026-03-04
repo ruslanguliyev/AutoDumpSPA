@@ -1,6 +1,7 @@
 import type { SpecialistsFiltersInput } from '@/specialists/api/specialists.types';
 import { Specialization } from '@/specialists/types/specialist.types';
 import type {
+  SpecialistCertification,
   SpecialistDetail,
   SpecialistProfile,
   SupportedVehicle,
@@ -13,6 +14,24 @@ const mockGallery = [
   'https://images.unsplash.com/photo-1486754735734-325b5831c3ad?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1485395037617-6f5f457f9f93?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1515923162838-485e317f6804?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1504222490345-c075b7b7b83e?auto=format&fit=crop&w=800&q=80',
+];
+
+const defaultCertifications: SpecialistCertification[] = [
+  {
+    id: 'cert-ase',
+    title: 'ASE Master Certified',
+    subtitle: 'Valid Jan 2025',
+    validUntil: '2025-01-31',
+    iconCode: 'ase',
+  },
+  {
+    id: 'cert-ev',
+    title: 'Hybrid Specialist L3',
+    subtitle: 'Advanced EV Tech',
+    validUntil: null,
+    iconCode: 'ev',
+  },
 ];
 
 const MOCK_SPECIALISTS: SpecialistDetail[] = [
@@ -42,12 +61,14 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Audi', model: 'A6', yearFrom: 2014, yearTo: 2022 },
     ],
     portfolio: mockGallery,
+    certifications: defaultCertifications,
     reviews: [
       {
         id: 'rev-001',
         rating: 5,
         comment: 'Diagnosed a complex misfire in one hour. Great experience.',
         authorName: 'Ali',
+        avatarUrl: 'https://i.pravatar.cc/48?img=11',
         createdAt: '2024-11-12',
       },
       {
@@ -55,6 +76,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
         rating: 4,
         comment: 'Clean workshop and transparent pricing.',
         authorName: 'Kamran',
+        avatarUrl: 'https://i.pravatar.cc/48?img=22',
         createdAt: '2024-09-02',
       },
     ],
@@ -83,12 +105,22 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Hyundai', model: 'Sonata', yearFrom: 2010, yearTo: 2023 },
     ],
     portfolio: mockGallery,
+    certifications: [
+      {
+        id: 'cert-trans',
+        title: 'Transmission Expert',
+        subtitle: 'Certified Drivetrain Tech',
+        validUntil: '2025-06-30',
+        iconCode: 'ase',
+      },
+    ],
     reviews: [
       {
         id: 'rev-003',
         rating: 5,
         comment: 'Smooth shifting after rebuild. Highly recommend.',
         authorName: 'Rauf',
+        avatarUrl: 'https://i.pravatar.cc/48?img=33',
         createdAt: '2024-10-15',
       },
     ],
@@ -117,6 +149,7 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Skoda', model: 'Octavia', yearFrom: 2012, yearTo: 2021 },
     ],
     portfolio: mockGallery,
+    certifications: [],
     reviews: [],
   },
   {
@@ -143,12 +176,14 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Porsche', model: 'Cayenne', yearFrom: 2015, yearTo: 2023 },
     ],
     portfolio: mockGallery,
+    certifications: defaultCertifications,
     reviews: [
       {
         id: 'rev-004',
         rating: 5,
         comment: 'Paint looks brand new after ceramic coating.',
         authorName: 'Nijat',
+        avatarUrl: 'https://i.pravatar.cc/48?img=44',
         createdAt: '2024-08-21',
       },
     ],
@@ -177,12 +212,22 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Kia', model: 'Sportage', yearFrom: 2011, yearTo: 2022 },
     ],
     portfolio: mockGallery,
+    certifications: [
+      {
+        id: 'cert-brakes',
+        title: 'Brake System Specialist',
+        subtitle: 'Safety Certified 2024',
+        validUntil: '2026-01-01',
+        iconCode: 'ase',
+      },
+    ],
     reviews: [
       {
         id: 'rev-005',
         rating: 4,
         comment: 'Quick brake pad change. Price was fair.',
         authorName: 'Emil',
+        avatarUrl: 'https://i.pravatar.cc/48?img=55',
         createdAt: '2024-07-05',
       },
     ],
@@ -212,6 +257,15 @@ const MOCK_SPECIALISTS: SpecialistDetail[] = [
       { brand: 'Audi', model: 'S4', yearFrom: 2013, yearTo: 2021 },
     ],
     portfolio: mockGallery,
+    certifications: [
+      {
+        id: 'cert-tuning',
+        title: 'ECU Remap Certified',
+        subtitle: 'Performance Tuning Pro',
+        validUntil: null,
+        iconCode: 'generic',
+      },
+    ],
     reviews: [],
   },
 ];

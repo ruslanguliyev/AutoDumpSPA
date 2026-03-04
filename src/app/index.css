@@ -190,6 +190,11 @@ a.card-cta {
   text-decoration: none !important;
 }
 
+/* Specialist sidebar card: remove underline from all links (Bootstrap overrides Tailwind) */
+.specialist-sidebar-card a {
+  text-decoration: none !important;
+}
+
 /* Ensure the app canvas always follows theme (unlayered override for Bootstrap) */
 html,
 body {

@@ -91,7 +91,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
 
       {/* Specializations */}
       {safeSpecializations.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-1 flex flex-wrap gap-2">
           {safeSpecializations.slice(0, 3).map((spec) => (
             <span
               key={spec}

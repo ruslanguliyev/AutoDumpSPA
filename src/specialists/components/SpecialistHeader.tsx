@@ -88,6 +88,18 @@ const SpecialistHeader = ({ specialist, city }: SpecialistHeaderProps) => {
                 </span>
               ) : null}
             </div>
+
+            {specialist.specializations?.length ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {specialist.specializations.map((item) => (
+                  <SpecialistBadge
+                    key={item}
+                    label={t(`specializations.${item}`)}
+                    className="bg-background/80"
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
 
