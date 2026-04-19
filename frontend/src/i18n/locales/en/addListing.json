@@ -1,0 +1,14 @@
+{
+  "title": "Add a new listing",
+  "subtitle": "Choose the listing type to start the guided wizard.",
+  "vehicle": {
+    "title": "Vehicle listing",
+    "description": "Capture VIN, specs, pricing, and seller details for a vehicle.",
+    "button": "Create vehicle draft"
+  },
+  "part": {
+    "title": "Part listing",
+    "description": "List accessories or parts with compatibility and condition details.",
+    "button": "Create part draft"
+  }
+}

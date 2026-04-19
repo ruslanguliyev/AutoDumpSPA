@@ -1,0 +1,295 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuctionObject {
+  currentPrice: Float!
+  endTime: DateTime!
+  id: String!
+  listingId: String!
+  startPrice: Float!
+  startTime: DateTime!
+  status: String!
+}
+
+type AuthPayload {
+  accessToken: String!
+  user: AuthUser!
+}
+
+type AuthUser {
+  createdAt: DateTime!
+  email: String!
+  fullName: String!
+  id: String!
+  role: UserRole!
+  updatedAt: DateTime!
+}
+
+type BidObject {
+  amount: Float!
+  auctionId: String!
+  createdAt: DateTime!
+  id: String!
+  userId: String!
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+input CreateAuctionInput {
+  endTime: DateTime!
+  listingId: String!
+  startPrice: Float!
+  startTime: DateTime!
+}
+
+input CreateListingInput {
+  description: String!
+  price: Float!
+  title: String!
+}
+
+input CreatePartInput {
+  brand: String!
+  category: String!
+  condition: String!
+  model: String!
+  name: String!
+  oemCode: String!
+  stock: Int!
+}
+
+input CreateSellerInput {
+  city: String!
+  name: String!
+  type: SellerType!
+}
+
+input CreateServiceInput {
+  categories: [String!]!
+  city: String!
+  name: String!
+  rating: Float!
+  supportedBrands: [String!]!
+}
+
+input CreateVehicleInput {
+  brand: String!
+  engineVolume: Float!
+  fuel: String!
+  mileage: Int!
+  model: String!
+  power: Int!
+  transmission: String!
+  year: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ImageObject {
+  id: String!
+  listingId: String!
+  position: Int!
+  url: String!
+}
+
+type ListingObject {
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  price: Float!
+  sellerId: String!
+  status: ListingStatus!
+  title: String!
+  updatedAt: DateTime!
+}
+
+"""Listing status enum"""
+enum ListingStatus {
+  ACTIVE
+  DRAFT
+  SOLD
+}
+
+input ListingsFilterInput {
+  maxPrice: Float
+  minPrice: Float
+  sellerId: String
+  status: ListingStatus
+}
+
+type Mutation {
+  changePassword(input: ChangePasswordInput!): Boolean!
+  closeListing(id: String!): ListingObject!
+  createAuction(input: CreateAuctionInput!): AuctionObject!
+  createListing(input: CreateListingInput!): ListingObject!
+  createPart(input: CreatePartInput!, listingId: String!): PartObject!
+  createSeller(input: CreateSellerInput!): SellerObject!
+  createService(input: CreateServiceInput!, listingId: String!): ServiceObject!
+  createVehicle(input: CreateVehicleInput!, listingId: String!): VehicleObject!
+  deleteListing(id: String!): Boolean!
+  deletePart(id: String!): Boolean!
+  deleteService(id: String!): Boolean!
+  deleteVehicle(id: String!): Boolean!
+  finishAuction(id: String!): AuctionObject!
+  login(email: String!, password: String!): AuthPayload!
+  placeBid(input: PlaceBidInput!): BidObject!
+  publishListing(id: String!): ListingObject!
+  register(email: String!, fullName: String!, password: String!): AuthPayload!
+  startAuction(id: String!): AuctionObject!
+  updateListing(id: String!, input: UpdateListingInput!): ListingObject!
+  updatePart(id: String!, input: UpdatePartInput!): PartObject!
+  updateProfile(input: UpdateProfileInput!): UserObject!
+  updateSeller(input: UpdateSellerInput!): SellerObject!
+  updateService(id: String!, input: UpdateServiceInput!): ServiceObject!
+  updateVehicle(id: String!, input: UpdateVehicleInput!): VehicleObject!
+}
+
+type PaginatedListings {
+  items: [ListingObject!]!
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+type PartObject {
+  brand: String!
+  category: String!
+  condition: String!
+  id: String!
+  listingId: String!
+  model: String!
+  name: String!
+  oemCode: String!
+  stock: Int!
+}
+
+input PlaceBidInput {
+  amount: Float!
+  auctionId: String!
+}
+
+type Query {
+  auction(id: String!): AuctionObject!
+  auctionByListing(listingId: String!): AuctionObject
+  bidsByAuction(auctionId: String!): [BidObject!]!
+  health: String!
+  imagesByListing(listingId: String!): [ImageObject!]!
+  listing(id: String!): ListingObject!
+  listings(filter: ListingsFilterInput, page: Int! = 1, perPage: Int! = 20): PaginatedListings!
+  me: UserObject!
+  myBids: [BidObject!]!
+  mySeller: SellerObject
+  partByListing(listingId: String!): PartObject
+  serviceByListing(listingId: String!): ServiceObject
+  vehicleByListing(listingId: String!): VehicleObject
+}
+
+type SellerObject {
+  city: String!
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  rating: Float!
+  type: SellerType!
+  updatedAt: DateTime!
+  userId: String!
+  verified: Boolean!
+}
+
+"""Seller type enum"""
+enum SellerType {
+  DEALER
+  PRIVATE
+}
+
+type ServiceObject {
+  categories: [String!]!
+  city: String!
+  id: String!
+  listingId: String!
+  name: String!
+  rating: Float!
+  supportedBrands: [String!]!
+}
+
+input UpdateListingInput {
+  description: String
+  price: Float
+  title: String
+}
+
+input UpdatePartInput {
+  brand: String
+  category: String
+  condition: String
+  model: String
+  name: String
+  oemCode: String
+  stock: Int
+}
+
+input UpdateProfileInput {
+  fullName: String
+}
+
+input UpdateSellerInput {
+  city: String
+  name: String
+  type: SellerType
+}
+
+input UpdateServiceInput {
+  categories: [String!]
+  city: String
+  name: String
+  rating: Float
+  supportedBrands: [String!]
+}
+
+input UpdateVehicleInput {
+  brand: String
+  engineVolume: Float
+  fuel: String
+  mileage: Int
+  model: String
+  power: Int
+  transmission: String
+  year: Int
+}
+
+type UserObject {
+  createdAt: DateTime!
+  email: String!
+  fullName: String!
+  id: String!
+  role: UserRole!
+  updatedAt: DateTime!
+}
+
+"""User role enum"""
+enum UserRole {
+  ADMIN
+  SELLER
+  SERVICE
+  USER
+}
+
+type VehicleObject {
+  brand: String!
+  engineVolume: Float!
+  fuel: String!
+  id: String!
+  listingId: String!
+  mileage: Int!
+  model: String!
+  power: Int!
+  transmission: String!
+  year: Int!
+}

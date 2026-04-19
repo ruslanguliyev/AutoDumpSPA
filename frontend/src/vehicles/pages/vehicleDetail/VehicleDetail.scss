@@ -1,0 +1,194 @@
+/* Вся страница */
+.vehicle-page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  background: rgb(var(--muted));
+}
+
+/* GRID */
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+
+  background: rgb(var(--card));
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Левая часть */
+.vehicle-left {
+  width: 100%;
+  min-width: 0; /* позволяет сжиматься внутри grid, предотвращает overflow справа */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.vehicle-left>button {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: start;
+}
+
+/* Фото */
+// .vehicle-gallery {
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+
+//   img {
+//     max-width: 100%;
+//     display: block;
+//   }
+// }
+
+
+// .main-image {
+//   width: 100%;
+//   // aspect-ratio: 16 / 9; // универсально для авто-фото
+//   object-fit: cover;
+//   border-radius: 12px;
+//   margin-bottom: 12px;
+//   overflow: hidden;
+
+//   @media (max-width: 600px) {
+//     border-radius: 0;
+//   }
+// }
+
+
+// .thumbs {
+//   display: flex;
+//   justify-content: center;
+//   gap: 10px;
+//   flex-wrap: nowrap;
+
+//   img {
+//     width: 80px;
+//     height: 60px;
+//     object-fit: cover;
+//     border-radius: 6px;
+//     cursor: pointer;
+//     transition: 0.2s ease;
+
+//     &:hover {
+//       opacity: 0.7;
+//     }
+//   }
+// }
+
+
+/* Характеристики */
+.vehicle-specs-section {
+  margin-top: 10px;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--muted));
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 40px;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed rgb(var(--border));
+    padding-bottom: 6px;
+  }
+
+  .spec-name {
+    color: rgb(var(--muted-foreground));
+  }
+
+  .spec-value {
+    font-weight: 600;
+  }
+}
+
+.owner-note {
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  background: rgb(var(--card));
+  border: 1px solid rgb(var(--border));
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    line-height: 1.6;
+    font-size: 15px;
+    color: rgb(var(--muted-foreground));
+  }
+}
+
+
+/* Правая часть */
+.vehicle-right {
+  position: relative;
+  min-width: 0;
+}
+
+.vehicle-info {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(var(--foreground));
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+@media (max-width: 900px) {
+  .vehicle-grid {
+    grid-template-columns: minmax(0, 1fr); /* minmax(0,1fr) — колонка может сжиматься, сохраняя padding справа */
+  }
+
+  .vehicle-info {
+    position: static;
+  }
+}
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+  .specs-grid {
+    grid-template-columns: 1fr; // была 1fr 1fr → ломало адаптив
+    gap: 12px;
+  }
+
+  .spec-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

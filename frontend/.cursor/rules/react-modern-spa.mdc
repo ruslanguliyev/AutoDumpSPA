@@ -1,0 +1,68 @@
+---
+alwaysApply: true
+---
+Use only modern 2024–2025 React + Vite SPA practices for the AUTODUMP project.
+
+GENERAL:
+- Functional components only.
+- React Hooks only (no classes, no legacy lifecycles).
+- Always refactor outdated code automatically.
+- Prefer the simplest modern solution.
+
+ARCHITECTURE:
+- Organize by features (components/, pages/, hooks/, store/, api/, utils/, routes/).
+- Use absolute imports with @/.
+- Keep components small, composable, and declarative.
+
+STATE MANAGEMENT:
+- Use Zustand for all client-side state (filters, UI state, selected vehicle, modals).
+- Do NOT use Redux or Redux Toolkit unless explicitly requested.
+- Context is allowed only for theme/auth or light global state.
+
+DATA FETCHING:
+- Use React Query (TanStack Query) for all server-side data:
+  - autos list
+  - filters
+  - auction details
+  - bids
+  - real-time state sync (with query.invalidate or WebSocket triggers)
+- No fetch or axios inside useEffect unless required by edge cases.
+
+AUCTION / WEBSOCKET LOGIC:
+- Use WebSocket for real-time bids and updates.
+- WebSocket events must update React Query cache (setQueryData).
+- Bidding actions must be mutations via React Query.
+
+ROUTER:
+- Use React Router v6+.
+- Use route-based code splitting and lazy-loaded pages.
+- Use nested routes.
+- Avoid custom routing logic.
+
+UI / STYLE:
+- Prefer TailwindCSS or modern CSS Modules.
+- Use reusable UI components (buttons, cards, timers, filters).
+- Avoid SCSS spaghetti and global CSS except for resets.
+
+COMPONENT PRACTICES:
+- Use Suspense + ErrorBoundary for async pages.
+- Memoize values only when needed (avoid premature optimization).
+- Replace any old patterns automatically (prop drilling, index-hell, useEffect-fetch).
+
+AUTODUMP SPECIFIC RULES:
+- Use dedicated hooks for domain logic (useFilters, useAutos, useAuction, useBids, useTimer).
+- CarCard components must be clean, modular, and support future animation.
+- Filters must be fully controlled via Zustand store and synced with React Query fetches.
+- Timer components must be fully isolated (countdown logic inside custom hook).
+- Auction pages must support real-time feedback and optimistic UI for bids.
+
+TESTING & QUALITY:
+- Prefer Vitest + React Testing Library for logic-heavy components.
+- Optionally use Playwright for critical flows.
+- Follow existing ESLint + Prettier rules.
+
+CODE STYLE:
+- Use async/await always.
+- Avoid any boilerplate-heavy patterns.
+- Use modern JS/TS: const everywhere, arrow functions, modular design.
+

@@ -1,0 +1,192 @@
+{
+  "nav": {
+    "home": "Ana səhifə",
+    "sellers": "Satıcılar",
+    "cars": "Avtomobillər",
+    "parts": "Ehtiyat hissələri",
+    "auto_services": "Auto Xidmətləri",
+    "specialists": "Ustalar",
+    "favorites": "Seçilmişlər",
+    "account": "Hesab",
+    "about": "Haqqımızda",
+    "addListing": "Elan əlavə et",
+    "add": "Əlavə et",
+    "dashboard": "Kabinet",
+    "megaMenu": {
+      "parts": {
+        "sections": {
+          "categories": "Kateqoriyalar",
+          "byCar": "Avtomobilə görə",
+          "brands": "Brendlər",
+          "popular": "Populyar"
+        },
+        "categories": {
+          "engine": "Mühərrik",
+          "transmission": "Transmissiya",
+          "suspension": "Asqı və Sükan",
+          "brake": "Əyləc sistemi",
+          "electronics": "Elektronika",
+          "body": "Kuzov hissələri",
+          "lighting": "İşıqlandırma",
+          "interior": "Salon",
+          "oils": "Yağlar və mayelər",
+          "tire": "Təkər və Disk",
+          "accessories": "Aksesuarlar"
+        },
+        "byCar": {
+          "brand": "Marka",
+          "model": "Model",
+          "year": "İl"
+        },
+        "brands": {
+          "bosch": "Bosch",
+          "brembo": "Brembo",
+          "valeo": "Valeo",
+          "ngk": "NGK",
+          "denso": "Denso"
+        },
+        "popular": {
+          "headlight": "Fara",
+          "bumper": "Bumper",
+          "shock": "Amortizator",
+          "battery": "Akkumulyator"
+        }
+      },
+      "autoServices": {
+        "section": "Xidmətlər",
+        "serviceCenters": "Servis mərkəzləri",
+        "tuning": "Tuning & Custom",
+        "detailing": "Detailing",
+        "diagnostics": "Diaqnostika",
+        "tireService": "Şin və Disk xidməti",
+        "electrician": "Elektrik ustası",
+        "ac": "Avto kondisioner",
+        "mobileService": "Mobil servis"
+      }
+    }
+  },
+  "buttons": {
+    "search": "Axtar",
+    "filter": "Filtrlə",
+    "reset": "Sıfırla",
+    "clear": "Təmizlə",
+    "apply": "Tətbiq et",
+    "cancel": "Ləğv et",
+    "save": "Saxla",
+    "delete": "Sil",
+    "edit": "Redaktə et",
+    "add": "Əlavə et",
+    "remove": "Sil",
+    "close": "Bağla",
+    "back": "Geri",
+    "next": "Növbəti",
+    "previous": "Əvvəlki",
+    "submit": "Göndər",
+    "login": "Daxil ol",
+    "signup": "Qeydiyyat",
+    "logout": "Çıxış",
+    "viewAll": "Hamısına bax",
+    "viewMore": "Daha çox bax",
+    "showMore": "Daha çox göstər",
+    "showLess": "Daha az göstər",
+    "loadMore": "Daha çox yüklə"
+  },
+  "labels": {
+    "favorites": "Seçilmişlər",
+    "favoritesEmpty": "Seçilmişlər (boş)",
+    "favoritesCount": "Seçilmişlər ({{count}} element)",
+    "favoritesCount_plural": "Seçilmişlər ({{count}} element)",
+    "noFavorites": "Hələ seçilmiş yoxdur",
+    "removeFromFavorites": "Seçilmişlərdən sil",
+    "account": "Hesab",
+    "menu": "Menyu",
+    "openMenu": "Menyunu aç",
+    "closeMenu": "Menyunu bağla",
+    "language": "Dil",
+    "vehicle": "Avtomobil",
+    "part": "Ehtiyat hissəsi",
+    "viewAllFavorites": "Bütün seçilmişlərə bax",
+    "switchToLight": "İşıqlı rejimə keç",
+    "switchToDark": "Qaranlıq rejimə keç",
+    "vehicleWithNumber": "Avtomobil #{{id}}",
+    "partWithNumber": "Hissə #{{id}}",
+    "mobileCounters": "Mobil sayğaclar",
+    "primaryNavigation": "Əsas naviqasiya",
+    "headerActions": "Başlıq hərəkətləri",
+    "mobileNavigation": "Mobil naviqasiya"
+  },
+  "common": {
+    "loading": "Yüklənir...",
+    "error": "Xəta",
+    "notFound": "Tapılmadı",
+    "noData": "Məlumat yoxdur",
+    "noResults": "Nəticə tapılmadı",
+    "tryAgain": "Yenidən cəhd et",
+    "somethingWentWrong": "Nəsə səhv getdi",
+    "pageNotFound": "Səhifə tapılmadı",
+    "goHome": "Ana səhifəyə get"
+  },
+  "footer": {
+    "company": "Şirkət",
+    "auto_services": "Auto Xidmətləri",
+    "auctions": "Auksionlar",
+    "about": "Haqqımızda",
+    "press": "Mətbuat",
+    "legal": "Hüquqi məlumat",
+    "privacy": "Məlumatların mühafizəsi",
+    "imprint": "Rekvizitlər",
+    "forBuyers": "Alıcılar üçün",
+    "forSellers": "Satıcılar üçün",
+    "forDealers": "Dilərlər üçün",
+    "help": "Kömək / FAQ",
+    "currentAuctions": "Cari auksionlar",
+    "howItWorks": "Necə işləyir",
+    "rules": "Qaydalar və ödənişlər",
+    "guarantees": "Zəmanətlər / Escrow",
+    "sellerVerification": "Satıcının yoxlanılması",
+    "copyright": "© 2025 AutoDump GmbH. Bütün hüquqlar qorunur.",
+    "tagline": "AutoDump — təcili satışlar və avtomobil auksionları. Bazar qiymətlərindən aşağı, vaxt məhduddur — sövdələşməni əldə etməyə tələsin.",
+    "family": "AutoDump.de Media & Smyle — AutoDump ailəsinin bir hissəsidir."
+  },
+  "languages": {
+    "ru": "Русский",
+    "en": "English",
+    "az": "Azərbaycan"
+  },
+  "seller": {
+    "fallbackName": "Satıcı",
+    "openSeller": "Satıcı {{name}} aç",
+    "sellerInfo": "Satıcı məlumatı",
+    "soldBy": "Satıcı",
+    "noRating": "Reytinq yoxdur",
+    "verified": "Təsdiqlənmiş",
+    "verifiedSeller": "Təsdiqlənmiş satıcı",
+    "sellerRating": "Satıcı reytinqi",
+    "sellerCard": "Satıcı kartı",
+    "listings": "{{count}} elan",
+    "listings_plural": "{{count}} elan",
+    "reviews": "{{count}} rəy",
+    "reviews_plural": "{{count}} rəy",
+    "viewSeller": "Satıcıya bax →",
+    "notAvailable": "yoxdur",
+    "type": {
+      "dealer": "Diler",
+      "reseller": "Reseller",
+      "private": "Şəxsi"
+    },
+    "domain": {
+      "cars": "Avtomobillər",
+      "parts": "Ehtiyat hissələri"
+    }
+  },
+  "trust": {
+    "buyerProtection": "Alıcı müdafiəsi",
+    "verifiedSeller": "Təsdiqlənmiş satıcı",
+    "securePayment": "Təhlükəsiz ödəniş",
+    "safetyTips": "Təhlükəsizlik məsləhətləri",
+    "safetyTip1": "Satıcı ilə təhlükəsiz ictimai yerdə görüşün",
+    "safetyTip2": "Alışdan əvvəl avtomobili diqqətlə yoxlayın",
+    "safetyTip3": "Avtomobili görmədən əvvəl heç vaxt ödəniş etməyin",
+    "safetyTip4": "Bütün sənədləri diqqətlə yoxlayın"
+  }
+}

@@ -1,0 +1,68 @@
+09.03
+Анализ проекта AutoBAZ Backend
+Что уже сделано
+1. Инфраструктура
+NestJS — каркас приложения
+GraphQL (Apollo 5) — code-first, endpoint /graphql
+Prisma 6 + PostgreSQL — модели и подключение
+JWT — через @nestjs/jwt и Passport
+Config — .env с PORT, DATABASE_URL, JWT_SECRET
+WebSocket — заглушка в auctions.gateway.ts
+2. Prisma-модели
+В схеме описаны модели:
+User, Seller (UserRole, SellerType)
+Listing — центральная сущность
+Vehicle, Part, Service, Image — привязаны к Listing
+Auction, Bid — аукцион и ставки
+Есть enum-ы: UserRole, SellerType, ListingStatus.
+3. Auth
+Реализованы:
+register(email, password, fullName) — bcrypt, проверка на дубликат email
+login(email, password) — проверка пароля, выдача JWT
+Формат ответа: { accessToken, user }
+JwtStrategy для проверки Bearer-токена
+GraphQL-типы: AuthPayload, AuthUser
+4. Модули (каркас)
+Созданы модули: auth, users, vehicles, parts, services, specialists, sellers, memberships, listings, uploads, auctions, bids, prisma, common (guards, decorators, utils).
+Бизнес-логика есть только в Auth и минимально в Vehicles (health-check).
+Что предстоит сделать
+1. Auth
+Guard GqlAuthGuard (или аналогичный) для защищённых resolvers
+Декоратор @CurrentUser() для доступа к user в resolvers
+2. Users
+CRUD по профилю пользователя
+Смена пароля, обновление профиля
+3. Sellers
+Создание/обновление профиля продавца
+Связь User ↔ Seller
+Логика верификации
+4. Listings
+CRUD объявлений
+Фильтры, пагинация, сортировка
+Связь с Vehicle / Part / Service
+Управление статусами (DRAFT, ACTIVE, SOLD)
+5. Vehicle / Part / Service
+Специфичные резолверы и сервисы
+Валидация и бизнес-правила для каждого типа объявлений
+6. Images
+Загрузка файлов (S3 или локально)
+Привязка к Listing, position
+7. Auctions & Bids
+Запуск/завершение аукционов
+Размещение ставок
+WebSocket для обновлений ставок в реальном времени
+8. Memberships / Specialists
+Уточнить требования и реализовать логику (сейчас модели нет в Prisma, модули пустые).
+9. Прочее
+Redis — кеш и/или rate limiting (если планируется)
+Валидация входных данных (классы DTO)
+Обработка ошибок (фильтры)
+Тесты (unit/integration)
+Приоритеты
+Приоритет	Задача	Причина
+1	GqlAuthGuard + @CurrentUser	Нужно для защищённых endpoints
+2	Listings CRUD	Центральная функциональность маркетплейса
+3	Sellers + связь с User	Без продавцов нет объявлений
+4	Vehicle/Part/Service-специфика	Конкретизация типов объявлений
+5	Images upload	Фото в объявлениях
+6	Auctions + Bids + WebSocket	Реализация аукционов

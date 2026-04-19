@@ -1,0 +1,10 @@
+/* Переопределяет Bootstrap h1 — заголовок карточки summary */
+.vehicle-summary-card {
+  h1.vehicle-summary-card__title {
+    font-size: 1.35rem !important; /* 20px */
+
+    @media (min-width: 640px) {
+      font-size: 1.375rem !important; /* 22px */
+    }
+  }
+}

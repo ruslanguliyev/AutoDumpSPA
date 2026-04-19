@@ -1,0 +1,209 @@
+query Services(
+  $city: String
+  $radiusKm: Int
+  $serviceTypes: [String]
+  $serviceCodes: [String]
+  $brands: [String]
+  $categories: [String]
+  $ratingFrom: Float
+  $priceRange: [Int]
+  $verifiedOnly: Boolean
+) {
+  services(
+    city: $city
+    radiusKm: $radiusKm
+    serviceTypes: $serviceTypes
+    serviceCodes: $serviceCodes
+    brands: $brands
+    categories: $categories
+    ratingFrom: $ratingFrom
+    priceRange: $priceRange
+    verifiedOnly: $verifiedOnly
+  ) {
+    id
+    slug
+    name
+    legalName
+    description
+    type
+    categories
+    services {
+      id
+      code
+      title
+      category
+      priceFrom
+      priceTo
+      currency
+      durationMin
+      applicableBrands
+      popular
+    }
+    supportedBrands
+    supportedModels {
+      brand
+      models
+      yearFrom
+      yearTo
+    }
+    location {
+      country
+      city
+      address
+      lat
+      lng
+      radiusKm
+    }
+    rating
+    reviewsCount
+    verified
+    verificationLevel
+    priceRange
+    avgCheck
+    schedule {
+      monday {
+        from
+        to
+        closed
+      }
+      tuesday {
+        from
+        to
+        closed
+      }
+      wednesday {
+        from
+        to
+        closed
+      }
+      thursday {
+        from
+        to
+        closed
+      }
+      friday {
+        from
+        to
+        closed
+      }
+      saturday {
+        from
+        to
+        closed
+      }
+      sunday {
+        from
+        to
+        closed
+      }
+    }
+    contacts {
+      phone
+      whatsapp
+      email
+      website
+    }
+    media {
+      logo
+      cover
+      gallery
+    }
+    promotedLevel
+    isActive
+  }
+}
+
+query Service($id: ID, $slug: String) {
+  service(id: $id, slug: $slug) {
+    id
+    slug
+    name
+    legalName
+    description
+    type
+    categories
+    services {
+      id
+      code
+      title
+      category
+      priceFrom
+      priceTo
+      currency
+      durationMin
+      applicableBrands
+      popular
+    }
+    supportedBrands
+    supportedModels {
+      brand
+      models
+      yearFrom
+      yearTo
+    }
+    location {
+      country
+      city
+      address
+      lat
+      lng
+      radiusKm
+    }
+    rating
+    reviewsCount
+    verified
+    verificationLevel
+    priceRange
+    avgCheck
+    schedule {
+      monday {
+        from
+        to
+        closed
+      }
+      tuesday {
+        from
+        to
+        closed
+      }
+      wednesday {
+        from
+        to
+        closed
+      }
+      thursday {
+        from
+        to
+        closed
+      }
+      friday {
+        from
+        to
+        closed
+      }
+      saturday {
+        from
+        to
+        closed
+      }
+      sunday {
+        from
+        to
+        closed
+      }
+    }
+    contacts {
+      phone
+      whatsapp
+      email
+      website
+    }
+    media {
+      logo
+      cover
+      gallery
+    }
+    promotedLevel
+    isActive
+  }
+}
