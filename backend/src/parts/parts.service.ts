@@ -238,14 +238,22 @@ export class PartsService {
     return this.mapPart(row);
   }
 
-  async getPartByListingId(listingId: string) {
+  /** Draft listings are only visible to their owner. */
+  async getPartByListingId(listingId: string, requesterUserId?: string) {
     const row = await this.prisma.part.findFirst({
       where: { listingId },
       include: {
         listing: { include: { seller: true } },
       },
     });
-    return row ? this.mapPart(row) : null;
+    if (!row) return null;
+    if (
+      row.listing.status === ListingStatus.DRAFT &&
+      row.listing.seller.userId !== requesterUserId
+    ) {
+      return null;
+    }
+    return this.mapPart(row);
   }
 
   async deletePart(userId: string, id: string): Promise<boolean> {

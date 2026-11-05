@@ -115,7 +115,8 @@
       "DRAFT": "Draft",
       "ACTIVE": "Published",
       "SOLD": "Sold"
-    }
+    },
+    "edit": "Edit"
   },
   "inquiries": {
     "title": "Inquiries",

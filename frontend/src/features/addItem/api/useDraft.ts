@@ -8,7 +8,7 @@ import {
 import { validateDraft } from '@/features/addItem/utils/validateDraft';
 
 const DRAFTS_STORAGE_KEY = 'autodump:add-item-drafts';
-const DRAFT_QUERY_KEY = 'add-item-draft';
+export const DRAFT_QUERY_KEY = 'add-item-draft';
 
 const getToken = () =>
   typeof window === 'undefined' ? null : window.localStorage.getItem('autobaz-token');
@@ -106,6 +106,11 @@ const writeDrafts = (drafts: Record<string, ListingDraft>) => {
   window.localStorage.setItem(DRAFTS_STORAGE_KEY, JSON.stringify(drafts));
 };
 
+/** Store (or replace) a draft in the local cache. */
+export const putDraft = (draft: ListingDraft) => {
+  writeDrafts({ ...readDrafts(), [draft.id]: draft });
+};
+
 const applyPatch = (
   draft: ListingDraft,
   patch: Partial<ListingDraft>
@@ -157,6 +162,15 @@ const finalizeStatus = (draft: ListingDraft): ListingDraft => {
   };
 };
 
+/** Main persisted (non-blob) image of a draft, used as the part's single image. */
+const partImageUrl = (draft: ListingDraft): string => {
+  const usable = draft.media.images.filter((img) => {
+    const url = (img.url ?? '').trim();
+    return url && !url.startsWith('blob:') && !url.startsWith('data:');
+  });
+  return (usable.find((img) => img.isMain) ?? usable[0])?.url?.trim() ?? '';
+};
+
 async function syncDraftToBackend(draft: ListingDraft) {
   const listingId = draft._listingId ?? draft.id;
   const price = draft.common.pricing.price ?? 0;
@@ -191,8 +205,8 @@ async function syncDraftToBackend(draft: ListingDraft) {
         transmission: v.transmission || 'Automatic',
         displacement: v.displacement || undefined,
         horsepower: v.horsepower || undefined,
-        engineVolume: 2.0,
-        power: 150,
+        // engineVolume / power are intentionally not sent: the wizard has no inputs for them
+        // and overwriting would reset real values of an existing listing.
         version: v.trim || undefined,
         drive: v.drivetrain || undefined,
         condition: draft.common.condition,
@@ -215,6 +229,12 @@ async function syncDraftToBackend(draft: ListingDraft) {
         model: p.model,
         condition: p.condition || draft.common.condition,
         oemCode: p.partNumber || undefined,
+        category: draft.common.category || undefined,
+        compatibility: p.compatibility
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean),
+        imageUrl: partImageUrl(draft) || undefined,
         description: draft.common.description || undefined,
         price,
         currency: draft.common.pricing.currency,

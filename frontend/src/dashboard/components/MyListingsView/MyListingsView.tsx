@@ -9,6 +9,7 @@ import { DashboardHeader } from '@/dashboard/components/DashboardHeader/Dashboar
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 import { formatPrice } from '@/lib/format';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
+import { useStartEditListing } from '@/features/addItem/api/editListing';
 
 type Props = {
   kind: ListingKind;
@@ -53,8 +54,10 @@ export function MyListingsView({ kind, section }: Props) {
   const { t } = useTranslation('dashboard');
   const { items, isLoading, error } = useMyListings(kind);
   const actions = useListingActions();
+  const editor = useStartEditListing();
   const busy = Object.values(actions).some((m) => m.isPending);
   const actionError =
+    editor.error ??
     actions.publish.error ??
     actions.unpublish.error ??
     actions.close.error ??
@@ -140,6 +143,14 @@ export function MyListingsView({ kind, section }: Props) {
                   </div>
 
                   <div className="flex flex-wrap gap-2 sm:justify-end">
+                    {(l.kind === 'vehicle' || l.kind === 'part') && l.status !== 'SOLD' ? (
+                      <ActionButton
+                        disabled={busy || editor.pendingId !== null}
+                        onClick={() => editor.start(l.id)}
+                      >
+                        {editor.pendingId === l.id ? t('listings.loading') : t('listings.edit')}
+                      </ActionButton>
+                    ) : null}
                     {l.status === 'DRAFT' ? (
                       <ActionButton disabled={busy} onClick={() => actions.publish.mutate(l.id)}>
                         {t('listings.publish')}

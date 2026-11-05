@@ -69,6 +69,8 @@ export type ListingDraft = {
   _listingId?: string;
   _vehicleId?: string;
   _partId?: string;
+  /** Set when the draft was loaded from an existing server listing (edit mode). */
+  _editing?: boolean;
   common: ListingCommon;
   media: ListingMedia;
   seller: ListingSeller;

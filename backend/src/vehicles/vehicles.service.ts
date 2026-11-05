@@ -328,14 +328,22 @@ export class VehiclesService {
     return this.mapVehicle(row);
   }
 
-  async getVehicleByListingId(listingId: string) {
+  /** Draft listings are only visible to their owner. */
+  async getVehicleByListingId(listingId: string, requesterUserId?: string) {
     const row = await this.prisma.vehicle.findFirst({
       where: { listingId },
       include: {
         listing: { include: { seller: true } },
       },
     });
-    return row ? this.mapVehicle(row) : null;
+    if (!row) return null;
+    if (
+      row.listing.status === ListingStatus.DRAFT &&
+      row.listing.seller.userId !== requesterUserId
+    ) {
+      return null;
+    }
+    return this.mapVehicle(row);
   }
 
   async deleteVehicle(userId: string, id: string): Promise<boolean> {

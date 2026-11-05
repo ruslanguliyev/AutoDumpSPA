@@ -115,7 +115,8 @@
       "DRAFT": "Qaralama",
       "ACTIVE": "Dərc olunub",
       "SOLD": "Satılıb"
-    }
+    },
+    "edit": "Redaktə et"
   },
   "inquiries": {
     "title": "Müraciətlər",

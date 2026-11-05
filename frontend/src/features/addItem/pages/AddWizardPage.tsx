@@ -97,6 +97,8 @@ const AddWizardPage = () => {
 
   useEffect(() => {
     if (!draftId || !debouncedDraft || !dirty) return;
+    // Published listings are saved explicitly so half-typed edits never go live.
+    if (debouncedDraft.status === 'published') return;
     const snapshot = debouncedDraft;
     setSaveStatus('saving');
     doSaveDraft(
@@ -147,6 +149,8 @@ const AddWizardPage = () => {
     doPublishDraft(draftId, {
       onSuccess: (data) => {
         if (data) syncDraft(data);
+        markSaved();
+        navigate(data?.type === 'part' ? '/dashboard/parts' : '/dashboard/vehicles');
       },
     });
   };

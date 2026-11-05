@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
+import { OptionalGqlAuthGuard } from '../common/guards/optional-gql-auth.guard';
 import {
   CreatePartInput,
   PaginatedParts,
@@ -29,11 +30,13 @@ export class PartsResolver {
     return this.partsService.getPartById(id);
   }
 
+  @UseGuards(OptionalGqlAuthGuard)
   @Query(() => PartObject, { nullable: true })
   async partByListing(
+    @CurrentUser() user: AuthUser | null,
     @Args('listingId') listingId: string,
   ): Promise<PartObject | null> {
-    return this.partsService.getPartByListingId(listingId);
+    return this.partsService.getPartByListingId(listingId, user?.id);
   }
 
   @UseGuards(GqlAuthGuard)

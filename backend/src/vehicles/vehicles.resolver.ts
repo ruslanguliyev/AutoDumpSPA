@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
+import { OptionalGqlAuthGuard } from '../common/guards/optional-gql-auth.guard';
 import {
   CreateVehicleInput,
   PaginatedVehicles,
@@ -29,11 +30,13 @@ export class VehiclesResolver {
     return this.vehiclesService.getVehicleById(id);
   }
 
+  @UseGuards(OptionalGqlAuthGuard)
   @Query(() => VehicleObject, { nullable: true })
   async vehicleByListing(
+    @CurrentUser() user: AuthUser | null,
     @Args('listingId') listingId: string,
   ): Promise<VehicleObject | null> {
-    return this.vehiclesService.getVehicleByListingId(listingId);
+    return this.vehiclesService.getVehicleByListingId(listingId, user?.id);
   }
 
   @UseGuards(GqlAuthGuard)

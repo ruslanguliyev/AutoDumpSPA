@@ -36,6 +36,7 @@ const FooterActions = ({
   const isFirst = stepIndex === 0;
   const isLast = stepIndex >= steps.length - 1;
   const canPublish = validateDraft(draft);
+  const isPublished = draft.status === 'published';
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -47,7 +48,7 @@ const FooterActions = ({
           {t('buttons.back')}
         </Button>
         <Button variant="outline" size="md" onClick={onSave} disabled={isSaving}>
-          {isSaving ? t('buttons.saving') : t('buttons.saveDraft')}
+          {isSaving ? t('buttons.saving') : isPublished ? t('buttons.saveChanges') : t('buttons.saveDraft')}
         </Button>
         {isLast ? (
           <Button
@@ -55,7 +56,11 @@ const FooterActions = ({
             onClick={onPublish}
             disabled={!canPublish || isPublishing}
           >
-            {isPublishing ? t('buttons.publishing') : t('buttons.submit')}
+            {isPublishing
+              ? t('buttons.publishing')
+              : isPublished
+                ? t('buttons.saveChanges')
+                : t('buttons.submit')}
           </Button>
         ) : (
           <Button size="lg" onClick={onNext} disabled={!canProceed}>

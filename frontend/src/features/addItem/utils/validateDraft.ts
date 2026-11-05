@@ -31,6 +31,8 @@ export const getDraftTitle = (draft: ListingDraft) => {
 
 export const validateVehicleCategory = (draft: ListingDraft) => {
   if (draft.type !== 'vehicle') return true;
+  // The category is not stored on the server, so it cannot be required when editing.
+  if (draft._editing && !trim(draft.common.category)) return true;
   return isVehicleCategoryId(trim(draft.common.category));
 };
 
@@ -72,7 +74,9 @@ export const validatePricing = (draft: ListingDraft) => {
 };
 
 export const validateSeller = (draft: ListingDraft) => {
-  return trim(draft.seller.name).length > 0 && trim(draft.seller.phone).length > 0;
+  if (!trim(draft.seller.name).length) return false;
+  // The phone number is not stored on the server, so it cannot be required when editing.
+  return draft._editing ? true : trim(draft.seller.phone).length > 0;
 };
 
 export const validatePhotos = (draft: ListingDraft) => {
