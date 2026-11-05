@@ -1,5 +1,0 @@
-ALTER TABLE "Vehicle"
-ADD COLUMN IF NOT EXISTS "generation" TEXT;
-
-ALTER TABLE "Vehicle"
-ALTER COLUMN "generation" SET DEFAULT '';
