@@ -1,6 +1,6 @@
 const TOKEN_KEY = 'autobaz-token';
 
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/graphql';
+const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
 
 export type AuthUser = {
   id: string;

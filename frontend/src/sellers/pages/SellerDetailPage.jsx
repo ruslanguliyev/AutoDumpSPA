@@ -141,15 +141,6 @@ export default function SellerDetailPage({
     return { vehicles: filteredVehicles, parts: filteredParts };
   }, [vehicles, parts, sellerId, debouncedSearchQuery]);
 
-  const handleLocationClick = useCallback(() => {
-    if (!city) return;
-    const locationQuery = `${city}, ${country}`;
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      locationQuery
-    )}`;
-    window.open(mapsUrl, "_blank", "noopener,noreferrer");
-  }, [city, country]);
-
   const handleShare = useCallback(async () => {
     const url = window.location.href;
 

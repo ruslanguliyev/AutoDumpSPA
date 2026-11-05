@@ -7,9 +7,13 @@ import { useFavoritesStore } from '@/shared/store/favoritesStore';
 
 export default function PartCard({ part }) {
     const { t } = useTranslation('part');
-    if (!part) return null;
-
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+    const partId = part ? (part.id ?? part._id ?? part.sku ?? part.code ?? part.name) : null;
+    const favActive = useFavoritesStore((s) =>
+        partId != null ? s.isFavorited('part', partId) : false
+    );
+
+    if (!part) return null;
 
     const hasDiscount = Number.isFinite(part.discountPercent);
     const oldPrice = hasDiscount
@@ -21,11 +25,6 @@ export default function PartCard({ part }) {
     const reviewsCount = Number.isFinite(part.reviewsCount)
         ? part.reviewsCount
         : 0;
-
-    const partId = part.id ?? part._id ?? part.sku ?? part.code ?? part.name;
-    const favActive = useFavoritesStore((s) =>
-        partId != null ? s.isFavorited('part', partId) : false
-    );
 
     return (
         <article className="part-card">

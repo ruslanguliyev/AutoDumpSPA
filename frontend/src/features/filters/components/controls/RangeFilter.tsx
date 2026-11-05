@@ -1,6 +1,6 @@
 type RangeFilterProps = {
-  minValue?: string | number | null;
-  maxValue?: string | number | null;
+  minValue?: string | number | boolean | Array<string | number> | null;
+  maxValue?: string | number | boolean | Array<string | number> | null;
   onMinChange: (value: string) => void;
   onMaxChange: (value: string) => void;
   minPlaceholder?: string;
@@ -23,7 +23,7 @@ const RangeFilter = ({
     <input
       type={inputType}
       min={inputType === 'number' ? '0' : undefined}
-      value={minValue ?? ''}
+      value={typeof minValue === 'string' || typeof minValue === 'number' ? minValue : ''}
       placeholder={minPlaceholder}
       onChange={(event) => onMinChange(event.target.value)}
       disabled={disabled}
@@ -31,7 +31,7 @@ const RangeFilter = ({
     <input
       type={inputType}
       min={inputType === 'number' ? '0' : undefined}
-      value={maxValue ?? ''}
+      value={typeof maxValue === 'string' || typeof maxValue === 'number' ? maxValue : ''}
       placeholder={maxPlaceholder}
       onChange={(event) => onMaxChange(event.target.value)}
       disabled={disabled}

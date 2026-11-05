@@ -1,7 +1,7 @@
 import type { IconComponent } from '../../types/filters.types';
 
 type TextFilterProps = {
-  value?: string | number | null;
+  value?: string | number | boolean | Array<string | number> | null;
   onChange: (value: string) => void;
   placeholder?: string;
   icon?: IconComponent;
@@ -20,7 +20,7 @@ const TextFilter = ({
   const input = (
     <input
       type={inputType}
-      value={value ?? ''}
+      value={typeof value === 'string' || typeof value === 'number' ? value : ''}
       placeholder={placeholder}
       onChange={(event) => onChange(event.target.value)}
       disabled={disabled}

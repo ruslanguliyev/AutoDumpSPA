@@ -52,7 +52,7 @@ export const useFavoritesStore = create(
     {
       name: "favorites-storage",
       version: FAVORITES_STORE_VERSION,
-      migrate: (persistedState, version) => {
+      migrate: (persistedState) => {
         // legacy was: { favorites: Array<id> } (no version / v0)
         if (persistedState?.favorites && Array.isArray(persistedState.favorites)) {
           return {

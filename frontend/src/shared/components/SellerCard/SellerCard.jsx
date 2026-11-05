@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, MapPin, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -172,10 +171,8 @@ export const SellerCard = ({
     }
   };
 
-  const filledStars = useMemo(() => {
-    if (rating === null) return 0;
-    return Math.max(0, Math.min(5, Math.round(rating)));
-  }, [rating]);
+  const filledStars =
+    rating === null ? 0 : Math.max(0, Math.min(5, Math.round(rating)));
 
   // Compact variant (for parts)
   if (variant === 'compact') {
@@ -292,7 +289,6 @@ export const SellerCard = ({
             <div className="seller-card__stars" aria-hidden="true">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
-                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                   size={16}
                   className="seller-card__star"

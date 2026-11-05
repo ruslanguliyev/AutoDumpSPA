@@ -1,7 +1,7 @@
 import type { FilterOption } from '../../types/filters.types';
 
 type SelectFilterProps = {
-  value?: string | number | null;
+  value?: string | number | boolean | Array<string | number> | null;
   onChange: (value: string) => void;
   options: FilterOption[];
   placeholder?: string;
@@ -16,7 +16,7 @@ const SelectFilter = ({
   disabled = false,
 }: SelectFilterProps) => (
   <select
-    value={value ?? ''}
+    value={Array.isArray(value) || typeof value === 'boolean' ? '' : (value ?? '')}
     onChange={(event) => onChange(event.target.value)}
     disabled={disabled}
   >

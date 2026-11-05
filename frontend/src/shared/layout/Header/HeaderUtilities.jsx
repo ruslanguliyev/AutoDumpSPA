@@ -5,7 +5,7 @@ import { useThemeStore } from '@/shared/store/theme';
 import { HeaderIconButton } from './HeaderIconButton';
 import { useState, useRef, useEffect } from 'react';
 
-export const HeaderLanguageSelector = ({ value, onChange, compact = false, onOpen }) => {
+export const HeaderLanguageSelector = ({ value, onChange, onOpen }) => {
   const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef(null);
