@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
+import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog';
 import type { ListingDraft } from '@/features/addItem/store/useAddItemStore';
 import { getDraftTitle } from '@/features/addItem/utils/validateDraft';
+import { formatNumber } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { cn } from '@/shared/utils/cn';
 
 type PreviewCardProps = {
@@ -17,23 +20,16 @@ const formatPrice = (price: number | null, currency: string) => {
       maximumFractionDigits: 0,
     }).format(price);
   } catch (_error) {
-    return `${currency} ${price.toLocaleString()}`;
+    return `${currency} ${formatNumber(price, 'en-US')}`;
   }
 };
 
 const PreviewCard = ({ draft }: PreviewCardProps) => {
   const { t } = useTranslation('addItem');
-  const mainImage =
+  const primaryPhoto =
     draft.media.images.find((image) => image.isMain) ?? draft.media.images[0];
-  const rawTitle = getDraftTitle(draft);
-  const title =
-    rawTitle === 'Untitled listing'
-      ? t('untitled.listing')
-      : rawTitle === 'Untitled vehicle'
-        ? t('untitled.vehicle')
-        : rawTitle === 'Untitled part'
-          ? t('untitled.part')
-          : rawTitle;
+  const primaryPhotoUrl = resolveMediaUrl(primaryPhoto?.url);
+  const title = getDraftTitle(draft);
   const price = formatPrice(draft.common.pricing.price, draft.common.pricing.currency);
   const statusKey =
     draft.status === 'published'
@@ -41,6 +37,44 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
       : draft.status === 'ready'
         ? 'preview.statusReady'
         : 'preview.statusDraft';
+
+  const categoryLabel =
+    draft.type === 'vehicle' &&
+    isVehicleCategoryId(String(draft.common.category ?? '').trim())
+      ? t(`form.vehicleCategories.${String(draft.common.category).trim()}`)
+      : '';
+
+  // Only show vehicle details once the user has started filling the Vehicle step
+  // (brand is explicitly set). Avoids leaking create-draft defaults like "2020".
+  const vehicleMeta =
+    draft.type === 'vehicle' && draft.vehicle && String(draft.vehicle.brand ?? '').trim()
+      ? [
+          draft.vehicle.brand,
+          draft.vehicle.model,
+          draft.vehicle.trim,
+          draft.vehicle.year,
+          draft.vehicle.displacement
+            ? `${String(draft.vehicle.displacement).trim()}L`
+            : '',
+          draft.vehicle.horsepower
+            ? `${String(draft.vehicle.horsepower).trim()} HP`
+            : '',
+        ]
+          .map((x) => String(x ?? '').trim())
+          .filter(Boolean)
+          .join(' · ')
+      : '';
+
+  const previewSubtitle = [categoryLabel, vehicleMeta].filter(Boolean).join(' · ');
+
+  const conditionLabel =
+    draft.common.condition === 'new'
+      ? t('form.conditionNew')
+      : draft.common.condition === 'used'
+        ? t('form.conditionUsed')
+        : draft.common.condition === 'certified'
+          ? t('form.conditionCertified')
+          : draft.common.condition;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)]">
@@ -61,11 +95,14 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-muted">
-        {mainImage ? (
+        {primaryPhotoUrl ? (
           <img
-            src={mainImage.url}
+            src={primaryPhotoUrl}
             alt={title}
             className="h-44 w-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
           />
         ) : (
           <div className="flex h-44 items-center justify-center text-sm text-muted-foreground">
@@ -76,6 +113,9 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
 
       <div className="mt-4 space-y-2">
         <div className="text-lg font-semibold text-foreground">{title}</div>
+        {previewSubtitle ? (
+          <div className="text-sm text-muted-foreground">{previewSubtitle}</div>
+        ) : null}
         <div className="text-sm text-muted-foreground">
           {draft.type === 'vehicle' ? t('preview.vehicleListing') : t('preview.partListing')}
         </div>
@@ -83,7 +123,7 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
           {draft.common.condition && (
             <span className="rounded-full bg-muted px-2 py-1">
-              {draft.common.condition}
+              {conditionLabel}
             </span>
           )}
           {draft.seller.location && (

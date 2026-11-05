@@ -1,9 +1,11 @@
-import { autos } from "@/vehicles/api/data";
+import { getAutos } from './vehicles.api.js';
 
-const normalize = (value) => String(value ?? "").trim().toLowerCase();
+export { getAutos, getAutoById, getVehicles, getVehicleById } from './vehicles.api.js';
+
+const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
 const parseCurrency = (value) => {
-  const digits = String(value ?? "").replace(/[^\d]/g, "");
+  const digits = String(value ?? '').replace(/[^\d]/g, '');
   if (!digits) return null;
   const parsed = Number(digits);
   return Number.isFinite(parsed) ? parsed : null;
@@ -16,29 +18,23 @@ const toNumber = (value) => {
 };
 
 const shouldMatchRegion = (location, region) => {
-  if (!region || region === "europe") return true;
+  if (!region || region === 'europe') return true;
 
   const regionMap = {
-    germany: "germany",
-    france: "france",
-    italy: "italy",
-    spain: "spain",
-    uk: "united kingdom",
+    germany: 'germany',
+    france: 'france',
+    italy: 'italy',
+    spain: 'spain',
+    uk: 'united kingdom',
   };
 
   const regionLabel = regionMap[region] || region;
   return normalize(location).includes(regionLabel);
 };
 
-export const getAutos = () => autos;
+export async function getAutosByFilters(filters) {
+  const vehicles = await getAutos();
 
-export const getAutoById = (id) => {
-  const safeId = String(id ?? '').trim();
-  if (!safeId) return null;
-  return autos.find((car) => String(car.id) === safeId) ?? null;
-};
-
-export function getAutosByFilters(filters) {
   const brand = normalize(filters.brand);
   const model = normalize(filters.model);
   const vehicleType = normalize(filters.vehicleType);
@@ -63,7 +59,7 @@ export function getAutosByFilters(filters) {
   const registrationYear = Number(filters.registration);
   const hasRegistrationYear =
     Number.isFinite(registrationYear) &&
-    String(filters.registration ?? "").trim() !== "";
+    String(filters.registration ?? '').trim() !== '';
 
   const engineVolumeFrom = toNumber(filters.engineVolumeFrom);
   const engineVolumeTo = toNumber(filters.engineVolumeTo);
@@ -74,7 +70,7 @@ export function getAutosByFilters(filters) {
   const ownersCount = toNumber(filters.ownersCount);
   const seatsCount = toNumber(filters.seatsCount);
 
-  return autos.filter((car) => {
+  return vehicles.filter((car) => {
     if (vehicleType && normalize(car.vehicleType) !== vehicleType) return false;
 
     if (brand && normalize(car.brand) !== brand) return false;
@@ -84,7 +80,7 @@ export function getAutosByFilters(filters) {
     if (priceFrom !== null && Number(car.price ?? 0) < priceFrom) return false;
     if (priceTo !== null && Number(car.price ?? 0) > priceTo) return false;
 
-    if (condition && condition !== "all") {
+    if (condition && condition !== 'all') {
       if (normalize(car.condition) !== condition) return false;
     }
 
@@ -94,7 +90,10 @@ export function getAutosByFilters(filters) {
 
     if (fuel.length && !fuel.includes(normalize(car.fuel))) return false;
 
-    if (transmission.length && !transmission.includes(normalize(car.transmission)))
+    if (
+      transmission.length &&
+      !transmission.includes(normalize(car.transmission))
+    )
       return false;
 
     if (
@@ -124,7 +123,8 @@ export function getAutosByFilters(filters) {
     if (seatsCount !== null && Number(car.seatsCount ?? 0) !== seatsCount)
       return false;
 
-    if (marketRegion && normalize(car.marketRegion) !== marketRegion) return false;
+    if (marketRegion && normalize(car.marketRegion) !== marketRegion)
+      return false;
 
     if (color && normalize(car.color) !== color) return false;
 
@@ -134,7 +134,7 @@ export function getAutosByFilters(filters) {
 
     if (filters.isAccidentedOnly && car.wasInAccident !== true) return false;
 
-    if (status && status !== "all" && normalize(car.status) !== status)
+    if (status && status !== 'all' && normalize(car.status) !== status)
       return false;
 
     const carYear = Number(car.year ?? 0);
@@ -143,7 +143,7 @@ export function getAutosByFilters(filters) {
     if (hasYearRange) {
       if (yearFrom !== null && carYear < yearFrom) return false;
       if (yearTo !== null && carYear > yearTo) return false;
-    } else if (filters.registration === "Older") {
+    } else if (filters.registration === 'Older') {
       if (carYear >= 2015) return false;
     } else if (hasRegistrationYear) {
       if (carYear < registrationYear) return false;

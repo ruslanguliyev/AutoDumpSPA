@@ -17,8 +17,11 @@ import sellerAvatarImg from '@/assets/images/png-clipart-user-profile-computer-i
 // ======================================================
 // 🔧 MOCK MODE (только для DEV)
 // ======================================================
-const shouldUseMocks = () =>
-  import.meta.env.DEV && String(import.meta.env.VITE_USE_PARTS_MOCKS ?? 'true') !== 'false';
+const shouldUseMocks = () => {
+  const flag = import.meta.env.VITE_USE_PARTS_MOCKS;
+  if (flag !== undefined) return String(flag) !== 'false';
+  return false;
+};
 
 const MOCK_SELLERS = [
   {
@@ -255,7 +258,6 @@ const buildPartsFilterInput = (filters) => ({
   priceFrom: filters.priceFrom === '' ? null : filters.priceFrom,
   priceTo: filters.priceTo === '' ? null : filters.priceTo,
   location: filters.location || null,
-  sort: filters.sort || null,
   limit: filters.limit,
   offset: filters.offset,
 });
@@ -309,20 +311,10 @@ const PARTS_QUERY = `
 query Parts($filter: PartsFilterInput) {
   parts(filter: $filter) {
     items {
-      id
-      name
-      category
-      brand
-      model
-      condition
-      description
-      price
-      currency
-      oemCode
-      compatibility
-      stock
-      location
-      imageUrl
+      id name category brand model condition
+      description price currency oemCode
+      compatibility stock location imageUrl
+      seller { id name type hasPublicPage verified rating city logo }
     }
     total
   }
@@ -330,13 +322,13 @@ query Parts($filter: PartsFilterInput) {
 `;
 
 const GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql';
+  import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
 
 const graphqlRequest = async ({ query, variables }) => {
   const res = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -385,52 +377,23 @@ export const fetchParts = async (filters) => {
 // 🔎 PART DETAILS
 // ======================================================
 const PART_BY_ID_QUERY = `
-query Part($id: ID!) {
-  part(id: $id) {
-    id
-    name
-    category
-    brand
-    model
-    condition
-    description
-    price
-    currency
-    oemCode
-    compatibility
-    stock
-    location
-    imageUrl
+query PartById($id: String!) {
+  partById(id: $id) {
+    id name category brand model condition
+    description price currency oemCode
+    compatibility stock location imageUrl
+    seller { id name type hasPublicPage verified rating city logo }
   }
 }
 `;
 
 const fetchPartByIdFromGraphql = async (id) => {
-  // Best-case: backend supports `part(id)`
-  try {
-    const data = await graphqlRequest({
-      query: PART_BY_ID_QUERY,
-      variables: { id: String(id) },
-    });
-    if (data?.part) return mapPartToEntity(data.part);
-    return null;
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-
-    // Fallback: schema might not have `part(id)` yet.
-    // We intentionally keep this fallback isolated to the API layer,
-    // so UI stays stable while backend evolves.
-    if (!msg.toLowerCase().includes('cannot query field') || !msg.includes('part')) {
-      throw e;
-    }
-
-    const payload = await fetchPartsFromGraphql(
-      sanitizeFilters({ limit: 10_000, offset: 0 })
-    );
-
-    const hit = payload?.items?.find((item) => String(item.id) === String(id));
-    return hit ? mapPartToEntity(hit) : null;
-  }
+  const data = await graphqlRequest({
+    query: PART_BY_ID_QUERY,
+    variables: { id: String(id) },
+  });
+  if (data?.partById) return mapPartToEntity(data.partById);
+  return null;
 };
 
 /**
@@ -446,5 +409,9 @@ export const fetchPartById = async (id) => {
     return item ? mapPartToEntity(item) : null;
   }
 
-  return await fetchPartByIdFromGraphql(safeId);
+  try {
+    return await fetchPartByIdFromGraphql(safeId);
+  } catch {
+    return null;
+  }
 };

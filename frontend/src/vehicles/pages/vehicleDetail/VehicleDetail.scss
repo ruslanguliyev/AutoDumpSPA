@@ -28,7 +28,6 @@
   width: 100%;
   min-width: 0; /* позволяет сжиматься внутри grid, предотвращает overflow справа */
   max-width: 100%;
-  overflow-x: hidden;
 }
 
 .vehicle-left>button {

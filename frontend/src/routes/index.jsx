@@ -1,14 +1,9 @@
 import { lazy } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
 
 import LayoutRoute from '@/routes/layout.route';
 import LanguageRoute from '@/routes/LanguageRoute';
 import RouteErrorBoundary from '@/routes/route-error-boundary';
-import { fetchParts } from '@/parts/api/parts.api';
-import { PARTS_DEFAULT_FILTER } from '@/parts/utils/parts.constants';
-import { getAutos } from '@/vehicles/api/autos';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
 
 const Home = lazy(() => import('@/pages/home'));
@@ -60,72 +55,12 @@ const SettingsPage = lazy(() =>
   import('@/dashboard/pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 );
 
-const AUTOS_QUERY_KEY = 'autos';
-const PARTS_QUERY_KEY = 'parts';
-const EMPTY_LIST = [];
-
-const useAutosListQuery = () =>
-  useQuery({
-    queryKey: [AUTOS_QUERY_KEY, 'all'],
-    queryFn: getAutos,
-    staleTime: 30_000,
-    initialData: getAutos(),
-  });
-
-const useSellersPartsQuery = () =>
-  useQuery({
-    queryKey: [PARTS_QUERY_KEY, 'sellers'],
-    queryFn: () =>
-      fetchParts({ ...PARTS_DEFAULT_FILTER, limit: 10_000, offset: 0 }),
-    staleTime: 30_000,
-  });
-
 const SellersPageRoute = () => {
-  const { t } = useTranslation('sellers');
-  const autosQuery = useAutosListQuery();
-  const partsQuery = useSellersPartsQuery();
-  const autosItems = autosQuery.data ?? EMPTY_LIST;
-  const partsItems = partsQuery.data?.items ?? EMPTY_LIST;
-
-  try {
-    return (
-      <SellersPage
-        vehicles={autosItems}
-        parts={partsItems}
-        isPartsLoading={partsQuery.isLoading}
-      />
-    );
-  } catch (error) {
-    return (
-      <div className="w-full px-4 py-10">
-        <div className="mx-auto w-full max-w-[1280px]">
-          <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
-            <div className="font-semibold">{t('errors.loadFailed')}</div>
-            <div className="mt-1">{error?.message || String(error)}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  return <SellersPage />;
 };
 
 const SellerDetailPageRoute = () => {
-  const autosQuery = useAutosListQuery();
-  const partsQuery = useSellersPartsQuery();
-  const autosItems = autosQuery.data ?? EMPTY_LIST;
-  const partsItems = partsQuery.data?.items ?? EMPTY_LIST;
-  const isLoading = autosQuery.isLoading || partsQuery.isLoading;
-  const isError = autosQuery.isError || partsQuery.isError;
-  const error = autosQuery.error ?? partsQuery.error ?? null;
-
-  return (
-    <SellerDetailPage
-      vehicles={autosItems}
-      parts={partsItems}
-      isLoading={isLoading}
-      error={isError ? error : null}
-    />
-  );
+  return <SellerDetailPage />;
 };
 
 const dashboardRoutes = [

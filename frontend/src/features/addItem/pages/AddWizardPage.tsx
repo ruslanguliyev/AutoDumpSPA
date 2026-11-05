@@ -10,6 +10,7 @@ import PreviewCard from '@/features/addItem/components/PreviewCard';
 import Stepper from '@/features/addItem/components/Stepper';
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
 import { buildSteps } from '@/features/addItem/utils/buildSteps';
+import { getDraftTitle } from '@/features/addItem/utils/validateDraft';
 import Button from '@/shared/ui/button';
 
 const useDebouncedValue = <T,>(value: T, delay = 700) => {
@@ -28,8 +29,15 @@ const AddWizardPage = () => {
   const { draftId } = useParams();
   const navigate = useNavigate();
   const draftQuery = useDraft(draftId);
-  const saveDraft = useSaveDraft();
-  const publishDraft = usePublishDraft();
+  const saveDraftMutation = useSaveDraft();
+  const publishDraftMutation = usePublishDraft();
+
+  // Destructure the stable `mutate` references — useMutation returns a new object
+  // on every render (state changes), so using the whole object in effect deps
+  // causes an infinite mutation loop. The `mutate` function itself IS stable
+  // (useCallback([observer]) inside TanStack Query).
+  const doSaveDraft = saveDraftMutation.mutate;
+  const doPublishDraft = publishDraftMutation.mutate;
 
   const draft = useAddItemStore((state) => state.draft);
   const stepIndex = useAddItemStore((state) => state.stepIndex);
@@ -43,6 +51,7 @@ const AddWizardPage = () => {
   const prevStep = useAddItemStore((state) => state.prevStep);
   const setSaveStatus = useAddItemStore((state) => state.setSaveStatus);
   const markSaved = useAddItemStore((state) => state.markSaved);
+  const setCommonField = useAddItemStore((state) => state.setCommonField);
 
   const didHydrate = useRef(false);
 
@@ -57,6 +66,24 @@ const AddWizardPage = () => {
     }
   }, [draftQuery.data, setDraft]);
 
+  useEffect(() => {
+    const current = useAddItemStore.getState().draft;
+    if (!current) return;
+    const nextTitle = getDraftTitle(current);
+    if (current.common.title !== nextTitle) {
+      setCommonField('title', nextTitle);
+    }
+  }, [
+    draft?.id,
+    draft?.type,
+    draft?.vehicle?.brand,
+    draft?.vehicle?.model,
+    draft?.part?.brand,
+    draft?.part?.name,
+    draft?.part?.partNumber,
+    setCommonField,
+  ]);
+
   const steps = useMemo(() => buildSteps(draft), [draft]);
   const CurrentStep = steps[stepIndex]?.Component ?? null;
   const debouncedDraft = useDebouncedValue(draft, 800);
@@ -70,13 +97,22 @@ const AddWizardPage = () => {
 
   useEffect(() => {
     if (!draftId || !debouncedDraft || !dirty) return;
+    const snapshot = debouncedDraft;
     setSaveStatus('saving');
-    saveDraft.mutate(
-      { draftId, patch: debouncedDraft },
+    doSaveDraft(
+      { draftId, patch: snapshot },
       {
         onSuccess: (data) => {
-          if (data) syncDraft(data);
-          markSaved();
+          const current = useAddItemStore.getState().draft;
+          const isStillCurrentSnapshot = current === snapshot;
+          if (isStillCurrentSnapshot) {
+            if (data) syncDraft(data);
+            markSaved();
+            return;
+          }
+          // A newer edit happened while this autosave request was in flight.
+          // Do not overwrite store with stale payload or clear `dirty`.
+          setSaveStatus('idle');
         },
         onError: () => setSaveStatus('error'),
       }
@@ -86,7 +122,7 @@ const AddWizardPage = () => {
     dirty,
     draftId,
     markSaved,
-    saveDraft,
+    doSaveDraft,
     setSaveStatus,
     syncDraft,
   ]);
@@ -94,7 +130,7 @@ const AddWizardPage = () => {
   const handleSave = () => {
     if (!draftId || !draft) return;
     setSaveStatus('saving');
-    saveDraft.mutate(
+    doSaveDraft(
       { draftId, patch: draft },
       {
         onSuccess: (data) => {
@@ -108,7 +144,7 @@ const AddWizardPage = () => {
 
   const handlePublish = () => {
     if (!draftId) return;
-    publishDraft.mutate(draftId, {
+    doPublishDraft(draftId, {
       onSuccess: (data) => {
         if (data) syncDraft(data);
       },
@@ -180,8 +216,8 @@ const AddWizardPage = () => {
           onNext={() => nextStep(steps.length)}
           onSave={handleSave}
           onPublish={handlePublish}
-          isSaving={saveDraft.isPending}
-          isPublishing={publishDraft.isPending}
+          isSaving={saveDraftMutation.isPending}
+          isPublishing={publishDraftMutation.isPending}
           canProceed={canProceed}
         />
       }

@@ -33,6 +33,26 @@
         transition: 0.35s ease;
     }
 
+    &__no-image {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(var(--muted));
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    &__no-image-icon {
+        width: 72px;
+        height: 72px;
+        opacity: 0.25;
+        filter: var(--icon-muted-filter, none);
+    }
+
     /* HOT badge */
     &__badge {
         position: absolute;

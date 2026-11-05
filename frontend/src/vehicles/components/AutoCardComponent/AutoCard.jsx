@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
+import { formatPrice, formatMileage, formatYear } from '@/lib/format';
 
 export default function AutoCard({ car }) {
     const { t } = useTranslation("vehicle");
@@ -15,11 +16,20 @@ export default function AutoCard({ car }) {
         <Link to={`/vehicles/${car.id}`} className="auto-card">
 
             <div className="auto-card__image-wrapper">
-                <img
-                    src={mainImage}
-                    alt={`${car.brand} ${car.model}`}
-                    className="auto-card__image"
-                />
+                {mainImage ? (
+                    <img
+                        src={mainImage}
+                        alt={`${car.brand} ${car.model}`}
+                        className="auto-card__image"
+                        onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                        }}
+                    />
+                ) : null}
+                <div className={`auto-card__no-image${mainImage ? ' hidden' : ''}`}>
+                    <img src="/icons/sedan-car-model-svgrepo-com.svg" alt="" className="auto-card__no-image-icon" />
+                </div>
 
                 {car.isHot && <span className="auto-card__badge">{t('badges.hot')}</span>}
 
@@ -49,7 +59,7 @@ export default function AutoCard({ car }) {
             <div className="auto-card__content">
 
                 <div className="auto-card__price">
-                    €{car.price.toLocaleString()}
+                    {formatPrice(car.price, 'EUR')}
                 </div>
 
                 <h3 className="auto-card__title">
@@ -60,7 +70,7 @@ export default function AutoCard({ car }) {
                 </h3>
 
                 <p className="auto-card__details">
-                    {car.year} • {car.engine} • {car.mileage} km • {car.transmission}
+                    {formatYear(car.year)} • {car.engine || '—'} • {formatMileage(car.mileage)} • {car.transmission || '—'}
                 </p>
 
                 <div className="auto-card__location">

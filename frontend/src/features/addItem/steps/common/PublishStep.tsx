@@ -19,14 +19,14 @@ const PublishStep = () => {
   const checks = useMemo(() => {
     if (!draft) return [];
     return [
-      { labelKey: 'form.basicsComplete' as const, ok: validateBasics(draft) },
+      { labelKey: 'form.basicsComplete', ok: validateBasics(draft) },
       {
-        labelKey: (draft.type === 'vehicle' ? 'form.vehicleDetails' : 'form.partDetails') as const,
+        labelKey: draft.type === 'vehicle' ? 'form.vehicleDetails' : 'form.partDetails',
         ok: draft.type === 'vehicle' ? validateVehicle(draft) : validatePart(draft),
       },
-      { labelKey: 'form.pricingSet' as const, ok: validatePricing(draft) },
-      { labelKey: 'form.sellerDetails' as const, ok: validateSeller(draft) },
-      { labelKey: 'form.photosUploaded' as const, ok: validatePhotos(draft) },
+      { labelKey: 'form.pricingSet', ok: validatePricing(draft) },
+      { labelKey: 'form.sellerDetails', ok: validateSeller(draft) },
+      { labelKey: 'form.photosUploaded', ok: validatePhotos(draft) },
     ];
   }, [draft]);
 

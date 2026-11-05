@@ -7,8 +7,30 @@ import { fileURLToPath } from 'node:url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+const utf8HeaderPlugin = () => ({
+  name: 'utf8-content-type-header',
+  configureServer(server) {
+    server.middlewares.use((_, res, next) => {
+      const originalSetHeader = res.setHeader.bind(res)
+      res.setHeader = (name, value) => {
+        if (
+          typeof name === 'string' &&
+          name.toLowerCase() === 'content-type' &&
+          typeof value === 'string' &&
+          value.startsWith('text/html') &&
+          !/charset=/i.test(value)
+        ) {
+          return originalSetHeader(name, `${value}; charset=utf-8`)
+        }
+        return originalSetHeader(name, value)
+      }
+      next()
+    })
+  },
+})
+
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [utf8HeaderPlugin(), react(), tailwindcss()],
   server: {
     host: true,
     hmr: {

@@ -1,19 +1,12 @@
-import { useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
 
-import { buildSellersList } from "@/sellers/utils/sellers.helpers";
+import { getSellers } from '@/sellers/api/sellers.api';
 
-const EMPTY_LIST = [];
-
-export const useSellersData = ({
-  vehicles,
-  parts,
-  buildList = buildSellersList,
-} = {}) => {
-  const safeVehicles = Array.isArray(vehicles) ? vehicles : EMPTY_LIST;
-  const safeParts = Array.isArray(parts) ? parts : EMPTY_LIST;
-
-  return useMemo(
-    () => buildList(safeVehicles, safeParts),
-    [buildList, safeVehicles, safeParts]
-  );
+export const useSellersData = () => {
+  const query = useQuery({
+    queryKey: ['sellers'],
+    queryFn: getSellers,
+    staleTime: 30_000,
+  });
+  return query.data ?? [];
 };

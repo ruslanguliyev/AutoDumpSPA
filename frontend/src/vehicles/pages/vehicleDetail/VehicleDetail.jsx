@@ -53,13 +53,14 @@ export default function VehicleDetail() {
 
     if (!car) return <div>{t("details.notFound", { ns: "vehicle" })}</div>;
 
-    // 🔁 адаптер данных
-    const media = car.image.map((src, index) => ({
-        id: `${car.id}-${index}`,
-        src,
-        alt: `${car.brand} ${car.model} image ${index + 1}`,
-        type: "image",
-    }));
+    const media = (Array.isArray(car.image) ? car.image : [])
+        .filter(Boolean)
+        .map((src, index) => ({
+            id: `${car.id}-${index}`,
+            src,
+            alt: `${car.brand} ${car.model} image ${index + 1}`,
+            type: "image",
+        }));
 
     const currency = car?.currency ?? "EUR";
     const sellerPhone = car?.seller?.phone ?? "—";
@@ -180,7 +181,7 @@ export default function VehicleDetail() {
                                 {t("match.errorFailed", { ns: "specialists" })}
                             </div>
                         ) : topSpecialists.length ? (
-                            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2" style={{minWidth: 0}}>
                                 {topSpecialists.map((specialist) => (
                                     <SpecialistCard key={specialist.id} specialist={specialist} />
                                 ))}

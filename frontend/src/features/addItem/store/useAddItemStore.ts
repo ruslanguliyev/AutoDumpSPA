@@ -2,7 +2,6 @@ import { create } from 'zustand';
 
 export type ListingType = 'vehicle' | 'part';
 export type ListingStatus = 'draft' | 'ready' | 'published';
-export type TitleMode = 'auto' | 'manual';
 
 export type ListingImage = {
   id: string;
@@ -12,7 +11,6 @@ export type ListingImage = {
 };
 
 export type ListingCommon = {
-  titleMode: TitleMode;
   title: string;
   description: string;
   category: string;
@@ -43,7 +41,10 @@ export type ListingVehicle = {
   vin: string;
   brand: string;
   model: string;
+  generation: string;
   year: string;
+  displacement: string;
+  horsepower: string;
   trim: string;
   mileage: string;
   transmission: string;
@@ -54,6 +55,7 @@ export type ListingVehicle = {
 export type ListingPart = {
   name: string;
   brand: string;
+  model: string;
   partNumber: string;
   condition: string;
   compatibility: string;
@@ -63,6 +65,10 @@ export type ListingDraft = {
   id: string;
   type: ListingType;
   status: ListingStatus;
+  /** GraphQL listing id (same as `id` for API-created drafts) */
+  _listingId?: string;
+  _vehicleId?: string;
+  _partId?: string;
   common: ListingCommon;
   media: ListingMedia;
   seller: ListingSeller;
@@ -125,7 +131,6 @@ export const createEmptyDraft = (type: ListingType): ListingDraft => ({
   type,
   status: 'draft',
   common: {
-    titleMode: 'auto',
     title: '',
     description: '',
     category: '',
@@ -155,7 +160,10 @@ export const createEmptyDraft = (type: ListingType): ListingDraft => ({
           vin: '',
           brand: '',
           model: '',
+          generation: '',
           year: '',
+          displacement: '',
+          horsepower: '',
           trim: '',
           mileage: '',
           transmission: '',
@@ -168,6 +176,7 @@ export const createEmptyDraft = (type: ListingType): ListingDraft => ({
       ? {
           name: '',
           brand: '',
+          model: '',
           partNumber: '',
           condition: '',
           compatibility: '',

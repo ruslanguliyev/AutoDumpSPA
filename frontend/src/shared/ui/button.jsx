@@ -21,16 +21,15 @@ const Button = ({
   variant = 'primary',
   size = 'md',
   className = '',
-  type,
+  type = 'button',
   ...props
 }) => {
   const Comp = asChild ? Slot : 'button';
-  const resolvedType = type ?? 'button';
 
   return (
     <Comp
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...(asChild ? props : { type: resolvedType, ...props })}
+      {...(asChild ? props : { type, ...props })}
     />
   );
 };

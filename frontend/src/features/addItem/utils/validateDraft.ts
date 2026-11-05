@@ -1,14 +1,18 @@
 import type { ListingDraft } from '@/features/addItem/store/useAddItemStore';
+import {
+  isModelAllowedForBrand,
+  isTrimAllowedForVehicle,
+  isVehicleCategoryId,
+} from '@/features/addItem/constants/vehicleCatalog';
 
 const trim = (value: string | undefined | null) => String(value ?? '').trim();
 
 const buildVehicleTitle = (draft: ListingDraft) => {
   const vehicle = draft.vehicle;
   if (!vehicle) return '';
-  return [vehicle.year, vehicle.brand, vehicle.model, vehicle.trim]
-    .map((value) => trim(value))
-    .filter(Boolean)
-    .join(' ');
+  const brand = trim(vehicle.brand);
+  const model = trim(vehicle.model);
+  return [brand, model].filter(Boolean).join(' ');
 };
 
 const buildPartTitle = (draft: ListingDraft) => {
@@ -20,31 +24,39 @@ const buildPartTitle = (draft: ListingDraft) => {
     .join(' ');
 };
 
+/** Display / listing title derived only from vehicle or part fields (not `common.title`). */
 export const getDraftTitle = (draft: ListingDraft) => {
-  const manualTitle = trim(draft.common.title);
-  if (draft.common.titleMode === 'manual') {
-    return manualTitle || 'Untitled listing';
-  }
+  return draft.type === 'vehicle' ? buildVehicleTitle(draft) : buildPartTitle(draft);
+};
 
-  const autoTitle =
-    draft.type === 'vehicle' ? buildVehicleTitle(draft) : buildPartTitle(draft);
-  return autoTitle || (draft.type === 'vehicle' ? 'Untitled vehicle' : 'Untitled part');
+export const validateVehicleCategory = (draft: ListingDraft) => {
+  if (draft.type !== 'vehicle') return true;
+  return isVehicleCategoryId(trim(draft.common.category));
 };
 
 export const validateBasics = (draft: ListingDraft) => {
-  if (draft.common.titleMode === 'manual') {
-    return trim(draft.common.title).length > 0;
+  if (draft.type === 'vehicle') {
+    if (!validateVehicleCategory(draft)) return false;
+  } else {
+    if (!trim(draft.common.category).length) return false;
   }
-  const autoTitle =
-    draft.type === 'vehicle' ? buildVehicleTitle(draft) : buildPartTitle(draft);
-  return trim(autoTitle).length > 0;
+  const cond = draft.common.condition;
+  return cond === 'new' || cond === 'used' || cond === 'certified';
 };
 
 export const validateVehicle = (draft: ListingDraft) => {
   if (draft.type !== 'vehicle') return true;
   const vehicle = draft.vehicle;
   if (!vehicle) return false;
-  return trim(vehicle.brand).length > 0 && trim(vehicle.model).length > 0;
+  if (!trim(vehicle.brand) || !trim(vehicle.model)) return false;
+  if (!isModelAllowedForBrand(vehicle.brand, vehicle.model)) return false;
+  if (
+    trim(vehicle.trim) &&
+    !isTrimAllowedForVehicle(vehicle.brand, vehicle.model, vehicle.trim)
+  ) {
+    return false;
+  }
+  return true;
 };
 
 export const validatePart = (draft: ListingDraft) => {

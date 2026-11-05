@@ -3,6 +3,8 @@ import type {
   SpecialistsQueryResponse,
   SpecialistsByIdsResponse,
   SpecialistBySlugResponse,
+  GqlSpecialistListRow,
+  GqlSpecialistDetailRow,
 } from '@/specialists/api/specialists.types';
 import type {
   SpecialistDetail,
@@ -11,7 +13,7 @@ import type {
 import type { SpecialistsDataProvider } from '@/shared/api/specialists.provider';
 
 const GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql';
+  import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
 
 type GraphqlRequestArgs = {
   query: string;
@@ -25,7 +27,7 @@ const graphqlRequest = async <T>({
   const res = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -44,75 +46,39 @@ const graphqlRequest = async <T>({
 };
 
 const GET_SPECIALISTS_QUERY = `
-query GetSpecialists($filters: SpecialistsFilterInput) {
-  getSpecialists(filters: $filters) {
-    id
-    name
-    slug
-    description
-    experienceYears
-    rating
-    reviewsCount
-    verified
-    mobileService
-    priceFrom
-    avatarUrl
-    coverImage
+query GetSpecialists($filter: SpecialistsFilterInput) {
+  specialists(filter: $filter) {
+    id slug name bio city
+    avatarUrl coverImage
+    specializations skills
+    experience rating reviewsCount
+    priceFrom mobileService verified available
   }
 }
 `;
 
 const GET_SPECIALIST_BY_SLUG_QUERY = `
 query GetSpecialistBySlug($slug: String!) {
-  getSpecialistBySlug(slug: $slug) {
-    id
-    name
-    slug
-    description
-    experienceYears
-    rating
-    reviewsCount
-    verified
-    mobileService
-    priceFrom
-    avatarUrl
-    coverImage
-    phone
-    whatsapp
-    specializations
-    supportedVehicles {
-      brand
-      model
-      yearFrom
-      yearTo
-    }
+  specialistBySlug(slug: $slug) {
+    id slug name bio city phone whatsapp
+    avatarUrl coverImage
+    specializations skills
+    experience rating reviewsCount
+    priceFrom hourlyRate mobileService verified available
     portfolio
-    reviews {
-      id
-      rating
-      comment
-      authorName
-      createdAt
-    }
+    supportedVehicles { id brand model yearFrom yearTo }
   }
 }
 `;
 
 const GET_SPECIALISTS_BY_IDS_QUERY = `
-query GetSpecialistsByIds($ids: [ID!]!) {
-  getSpecialistsByIds(ids: $ids) {
-    id
-    name
-    slug
-    description
-    experienceYears
-    rating
-    reviewsCount
-    verified
-    mobileService
-    priceFrom
-    avatarUrl
-    coverImage
+query GetSpecialistsByIds {
+  specialists(filter: null) {
+    id slug name bio city
+    avatarUrl coverImage
+    specializations skills
+    experience rating reviewsCount
+    priceFrom mobileService verified available
   }
 }
 `;
@@ -130,24 +96,64 @@ const toNumberOrNull = (value: string | number | null | undefined) => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 
-const buildFiltersInput = (filters: SpecialistsFiltersInput = {}) => ({
-  brand: normalizeValue(filters.brand),
-  model: normalizeValue(filters.model),
-  year: toNumberOrNull(filters.year),
-  specialization: filters.specialization ?? null,
-  city: normalizeValue(filters.city),
-  minRating: toNumberOrNull(filters.minRating),
+const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
+  id: s.id,
+  slug: s.slug,
+  name: s.name,
+  description: s.bio ?? null,
+  experienceYears: s.experience,
+  rating: s.rating,
+  reviewsCount: s.reviewsCount,
+  verified: s.verified,
+  mobileService: s.mobileService,
+  priceFrom: toNumberOrNull(s.priceFrom),
+  avatarUrl: s.avatarUrl ?? null,
+  coverImage: s.coverImage ?? null,
+  specializations: s.specializations ?? [],
 });
+
+const mapDetailRowToDetail = (s: GqlSpecialistDetailRow): SpecialistDetail => {
+  const base = mapListRowToProfile(s);
+  return {
+    ...base,
+    phone: s.phone ?? null,
+    whatsapp: s.whatsapp ?? null,
+    portfolio: s.portfolio ?? [],
+    skills: s.skills ?? [],
+    supportedVehicles: (s.supportedVehicles ?? []).map((v) => ({
+      brand: v.brand,
+      model: v.model,
+      yearFrom: v.yearFrom,
+      yearTo: v.yearTo,
+    })),
+  } as SpecialistDetail;
+};
+
+const buildSpecialistsFilterInput = (filters: SpecialistsFiltersInput = {}) => {
+  const city = normalizeValue(filters.city);
+  const minRating = toNumberOrNull(filters.minRating);
+  const skills =
+    filters.specialization != null
+      ? [String(filters.specialization)]
+      : undefined;
+
+  const filter: Record<string, unknown> = {};
+  if (city) filter.city = city;
+  if (skills?.length) filter.skills = skills;
+  if (minRating != null) filter.minRating = minRating;
+  return Object.keys(filter).length ? filter : undefined;
+};
 
 export const getSpecialists = async (
   filters: SpecialistsFiltersInput = {}
 ): Promise<SpecialistProfile[]> => {
   const data = await graphqlRequest<SpecialistsQueryResponse>({
     query: GET_SPECIALISTS_QUERY,
-    variables: { filters: buildFiltersInput(filters) },
+    variables: { filter: buildSpecialistsFilterInput(filters) ?? null },
   });
 
-  return data?.getSpecialists ?? [];
+  const rows = data?.specialists ?? [];
+  return rows.map(mapListRowToProfile);
 };
 
 export const getSpecialistsByIds = async (
@@ -160,10 +166,14 @@ export const getSpecialistsByIds = async (
 
   const data = await graphqlRequest<SpecialistsByIdsResponse>({
     query: GET_SPECIALISTS_BY_IDS_QUERY,
-    variables: { ids: safeIds },
+    variables: {},
   });
 
-  return data?.getSpecialistsByIds ?? [];
+  const rows = data?.specialists ?? [];
+  const idSet = new Set(safeIds);
+  return rows
+    .filter((s) => idSet.has(s.id))
+    .map(mapListRowToProfile);
 };
 
 export const getSpecialistBySlug = async (
@@ -172,12 +182,18 @@ export const getSpecialistBySlug = async (
   const safeSlug = String(slug ?? '').trim();
   if (!safeSlug) return null;
 
-  const data = await graphqlRequest<SpecialistBySlugResponse>({
-    query: GET_SPECIALIST_BY_SLUG_QUERY,
-    variables: { slug: safeSlug },
-  });
+  try {
+    const data = await graphqlRequest<SpecialistBySlugResponse>({
+      query: GET_SPECIALIST_BY_SLUG_QUERY,
+      variables: { slug: safeSlug },
+    });
 
-  return data?.getSpecialistBySlug ?? null;
+    const row = data?.specialistBySlug;
+    if (!row) return null;
+    return mapDetailRowToDetail(row);
+  } catch {
+    return null;
+  }
 };
 
 export const specialistsGraphqlApi: SpecialistsDataProvider = {

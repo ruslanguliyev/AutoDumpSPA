@@ -25,19 +25,20 @@ export default function MediaCarousel({
 
     const touchStartX = useRef(null);
 
-    // what is currently shown
+    const safeItems = items?.length ? items : [];
 
-    const current = items[index];
+    // what is currently shown
+    const current = safeItems[index];
 
     const goTo = (i) => setIndex(i);
 
     const prev = useCallback(() => {
-        setIndex((i) => (i === 0 ? items.length - 1 : i - 1));
-    }, [items.length]);
+        setIndex((i) => (i === 0 ? safeItems.length - 1 : i - 1));
+    }, [safeItems.length]);
 
     const next = useCallback(() => {
-        setIndex((i) => (i === items.length - 1 ? 0 : i + 1));
-    }, [items.length]);
+        setIndex((i) => (i === safeItems.length - 1 ? 0 : i + 1));
+    }, [safeItems.length]);
 
     // swipe support
     const onTouchStart = (e) => {
@@ -52,6 +53,26 @@ export default function MediaCarousel({
         }
         touchStartX.current = null;
     };
+
+    if (!safeItems.length) {
+        return (
+            <section
+                className={[styles.carousel, className].filter(Boolean).join(" ")}
+                aria-label={ariaLabel}
+            >
+                <div
+                    className={[styles.viewport, viewportClassName].filter(Boolean).join(" ")}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                    <img
+                        src="/icons/sedan-car-model-svgrepo-com.svg"
+                        alt=""
+                        style={{ width: 96, height: 96, opacity: 0.2 }}
+                    />
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section
@@ -95,7 +116,7 @@ export default function MediaCarousel({
             {/* THUMBNAILS */}
             {showThumbnails && (
                 <div className={[styles.thumbnails, thumbnailsClassName].filter(Boolean).join(" ")}>
-                    {items.map((item, i) => (
+                    {safeItems.map((item, i) => (
                         <button
                             key={item.id}
                             className={[

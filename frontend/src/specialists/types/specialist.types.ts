@@ -56,6 +56,8 @@ export type SpecialistReview = {
 
 export type SpecialistDetail = SpecialistProfile & {
   specializations?: Specialization[];
+  /** Skill tags from the API (e.g. overlaps with specialization filters). */
+  skills?: string[];
   supportedVehicles?: SupportedVehicle[];
   portfolio?: string[];
   reviews?: SpecialistReview[];

@@ -9,10 +9,10 @@ const DEFAULT_LISTINGS = 'any';
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
-export const useSellers = ({ vehicles, parts } = {}) => {
+export const useSellers = () => {
   const { t } = useTranslation('sellers');
   const filters = useFiltersStore((state) => state.filters.sellers);
-  const sellers = useSellersData({ vehicles, parts });
+  const sellers = useSellersData();
   const safeSellers = Array.isArray(sellers) ? sellers : [];
 
   const DOMAIN_OPTIONS = useMemo(

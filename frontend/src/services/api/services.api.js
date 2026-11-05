@@ -1,14 +1,120 @@
 import { MOCK_SERVICES } from './graphql/mocks/services.mocks.js';
 
+const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
+
+async function gqlRequest(query, variables) {
+  const res = await fetch(GQL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+  });
+  const json = await res.json();
+  if (json.errors?.length) throw new Error(json.errors[0].message);
+  return json.data;
+}
+
+const GET_SERVICE_CENTERS_QUERY = `
+query GetServiceCenters($city: String) {
+  serviceCenters(city: $city) {
+    id slug name description type
+    city phone website logoUrl coverImage
+    categories supportedBrands rating reviewsCount verified
+  }
+}
+`;
+
+const GET_SERVICE_CENTER_QUERY = `
+query GetServiceCenter($id: String!) {
+  serviceCenter(id: $id) {
+    id slug name legalName description type
+    city address phone whatsapp website
+    logoUrl coverImage gallery
+    categories supportedBrands
+    rating reviewsCount verified isActive
+    schedule contacts
+    services {
+      id code title category
+      priceFrom priceTo currency durationMin
+      applicableBrands popular
+    }
+  }
+}
+`;
+
+const GET_SERVICE_CENTER_BY_SLUG_QUERY = `
+query GetServiceCenterBySlug($slug: String!) {
+  serviceCenterBySlug(slug: $slug) {
+    id slug name legalName description type
+    city address phone whatsapp website
+    logoUrl coverImage gallery
+    categories supportedBrands
+    rating reviewsCount verified isActive
+    schedule contacts
+    services {
+      id code title category
+      priceFrom priceTo currency durationMin
+      applicableBrands popular
+    }
+  }
+}
+`;
+
+const mapServiceCenterRow = (row) => ({
+  id: row.id,
+  slug: row.slug ?? null,
+  name: row.name,
+  legalName: row.legalName ?? null,
+  description: row.description ?? null,
+  type: row.type ?? null,
+  location: {
+    city: row.city,
+    address: row.address ?? null,
+    lat: null,
+    lng: null,
+  },
+  categories: row.categories ?? [],
+  supportedBrands: row.supportedBrands ?? [],
+  rating: row.rating,
+  reviewsCount: row.reviewsCount ?? 0,
+  verified: row.verified,
+  isActive: row.isActive ?? true,
+  phone: row.phone ?? null,
+  whatsapp: row.whatsapp ?? null,
+  website: row.website ?? null,
+  media: {
+    logo: row.logoUrl ?? null,
+    cover: row.coverImage ?? null,
+    gallery: row.gallery ?? [],
+  },
+  schedule:
+    typeof row.schedule === 'string'
+      ? JSON.parse(row.schedule)
+      : (row.schedule ?? null),
+  contacts:
+    typeof row.contacts === 'string'
+      ? JSON.parse(row.contacts)
+      : (row.contacts ?? null),
+  services: (row.services ?? []).map((s) => ({
+    id: s.id,
+    code: s.code,
+    title: s.title,
+    category: s.category,
+    priceFrom: s.priceFrom != null ? Number(s.priceFrom) : null,
+    priceTo: s.priceTo != null ? Number(s.priceTo) : null,
+    currency: s.currency,
+    durationMin: s.durationMin,
+    applicableBrands: s.applicableBrands ?? [],
+    popular: s.popular,
+  })),
+});
+
 // ======================================================
-// 🔧 MOCK MODE (только для DEV)
+// 🔧 MOCK MODE
 // ======================================================
 const shouldUseMocks = () => {
   const flag = import.meta.env.VITE_USE_SERVICES_MOCKS;
-  if (flag !== undefined) {
-    return String(flag) !== 'false';
-  }
-  return import.meta.env.DEV;
+  if (flag !== undefined) return String(flag) !== 'false';
+  return false; // use real backend by default
 };
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
@@ -89,15 +195,22 @@ const applyMockFiltering = (services, filters) => {
  * In DEV returns mocked data for UI development.
  */
 export const getServices = async (filters = {}) => {
-  // 🟢 MOCK DATA (DEV)
   if (shouldUseMocks()) {
     const filtered = applyMockFiltering(MOCK_SERVICES, filters);
     return filtered;
   }
 
-  // 🔌 REAL BACKEND (PROD / LATER)
-  // This would call GraphQL in the future
-  return [];
+  try {
+    const city =
+      filters.city === '' || filters.city == null
+        ? null
+        : String(filters.city).trim() || null;
+    const data = await gqlRequest(GET_SERVICE_CENTERS_QUERY, { city });
+    const rows = data?.serviceCenters ?? [];
+    return rows.map((row) => mapServiceCenterRow({ ...row, services: [] }));
+  } catch {
+    return [];
+  }
 };
 
 /**
@@ -113,8 +226,14 @@ export const getServiceById = async (id) => {
     return service || null;
   }
 
-  // 🔌 REAL BACKEND (PROD / LATER)
-  return null;
+  try {
+    const data = await gqlRequest(GET_SERVICE_CENTER_QUERY, { id: safeId });
+    const row = data?.serviceCenter;
+    if (!row) return null;
+    return mapServiceCenterRow(row);
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -130,8 +249,21 @@ export const getServiceBySlug = async (slug) => {
     return service || null;
   }
 
-  // 🔌 REAL BACKEND (PROD / LATER)
-  return null;
+  try {
+    const data = await gqlRequest(GET_SERVICE_CENTER_BY_SLUG_QUERY, {
+      slug: safeSlug,
+    });
+    const row = data?.serviceCenterBySlug;
+    if (row) return mapServiceCenterRow(row);
+  } catch {
+    // fall through to id lookup
+  }
+
+  try {
+    return await getServiceById(safeSlug);
+  } catch {
+    return null;
+  }
 };
 
 /**
