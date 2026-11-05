@@ -7,7 +7,9 @@ const shouldUseMocks = (): boolean => {
   if (envFlag !== undefined) {
     return String(envFlag) !== 'false';
   }
-  return import.meta.env.DEV;
+  // The backend has no memberships resolver yet, so mocks stay the default
+  // (in every environment) until it is implemented.
+  return true;
 };
 
 export const membershipsApi: MembershipsDataProvider = shouldUseMocks()

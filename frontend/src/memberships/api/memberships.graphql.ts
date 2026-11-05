@@ -1,38 +1,6 @@
+import { graphqlRequest } from '@/lib/graphql';
 import type { MembershipsDataProvider } from '@/shared/api/memberships.provider';
 import type { SpecialistServiceMembership } from '@/memberships/types/membership.types';
-
-const GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql';
-
-type GraphqlRequestArgs = {
-  query: string;
-  variables?: Record<string, unknown>;
-};
-
-const graphqlRequest = async <T>({
-  query,
-  variables,
-}: GraphqlRequestArgs): Promise<T> => {
-  const res = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-
-  if (!res.ok) {
-    throw new Error(`GraphQL request failed (${res.status})`);
-  }
-
-  const json = await res.json();
-  const firstErrorMessage = json?.errors?.[0]?.message;
-  if (firstErrorMessage) {
-    throw new Error(firstErrorMessage);
-  }
-
-  return json?.data ?? null;
-};
 
 const MEMBERSHIPS_BY_SERVICE_QUERY = `
 query GetMembershipsByServiceId($serviceId: ID!) {

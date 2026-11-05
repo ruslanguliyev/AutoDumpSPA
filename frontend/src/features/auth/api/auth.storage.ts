@@ -1,6 +1,5 @@
+import { gqlRequest } from '@/lib/graphql';
 const TOKEN_KEY = 'autobaz-token';
-
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
 
 export type AuthUser = {
   id: string;
@@ -9,51 +8,6 @@ export type AuthUser = {
   role: string;
   createdAt: string;
 };
-
-type GraphQLResponse<T> = {
-  data?: T;
-  errors?: Array<{ message: string }>;
-};
-
-async function gqlRequest<TData>(
-  query: string,
-  variables?: Record<string, unknown>,
-  token?: string | null,
-): Promise<TData> {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  let res: Response;
-  try {
-    res = await fetch(GQL_URL, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ query, variables }),
-    });
-  } catch (e) {
-    throw e instanceof Error ? e : new Error('Network error');
-  }
-
-  if (!res.ok) {
-    throw new Error(`Request failed with status ${res.status}`);
-  }
-
-  const json = (await res.json()) as GraphQLResponse<TData>;
-
-  if (json.errors?.length) {
-    throw new Error(json.errors[0].message);
-  }
-
-  if (json.data === undefined) {
-    throw new Error('No data from GraphQL');
-  }
-
-  return json.data;
-}
 
 const REGISTER_MUTATION = `
   mutation Register($email: String!, $password: String!, $fullName: String!) {

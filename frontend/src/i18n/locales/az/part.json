@@ -93,7 +93,7 @@
   "list": {
     "loadingInventory": "Kataloq yüklənir…",
     "failedToLoad": "Ehtiyat hissələrini yükləmək alınmadı.",
-    "errorMessage": "VITE_GRAPHQL_ENDPOINT-i yoxlayın və ya VITE_USE_PARTS_MOCKS=true ilə mokları aktivləşdirin.",
+    "errorMessage": "VITE_API_URL-i yoxlayın və ya VITE_USE_PARTS_MOCKS=true ilə mokları aktivləşdirin.",
     "noResultsMatch": "Bu filtrlərə uyğun ehtiyat hissəsi yoxdur. Axtarışı dəyişdirin və yenidən cəhd edin.",
     "partsAvailable": "{{count}} ehtiyat hissəsi mövcuddur",
     "partsAvailable_plural": "{{count}} ehtiyat hissəsi mövcuddur",

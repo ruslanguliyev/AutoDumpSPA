@@ -1,3 +1,4 @@
+import { graphqlRequest } from '@/lib/graphql';
 import {
   sanitizeFilters,
   mapPartsPayloadToDomain,
@@ -320,29 +321,6 @@ query Parts($filter: PartsFilterInput) {
   }
 }
 `;
-
-const GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
-const graphqlRequest = async ({ query, variables }) => {
-  const res = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-
-  if (!res.ok) {
-    throw new Error(`GraphQL request failed (${res.status})`);
-  }
-
-  const json = await res.json();
-  const firstErrorMessage = json?.errors?.[0]?.message;
-  if (firstErrorMessage) throw new Error(firstErrorMessage);
-
-  return json?.data ?? null;
-};
 
 const fetchPartsFromGraphql = async (filters) => {
   const data = await graphqlRequest({

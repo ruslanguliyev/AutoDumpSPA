@@ -93,7 +93,7 @@
   "list": {
     "loadingInventory": "Loading inventory…",
     "failedToLoad": "Failed to load parts.",
-    "errorMessage": "Check VITE_GRAPHQL_ENDPOINT or enable mocks with VITE_USE_PARTS_MOCKS=true.",
+    "errorMessage": "Check VITE_API_URL or enable mocks with VITE_USE_PARTS_MOCKS=true.",
     "noResultsMatch": "No parts match these filters. Adjust search and try again.",
     "partsAvailable": "{{count}} part available",
     "partsAvailable_plural": "{{count}} parts available",

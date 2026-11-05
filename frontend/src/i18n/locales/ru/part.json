@@ -93,7 +93,7 @@
   "list": {
     "loadingInventory": "Загрузка каталога…",
     "failedToLoad": "Не удалось загрузить запчасти.",
-    "errorMessage": "Проверьте VITE_GRAPHQL_ENDPOINT или включите моки с VITE_USE_PARTS_MOCKS=true.",
+    "errorMessage": "Проверьте VITE_API_URL или включите моки с VITE_USE_PARTS_MOCKS=true.",
     "noResultsMatch": "Нет запчастей, соответствующих этим фильтрам. Измените поиск и попробуйте снова.",
     "partsAvailable": "Доступна {{count}} запчасть",
     "partsAvailable_plural": "Доступно {{count}} запчастей",

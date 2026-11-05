@@ -1,3 +1,4 @@
+import { graphqlRequest } from '@/lib/graphql';
 import type {
   SpecialistsFiltersInput,
   SpecialistsQueryResponse,
@@ -11,39 +12,6 @@ import type {
   SpecialistProfile,
 } from '@/specialists/types/specialist.types';
 import type { SpecialistsDataProvider } from '@/shared/api/specialists.provider';
-
-const GRAPHQL_ENDPOINT =
-  import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
-type GraphqlRequestArgs = {
-  query: string;
-  variables?: Record<string, unknown>;
-};
-
-const graphqlRequest = async <T>({
-  query,
-  variables,
-}: GraphqlRequestArgs): Promise<T> => {
-  const res = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-
-  if (!res.ok) {
-    throw new Error(`GraphQL request failed (${res.status})`);
-  }
-
-  const json = await res.json();
-  const firstErrorMessage = json?.errors?.[0]?.message;
-  if (firstErrorMessage) {
-    throw new Error(firstErrorMessage);
-  }
-
-  return json?.data ?? null;
-};
 
 const GET_SPECIALISTS_QUERY = `
 query GetSpecialists($filter: SpecialistsFilterInput) {

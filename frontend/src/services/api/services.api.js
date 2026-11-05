@@ -1,17 +1,5 @@
+import { gqlRequest } from '@/lib/graphql';
 import { MOCK_SERVICES } from './graphql/mocks/services.mocks.js';
-
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
-async function gqlRequest(query, variables) {
-  const res = await fetch(GQL_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = await res.json();
-  if (json.errors?.length) throw new Error(json.errors[0].message);
-  return json.data;
-}
 
 const GET_SERVICE_CENTERS_QUERY = `
 query GetServiceCenters($city: String) {

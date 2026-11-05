@@ -1,17 +1,5 @@
+import { gqlRequest } from '@/lib/graphql';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
-
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
-async function gqlRequest(query, variables) {
-  const res = await fetch(GQL_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = await res.json();
-  if (json.errors?.length) throw new Error(json.errors[0].message);
-  return json.data;
-}
 
 const VEHICLES_QUERY = `
 query Vehicles($filter: VehiclesFilterInput) {

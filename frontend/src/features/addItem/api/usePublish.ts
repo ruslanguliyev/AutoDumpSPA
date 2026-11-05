@@ -1,3 +1,4 @@
+import { gqlRequest } from '@/lib/graphql';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { forceSyncDraft } from '@/features/addItem/api/useDraft';
@@ -7,33 +8,8 @@ import { validateDraft } from '@/features/addItem/utils/validateDraft';
 const DRAFT_QUERY_KEY = 'add-item-draft';
 const DRAFTS_STORAGE_KEY = 'autodump:add-item-drafts';
 
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
 const getToken = () =>
   typeof window === 'undefined' ? null : window.localStorage.getItem('autobaz-token');
-
-async function gqlRequest<T>(
-  query: string,
-  variables?: Record<string, unknown>
-): Promise<T> {
-  const token = getToken();
-  const res = await fetch(GQL_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = (await res.json()) as {
-    data?: T;
-    errors?: { message: string }[];
-  };
-  if (json.errors?.length) {
-    throw new Error(json.errors[0].message);
-  }
-  return json.data as T;
-}
 
 const PUBLISH_LISTING = `
 mutation PublishListing($id: String!) {

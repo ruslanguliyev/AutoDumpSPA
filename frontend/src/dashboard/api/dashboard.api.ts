@@ -1,3 +1,4 @@
+import { gqlRequest } from '@/lib/graphql';
 import type {
   ActiveProfile,
   DashboardStats,
@@ -6,28 +7,6 @@ import type {
   RevenueData,
   ServiceBookingsData,
 } from '@/dashboard/types/dashboard.types';
-
-const GQL_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/graphql';
-
-const getToken = () => localStorage.getItem('autobaz-token');
-
-async function gqlRequest<T>(
-  query: string,
-  variables?: Record<string, unknown>,
-): Promise<T> {
-  const token = getToken();
-  const res = await fetch(GQL_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = await res.json();
-  if (json.errors?.length) throw new Error(json.errors[0].message);
-  return json.data as T;
-}
 
 const GET_LISTINGS_STATS = `
   query GetListingsStats($filter: ListingsFilterInput) {

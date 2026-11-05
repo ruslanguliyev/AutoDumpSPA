@@ -44,7 +44,7 @@ export default function ServicesListPage() {
             <div className="font-semibold">{t('list.errorFailed')}</div>
             <div className="mt-1">
               {errorMessage ? <span>{errorMessage}. </span> : null}
-              {t('list.errorCheckEndpoint')} <code className="rounded bg-destructive/10 px-1">VITE_GRAPHQL_ENDPOINT</code>.
+              {t('list.errorCheckEndpoint')} <code className="rounded bg-destructive/10 px-1">VITE_API_URL</code>.
             </div>
           </div>
         ) : null}

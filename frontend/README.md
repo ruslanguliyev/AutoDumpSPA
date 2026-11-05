@@ -7,31 +7,18 @@ npm install
 npm run dev
 ```
 
-## Parts page data source
+## Backend connection
 
-The `/parts` page uses **TanStack Query** and can work in two modes:
-
-- **Mock mode (default in DEV)**: no backend required.
-- **GraphQL mode**: fetches data from `VITE_GRAPHQL_ENDPOINT`.
-
-### Environment variables (optional)
-
-Create `.env.local` (recommended) in the project root:
+All GraphQL calls go through `src/lib/graphql.ts`. Set the endpoint in `.env`:
 
 ```bash
-# GraphQL backend endpoint (used only when VITE_USE_PARTS_MOCKS=false)
-VITE_GRAPHQL_ENDPOINT=http://localhost:4000/graphql
-
-# Use mock parts data in development (default: true)
-# Set to "false" to force real backend requests.
-VITE_USE_PARTS_MOCKS=true
+VITE_API_URL=http://localhost:4000/graphql
 ```
 
-### If you see `ERR_NAME_NOT_RESOLVED` in console
+Parts, services and specialists use the real backend by default. Each can be
+switched to local mock data with `VITE_USE_PARTS_MOCKS=true`,
+`VITE_USE_SERVICES_MOCKS=true` or `VITE_USE_SPECIALISTS_MOCKS=true`.
+Memberships have no backend yet and always use mocks unless
+`VITE_USE_MEMBERSHIPS_MOCKS=false`.
 
-This means the configured GraphQL host cannot be resolved/reached (for example, `fake-graphql.autodump.local`).
-
-Fix options:
-
-- Set `VITE_USE_PARTS_MOCKS=true` (or just remove `VITE_USE_PARTS_MOCKS=false`).
-- Set `VITE_GRAPHQL_ENDPOINT` to a real, reachable endpoint.
+Useful scripts: `npm run dev`, `npm run build`, `npm run lint`, `npm run typecheck`.
