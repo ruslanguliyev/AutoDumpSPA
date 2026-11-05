@@ -1,5 +1,5 @@
 import '../auth/auth.types';
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { SellerType } from '@prisma/client';
 
 @ObjectType()
@@ -25,6 +25,10 @@ export class SellerObject {
 
   @Field()
   showPhone: boolean;
+
+  /** Number of published listings. Only filled by the public seller queries. */
+  @Field(() => Int, { nullable: true })
+  listingsCount?: number | null;
 
   @Field()
   rating: number;

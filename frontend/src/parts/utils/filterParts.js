@@ -1,3 +1,4 @@
+import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { PARTS_DEFAULT_FILTER } from './parts.constants';
 
 /**
@@ -23,6 +24,7 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
     priceFrom: safeNumber(merged.priceFrom),
     priceTo: safeNumber(merged.priceTo),
     location: merged.location?.trim() || '',
+    sellerId: merged.sellerId?.trim?.() || '',
     sort: merged.sort || 'RELEVANCE',
     limit: merged.limit ?? PARTS_DEFAULT_FILTER.limit,
     offset: merged.offset ?? PARTS_DEFAULT_FILTER.offset,
@@ -35,8 +37,9 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
  * @returns {import('./parts.types').PartEntity}
  */
 export const mapPartToEntity = (dto) => {
+  const imageUrl = resolveMediaUrl(dto.imageUrl);
   const fallbackImageUrl =
-    dto.imageUrl ||
+    imageUrl ||
     'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=60';
 
   return {
@@ -55,7 +58,7 @@ export const mapPartToEntity = (dto) => {
     stock: dto.stock ?? 0,
     location: dto.location || 'N/A',
     imageUrl: fallbackImageUrl,
-    image: dto.image ?? dto.imageUrl ?? fallbackImageUrl,
+    image: dto.image ?? imageUrl ?? fallbackImageUrl,
     seller: dto.seller ?? null,
   };
 };

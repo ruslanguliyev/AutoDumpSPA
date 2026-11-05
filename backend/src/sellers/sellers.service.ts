@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Seller, SellerType, UserRole } from '@prisma/client';
+import { ListingStatus, Seller, SellerType, UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSellerInput, UpdateSellerInput } from './seller.types';
 
@@ -97,22 +97,34 @@ export class SellersService {
     });
   }
 
+  /** Counts only published listings; drafts and sold items are not public. */
+  private static readonly publicListingsCount = {
+    _count: { select: { listings: { where: { status: ListingStatus.ACTIVE } } } },
+  } as const;
+
+  private withListingsCount<T extends { _count: { listings: number } }>(row: T) {
+    const { _count, ...seller } = row;
+    return { ...seller, listingsCount: _count.listings };
+  }
+
   async getAllSellers() {
     const sellers = await this.prisma.seller.findMany({
       orderBy: { createdAt: 'desc' },
+      include: SellersService.publicListingsCount,
     });
-    return sellers.map(toPublicSeller);
+    return sellers.map((row) => toPublicSeller(this.withListingsCount(row)));
   }
 
   async getSellerById(id: string) {
     const seller = await this.prisma.seller.findUnique({
       where: { id },
+      include: SellersService.publicListingsCount,
     });
 
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }
 
-    return toPublicSeller(seller);
+    return toPublicSeller(this.withListingsCount(seller));
   }
 }

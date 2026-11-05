@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Context, Mutation, Args, Resolver } from '@nestjs/graphql';
 import { AuthService, AuthResult } from './auth.service';
 import { AuthPayload } from './auth.types';
 
@@ -19,7 +19,8 @@ export class AuthResolver {
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
+    @Context() context: { req?: { ip?: string } },
   ): Promise<AuthResult> {
-    return this.authService.login(email, password);
+    return this.authService.login(email, password, context?.req?.ip);
   }
 }

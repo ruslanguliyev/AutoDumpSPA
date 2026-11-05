@@ -88,7 +88,10 @@ export class VehiclesService {
   ): Prisma.VehicleWhereInput {
     // Public search shows only published listings.
     const where: Prisma.VehicleWhereInput = {
-      listing: { status: ListingStatus.ACTIVE },
+      listing: {
+        status: ListingStatus.ACTIVE,
+        ...(filter?.sellerId ? { sellerId: filter.sellerId } : {}),
+      },
     };
 
     if (filter?.brand?.trim()) {

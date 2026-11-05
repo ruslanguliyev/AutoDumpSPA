@@ -2,7 +2,7 @@ import { gqlRequest } from '@/lib/graphql';
 const GET_SELLERS_QUERY = `
 query GetSellers {
   sellers {
-    id userId type name city phone rating verified createdAt
+    id userId type name city phone rating verified listingsCount createdAt
   }
 }
 `;
@@ -10,7 +10,7 @@ query GetSellers {
 const GET_SELLER_QUERY = `
 query GetSeller($id: String!) {
   sellerById(id: $id) {
-    id userId type name city phone rating verified createdAt
+    id userId type name city phone rating verified listingsCount createdAt
   }
 }
 `;
@@ -32,7 +32,7 @@ const mapSeller = (row) => ({
           : 'reseller',
   domain: row.type === 'PARTS_DEALER' ? 'parts' : 'cars',
   hasPublicPage: true,
-  listingsCount: 0,
+  listingsCount: row.listingsCount ?? 0,
   logo: null,
   votes: 0,
   createdAt: row.createdAt,

@@ -69,7 +69,10 @@ export class PartsService {
   ): Prisma.PartWhereInput {
     // Public search shows only published listings.
     const where: Prisma.PartWhereInput = {
-      listing: { status: ListingStatus.ACTIVE },
+      listing: {
+        status: ListingStatus.ACTIVE,
+        ...(filter?.sellerId ? { sellerId: filter.sellerId } : {}),
+      },
     };
 
     if (filter?.search?.trim()) {

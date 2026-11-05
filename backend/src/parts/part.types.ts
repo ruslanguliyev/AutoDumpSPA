@@ -93,6 +93,10 @@ export class PaginatedParts {
 
 @InputType()
 export class PartsFilterInput {
+  /** Only parts of this seller. */
+  @Field({ nullable: true })
+  sellerId?: string;
+
   @Field({ nullable: true })
   search?: string;
 

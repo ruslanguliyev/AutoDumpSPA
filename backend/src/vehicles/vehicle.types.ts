@@ -144,6 +144,10 @@ export class PaginatedVehicles {
 
 @InputType()
 export class VehiclesFilterInput {
+  /** Only vehicles of this seller. */
+  @Field({ nullable: true })
+  sellerId?: string;
+
   @Field({ nullable: true })
   brand?: string;
 

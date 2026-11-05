@@ -67,7 +67,13 @@ const RegisterForm = () => {
     registerMutation.error instanceof Error ? registerMutation.error.message : null;
   const serverError = useMemo(() => {
     if (!rawServerError) return null;
-    if (rawServerError === 'Account already exists for this email') return t('errors.emailExists');
+    if (
+      rawServerError === 'User with this email already exists' ||
+      rawServerError === 'Account already exists for this email'
+    ) {
+      return t('errors.emailExists');
+    }
+    if (rawServerError === 'Invalid email address') return t('validation.emailInvalid', { defaultValue: rawServerError });
     if (rawServerError === 'Email is required') return t('validation.emailRequired');
     return rawServerError;
   }, [rawServerError, t]);

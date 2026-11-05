@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { useSellersData } from "@/sellers/hooks/useSellersData";
+import { useSellerListings } from "@/sellers/hooks/useSellerListings";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
@@ -36,14 +37,22 @@ const getYearsActive = (memberSince) => {
 };
 
 export default function SellerDetailPage({
-  vehicles = [],
-  parts = [],
-  isLoading = false,
-  error = null,
+  vehicles: vehiclesProp,
+  parts: partsProp,
+  isLoading: isLoadingProp = false,
+  error: errorProp = null,
 } = {}) {
   const { t } = useTranslation("sellers");
   const params = useParams();
   const sellerId = String(params?.sellerId ?? "").trim();
+
+  // The route renders this page without props, so by default load the seller's own listings.
+  const hasExternalData = vehiclesProp !== undefined || partsProp !== undefined;
+  const loaded = useSellerListings(sellerId, { enabled: !hasExternalData });
+  const vehicles = vehiclesProp ?? loaded.vehicles;
+  const parts = partsProp ?? loaded.parts;
+  const isLoading = isLoadingProp || loaded.isLoading;
+  const error = errorProp ?? loaded.error;
 
   const [activeTab, setActiveTab] = useState("listings");
   const [searchQuery, setSearchQuery] = useState("");

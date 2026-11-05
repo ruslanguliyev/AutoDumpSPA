@@ -370,6 +370,7 @@ input PartsFilterInput {
   priceFrom: Float
   priceTo: Float
   search: String
+  sellerId: String
 }
 
 input PlaceBidInput {
@@ -416,6 +417,7 @@ type SellerObject {
   city: String!
   createdAt: DateTime!
   id: String!
+  listingsCount: Int
   name: String!
   phone: String
   rating: Float!
@@ -727,6 +729,7 @@ input VehiclesFilterInput {
   offset: Int
   priceFrom: Float
   priceTo: Float
+  sellerId: String
   transmission: String
   vehicleType: String
   yearFrom: Int

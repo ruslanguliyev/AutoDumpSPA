@@ -30,6 +30,8 @@ import { PrismaModule } from './prisma/prisma.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       path: '/graphql',
+      // The schema is public knowledge in dev; hide it in production.
+      introspection: process.env.NODE_ENV !== 'production',
       sortSchema: true,
       resolvers: { JSON: GraphQLJSON },
     }),

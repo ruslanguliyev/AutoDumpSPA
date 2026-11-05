@@ -89,4 +89,41 @@ describe('listings: visibility, publishing, ownership', () => {
     expect(myListings.data.myListings.find((l: any) => l.id === mine.listingId)).toMatchObject({ kind: 'vehicle', status: 'DRAFT' });
     expect((await ctx.gql('{ myListings { id } }', undefined, stranger)).data.myListings.map((l: any) => l.id)).not.toContain(mine.listingId);
   });
+
+  it('filters vehicles and parts by seller and counts only published listings per seller', async () => {
+    const shop = await ctx.registerSeller('Shop');
+    const other = await ctx.registerSeller('Other shop');
+    await ctx.createVehicleListing(shop, { brand: 'ShopCar', publish: true });
+    await ctx.createVehicleListing(shop, { brand: 'ShopDraft' }); // draft: must not count
+    await ctx.createVehicleListing(other, { brand: 'OtherCar', publish: true });
+
+    const shopId = (await ctx.gql('{ mySeller { id } }', undefined, shop)).data.mySeller.id;
+    const otherId = (await ctx.gql('{ mySeller { id } }', undefined, other)).data.mySeller.id;
+
+    const byShop = await ctx.gql(
+      `query($s: String!) { vehicles(filter: { sellerId: $s }) { total items { brand } } }`,
+      { s: shopId },
+    );
+    expect(byShop.data.vehicles.items.map((v: any) => v.brand)).toEqual(['ShopCar']);
+
+    const byOther = await ctx.gql(
+      `query($s: String!) { vehicles(filter: { sellerId: $s }) { total } }`,
+      { s: otherId },
+    );
+    expect(byOther.data.vehicles.total).toBe(1);
+
+    const parts = await ctx.gql(
+      `query($s: String!) { parts(filter: { sellerId: $s }) { total } }`,
+      { s: shopId },
+    );
+    expect(parts.data.parts.total).toBe(0);
+
+    const counts = await ctx.gql('{ sellers { id listingsCount } }');
+    const count = (id: string) => counts.data.sellers.find((s: any) => s.id === id).listingsCount;
+    expect(count(shopId)).toBe(1);
+    expect(count(otherId)).toBe(1);
+
+    const one = await ctx.gql(`query($id: String!) { sellerById(id: $id) { listingsCount } }`, { id: shopId });
+    expect(one.data.sellerById.listingsCount).toBe(1);
+  });
 });

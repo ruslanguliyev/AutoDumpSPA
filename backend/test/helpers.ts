@@ -47,7 +47,7 @@ export async function createTestContext(): Promise<TestContext> {
       `mutation($e: String!, $p: String!, $f: String!) {
         register(email: $e, password: $p, fullName: $f) { accessToken }
       }`,
-      { e: `${name}-${counter}-${Date.now()}@test.local`, p: 'Passw0rd!x', f: name },
+      { e: `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${counter}-${Date.now()}@test.local`, p: 'Passw0rd!x', f: name },
     );
     if (!res.data) throw new Error(`register failed: ${JSON.stringify(res.errors)}`);
     return res.data.register.accessToken;

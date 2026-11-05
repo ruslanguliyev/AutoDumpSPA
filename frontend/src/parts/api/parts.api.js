@@ -259,6 +259,7 @@ const buildPartsFilterInput = (filters) => ({
   priceFrom: filters.priceFrom === '' ? null : filters.priceFrom,
   priceTo: filters.priceTo === '' ? null : filters.priceTo,
   location: filters.location || null,
+  sellerId: filters.sellerId || null,
   limit: filters.limit,
   offset: filters.offset,
 });

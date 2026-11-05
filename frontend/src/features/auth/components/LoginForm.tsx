@@ -57,6 +57,7 @@ const LoginForm = () => {
   const serverError = useMemo(() => {
     if (!rawServerError) return null;
     if (rawServerError === 'Invalid email or password') return t('errors.invalidCredentials');
+    if (rawServerError.startsWith('Too many failed login attempts')) return t('errors.tooManyAttempts');
     return rawServerError;
   }, [rawServerError, t]);
 

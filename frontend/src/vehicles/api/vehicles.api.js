@@ -74,6 +74,7 @@ const mapVehicle = (row) => ({
 const buildVehiclesFilterInput = (filters = {}) => ({
   brand: filters.brand || null,
   model: filters.model || null,
+  sellerId: filters.sellerId || null,
   yearFrom: filters.yearFrom ?? null,
   yearTo: filters.yearTo ?? null,
   priceFrom: filters.priceFrom ?? null,
