@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Image } from '@prisma/client';
 import * as fs from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { ListingsService } from '../listings/listings.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -28,7 +28,7 @@ export class UploadsService {
     await fs.mkdir(uploadDir, { recursive: true });
 
     const ext = this.getExtension(file.originalname);
-    const filename = `${uuidv4()}${ext}`;
+    const filename = `${randomUUID()}${ext}`;
     const destPath = join(uploadDir, filename);
 
     if (file.path) {
