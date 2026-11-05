@@ -94,3 +94,44 @@ export class PaginatedListings {
   @Field(() => Int)
   perPage: number;
 }
+
+@ObjectType()
+export class MyListingObject {
+  @Field()
+  id: string;
+
+  @Field()
+  title: string;
+
+  @Field(() => Float)
+  price: number;
+
+  @Field(() => ListingStatus)
+  status: ListingStatus;
+
+  /** 'vehicle' | 'part' | 'service' | 'unknown' */
+  @Field()
+  kind: string;
+
+  /** Vehicle.id / Part.id for linking to the public page. */
+  @Field({ nullable: true })
+  itemId?: string | null;
+
+  @Field({ nullable: true })
+  currency?: string | null;
+
+  @Field({ nullable: true })
+  thumbnail?: string | null;
+
+  @Field(() => Int)
+  inquiriesCount: number;
+
+  @Field(() => Int)
+  favoritesCount: number;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
+}

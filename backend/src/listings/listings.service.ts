@@ -14,6 +14,7 @@ import { SellersService } from '../sellers/sellers.service';
 import {
   CreateListingInput,
   ListingsFilterInput,
+  MyListingObject,
   PaginatedListings,
   UpdateListingInput,
 } from './listing.types';
@@ -176,6 +177,69 @@ export class ListingsService {
       page: safePage,
       perPage: safePerPage,
     };
+  }
+
+  /** Listings of the current user's seller profile (all statuses) with card data. */
+  async getMyListings(userId: string, status?: ListingStatus): Promise<MyListingObject[]> {
+    const seller = await this.sellersService.getSellerByUserId(userId);
+    if (!seller) return [];
+
+    const listings = await this.prisma.listing.findMany({
+      where: { sellerId: seller.id, ...(status ? { status } : {}) },
+      orderBy: { createdAt: 'desc' },
+      take: 500,
+      include: {
+        vehicles: { take: 1 },
+        parts: { take: 1 },
+        services: { take: 1 },
+        _count: { select: { inquiries: true } },
+      },
+    });
+
+    const itemIds = listings.flatMap((l) => [
+      ...l.vehicles.map((v) => v.id),
+      ...l.parts.map((p) => p.id),
+    ]);
+    const favGroups = itemIds.length
+      ? await this.prisma.favorite.groupBy({
+          by: ['itemId'],
+          where: { itemId: { in: itemIds } },
+          _count: { _all: true },
+        })
+      : [];
+    const favCount = new Map(favGroups.map((g) => [g.itemId, g._count._all]));
+
+    return listings.map((l) => {
+      const v = l.vehicles[0];
+      const p = l.parts[0];
+      const s = l.services[0];
+      const kind = v ? 'vehicle' : p ? 'part' : s ? 'service' : 'unknown';
+      const itemId = v?.id ?? p?.id ?? null;
+      return {
+        id: l.id,
+        title: l.title,
+        price: Number(l.price),
+        status: l.status,
+        kind,
+        itemId,
+        currency: v?.currency ?? p?.currency ?? null,
+        thumbnail: v?.imageUrls?.[0] ?? p?.imageUrl ?? null,
+        inquiriesCount: l._count.inquiries,
+        favoritesCount: itemId ? (favCount.get(itemId) ?? 0) : 0,
+        createdAt: l.createdAt,
+        updatedAt: l.updatedAt,
+      };
+    });
+  }
+
+  /** Move an owned listing back to DRAFT (unpublish). */
+  async unpublishListing(userId: string, id: string) {
+    const listing = await this.getOwnedListing(userId, id);
+    const updated = await this.prisma.listing.update({
+      where: { id: listing.id },
+      data: { status: ListingStatus.DRAFT },
+    });
+    return this.toListingObject(updated);
   }
 
   private async getOwnedListing(userId: string, listingId: string): Promise<Listing> {

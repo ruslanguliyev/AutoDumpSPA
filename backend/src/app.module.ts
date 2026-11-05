@@ -19,6 +19,8 @@ import { ListingsModule } from './listings/listings.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { AuctionsModule } from './auctions/auctions.module';
 import { BidsModule } from './bids/bids.module';
+import { FavoritesModule } from './favorites/favorites.module';
+import { InquiriesModule } from './inquiries/inquiries.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -45,6 +47,8 @@ import { PrismaModule } from './prisma/prisma.module';
     UploadsModule,
     AuctionsModule,
     BidsModule,
+    FavoritesModule,
+    InquiriesModule,
   ],
   providers: [AppResolver, AppService],
 })

@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ListingStatus } from '@prisma/client';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
@@ -8,6 +9,7 @@ import {
   CreateListingInput,
   ListingObject,
   ListingsFilterInput,
+  MyListingObject,
   PaginatedListings,
   UpdateListingInput,
 } from './listing.types';
@@ -63,6 +65,24 @@ export class ListingsResolver {
     @Args('id') id: string,
   ): Promise<ListingObject> {
     return this.listingsService.publishListing(user.id, id);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [MyListingObject])
+  async myListings(
+    @CurrentUser() user: AuthUser,
+    @Args('status', { type: () => ListingStatus, nullable: true }) status?: ListingStatus,
+  ): Promise<MyListingObject[]> {
+    return this.listingsService.getMyListings(user.id, status);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => ListingObject)
+  async unpublishListing(
+    @CurrentUser() user: AuthUser,
+    @Args('id') id: string,
+  ): Promise<ListingObject> {
+    return this.listingsService.unpublishListing(user.id, id);
   }
 
   @UseGuards(GqlAuthGuard)

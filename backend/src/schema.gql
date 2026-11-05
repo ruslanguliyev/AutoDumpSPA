@@ -46,6 +46,12 @@ input CreateAuctionInput {
   startTime: DateTime!
 }
 
+input CreateInquiryInput {
+  listingId: String!
+  message: String!
+  phone: String
+}
+
 input CreateListingInput {
   description: String!
   price: Float!
@@ -182,11 +188,43 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type FavoriteItemObject {
+  createdAt: DateTime!
+  currency: String
+  itemId: String!
+  price: Float
+  thumbnail: String
+  title: String!
+  type: String!
+}
+
+input FavoriteRefInput {
+  itemId: String!
+  type: String!
+}
+
 type ImageObject {
   id: String!
   listingId: String!
   position: Int!
   url: String!
+}
+
+type InquiryObject {
+  createdAt: DateTime!
+  fromEmail: String
+  fromName: String
+  id: String!
+  listingId: String!
+  listingTitle: String!
+  message: String!
+  phone: String
+  status: InquiryStatus!
+}
+
+enum InquiryStatus {
+  NEW
+  READ
 }
 
 """
@@ -220,9 +258,11 @@ input ListingsFilterInput {
 }
 
 type Mutation {
+  addFavorite(itemId: String!, type: String!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
   closeListing(id: String!): ListingObject!
   createAuction(input: CreateAuctionInput!): AuctionObject!
+  createInquiry(input: CreateInquiryInput!): InquiryObject!
   createListing(input: CreateListingInput!): ListingObject!
   createPart(input: CreatePartInput!, listingId: String!): PartObject!
   createSeller(input: CreateSellerInput!): SellerObject!
@@ -236,10 +276,14 @@ type Mutation {
   deleteVehicle(id: String!): Boolean!
   finishAuction(id: String!): AuctionObject!
   login(email: String!, password: String!): AuthPayload!
+  markInquiryRead(id: String!): InquiryObject!
   placeBid(input: PlaceBidInput!): BidObject!
   publishListing(id: String!): ListingObject!
   register(email: String!, fullName: String!, password: String!): AuthPayload!
+  removeFavorite(itemId: String!, type: String!): Boolean!
   startAuction(id: String!): AuctionObject!
+  syncFavorites(items: [FavoriteRefInput!]!): Int!
+  unpublishListing(id: String!): ListingObject!
   updateListing(id: String!, input: UpdateListingInput!): ListingObject!
   updatePart(id: String!, input: UpdatePartInput!): PartObject!
   updateProfile(input: UpdateProfileInput!): UserObject!
@@ -248,6 +292,21 @@ type Mutation {
   updateServiceCenter(input: UpdateServiceCenterInput!): ServiceCenterObject!
   updateSpecialist(input: UpdateSpecialistInput!): SpecialistObject!
   updateVehicle(id: String!, input: UpdateVehicleInput!): VehicleObject!
+}
+
+type MyListingObject {
+  createdAt: DateTime!
+  currency: String
+  favoritesCount: Int!
+  id: String!
+  inquiriesCount: Int!
+  itemId: String
+  kind: String!
+  price: Float!
+  status: ListingStatus!
+  thumbnail: String
+  title: String!
+  updatedAt: DateTime!
 }
 
 type PaginatedListings {
@@ -325,14 +384,18 @@ type Query {
   listings(filter: ListingsFilterInput, page: Int! = 1, perPage: Int! = 20): PaginatedListings!
   me: UserObject!
   myBids: [BidObject!]!
+  myFavorites: [FavoriteItemObject!]!
+  myListings(status: ListingStatus): [MyListingObject!]!
   mySeller: SellerObject
   myServiceCenter: ServiceCenterObject
   mySpecialist: SpecialistObject
   partById(id: String!): PartObject!
   partByListing(listingId: String!): PartObject
   parts(filter: PartsFilterInput): PaginatedParts!
+  receivedInquiries(status: InquiryStatus): [InquiryObject!]!
   sellerById(id: String!): SellerObject!
   sellers: [SellerObject!]!
+  sentInquiries: [InquiryObject!]!
   serviceByListing(listingId: String!): ServiceObject
   serviceCenter(id: String!): ServiceCenterObject!
   serviceCenterBySlug(slug: String!): ServiceCenterObject
@@ -340,6 +403,7 @@ type Query {
   specialist(id: String!): SpecialistObject!
   specialistBySlug(slug: String!): SpecialistObject!
   specialists(filter: SpecialistsFilterInput): [SpecialistObject!]!
+  unreadInquiriesCount: Int!
   vehicleById(id: String!): VehicleObject!
   vehicleByListing(listingId: String!): VehicleObject
   vehicles(filter: VehiclesFilterInput): PaginatedVehicles!
