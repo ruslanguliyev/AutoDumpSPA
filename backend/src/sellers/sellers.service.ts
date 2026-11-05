@@ -1,9 +1,10 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SellerType, UserRole } from '@prisma/client';
+import { Seller, SellerType, UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSellerInput, UpdateSellerInput } from './seller.types';
 
@@ -16,6 +17,23 @@ function userRoleForSellerType(type: SellerType): UserRole {
     case SellerType.PARTS_DEALER:
       return UserRole.PARTS_DEALER;
   }
+}
+
+const PHONE_PATTERN = /^\+?[0-9\s\-()]{6,20}$/;
+
+/** Trims and validates a phone number. Empty input means "no phone" (null). */
+export function normalizePhone(value: string | null | undefined): string | null {
+  const phone = (value ?? '').trim();
+  if (!phone) return null;
+  if (!PHONE_PATTERN.test(phone)) {
+    throw new BadRequestException('Invalid phone number');
+  }
+  return phone;
+}
+
+/** Public view of a seller: the phone is only visible when the seller allows it. */
+export function toPublicSeller<T extends Pick<Seller, 'phone' | 'showPhone'>>(seller: T): T {
+  return seller.showPhone ? seller : { ...seller, phone: null };
 }
 
 @Injectable()
@@ -37,6 +55,8 @@ export class SellersService {
         type: input.type as SellerType,
         name: input.name,
         city: input.city,
+        phone: normalizePhone(input.phone),
+        ...(input.showPhone !== undefined ? { showPhone: input.showPhone } : {}),
         rating: 0,
         verified: false,
       },
@@ -65,6 +85,8 @@ export class SellersService {
         ...(input.type !== undefined ? { type: input.type as SellerType } : {}),
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.city !== undefined ? { city: input.city } : {}),
+        ...(input.phone !== undefined ? { phone: normalizePhone(input.phone) } : {}),
+        ...(input.showPhone !== undefined ? { showPhone: input.showPhone } : {}),
       },
     });
   }
@@ -76,9 +98,10 @@ export class SellersService {
   }
 
   async getAllSellers() {
-    return this.prisma.seller.findMany({
+    const sellers = await this.prisma.seller.findMany({
       orderBy: { createdAt: 'desc' },
     });
+    return sellers.map(toPublicSeller);
   }
 
   async getSellerById(id: string) {
@@ -90,6 +113,6 @@ export class SellersService {
       throw new NotFoundException('Seller not found');
     }
 
-    return seller;
+    return toPublicSeller(seller);
   }
 }

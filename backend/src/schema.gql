@@ -77,6 +77,8 @@ input CreatePartInput {
 input CreateSellerInput {
   city: String!
   name: String!
+  phone: String
+  showPhone: Boolean
   type: SellerType!
 }
 
@@ -351,6 +353,7 @@ type PartSellerObject {
   id: String!
   logo: String
   name: String!
+  phone: String
   rating: Float!
   type: String!
   verified: Boolean!
@@ -414,7 +417,9 @@ type SellerObject {
   createdAt: DateTime!
   id: String!
   name: String!
+  phone: String
   rating: Float!
+  showPhone: Boolean!
   type: SellerType!
   updatedAt: DateTime!
   userId: String!
@@ -554,6 +559,8 @@ input UpdateProfileInput {
 input UpdateSellerInput {
   city: String
   name: String
+  phone: String
+  showPhone: Boolean
   type: SellerType
 }
 
@@ -704,6 +711,7 @@ type VehicleSellerObject {
   id: String!
   logo: String
   name: String!
+  phone: String
   rating: Float!
   type: String!
   verified: Boolean!

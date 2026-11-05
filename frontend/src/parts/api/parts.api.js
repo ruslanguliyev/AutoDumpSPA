@@ -315,7 +315,7 @@ query Parts($filter: PartsFilterInput) {
       id name category brand model condition
       description price currency oemCode
       compatibility stock location imageUrl
-      seller { id name type hasPublicPage verified rating city logo }
+      seller { id name type hasPublicPage verified rating city phone logo }
     }
     total
   }
@@ -360,7 +360,7 @@ query PartById($id: String!) {
     id listingId name category brand model condition
     description price currency oemCode
     compatibility stock location imageUrl
-    seller { id name type hasPublicPage verified rating city logo }
+    seller { id name type hasPublicPage verified rating city phone logo }
   }
 }
 `;

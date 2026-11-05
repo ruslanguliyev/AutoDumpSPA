@@ -23,6 +23,10 @@ export class PartSellerObject {
   @Field()
   city: string;
 
+  /** Null unless the seller chose to show the phone number publicly. */
+  @Field({ nullable: true })
+  phone?: string | null;
+
   @Field({ nullable: true })
   logo: string | null;
 }

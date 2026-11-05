@@ -12,7 +12,7 @@ import { gqlRequest } from '@/lib/graphql';
 const EDIT_QUERY = `
 query EditListing($id: String!) {
   listing(id: $id) { id title description price status sellerId }
-  mySeller { id name type }
+  mySeller { id name type phone showPhone }
   vehicleByListing(listingId: $id) {
     id brand model generation version year mileage fuel transmission
     displacement horsepower drive condition location description
@@ -34,7 +34,13 @@ type EditQueryResult = {
     status: 'DRAFT' | 'ACTIVE' | 'SOLD';
     sellerId: string;
   };
-  mySeller: { id: string; name: string; type: string } | null;
+  mySeller: {
+    id: string;
+    name: string;
+    type: string;
+    phone: string | null;
+    showPhone: boolean;
+  } | null;
   vehicleByListing: {
     id: string;
     brand: string;
@@ -82,7 +88,7 @@ const toImages = (urls: string[]): ListingImage[] =>
 
 /**
  * Builds a wizard draft from a listing stored on the server.
- * Fields the backend does not persist (phone, email, VIN, vehicle category) are carried over
+ * Fields the backend does not persist (email, VIN, vehicle category) are carried over
  * from an existing local draft when there is one.
  */
 export const buildDraftFromServer = (
@@ -123,10 +129,10 @@ export const buildDraftFromServer = (
     seller: {
       type: mySeller?.type === 'PRIVATE' ? 'private' : 'dealer',
       name: mySeller?.name ?? previous?.seller.name ?? '',
-      phone: previous?.seller.phone ?? '',
+      phone: mySeller?.phone ?? previous?.seller.phone ?? '',
       email: previous?.seller.email ?? '',
       location,
-      showPhone: previous?.seller.showPhone ?? true,
+      showPhone: mySeller?.showPhone ?? previous?.seller.showPhone ?? true,
     },
     vehicle: v
       ? {

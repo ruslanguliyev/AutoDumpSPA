@@ -11,7 +11,7 @@ query Vehicles($filter: VehiclesFilterInput) {
       isHot isCreditAvailable isBarterAvailable
       hasDamage isRepainted wasInAccident
       ownersCount seatsCount marketRegion
-      seller { id name type hasPublicPage verified rating city logo }
+      seller { id name type hasPublicPage verified rating city phone logo }
     }
     total
   }
@@ -27,7 +27,7 @@ query VehicleById($id: String!) {
     isHot isCreditAvailable isBarterAvailable
     hasDamage isRepainted wasInAccident
     ownersCount seatsCount marketRegion
-    seller { id name type hasPublicPage verified rating city logo }
+    seller { id name type hasPublicPage verified rating city phone logo }
   }
 }
 `;

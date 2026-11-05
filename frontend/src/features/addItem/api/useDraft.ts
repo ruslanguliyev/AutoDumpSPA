@@ -171,6 +171,63 @@ const partImageUrl = (draft: ListingDraft): string => {
   return (usable.find((img) => img.isMain) ?? usable[0])?.url?.trim() ?? '';
 };
 
+const UPDATE_SELLER = `
+mutation UpdateSeller($input: UpdateSellerInput!) {
+  updateSeller(input: $input) { id phone showPhone }
+}
+`;
+
+const MY_SELLER_AND_ME = `
+query {
+  mySeller { id name type city phone showPhone }
+  me { fullName }
+}
+`;
+
+const CREATE_SELLER = `
+mutation CreateSeller($input: CreateSellerInput!) {
+  createSeller(input: $input) { id name type city phone showPhone }
+}
+`;
+
+type SellerGql = {
+  id: string;
+  name: string;
+  type: string;
+  city: string;
+  phone: string | null;
+  showPhone: boolean;
+};
+
+/** Last seller contact data pushed to the server, so autosave does not resend it every time. */
+let lastSyncedContact = '';
+
+const syncSellerContact = async (draft: ListingDraft) => {
+  const phone = draft.seller.phone.trim();
+  const showPhone = draft.seller.showPhone;
+  if (!phone) return; // never clear a stored number implicitly
+  const key = JSON.stringify({ phone, showPhone });
+  if (key === lastSyncedContact) return;
+  await gqlRequest(UPDATE_SELLER, { input: { phone, showPhone } });
+  lastSyncedContact = key;
+};
+
+/**
+ * Every listing needs a seller profile. New users have none, so create a minimal one
+ * (name from the account) and let the wizard's seller step fill in the rest.
+ */
+const ensureSellerProfile = async (): Promise<SellerGql> => {
+  const { mySeller, me } = await gqlRequest<{
+    mySeller: SellerGql | null;
+    me: { fullName: string };
+  }>(MY_SELLER_AND_ME);
+  if (mySeller) return mySeller;
+  const { createSeller } = await gqlRequest<{ createSeller: SellerGql }>(CREATE_SELLER, {
+    input: { type: 'PRIVATE', name: me.fullName, city: '' },
+  });
+  return createSeller;
+};
+
 async function syncDraftToBackend(draft: ListingDraft) {
   const listingId = draft._listingId ?? draft.id;
   const price = draft.common.pricing.price ?? 0;
@@ -242,12 +299,21 @@ async function syncDraftToBackend(draft: ListingDraft) {
       },
     });
   }
+
+  // Seller contact is best-effort: a failure here must not block saving the listing itself.
+  try {
+    await syncSellerContact(draft);
+  } catch (err) {
+    console.error('Seller contact sync failed', err);
+  }
 }
 
 export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
   if (!getToken()) {
     throw new Error('Please log in to create a listing');
   }
+
+  const sellerProfile = await ensureSellerProfile();
 
   const { createListing: listing } = await gqlRequest<{ createListing: ListingGql }>(
     CREATE_LISTING,
@@ -319,12 +385,12 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
     },
     media: { images: [], pendingUrl: '' },
     seller: {
-      type: 'dealer',
-      name: '',
-      phone: '',
+      type: sellerProfile.type === 'PRIVATE' ? 'private' : 'dealer',
+      name: sellerProfile.name,
+      phone: sellerProfile.phone ?? '',
       email: '',
       location: '',
-      showPhone: true,
+      showPhone: sellerProfile.showPhone,
     },
     vehicle:
       type === 'vehicle'

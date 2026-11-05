@@ -73,10 +73,12 @@ export const validatePricing = (draft: ListingDraft) => {
   return typeof price === 'number' && Number.isFinite(price) && price > 0;
 };
 
+/** Same rule as the backend: optional +, then 6-20 digits, spaces, dashes or brackets. */
+export const isValidPhone = (value: string | undefined | null) =>
+  /^\+?[0-9\s\-()]{6,20}$/.test(trim(value));
+
 export const validateSeller = (draft: ListingDraft) => {
-  if (!trim(draft.seller.name).length) return false;
-  // The phone number is not stored on the server, so it cannot be required when editing.
-  return draft._editing ? true : trim(draft.seller.phone).length > 0;
+  return trim(draft.seller.name).length > 0 && isValidPhone(draft.seller.phone);
 };
 
 export const validatePhotos = (draft: ListingDraft) => {

@@ -19,6 +19,13 @@ export class SellerObject {
   @Field()
   city: string;
 
+  /** Hidden (null) in public queries when the seller disabled showPhone. */
+  @Field({ nullable: true })
+  phone?: string | null;
+
+  @Field()
+  showPhone: boolean;
+
   @Field()
   rating: number;
 
@@ -42,6 +49,12 @@ export class CreateSellerInput {
 
   @Field()
   city: string;
+
+  @Field({ nullable: true })
+  phone?: string;
+
+  @Field({ nullable: true })
+  showPhone?: boolean;
 }
 
 @InputType()
@@ -54,4 +67,11 @@ export class UpdateSellerInput {
 
   @Field({ nullable: true })
   city?: string;
+
+  /** Empty string clears the phone number. */
+  @Field({ nullable: true })
+  phone?: string;
+
+  @Field({ nullable: true })
+  showPhone?: boolean;
 }

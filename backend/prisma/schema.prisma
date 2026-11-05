@@ -57,6 +57,9 @@ model Seller {
   type      SellerType
   name      String
   city      String
+  phone     String?
+  /// When false the phone number is hidden from public queries
+  showPhone Boolean    @default(true)
   rating    Float
   verified  Boolean    @default(false)
   createdAt DateTime   @default(now())

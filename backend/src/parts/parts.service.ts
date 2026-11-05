@@ -57,6 +57,7 @@ export class PartsService {
             verified: seller.verified,
             rating: seller.rating,
             city: seller.city,
+            phone: seller.showPhone ? seller.phone : null,
             logo: null,
           }
         : null,
