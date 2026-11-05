@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { fetchParts } from '@/parts/api/parts.api';
 import { sanitizeFilters } from '@/parts/utils/filterParts';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
@@ -33,14 +33,14 @@ export const useParts = () => {
     queryKey: [PARTS_QUERY_KEY, 'all', unfilteredFilters],
     queryFn: () => fetchParts(unfilteredFilters),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const query = useQuery({
     queryKey: [PARTS_QUERY_KEY, normalizedFilters],
     queryFn: () => fetchParts(normalizedFilters),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   // Select options must be derived from FULL dataset only (allParts),

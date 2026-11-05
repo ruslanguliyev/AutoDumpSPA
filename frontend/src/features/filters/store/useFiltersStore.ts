@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 import type { DomainFilters, FilterDomain, FilterValue } from '../types/filters.types';
 import { FILTER_DEFAULTS, getDefaultFilters } from './filters.defaults';
@@ -228,7 +228,7 @@ export const useFiltersStore = create<FiltersStoreState>()(
       partialize: (state) => ({ ui: state.ui }),
       merge: (persisted, current) => {
         const p = persisted as { ui?: Record<string, Partial<FiltersUIState>> };
-        const merged = { ...current, ...p };
+        const merged: FiltersStoreState = { ...current, ...(p as Partial<FiltersStoreState>) };
         if (p?.ui && typeof p.ui === 'object') {
           merged.ui = { ...current.ui };
           for (const key of Object.keys(p.ui)) {
@@ -243,12 +243,10 @@ export const useFiltersStore = create<FiltersStoreState>()(
 
 export const useFilters = (domain: FilterDomain): DomainFilters =>
   useFiltersStore(
-    (state) => state.filters[domain] ?? FILTER_DEFAULTS[domain],
-    shallow
+    useShallow((state) => state.filters[domain] ?? FILTER_DEFAULTS[domain])
   );
 
 export const useFiltersUi = (domain: FilterDomain): FiltersUIState =>
   useFiltersStore(
-    (state) => state.ui[domain] ?? DEFAULT_UI_STATE,
-    shallow
+    useShallow((state) => state.ui[domain] ?? DEFAULT_UI_STATE)
   );

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getServicesByIds } from '@/services/api/services.query';
 
 const SERVICES_BY_IDS_QUERY_KEY = 'services';
@@ -16,7 +16,7 @@ export const useServicesByIds = (ids = [], options = {}) => {
     queryFn: () => getServicesByIds(normalizedIds),
     enabled: normalizedIds.length > 0 && (options.enabled ?? true),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   return {

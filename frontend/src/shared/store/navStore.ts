@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /** ID of the currently open mega menu: 'parts' | 'auto_services' | null */
-type OpenMegaMenuId = 'parts' | 'auto_services' | null;
+export type OpenMegaMenuId = 'parts' | 'auto_services' | null;
 
 interface NavState {
   openMegaMenu: OpenMegaMenuId;

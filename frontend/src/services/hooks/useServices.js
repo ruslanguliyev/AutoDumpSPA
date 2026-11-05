@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getServices } from '@/services/api/services.query';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { isServiceOpen } from '@/services/utils/serviceSchedule.utils';
@@ -13,7 +13,7 @@ export const useServices = () => {
     queryKey: [SERVICES_QUERY_KEY, filters],
     queryFn: () => getServices(filters),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const services = query.data ?? [];

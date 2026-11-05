@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { useNavStore } from '@/shared/store/navStore';
+import type { OpenMegaMenuId } from '@/shared/store/navStore';
 import type { MegaMenuConfig } from '@/domain/navigation/megaMenu.config';
 
 interface MegaMenuProps {
@@ -34,7 +35,7 @@ export function MegaMenu({
     if (isMobile && onToggle) {
       onToggle();
     } else {
-      setOpenMegaMenu(config.id);
+      setOpenMegaMenu(config.id as OpenMegaMenuId);
     }
   }, [config.id, isMobile, onToggle, setOpenMegaMenu]);
 

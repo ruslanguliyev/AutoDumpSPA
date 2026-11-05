@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { getAutosByFilters } from '@/vehicles/api/autos';
@@ -68,7 +68,7 @@ export const useAutos = () => {
     queryKey: [CARS_QUERY_KEY, normalizedFilters],
     queryFn: () => getAutosByFilters(normalizedFilters),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const autos = query.data ?? [];

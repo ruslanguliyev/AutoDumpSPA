@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import { specialistsApi } from '@/specialists/api';
 import { useFilters } from '@/features/filters/store/useFiltersStore';
@@ -26,7 +26,7 @@ const normalizeFilters = (filters: DomainFilters): SpecialistsFiltersInput => ({
   brand: toString(filters.brand) || null,
   model: toString(filters.model) || null,
   year: toNumberOrNull(filters.year),
-  specialization: toString(filters.specialization) || null,
+  specialization: (toString(filters.specialization) || null) as SpecialistsFiltersInput['specialization'],
   city: toString(filters.city) || null,
   minRating: toNumberOrNull(filters.minRating),
 });
@@ -49,7 +49,7 @@ export const useSpecialistsQuery = (
     queryKey: [SPECIALISTS_QUERY_KEY, stableKey],
     queryFn: () => specialistsApi.getSpecialists(filters),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     ...options,
   });
 
@@ -105,7 +105,7 @@ export const useSpecialistsByIds = (
     queryFn: () => specialistsApi.getSpecialistsByIds(normalizedIds),
     enabled: normalizedIds.length > 0 && (options.enabled ?? true),
     staleTime: 30_000,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   return {

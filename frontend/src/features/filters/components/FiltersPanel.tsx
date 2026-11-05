@@ -94,7 +94,7 @@ const getActiveFiltersCount = (
     return count + (isActiveValue(value, defaultValue) ? 1 : 0);
   }, 0);
 
-const getOptionLabel = (options: FilterOption[], value: string | number) =>
+const getOptionLabel = (options: FilterOption[], value: string | number | boolean) =>
   options.find((option) => String(option.value) === String(value))?.label ??
   String(value);
 
