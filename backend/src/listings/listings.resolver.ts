@@ -3,6 +3,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
+import { OptionalGqlAuthGuard } from '../common/guards/optional-gql-auth.guard';
 import {
   CreateListingInput,
   ListingObject,
@@ -16,18 +17,24 @@ import { ListingsService } from './listings.service';
 export class ListingsResolver {
   constructor(private readonly listingsService: ListingsService) {}
 
+  @UseGuards(OptionalGqlAuthGuard)
   @Query(() => ListingObject)
-  async listing(@Args('id') id: string): Promise<ListingObject> {
-    return this.listingsService.getListing(id);
+  async listing(
+    @CurrentUser() user: AuthUser | null,
+    @Args('id') id: string,
+  ): Promise<ListingObject> {
+    return this.listingsService.getVisibleListing(id, user?.id);
   }
 
+  @UseGuards(OptionalGqlAuthGuard)
   @Query(() => PaginatedListings)
   async listings(
+    @CurrentUser() user: AuthUser | null,
     @Args('filter', { nullable: true }) filter?: ListingsFilterInput,
     @Args('page', { type: () => Int, defaultValue: 1 }) page = 1,
     @Args('perPage', { type: () => Int, defaultValue: 20 }) perPage = 20,
   ): Promise<PaginatedListings> {
-    return this.listingsService.getListings(filter ?? {}, page, perPage);
+    return this.listingsService.getListings(filter ?? {}, page, perPage, user?.id);
   }
 
   @UseGuards(GqlAuthGuard)

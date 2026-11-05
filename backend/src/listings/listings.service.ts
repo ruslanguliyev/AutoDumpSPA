@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -60,6 +61,21 @@ export class ListingsService {
 
   async publishListing(userId: string, id: string) {
     const listing = await this.getOwnedListing(userId, id);
+
+    const [vehicles, parts, services] = await this.prisma.$transaction([
+      this.prisma.vehicle.count({ where: { listingId: listing.id } }),
+      this.prisma.part.count({ where: { listingId: listing.id } }),
+      this.prisma.service.count({ where: { listingId: listing.id } }),
+    ]);
+    if (vehicles + parts + services === 0) {
+      throw new BadRequestException(
+        'Listing has no vehicle, part or service attached and cannot be published',
+      );
+    }
+    if (!listing.title.trim()) {
+      throw new BadRequestException('Listing title is required to publish');
+    }
+
     const updated = await this.prisma.listing.update({
       where: { id: listing.id },
       data: { status: ListingStatus.ACTIVE },
@@ -92,17 +108,47 @@ export class ListingsService {
     return this.toListingObject(listing);
   }
 
+  /**
+   * Returns a listing for public display. DRAFT listings are visible only to
+   * their owner; everyone else gets "not found".
+   */
+  async getVisibleListing(id: string, requesterUserId?: string) {
+    const listing = await this.prisma.listing.findUnique({ where: { id } });
+    if (!listing) {
+      throw new NotFoundException('Listing not found');
+    }
+    if (listing.status === ListingStatus.DRAFT) {
+      const ownSeller = requesterUserId
+        ? await this.sellersService.getSellerByUserId(requesterUserId)
+        : null;
+      if (!ownSeller || ownSeller.id !== listing.sellerId) {
+        throw new NotFoundException('Listing not found');
+      }
+    }
+    return this.toListingObject(listing);
+  }
+
   async getListings(
     filter: ListingsFilterInput = {},
     page = 1,
     perPage = 20,
+    requesterUserId?: string,
   ): Promise<PaginatedListings> {
     const safePage = Math.max(1, page);
-    const safePerPage = Math.max(1, perPage);
+    const safePerPage = Math.min(1000, Math.max(1, perPage));
     const skip = (safePage - 1) * safePerPage;
 
+    // Anonymous users and other sellers only ever see published listings.
+    // Only a seller browsing their own listings may filter by any status.
+    let isOwnListings = false;
+    if (requesterUserId && filter.sellerId !== undefined) {
+      const ownSeller = await this.sellersService.getSellerByUserId(requesterUserId);
+      isOwnListings = ownSeller?.id === filter.sellerId;
+    }
+    const status = isOwnListings ? filter.status : ListingStatus.ACTIVE;
+
     const where: Prisma.ListingWhereInput = {
-      ...(filter.status !== undefined ? { status: filter.status } : {}),
+      ...(status !== undefined ? { status } : {}),
       ...(filter.sellerId !== undefined ? { sellerId: filter.sellerId } : {}),
       ...((filter.minPrice !== undefined || filter.maxPrice !== undefined)
         ? {

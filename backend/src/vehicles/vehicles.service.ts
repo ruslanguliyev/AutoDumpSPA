@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { ListingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ListingsService } from '../listings/listings.service';
 import {
@@ -85,7 +85,10 @@ export class VehiclesService {
   private buildVehiclesWhere(
     filter?: VehiclesFilterInput | null,
   ): Prisma.VehicleWhereInput {
-    const where: Prisma.VehicleWhereInput = {};
+    // Public search shows only published listings.
+    const where: Prisma.VehicleWhereInput = {
+      listing: { status: ListingStatus.ACTIVE },
+    };
 
     if (filter?.brand?.trim()) {
       where.brand = {
@@ -192,7 +195,7 @@ export class VehiclesService {
         listing: { include: { seller: true } },
       },
     });
-    if (!row) {
+    if (!row || row.listing.status === ListingStatus.DRAFT) {
       throw new NotFoundException('Vehicle not found');
     }
     return this.mapVehicle(row);

@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -20,36 +22,52 @@ export class BidsService {
   async placeBid(userId: string, input: PlaceBidInput) {
     const auction = await this.prisma.auction.findUnique({
       where: { id: input.auctionId },
+      include: { listing: { include: { seller: true } } },
     });
 
     if (!auction) {
       throw new NotFoundException('Auction not found');
     }
 
-    if (auction.status !== STATUS_ACTIVE) {
+    if (auction.listing.seller.userId === userId) {
+      throw new ForbiddenException('You cannot bid on your own listing');
+    }
+
+    const now = new Date();
+    if (auction.status !== STATUS_ACTIVE || auction.endTime <= now) {
       throw new BadRequestException('Auction is not active');
     }
 
-    const current = Number(auction.currentPrice);
-    if (input.amount <= current) {
+    if (input.amount <= Number(auction.currentPrice)) {
       throw new BadRequestException('Bid must be greater than current price');
     }
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const bid = await tx.bid.create({
+      // Conditional update is atomic: if another bid raised the price (or the
+      // auction ended) since the checks above, no row matches and we reject.
+      const updated = await tx.auction.updateMany({
+        where: {
+          id: input.auctionId,
+          status: STATUS_ACTIVE,
+          endTime: { gt: now },
+          currentPrice: { lt: input.amount },
+        },
+        data: { currentPrice: input.amount },
+      });
+
+      if (updated.count === 0) {
+        throw new ConflictException(
+          'Bid is no longer valid: the price changed or the auction ended',
+        );
+      }
+
+      return tx.bid.create({
         data: {
           auctionId: input.auctionId,
           userId,
           amount: input.amount,
         },
       });
-
-      await tx.auction.update({
-        where: { id: input.auctionId },
-        data: { currentPrice: input.amount },
-      });
-
-      return bid;
     });
 
     const payload = this.toBidObject(result);

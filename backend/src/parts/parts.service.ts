@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { ListingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ListingsService } from '../listings/listings.service';
 import {
@@ -66,7 +66,10 @@ export class PartsService {
   private buildPartsWhere(
     filter?: PartsFilterInput | null,
   ): Prisma.PartWhereInput {
-    const where: Prisma.PartWhereInput = {};
+    // Public search shows only published listings.
+    const where: Prisma.PartWhereInput = {
+      listing: { status: ListingStatus.ACTIVE },
+    };
 
     if (filter?.search?.trim()) {
       const s = filter.search.trim();
@@ -158,7 +161,7 @@ export class PartsService {
         listing: { include: { seller: true } },
       },
     });
-    if (!row) {
+    if (!row || row.listing.status === ListingStatus.DRAFT) {
       throw new NotFoundException('Part not found');
     }
     return this.mapPart(row);

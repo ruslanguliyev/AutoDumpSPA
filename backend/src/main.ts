@@ -1,9 +1,11 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { AppModule } from './app.module';
+import { getAllowedOrigins } from './common/config/cors';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,7 +18,7 @@ async function bootstrap() {
   const port = configService.get<number>('PORT') ?? 4000;
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: getAllowedOrigins(),
     credentials: true,
   });
 

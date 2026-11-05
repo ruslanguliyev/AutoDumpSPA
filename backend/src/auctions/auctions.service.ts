@@ -3,7 +3,10 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
+  OnModuleDestroy,
+  OnModuleInit,
 } from '@nestjs/common';
 import { Auction } from '@prisma/client';
 import { ListingsService } from '../listings/listings.service';
@@ -17,16 +20,65 @@ const STATUS = {
   FINISHED: 'FINISHED',
 } as const;
 
+const EXPIRY_CHECK_INTERVAL_MS = 30_000;
+
 @Injectable()
-export class AuctionsService {
+export class AuctionsService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(AuctionsService.name);
+  private expiryTimer?: NodeJS.Timeout;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly listingsService: ListingsService,
     private readonly auctionsGateway: AuctionsGateway,
   ) {}
 
+  onModuleInit() {
+    this.expiryTimer = setInterval(() => {
+      this.finishExpiredAuctions().catch((err) =>
+        this.logger.error('Failed to finish expired auctions', err),
+      );
+    }, EXPIRY_CHECK_INTERVAL_MS);
+  }
+
+  onModuleDestroy() {
+    if (this.expiryTimer) clearInterval(this.expiryTimer);
+  }
+
+  /** Closes every ACTIVE auction whose endTime has passed. */
+  async finishExpiredAuctions(): Promise<number> {
+    const expired = await this.prisma.auction.findMany({
+      where: { status: STATUS.ACTIVE, endTime: { lte: new Date() } },
+      select: { id: true },
+    });
+
+    let finished = 0;
+    for (const { id } of expired) {
+      // Guard against a concurrent manual finish.
+      const res = await this.prisma.auction.updateMany({
+        where: { id, status: STATUS.ACTIVE },
+        data: { status: STATUS.FINISHED },
+      });
+      if (res.count > 0) {
+        finished += 1;
+        this.auctionsGateway.emitAuctionFinished(id);
+      }
+    }
+    return finished;
+  }
+
   async createAuction(userId: string, input: CreateAuctionInput) {
     await this.assertListingOwnership(userId, input.listingId);
+
+    if (!(input.startPrice > 0)) {
+      throw new BadRequestException('startPrice must be greater than 0');
+    }
+    if (input.endTime <= input.startTime) {
+      throw new BadRequestException('endTime must be after startTime');
+    }
+    if (input.endTime <= new Date()) {
+      throw new BadRequestException('endTime must be in the future');
+    }
 
     const blocking = await this.prisma.auction.findFirst({
       where: {
@@ -65,6 +117,9 @@ export class AuctionsService {
 
     if (auction.status !== STATUS.PENDING) {
       throw new BadRequestException('Auction must be PENDING to start');
+    }
+    if (auction.endTime <= new Date()) {
+      throw new BadRequestException('Auction end time has already passed');
     }
 
     const updated = await this.prisma.auction.update({

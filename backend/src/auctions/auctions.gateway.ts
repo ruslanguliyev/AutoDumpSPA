@@ -10,8 +10,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { getAllowedOrigins } from '../common/config/cors';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ cors: { origin: getAllowedOrigins(), credentials: true } })
 export class AuctionsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
