@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import GraphQLJSON from 'graphql-type-json';
 import { join } from 'path';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
@@ -11,6 +12,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { PartsModule } from './parts/parts.module';
 import { ServicesModule } from './services/services.module';
 import { SpecialistsModule } from './specialists/specialists.module';
+import { ServiceCentersModule } from './service-centers/service-centers.module';
 import { SellersModule } from './sellers/sellers.module';
 import { MembershipsModule } from './memberships/memberships.module';
 import { ListingsModule } from './listings/listings.module';
@@ -27,6 +29,7 @@ import { PrismaModule } from './prisma/prisma.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       path: '/graphql',
       sortSchema: true,
+      resolvers: { JSON: GraphQLJSON },
     }),
     PrismaModule,
     AuthModule,
@@ -34,6 +37,7 @@ import { PrismaModule } from './prisma/prisma.module';
     VehiclesModule,
     PartsModule,
     ServicesModule,
+    ServiceCentersModule,
     SpecialistsModule,
     SellersModule,
     MembershipsModule,

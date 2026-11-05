@@ -3,12 +3,31 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
-import { CreatePartInput, PartObject, UpdatePartInput } from './part.types';
+import {
+  CreatePartInput,
+  PaginatedParts,
+  PartObject,
+  PartsFilterInput,
+  UpdatePartInput,
+} from './part.types';
 import { PartsService } from './parts.service';
 
 @Resolver(() => PartObject)
 export class PartsResolver {
   constructor(private readonly partsService: PartsService) {}
+
+  @Query(() => PaginatedParts)
+  async parts(
+    @Args('filter', { type: () => PartsFilterInput, nullable: true })
+    filter?: PartsFilterInput | null,
+  ): Promise<PaginatedParts> {
+    return this.partsService.getParts(filter ?? undefined);
+  }
+
+  @Query(() => PartObject)
+  async partById(@Args('id') id: string): Promise<PartObject> {
+    return this.partsService.getPartById(id);
+  }
 
   @Query(() => PartObject, { nullable: true })
   async partByListing(

@@ -1,4 +1,31 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
+export class PartSellerObject {
+  @Field()
+  id: string;
+
+  @Field()
+  name: string;
+
+  @Field()
+  type: string;
+
+  @Field()
+  hasPublicPage: boolean;
+
+  @Field()
+  verified: boolean;
+
+  @Field(() => Float)
+  rating: number;
+
+  @Field()
+  city: string;
+
+  @Field({ nullable: true })
+  logo: string | null;
+}
 
 @ObjectType()
 export class PartObject {
@@ -23,11 +50,74 @@ export class PartObject {
   @Field()
   condition: string;
 
-  @Field()
-  oemCode: string;
+  @Field({ nullable: true })
+  oemCode: string | null;
 
   @Field(() => Int)
   stock: number;
+
+  @Field({ nullable: true })
+  description: string | null;
+
+  @Field(() => Float, { nullable: true })
+  price: number | null;
+
+  @Field()
+  currency: string;
+
+  @Field({ nullable: true })
+  imageUrl: string | null;
+
+  @Field(() => [String])
+  compatibility: string[];
+
+  @Field({ nullable: true })
+  location: string | null;
+
+  @Field(() => PartSellerObject, { nullable: true })
+  seller: PartSellerObject | null;
+}
+
+@ObjectType()
+export class PaginatedParts {
+  @Field(() => [PartObject])
+  items: PartObject[];
+
+  @Field(() => Int)
+  total: number;
+}
+
+@InputType()
+export class PartsFilterInput {
+  @Field({ nullable: true })
+  search?: string;
+
+  @Field({ nullable: true })
+  category?: string;
+
+  @Field({ nullable: true })
+  brand?: string;
+
+  @Field({ nullable: true })
+  model?: string;
+
+  @Field({ nullable: true })
+  condition?: string;
+
+  @Field(() => Float, { nullable: true })
+  priceFrom?: number;
+
+  @Field(() => Float, { nullable: true })
+  priceTo?: number;
+
+  @Field({ nullable: true })
+  location?: string;
+
+  @Field(() => Int, { nullable: true })
+  limit?: number;
+
+  @Field(() => Int, { nullable: true })
+  offset?: number;
 }
 
 @InputType()
@@ -47,11 +137,29 @@ export class CreatePartInput {
   @Field()
   condition: string;
 
-  @Field()
-  oemCode: string;
+  @Field({ nullable: true })
+  oemCode?: string;
 
   @Field(() => Int)
   stock: number;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field(() => Float, { nullable: true })
+  price?: number;
+
+  @Field({ nullable: true })
+  currency?: string;
+
+  @Field({ nullable: true })
+  imageUrl?: string;
+
+  @Field(() => [String], { nullable: true })
+  compatibility?: string[];
+
+  @Field({ nullable: true })
+  location?: string;
 }
 
 @InputType()
@@ -76,4 +184,22 @@ export class UpdatePartInput {
 
   @Field(() => Int, { nullable: true })
   stock?: number;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field(() => Float, { nullable: true })
+  price?: number;
+
+  @Field({ nullable: true })
+  currency?: string;
+
+  @Field({ nullable: true })
+  imageUrl?: string;
+
+  @Field(() => [String], { nullable: true })
+  compatibility?: string[];
+
+  @Field({ nullable: true })
+  location?: string;
 }

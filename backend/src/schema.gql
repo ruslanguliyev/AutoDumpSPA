@@ -55,10 +55,16 @@ input CreateListingInput {
 input CreatePartInput {
   brand: String!
   category: String!
+  compatibility: [String!]
   condition: String!
+  currency: String
+  description: String
+  imageUrl: String
+  location: String
   model: String!
   name: String!
-  oemCode: String!
+  oemCode: String
+  price: Float
   stock: Int!
 }
 
@@ -66,6 +72,42 @@ input CreateSellerInput {
   city: String!
   name: String!
   type: SellerType!
+}
+
+input CreateServiceCenterInput {
+  address: String
+  categories: [String!]!
+  city: String!
+  contacts: JSON
+  coverImage: String
+  description: String
+  gallery: [String!]
+  isActive: Boolean
+  legalName: String
+  logoUrl: String
+  name: String!
+  phone: String
+  reviewsCount: Int
+  schedule: JSON
+  services: [CreateServiceCenterServiceInput!]
+  slug: String
+  supportedBrands: [String!]
+  type: String
+  verified: Boolean
+  website: String
+  whatsapp: String
+}
+
+input CreateServiceCenterServiceInput {
+  applicableBrands: [String!]
+  category: String!
+  code: String!
+  currency: String
+  durationMin: Int
+  popular: Boolean
+  priceFrom: Float
+  priceTo: Float
+  title: String!
 }
 
 input CreateServiceInput {
@@ -76,14 +118,62 @@ input CreateServiceInput {
   supportedBrands: [String!]!
 }
 
+input CreateSpecialistInput {
+  avatarUrl: String
+  bio: String
+  city: String!
+  coverImage: String
+  experience: Int!
+  hourlyRate: Float
+  mobileService: Boolean
+  name: String!
+  phone: String
+  portfolio: [String!]!
+  priceFrom: Float
+  skills: [String!]!
+  slug: String!
+  specializations: [String!]!
+  supportedVehicles: [CreateSpecialistVehicleInput!]
+  whatsapp: String
+}
+
+input CreateSpecialistVehicleInput {
+  brand: String!
+  model: String!
+  yearFrom: Int
+  yearTo: Int
+}
+
 input CreateVehicleInput {
   brand: String!
+  color: String
+  condition: String
+  currency: String
+  description: String
+  displacement: String
+  drive: String
   engineVolume: Float!
   fuel: String!
+  generation: String
+  hasDamage: Boolean
+  horsepower: String
+  imageUrls: [String!]
+  isBarterAvailable: Boolean
+  isCreditAvailable: Boolean
+  isHot: Boolean
+  isRepainted: Boolean
+  location: String
+  marketRegion: String
   mileage: Int!
   model: String!
+  ownersCount: Int
   power: Int!
+  price: Float
+  seatsCount: Int
   transmission: String!
+  vehicleType: String
+  version: String
+  wasInAccident: Boolean
   year: Int!
 }
 
@@ -98,6 +188,11 @@ type ImageObject {
   position: Int!
   url: String!
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type ListingObject {
   createdAt: DateTime!
@@ -132,6 +227,8 @@ type Mutation {
   createPart(input: CreatePartInput!, listingId: String!): PartObject!
   createSeller(input: CreateSellerInput!): SellerObject!
   createService(input: CreateServiceInput!, listingId: String!): ServiceObject!
+  createServiceCenter(input: CreateServiceCenterInput!): ServiceCenterObject!
+  createSpecialist(input: CreateSpecialistInput!): SpecialistObject!
   createVehicle(input: CreateVehicleInput!, listingId: String!): VehicleObject!
   deleteListing(id: String!): Boolean!
   deletePart(id: String!): Boolean!
@@ -148,6 +245,8 @@ type Mutation {
   updateProfile(input: UpdateProfileInput!): UserObject!
   updateSeller(input: UpdateSellerInput!): SellerObject!
   updateService(id: String!, input: UpdateServiceInput!): ServiceObject!
+  updateServiceCenter(input: UpdateServiceCenterInput!): ServiceCenterObject!
+  updateSpecialist(input: UpdateSpecialistInput!): SpecialistObject!
   updateVehicle(id: String!, input: UpdateVehicleInput!): VehicleObject!
 }
 
@@ -158,16 +257,57 @@ type PaginatedListings {
   total: Int!
 }
 
+type PaginatedParts {
+  items: [PartObject!]!
+  total: Int!
+}
+
+type PaginatedVehicles {
+  items: [VehicleObject!]!
+  total: Int!
+}
+
 type PartObject {
   brand: String!
   category: String!
+  compatibility: [String!]!
   condition: String!
+  currency: String!
+  description: String
   id: String!
+  imageUrl: String
   listingId: String!
+  location: String
   model: String!
   name: String!
-  oemCode: String!
+  oemCode: String
+  price: Float
+  seller: PartSellerObject
   stock: Int!
+}
+
+type PartSellerObject {
+  city: String!
+  hasPublicPage: Boolean!
+  id: String!
+  logo: String
+  name: String!
+  rating: Float!
+  type: String!
+  verified: Boolean!
+}
+
+input PartsFilterInput {
+  brand: String
+  category: String
+  condition: String
+  limit: Int
+  location: String
+  model: String
+  offset: Int
+  priceFrom: Float
+  priceTo: Float
+  search: String
 }
 
 input PlaceBidInput {
@@ -179,16 +319,30 @@ type Query {
   auction(id: String!): AuctionObject!
   auctionByListing(listingId: String!): AuctionObject
   bidsByAuction(auctionId: String!): [BidObject!]!
-  health: String!
+  hello: String!
   imagesByListing(listingId: String!): [ImageObject!]!
   listing(id: String!): ListingObject!
   listings(filter: ListingsFilterInput, page: Int! = 1, perPage: Int! = 20): PaginatedListings!
   me: UserObject!
   myBids: [BidObject!]!
   mySeller: SellerObject
+  myServiceCenter: ServiceCenterObject
+  mySpecialist: SpecialistObject
+  partById(id: String!): PartObject!
   partByListing(listingId: String!): PartObject
+  parts(filter: PartsFilterInput): PaginatedParts!
+  sellerById(id: String!): SellerObject!
+  sellers: [SellerObject!]!
   serviceByListing(listingId: String!): ServiceObject
+  serviceCenter(id: String!): ServiceCenterObject!
+  serviceCenterBySlug(slug: String!): ServiceCenterObject
+  serviceCenters(city: String): [ServiceCenterObject!]!
+  specialist(id: String!): SpecialistObject!
+  specialistBySlug(slug: String!): SpecialistObject!
+  specialists(filter: SpecialistsFilterInput): [SpecialistObject!]!
+  vehicleById(id: String!): VehicleObject!
   vehicleByListing(listingId: String!): VehicleObject
+  vehicles(filter: VehiclesFilterInput): PaginatedVehicles!
 }
 
 type SellerObject {
@@ -206,7 +360,51 @@ type SellerObject {
 """Seller type enum"""
 enum SellerType {
   DEALER
+  PARTS_DEALER
   PRIVATE
+}
+
+type ServiceCenterObject {
+  address: String
+  categories: [String!]!
+  city: String!
+  contacts: JSON
+  coverImage: String
+  createdAt: DateTime!
+  description: String
+  gallery: [String!]!
+  id: String!
+  isActive: Boolean!
+  legalName: String
+  logoUrl: String
+  name: String!
+  phone: String
+  rating: Float!
+  reviewsCount: Int!
+  schedule: JSON
+  services: [ServiceCenterServiceObject!]!
+  slug: String
+  supportedBrands: [String!]!
+  type: String
+  updatedAt: DateTime!
+  userId: String!
+  verified: Boolean!
+  website: String
+  whatsapp: String
+}
+
+type ServiceCenterServiceObject {
+  applicableBrands: [String!]!
+  category: String!
+  code: String!
+  currency: String!
+  durationMin: Int
+  id: String!
+  popular: Boolean!
+  priceFrom: Float
+  priceTo: Float
+  serviceCenterId: String!
+  title: String!
 }
 
 type ServiceObject {
@@ -219,6 +417,50 @@ type ServiceObject {
   supportedBrands: [String!]!
 }
 
+type SpecialistObject {
+  available: Boolean!
+  avatarUrl: String
+  bio: String
+  city: String!
+  coverImage: String
+  createdAt: DateTime!
+  experience: Int!
+  hourlyRate: Float
+  id: String!
+  mobileService: Boolean!
+  name: String!
+  phone: String
+  portfolio: [String!]!
+  priceFrom: Float
+  rating: Float!
+  reviewsCount: Int!
+  skills: [String!]!
+  slug: String!
+  specializations: [String!]!
+  supportedVehicles: [SpecialistVehicleObject!]!
+  updatedAt: DateTime!
+  userId: String!
+  verified: Boolean!
+  whatsapp: String
+}
+
+type SpecialistVehicleObject {
+  brand: String!
+  id: String!
+  model: String!
+  specialistId: String!
+  yearFrom: Int
+  yearTo: Int
+}
+
+input SpecialistsFilterInput {
+  available: Boolean
+  city: String
+  minRating: Float
+  skills: [String!]
+  specializations: [String!]
+}
+
 input UpdateListingInput {
   description: String
   price: Float
@@ -228,10 +470,16 @@ input UpdateListingInput {
 input UpdatePartInput {
   brand: String
   category: String
+  compatibility: [String!]
   condition: String
+  currency: String
+  description: String
+  imageUrl: String
+  location: String
   model: String
   name: String
   oemCode: String
+  price: Float
   stock: Int
 }
 
@@ -245,6 +493,30 @@ input UpdateSellerInput {
   type: SellerType
 }
 
+input UpdateServiceCenterInput {
+  address: String
+  categories: [String!]
+  city: String
+  contacts: JSON
+  coverImage: String
+  description: String
+  gallery: [String!]
+  isActive: Boolean
+  legalName: String
+  logoUrl: String
+  name: String
+  phone: String
+  reviewsCount: Int
+  schedule: JSON
+  services: [CreateServiceCenterServiceInput!]
+  slug: String
+  supportedBrands: [String!]
+  type: String
+  verified: Boolean
+  website: String
+  whatsapp: String
+}
+
 input UpdateServiceInput {
   categories: [String!]
   city: String
@@ -253,14 +525,56 @@ input UpdateServiceInput {
   supportedBrands: [String!]
 }
 
+input UpdateSpecialistInput {
+  available: Boolean
+  avatarUrl: String
+  bio: String
+  city: String
+  coverImage: String
+  experience: Int
+  hourlyRate: Float
+  mobileService: Boolean
+  name: String
+  phone: String
+  portfolio: [String!]
+  priceFrom: Float
+  skills: [String!]
+  slug: String
+  specializations: [String!]
+  supportedVehicles: [CreateSpecialistVehicleInput!]
+  whatsapp: String
+}
+
 input UpdateVehicleInput {
   brand: String
+  color: String
+  condition: String
+  currency: String
+  description: String
+  displacement: String
+  drive: String
   engineVolume: Float
   fuel: String
+  generation: String
+  hasDamage: Boolean
+  horsepower: String
+  imageUrls: [String!]
+  isBarterAvailable: Boolean
+  isCreditAvailable: Boolean
+  isHot: Boolean
+  isRepainted: Boolean
+  location: String
+  marketRegion: String
   mileage: Int
   model: String
+  ownersCount: Int
   power: Int
+  price: Float
+  seatsCount: Int
   transmission: String
+  vehicleType: String
+  version: String
+  wasInAccident: Boolean
   year: Int
 }
 
@@ -276,20 +590,73 @@ type UserObject {
 """User role enum"""
 enum UserRole {
   ADMIN
-  SELLER
+  DEALER
+  PARTS_DEALER
+  PRIVATE_SELLER
   SERVICE
+  SPECIALIST
   USER
 }
 
 type VehicleObject {
   brand: String!
+  color: String
+  condition: String!
+  currency: String!
+  description: String
+  displacement: String
+  drive: String
   engineVolume: Float!
   fuel: String!
+  generation: String
+  hasDamage: Boolean!
+  horsepower: String
   id: String!
+  imageUrls: [String!]!
+  isBarterAvailable: Boolean!
+  isCreditAvailable: Boolean!
+  isHot: Boolean!
+  isRepainted: Boolean!
   listingId: String!
+  location: String
+  marketRegion: String
   mileage: Int!
   model: String!
+  ownersCount: Int!
   power: Int!
+  price: Float
+  seatsCount: Int
+  seller: VehicleSellerObject
   transmission: String!
+  vehicleType: String!
+  version: String
+  wasInAccident: Boolean!
   year: Int!
+}
+
+type VehicleSellerObject {
+  city: String!
+  hasPublicPage: Boolean!
+  id: String!
+  logo: String
+  name: String!
+  rating: Float!
+  type: String!
+  verified: Boolean!
+}
+
+input VehiclesFilterInput {
+  brand: String
+  condition: String
+  fuel: String
+  limit: Int
+  location: String
+  model: String
+  offset: Int
+  priceFrom: Float
+  priceTo: Float
+  transmission: String
+  vehicleType: String
+  yearFrom: Int
+  yearTo: Int
 }

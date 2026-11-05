@@ -3,12 +3,31 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
-import { CreateVehicleInput, UpdateVehicleInput, VehicleObject } from './vehicle.types';
+import {
+  CreateVehicleInput,
+  PaginatedVehicles,
+  UpdateVehicleInput,
+  VehicleObject,
+  VehiclesFilterInput,
+} from './vehicle.types';
 import { VehiclesService } from './vehicles.service';
 
 @Resolver(() => VehicleObject)
 export class VehiclesResolver {
   constructor(private readonly vehiclesService: VehiclesService) {}
+
+  @Query(() => PaginatedVehicles)
+  async vehicles(
+    @Args('filter', { type: () => VehiclesFilterInput, nullable: true })
+    filter?: VehiclesFilterInput | null,
+  ): Promise<PaginatedVehicles> {
+    return this.vehiclesService.getVehicles(filter ?? undefined);
+  }
+
+  @Query(() => VehicleObject)
+  async vehicleById(@Args('id') id: string): Promise<VehicleObject> {
+    return this.vehiclesService.getVehicleById(id);
+  }
 
   @Query(() => VehicleObject, { nullable: true })
   async vehicleByListing(

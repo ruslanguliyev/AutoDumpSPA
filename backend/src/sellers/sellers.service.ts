@@ -7,6 +7,17 @@ import { SellerType, UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSellerInput, UpdateSellerInput } from './seller.types';
 
+function userRoleForSellerType(type: SellerType): UserRole {
+  switch (type) {
+    case SellerType.PRIVATE:
+      return UserRole.PRIVATE_SELLER;
+    case SellerType.DEALER:
+      return UserRole.DEALER;
+    case SellerType.PARTS_DEALER:
+      return UserRole.PARTS_DEALER;
+  }
+}
+
 @Injectable()
 export class SellersService {
   constructor(private readonly prisma: PrismaService) {}
@@ -33,7 +44,7 @@ export class SellersService {
 
     await this.prisma.user.update({
       where: { id: userId },
-      data: { role: UserRole.SELLER },
+      data: { role: userRoleForSellerType(input.type as SellerType) },
     });
 
     return seller;
@@ -61,6 +72,12 @@ export class SellersService {
   async getSellerByUserId(userId: string) {
     return this.prisma.seller.findUnique({
       where: { userId },
+    });
+  }
+
+  async getAllSellers() {
+    return this.prisma.seller.findMany({
+      orderBy: { createdAt: 'desc' },
     });
   }
 

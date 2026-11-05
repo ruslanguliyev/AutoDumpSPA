@@ -10,6 +10,16 @@ import { SellersService } from './sellers.service';
 export class SellersResolver {
   constructor(private readonly sellersService: SellersService) {}
 
+  @Query(() => [SellerObject])
+  async sellers(): Promise<SellerObject[]> {
+    return this.sellersService.getAllSellers();
+  }
+
+  @Query(() => SellerObject)
+  async sellerById(@Args('id') id: string): Promise<SellerObject> {
+    return this.sellersService.getSellerById(id);
+  }
+
   @UseGuards(GqlAuthGuard)
   @Query(() => SellerObject, { nullable: true })
   async mySeller(@CurrentUser() user: AuthUser): Promise<SellerObject | null> {

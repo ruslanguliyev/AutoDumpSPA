@@ -5,8 +5,8 @@ import { AppService } from './app.service';
 export class AppResolver {
   constructor(private readonly appService: AppService) {}
 
-  @Query(() => String, { name: 'health' })
-  health(): string {
-    return this.appService.getHealth();
+  @Query(() => String)
+  hello(): string {
+    return this.appService.getHello();
   }
 }
