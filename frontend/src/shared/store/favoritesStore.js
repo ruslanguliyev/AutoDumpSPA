@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { favoritesApi } from "@/features/favorites/favorites.api";
 
 const FAVORITES_STORE_VERSION = 2;
 
@@ -35,18 +36,21 @@ export const useFavoritesStore = create(
         const next = normalizeFavoriteInput(favoriteInput);
         if (!next) return;
 
-        set((state) => {
-          const exists = state.items.some((x) => x.key === next.key);
-          if (exists) {
-            return { items: state.items.filter((x) => x.key !== next.key) };
-          }
-          return { items: [next, ...state.items] };
-        });
+        const exists = get().items.some((x) => x.key === next.key);
+        set((state) =>
+          exists
+            ? { items: state.items.filter((x) => x.key !== next.key) }
+            : { items: [next, ...state.items] }
+        );
+        favoritesApi.push(exists ? "remove" : "add", next.type, next.id);
       },
+
+      replaceItems: (items) => set({ items }),
 
       removeFromFavorites: (type, id) => {
         const key = makeKey(type, id);
         set((state) => ({ items: state.items.filter((x) => x.key !== key) }));
+        favoritesApi.push("remove", type, String(id));
       },
     }),
     {

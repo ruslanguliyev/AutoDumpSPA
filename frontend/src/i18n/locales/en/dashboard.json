@@ -65,7 +65,8 @@
     "parts": "My Parts",
     "services": "My Services",
     "favorites": "Favorites",
-    "settings": "Settings"
+    "settings": "Settings",
+    "inquiries": "Inquiries"
   },
   "vehicles": {
     "title": "My Vehicles",
@@ -85,11 +86,59 @@
   "favorites": {
     "title": "Favorites",
     "subtitle": "Items you've saved",
-    "empty": "No favorites yet."
+    "empty": "No favorites yet.",
+    "type": {
+      "vehicle": "Vehicle",
+      "part": "Part"
+    },
+    "remove": "Remove from favorites"
   },
   "settings": {
     "title": "Settings",
     "subtitle": "Account and preferences",
     "content": "Settings content will be available soon."
+  },
+  "listings": {
+    "add": "Add listing",
+    "loading": "Loading…",
+    "error": "Failed to load",
+    "view": "View",
+    "inquiries": "Inquiries",
+    "favorites": "Favorited",
+    "publish": "Publish",
+    "republish": "Relist",
+    "unpublish": "Unpublish",
+    "markSold": "Mark as sold",
+    "delete": "Delete",
+    "confirmDelete": "Delete \"{{title}}\"? This cannot be undone.",
+    "status": {
+      "DRAFT": "Draft",
+      "ACTIVE": "Published",
+      "SOLD": "Sold"
+    }
+  },
+  "inquiries": {
+    "title": "Inquiries",
+    "subtitle": "Messages from buyers and your requests to sellers",
+    "tabs": {
+      "received": "Received",
+      "sent": "Sent"
+    },
+    "empty": {
+      "received": "No inquiries yet.",
+      "sent": "You have not contacted anyone yet."
+    },
+    "new": "New",
+    "markRead": "Mark as read"
+  },
+  "contact": {
+    "title": "Contact the seller",
+    "loginRequired": "Log in to message the seller.",
+    "login": "Log in",
+    "messagePlaceholder": "Hello! Is this still available?",
+    "phonePlaceholder": "Phone number (optional)",
+    "send": "Send",
+    "sending": "Sending…",
+    "sent": "Message sent. The seller will see it in their Inquiries."
   }
 }

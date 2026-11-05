@@ -6,6 +6,7 @@ import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
+import { ContactSellerForm } from '@/features/inquiries/components/ContactSellerForm';
 import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
 import { getPartCategoryKey } from '@/parts/utils/parts.constants';
@@ -245,6 +246,7 @@ export default function PartDetailsPage() {
                 })
               }
             />
+            <ContactSellerForm listingId={part.listingId} />
           </div>
         </div>
       </div>

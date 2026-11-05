@@ -65,7 +65,8 @@
     "parts": "Mənim ehtiyyat hissələrim",
     "services": "Mənim xidmətlərim",
     "favorites": "Seçilmişlər",
-    "settings": "Parametrlər"
+    "settings": "Parametrlər",
+    "inquiries": "Müraciətlər"
   },
   "vehicles": {
     "title": "Mənim avtomobillərim",
@@ -85,11 +86,59 @@
   "favorites": {
     "title": "Seçilmişlər",
     "subtitle": "Saxladığınız elanlar",
-    "empty": "Hələ seçilmiş yoxdur."
+    "empty": "Hələ seçilmiş yoxdur.",
+    "type": {
+      "vehicle": "Avtomobil",
+      "part": "Ehtiyat hissəsi"
+    },
+    "remove": "Sevimlilərdən çıxar"
   },
   "settings": {
     "title": "Parametrlər",
     "subtitle": "Hesab və seçimlər",
     "content": "Parametrlər tezliklə mövcud olacaq."
+  },
+  "listings": {
+    "add": "Elan əlavə et",
+    "loading": "Yüklənir…",
+    "error": "Yükləmək alınmadı",
+    "view": "Aç",
+    "inquiries": "Müraciətlər",
+    "favorites": "Sevimlilərdə",
+    "publish": "Dərc et",
+    "republish": "Yenidən sat",
+    "unpublish": "Dərcdən çıxar",
+    "markSold": "Satıldı",
+    "delete": "Sil",
+    "confirmDelete": "\"{{title}}\" silinsin? Bu əməliyyatı geri qaytarmaq olmaz.",
+    "status": {
+      "DRAFT": "Qaralama",
+      "ACTIVE": "Dərc olunub",
+      "SOLD": "Satılıb"
+    }
+  },
+  "inquiries": {
+    "title": "Müraciətlər",
+    "subtitle": "Alıcılardan gələn mesajlar və satıcılara sorğularınız",
+    "tabs": {
+      "received": "Gələn",
+      "sent": "Göndərilən"
+    },
+    "empty": {
+      "received": "Hələ müraciət yoxdur.",
+      "sent": "Hələ heç kimə yazmamısınız."
+    },
+    "new": "Yeni",
+    "markRead": "Oxunmuş kimi işarələ"
+  },
+  "contact": {
+    "title": "Satıcıya yaz",
+    "loginRequired": "Satıcıya yazmaq üçün daxil olun.",
+    "login": "Daxil ol",
+    "messagePlaceholder": "Salam! Elan hələ aktualdır?",
+    "phonePlaceholder": "Əlaqə nömrəsi (məcburi deyil)",
+    "send": "Göndər",
+    "sending": "Göndərilir…",
+    "sent": "Mesaj göndərildi. Satıcı onu \"Müraciətlər\" bölməsində görəcək."
   }
 }

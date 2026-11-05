@@ -357,7 +357,7 @@ export const fetchParts = async (filters) => {
 const PART_BY_ID_QUERY = `
 query PartById($id: String!) {
   partById(id: $id) {
-    id name category brand model condition
+    id listingId name category brand model condition
     description price currency oemCode
     compatibility stock location imageUrl
     seller { id name type hasPublicPage verified rating city logo }

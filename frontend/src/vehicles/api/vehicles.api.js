@@ -21,7 +21,7 @@ query Vehicles($filter: VehiclesFilterInput) {
 const VEHICLE_BY_ID_QUERY = `
 query VehicleById($id: String!) {
   vehicleById(id: $id) {
-    id brand model version year mileage fuel transmission
+    id listingId brand model version year mileage fuel transmission
     engineVolume power drive condition color vehicleType
     price currency location description imageUrls
     isHot isCreditAvailable isBarterAvailable
@@ -34,6 +34,7 @@ query VehicleById($id: String!) {
 
 const mapVehicle = (row) => ({
   id: row.id,
+  listingId: row.listingId ?? null,
   brand: row.brand,
   model: row.model,
   version: row.version ?? null,

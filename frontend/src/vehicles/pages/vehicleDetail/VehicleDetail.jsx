@@ -13,6 +13,7 @@ import { TrustBlock } from "@/shared/blocks";
 import VehicleGallery from "@/vehicles/pages/vehicleDetail/VehicleGallery";
 import VehicleSpecs from "@/vehicles/pages/vehicleDetail/VehicleSpecs";
 import VehicleSummaryCard from "@/vehicles/pages/vehicleDetail/VehicleSummaryCard";
+import { ContactSellerForm } from "@/features/inquiries/components/ContactSellerForm";
 
 import "@/shared/components/SellerCard/SellerCard.scss";
 import "@/shared/blocks/TrustBlock/TrustBlock.scss";
@@ -198,6 +199,7 @@ export default function VehicleDetail() {
                 <div className="vehicle-right">
                     <div className="vehicle-info">
                         <SellerCard seller={car.seller} actions={sellerActions} />
+                        <ContactSellerForm listingId={car.listingId} />
                         <TrustBlock variant="car" />
                     </div>
                 </div>

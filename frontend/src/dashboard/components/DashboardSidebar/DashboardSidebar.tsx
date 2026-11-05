@@ -5,6 +5,7 @@ import { PanelLeftClose, PanelLeft } from 'lucide-react';
 import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
+import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
 import clsx from 'clsx';
 
 export function DashboardSidebar() {
@@ -56,6 +57,7 @@ export function DashboardSidebar() {
                 >
                   <Icon size={20} className="flex-shrink-0" aria-hidden />
                   {!sidebarCollapsed && <span>{t(item.key)}</span>}
+                  {!sidebarCollapsed && item.key === 'nav.inquiries' && <InquiriesBadge />}
                 </NavLink>
               </li>
             );

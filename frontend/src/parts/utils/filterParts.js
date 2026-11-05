@@ -41,6 +41,7 @@ export const mapPartToEntity = (dto) => {
 
   return {
     id: dto.id,
+    listingId: dto.listingId ?? null,
     name: dto.name,
     category: dto.category || 'unspecified',
     brand: dto.brand || 'Unknown',

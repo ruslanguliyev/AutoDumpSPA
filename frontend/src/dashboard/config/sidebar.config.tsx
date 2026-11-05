@@ -1,4 +1,4 @@
-import { LayoutDashboard, Car, Package, Wrench, Heart, Settings } from 'lucide-react';
+import { LayoutDashboard, Car, Package, Wrench, Heart, MessageSquare, Settings } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
 
@@ -13,6 +13,7 @@ const allItems: NavItem[] = [
   { key: 'nav.vehicles', path: '/dashboard/vehicles', icon: Car },
   { key: 'nav.parts', path: '/dashboard/parts', icon: Package },
   { key: 'nav.services', path: '/dashboard/services', icon: Wrench },
+  { key: 'nav.inquiries', path: '/dashboard/inquiries', icon: MessageSquare },
   { key: 'nav.favorites', path: '/dashboard/favorites', icon: Heart },
   { key: 'nav.settings', path: '/dashboard/settings', icon: Settings },
 ];
