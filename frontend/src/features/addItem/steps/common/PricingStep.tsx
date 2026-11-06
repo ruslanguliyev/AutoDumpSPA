@@ -24,7 +24,7 @@ const PricingStep = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('form.price')}
+            {draft.purpose === 'RENT' ? t('form.pricePerDay') : t('form.price')}
           </label>
           <input
             className={inputClass}
@@ -49,6 +49,7 @@ const PricingStep = () => {
             value={draft.common.pricing.currency}
             onChange={(event) => setPricingField('currency', event.target.value)}
           >
+            <option value="AZN">AZN</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
             <option value="GBP">GBP</option>
@@ -56,7 +57,7 @@ const PricingStep = () => {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <div className={`mt-4 grid gap-4 md:grid-cols-2 ${draft.purpose === 'RENT' ? 'hidden' : ''}`}>
         <label className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-3 py-3 text-sm">
           <input
             type="checkbox"

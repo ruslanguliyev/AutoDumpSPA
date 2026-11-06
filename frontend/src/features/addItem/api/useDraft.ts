@@ -2,13 +2,17 @@ import { gqlRequest } from '@/lib/graphql';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  emptyRental,
   type ListingDraft,
+  type ListingPurpose,
   type ListingType,
 } from '@/features/addItem/store/useAddItemStore';
 import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog';
 import {
   isValidEmail,
   parseEngineVolume,
+  parseOptionalAmount,
+  parseOptionalInt,
   parsePower,
   parseStock,
   validateDraft,
@@ -228,6 +232,33 @@ const syncSellerContact = async (draft: ListingDraft) => {
   lastSyncedContact = key;
 };
 
+const SET_RENTAL_TERMS = `
+mutation SetRentalTerms($listingId: String!, $input: RentalTermsInput!) {
+  setRentalTerms(listingId: $listingId, input: $input)
+}
+`;
+
+/** Last rental terms pushed per listing, so autosave does not resend unchanged terms. */
+const lastSyncedTerms = new Map<string, string>();
+
+const syncRentalTerms = async (draft: ListingDraft) => {
+  if (draft.purpose !== 'RENT' || !draft.rental) return;
+  const r = draft.rental;
+  const input = {
+    minDays: parseOptionalInt(r.minDays, 1, 365) ?? undefined,
+    maxDays: parseOptionalInt(r.maxDays, 1, 365) ?? undefined,
+    deposit: parseOptionalAmount(r.deposit) ?? undefined,
+    kmPerDay: parseOptionalInt(r.kmPerDay, 1, 5000) ?? undefined,
+    minDriverAge: parseOptionalInt(r.minDriverAge, 16, 100) ?? undefined,
+  };
+  if (!input.minDays) return; // not valid yet: wait for the user
+  const listingId = draft._listingId ?? draft.id;
+  const key = JSON.stringify(input);
+  if (lastSyncedTerms.get(listingId) === key) return;
+  await gqlRequest(SET_RENTAL_TERMS, { listingId, input });
+  lastSyncedTerms.set(listingId, key);
+};
+
 /**
  * Every listing needs a seller profile. New users have none, so create a minimal one
  * (name from the account) and let the wizard's seller step fill in the rest.
@@ -320,6 +351,9 @@ async function syncDraftToBackend(draft: ListingDraft) {
     });
   }
 
+  // Rental conditions: required to publish, so errors are not swallowed here.
+  await syncRentalTerms(draft);
+
   // Seller contact is best-effort: a failure here must not block saving the listing itself.
   try {
     await syncSellerContact(draft);
@@ -328,7 +362,10 @@ async function syncDraftToBackend(draft: ListingDraft) {
   }
 }
 
-export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
+export const createDraft = async (
+  type: ListingType,
+  purpose: ListingPurpose = 'SALE'
+): Promise<ListingDraft> => {
   if (!getToken()) {
     throw new Error('Please log in to create a listing');
   }
@@ -342,6 +379,7 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
         title: '',
         description: '',
         price: 0,
+        ...(purpose === 'RENT' ? { purpose: 'RENT' } : {}),
       },
     }
   );
@@ -387,6 +425,8 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
   const draft: ListingDraft = {
     id: listingId,
     type,
+    purpose,
+    ...(purpose === 'RENT' ? { rental: emptyRental() } : {}),
     status: 'draft',
     _listingId: listingId,
     _vehicleId: vehicleId,
@@ -500,7 +540,8 @@ export const useDraft = (draftId?: string) =>
 export const useCreateDraft = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createDraft,
+    mutationFn: ({ type, purpose }: { type: ListingType; purpose?: ListingPurpose }) =>
+      createDraft(type, purpose),
     onSuccess: (draft) => {
       writeDrafts({ ...readDrafts(), [draft.id]: draft });
       queryClient.setQueryData([DRAFT_QUERY_KEY, draft.id], draft);

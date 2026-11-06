@@ -118,9 +118,15 @@ export function MyListingsView({ kind, section }: Props) {
                       >
                         {t(`listings.status.${l.status}`)}
                       </span>
+                      {l.purpose === 'RENT' ? (
+                        <span className="rounded-full bg-sky-500/15 px-2.5 py-0.5 text-xs font-semibold text-sky-600">
+                          {t('listings.forRent')}
+                        </span>
+                      ) : null}
                     </div>
                     <p className="mt-1 text-sm font-medium text-foreground">
                       {formatPrice(l.price, l.currency ?? 'AZN')}
+                      {l.purpose === 'RENT' ? <span className="ml-1 text-xs font-normal text-muted-foreground">{t('rental.perDay')}</span> : null}
                     </p>
                     {l.status === 'BLOCKED' ? (
                       <p className="mt-2 rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">
@@ -164,9 +170,11 @@ export function MyListingsView({ kind, section }: Props) {
                     ) : null}
                     {l.status === 'ACTIVE' ? (
                       <>
-                        <ActionButton disabled={busy} onClick={() => actions.close.mutate(l.id)}>
-                          {t('listings.markSold')}
-                        </ActionButton>
+                        {l.purpose !== 'RENT' ? (
+                          <ActionButton disabled={busy} onClick={() => actions.close.mutate(l.id)}>
+                            {t('listings.markSold')}
+                          </ActionButton>
+                        ) : null}
                         <ActionButton disabled={busy} onClick={() => actions.unpublish.mutate(l.id)}>
                           {t('listings.unpublish')}
                         </ActionButton>

@@ -1,6 +1,7 @@
 import { gqlRequest } from '@/lib/graphql';
 
 export type ListingStatus = 'DRAFT' | 'ACTIVE' | 'SOLD' | 'BLOCKED';
+export type ListingPurpose = 'SALE' | 'RENT';
 export type ListingKind = 'vehicle' | 'part' | 'service' | 'unknown';
 
 export type MyListing = {
@@ -9,6 +10,7 @@ export type MyListing = {
   price: number;
   status: ListingStatus;
   kind: ListingKind;
+  purpose: ListingPurpose;
   itemId: string | null;
   currency: string | null;
   thumbnail: string | null;
@@ -23,7 +25,7 @@ export type MyListing = {
 const MY_LISTINGS = `
   query MyListings {
     myListings {
-      id title price status kind itemId currency thumbnail blockedReason
+      id title price status kind purpose itemId currency thumbnail blockedReason
       inquiriesCount favoritesCount createdAt updatedAt
     }
   }

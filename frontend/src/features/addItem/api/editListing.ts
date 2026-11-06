@@ -11,12 +11,13 @@ import { gqlRequest } from '@/lib/graphql';
 
 const EDIT_QUERY = `
 query EditListing($id: String!) {
-  listing(id: $id) { id title description price status sellerId }
+  listing(id: $id) { id title description price status purpose sellerId }
   mySeller { id name type phone showPhone contactEmail }
   vehicleByListing(listingId: $id) {
     id brand model generation version year mileage fuel transmission
     displacement horsepower engineVolume power bodyType drive condition location description
     price currency imageUrls
+    rental { deposit minDays maxDays kmPerDay minDriverAge }
   }
   partByListing(listingId: $id) {
     id name category brand model condition oemCode description
@@ -32,6 +33,7 @@ type EditQueryResult = {
     description: string;
     price: number;
     status: 'DRAFT' | 'ACTIVE' | 'SOLD' | 'BLOCKED';
+    purpose: 'SALE' | 'RENT';
     sellerId: string;
   };
   mySeller: {
@@ -64,6 +66,13 @@ type EditQueryResult = {
     price: number | null;
     currency: string | null;
     imageUrls: string[];
+    rental: {
+      deposit: number | null;
+      minDays: number;
+      maxDays: number | null;
+      kmPerDay: number | null;
+      minDriverAge: number | null;
+    } | null;
   } | null;
   partByListing: {
     id: string;
@@ -113,6 +122,18 @@ export const buildDraftFromServer = (
   return {
     id: listing.id,
     type,
+    purpose: listing.purpose,
+    ...(listing.purpose === 'RENT'
+      ? {
+          rental: {
+            deposit: v?.rental?.deposit != null ? String(v.rental.deposit) : '',
+            minDays: String(v?.rental?.minDays ?? 1),
+            maxDays: v?.rental?.maxDays != null ? String(v.rental.maxDays) : '',
+            kmPerDay: v?.rental?.kmPerDay != null ? String(v.rental.kmPerDay) : '',
+            minDriverAge: v?.rental?.minDriverAge != null ? String(v.rental.minDriverAge) : '',
+          },
+        }
+      : {}),
     status: published ? 'published' : 'ready',
     _listingId: listing.id,
     _vehicleId: v?.id,

@@ -5,6 +5,7 @@ import { LayoutDashboard, Car, Package, Wrench, Heart, Settings } from 'lucide-r
 import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
+import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 
 export function DashboardBottomNav() {
@@ -37,6 +38,7 @@ export function DashboardBottomNav() {
             <span className="flex items-center gap-1">
               {t(item.key)}
               {item.key === 'nav.inquiries' && <InquiriesBadge />}
+              {item.key === 'nav.rentals' && <RentalsBadge />}
             </span>
           </NavLink>
         );

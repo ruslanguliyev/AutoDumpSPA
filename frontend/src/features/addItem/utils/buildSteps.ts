@@ -5,6 +5,7 @@ import {
   validateBasics,
   validateDraft,
   validatePart,
+  validateRental,
   validatePhotos,
   validatePricing,
   validateSeller,
@@ -17,6 +18,7 @@ import PhotosStep from '@/features/addItem/steps/common/PhotosStep';
 import PublishStep from '@/features/addItem/steps/common/PublishStep';
 import VehicleStep from '@/features/addItem/steps/vehicle/VehicleStep';
 import PartStep from '@/features/addItem/steps/part/PartStep';
+import RentalStep from '@/features/addItem/steps/rental/RentalStep';
 
 export type StepDefinition = {
   id: string;
@@ -59,6 +61,17 @@ export const buildSteps = (draft: ListingDraft | null): StepDefinition[] => {
       Component: BasicsStep,
     },
     ...typeSteps,
+    ...(draft.purpose === 'RENT'
+      ? [
+          {
+            id: 'rental',
+            label: 'Rental',
+            validate: validateRental,
+            isAvailable: () => true,
+            Component: RentalStep,
+          },
+        ]
+      : []),
     {
       id: 'pricing',
       label: 'Pricing',

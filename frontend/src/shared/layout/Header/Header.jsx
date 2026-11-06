@@ -70,6 +70,8 @@ export default function Header() {
         () => [
             { to: "/add", label: t('nav.addListing'), Icon: Plus },
             { to: "/", label: t('nav.home'), Icon: Home },
+            { to: "/autosearch", label: t('nav.cars'), Icon: Home },
+            { to: "/rent", label: t('nav.rent'), Icon: Home },
             { to: "/sellers", label: t('nav.sellers'), Icon: Info },
             { to: "/parts", label: t('nav.parts'), Icon: Package, megaMenu: PARTS_MEGA_MENU },
             { to: "/services", label: t('nav.auto_services'), Icon: Wrench, megaMenu: AUTO_SERVICES_MEGA_MENU },
@@ -148,6 +150,7 @@ export default function Header() {
                         <div className="header__desktop" ref={popoverRootRef}>
                             <nav className="header__nav" aria-label={t('labels.primaryNavigation')}>
                                 <Link to="/autosearch">{t('nav.cars')}</Link>
+                                <Link to="/rent">{t('nav.rent')}</Link>
                                 <MegaMenu
                                     config={PARTS_MEGA_MENU}
                                     labelKey="nav.parts"

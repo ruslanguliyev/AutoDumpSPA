@@ -52,7 +52,8 @@
     "favorites": "Favorites",
     "settings": "Settings",
     "inquiries": "Inquiries",
-    "moderation": "Moderation"
+    "moderation": "Moderation",
+    "rentals": "Rentals"
   },
   "vehicles": {
     "title": "My Vehicles",
@@ -142,7 +143,8 @@
       "BLOCKED": "Blocked"
     },
     "edit": "Edit",
-    "blockedNotice": "Blocked by a moderator"
+    "blockedNotice": "Blocked by a moderator",
+    "forRent": "For rent"
   },
   "inquiries": {
     "title": "Inquiries",
@@ -211,5 +213,72 @@
       "ACTIONED": "Reports that led to a blocked listing appear here.",
       "DISMISSED": "No dismissed reports."
     }
+  },
+  "rentSearch": {
+    "title": "Car rental",
+    "subtitle": "Cars for a day or longer: price per day, deposit and conditions are shown on every listing.",
+    "brand": "Brand",
+    "city": "City",
+    "maxPrice": "Max price per day",
+    "empty": "No cars found.",
+    "count": "{{count}} car(s) found"
+  },
+  "rental": {
+    "perDay": "/ day",
+    "from": "From",
+    "to": "To",
+    "total": "Days: {{count}} · total {{amount}}",
+    "request": "Send request",
+    "requestNote": "The owner will confirm or decline your request. The dates are yours only after confirmation.",
+    "loginRequired": "Log in to send a rental request.",
+    "sentTitle": "Request sent",
+    "sentText": "The owner will see it in their dashboard. The answer will appear under \"Rentals\".",
+    "myBookings": "My bookings",
+    "unavailableDays": "Unavailable days",
+    "messagePlaceholder": "Message to the owner (optional)",
+    "term": {
+      "minDays": "Minimum rental: {{count}} day(s)",
+      "maxDays": "Maximum rental: {{count}} day(s)",
+      "deposit": "Deposit: {{amount}}",
+      "noDeposit": "No deposit",
+      "kmPerDay": "Mileage: {{count}} km per day",
+      "unlimitedKm": "Unlimited mileage",
+      "minDriverAge": "Driver age from {{count}}"
+    },
+    "errors": {
+      "past": "The start date cannot be in the past",
+      "order": "The end date cannot be before the start date",
+      "tooShort": "Minimum rental: {{count}} day(s)",
+      "tooLong": "Maximum rental: {{count}} day(s)",
+      "unavailable": "The car is not available on these dates"
+    },
+    "status": {
+      "PENDING": "Awaiting answer",
+      "CONFIRMED": "Confirmed",
+      "DECLINED": "Declined",
+      "CANCELLED": "Cancelled"
+    },
+    "daysCount": "Days: {{count}}",
+    "contactOwner": "Owner phone ({{name}})",
+    "confirm": "Confirm",
+    "decline": "Decline",
+    "cancel": "Cancel",
+    "empty": {
+      "incoming": "No requests for your cars yet.",
+      "mine": "You have not booked anything yet.",
+      "calendar": "You have no cars for rent. Add a rental listing."
+    },
+    "tabs": {
+      "incoming": "Requests for my cars",
+      "mine": "My bookings",
+      "calendar": "Blocked days"
+    },
+    "pageTitle": "Rentals",
+    "pageSubtitle": "Requests, bookings and the calendar of your cars",
+    "car": "Car",
+    "blockNote": "Reason (optional)",
+    "blockDays": "Block dates",
+    "unblockDays": "Unblock",
+    "noBlocks": "No blocked dates."
   }
 }

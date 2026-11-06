@@ -12,6 +12,7 @@ const VehicleSummaryCard = ({
   fuelType,
   transmission,
   engine,
+  priceSuffix,
 }) => {
   const { t } = useTranslation("vehicle");
   const formattedMileage = formatInt(mileage);
@@ -35,6 +36,7 @@ const VehicleSummaryCard = ({
         <div className="flex flex-col items-start shrink-0 sm:items-end sm:text-right">
           <p className="whitespace-nowrap text-2xl font-bold tracking-tight text-chart-1 sm:text-3xl">
             {formatPrice(price, currency)}
+            {priceSuffix ? <span className="ml-1 text-sm font-medium text-muted-foreground">{priceSuffix}</span> : null}
           </p>
         </div>
       </header>

@@ -19,6 +19,27 @@ export const parsePower = (value: string | undefined | null): number | undefined
   return Number.isFinite(n) && n > 0 && n <= 3000 ? n : undefined;
 };
 
+/** Optional whole number in [min, max] typed as text: "" -> null (not set), invalid -> undefined. */
+export const parseOptionalInt = (
+  value: string | undefined | null,
+  min: number,
+  max: number,
+): number | null | undefined => {
+  const raw = trim(value);
+  if (raw === '') return null;
+  if (!/^\d{1,6}$/.test(raw)) return undefined;
+  const n = parseInt(raw, 10);
+  return n >= min && n <= max ? n : undefined;
+};
+
+/** Optional non-negative amount typed as text ("" -> null, invalid -> undefined). */
+export const parseOptionalAmount = (value: string | undefined | null): number | null | undefined => {
+  const raw = trim(value).replace(',', '.');
+  if (raw === '') return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 && n <= 1_000_000 ? n : undefined;
+};
+
 /** Stock quantity as a whole number >= 0; undefined when invalid. */
 export const parseStock = (value: string | number | undefined | null): number | undefined => {
   const raw = trim(value === undefined || value === null ? '' : String(value));
@@ -115,9 +136,26 @@ export const validatePhotos = (draft: ListingDraft) => {
   return draft.media.images.length > 0;
 };
 
+/** Rental conditions: valid numbers, and maxDays not below minDays. Sales have no such step. */
+export const validateRental = (draft: ListingDraft) => {
+  if (draft.purpose !== 'RENT') return true;
+  const r = draft.rental;
+  if (!r) return false;
+  const minDays = parseOptionalInt(r.minDays, 1, 365);
+  const maxDays = parseOptionalInt(r.maxDays, 1, 365);
+  if (!minDays) return false; // required (null = empty, undefined = invalid)
+  if (maxDays === undefined || (maxDays !== null && maxDays < minDays)) return false;
+  return (
+    parseOptionalAmount(r.deposit) !== undefined &&
+    parseOptionalInt(r.kmPerDay, 1, 5000) !== undefined &&
+    parseOptionalInt(r.minDriverAge, 16, 100) !== undefined
+  );
+};
+
 export const validateDraft = (draft: ListingDraft) => {
   return (
     validateBasics(draft) &&
+    validateRental(draft) &&
     (draft.type === 'vehicle' ? validateVehicle(draft) : validatePart(draft)) &&
     validatePricing(draft) &&
     validateSeller(draft) &&

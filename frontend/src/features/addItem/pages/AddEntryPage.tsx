@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateDraft } from '@/features/addItem/api/useDraft';
-import type { ListingType } from '@/features/addItem/store/useAddItemStore';
+import type { ListingPurpose, ListingType } from '@/features/addItem/store/useAddItemStore';
 import Button from '@/shared/ui/button';
 
 const cardClass =
@@ -13,8 +13,8 @@ const AddEntryPage = () => {
   const navigate = useNavigate();
   const createDraft = useCreateDraft();
 
-  const handleSelect = (type: ListingType) => {
-    createDraft.mutate(type, {
+  const handleSelect = (type: ListingType, purpose: ListingPurpose = 'SALE') => {
+    createDraft.mutate({ type, purpose }, {
       onSuccess: (draft) => {
         navigate(`/add/${draft.id}`);
       },
@@ -30,7 +30,7 @@ const AddEntryPage = () => {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         <div className={cardClass}>
           <div>
             <h2 className="text-lg font-semibold text-foreground">{t('entry.vehicle.title')}</h2>
@@ -44,6 +44,21 @@ const AddEntryPage = () => {
             disabled={createDraft.isPending}
           >
             {t('entry.vehicle.button')}
+          </Button>
+        </div>
+        <div className={cardClass}>
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">{t('entry.rent.title')}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t('entry.rent.description')}
+            </p>
+          </div>
+          <Button
+            className="mt-6 w-full"
+            onClick={() => handleSelect('vehicle', 'RENT')}
+            disabled={createDraft.isPending}
+          >
+            {t('entry.rent.button')}
           </Button>
         </div>
         <div className={cardClass}>

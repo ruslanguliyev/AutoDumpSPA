@@ -63,9 +63,31 @@ export type ListingPart = {
   stock: string;
 };
 
+export type ListingPurpose = 'SALE' | 'RENT';
+
+/** Rental conditions, kept as text while the user types. */
+export type ListingRental = {
+  deposit: string;
+  minDays: string;
+  maxDays: string;
+  kmPerDay: string;
+  minDriverAge: string;
+};
+
+export const emptyRental = (): ListingRental => ({
+  deposit: '',
+  minDays: '1',
+  maxDays: '',
+  kmPerDay: '',
+  minDriverAge: '',
+});
+
 export type ListingDraft = {
   id: string;
   type: ListingType;
+  /** SALE (default) or RENT: for rentals the price is the price per day. */
+  purpose?: ListingPurpose;
+  rental?: ListingRental;
   status: ListingStatus;
   /** GraphQL listing id (same as `id` for API-created drafts) */
   _listingId?: string;
@@ -113,6 +135,10 @@ type AddItemStoreState = {
   setPartField: <K extends keyof ListingPart>(
     key: K,
     value: ListingPart[K]
+  ) => void;
+  setRentalField: <K extends keyof ListingRental>(
+    key: K,
+    value: ListingRental[K]
   ) => void;
   setMediaField: <K extends keyof ListingMedia>(
     key: K,
@@ -299,6 +325,16 @@ export const useAddItemStore = create<AddItemStoreState>((set) => ({
               [key]: value,
             }
           : undefined,
+      })),
+      dirty: true,
+      saveStatus: 'idle',
+    })),
+
+  setRentalField: (key, value) =>
+    set((state) => ({
+      draft: updateDraftState(state.draft, (current) => ({
+        ...current,
+        rental: { ...(current.rental ?? emptyRental()), [key]: value },
       })),
       dirty: true,
       saveStatus: 'idle',

@@ -119,7 +119,12 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
         <div className="text-sm text-muted-foreground">
           {draft.type === 'vehicle' ? t('preview.vehicleListing') : t('preview.partListing')}
         </div>
-        <div className="text-2xl font-semibold text-primary">{price}</div>
+        <div className="text-2xl font-semibold text-primary">
+          {price}
+          {draft.purpose === 'RENT' && price !== '—' ? (
+            <span className="ml-1 text-sm font-medium text-muted-foreground">{t('form.perDay')}</span>
+          ) : null}
+        </div>
         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
           {draft.common.condition && (
             <span className="rounded-full bg-muted px-2 py-1">

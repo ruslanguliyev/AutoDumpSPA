@@ -52,7 +52,8 @@
     "favorites": "Seçilmişlər",
     "settings": "Parametrlər",
     "inquiries": "Müraciətlər",
-    "moderation": "Moderasiya"
+    "moderation": "Moderasiya",
+    "rentals": "İcarə"
   },
   "vehicles": {
     "title": "Mənim avtomobillərim",
@@ -142,7 +143,8 @@
       "BLOCKED": "Bloklanıb"
     },
     "edit": "Redaktə et",
-    "blockedNotice": "Moderator tərəfindən bloklanıb"
+    "blockedNotice": "Moderator tərəfindən bloklanıb",
+    "forRent": "İcarə"
   },
   "inquiries": {
     "title": "Müraciətlər",
@@ -211,5 +213,72 @@
       "ACTIONED": "Elanın bloklanmasına səbəb olan şikayətlər burada görünür.",
       "DISMISSED": "Rədd edilmiş şikayət yoxdur."
     }
+  },
+  "rentSearch": {
+    "title": "Avtomobil icarəsi",
+    "subtitle": "Bir gün və daha çox: günlük qiymət, girov və şərtlər hər elanda göstərilir.",
+    "brand": "Marka",
+    "city": "Şəhər",
+    "maxPrice": "Maks. günlük qiymət",
+    "empty": "Uyğun avtomobil tapılmadı.",
+    "count": "Tapılan avtomobil: {{count}}"
+  },
+  "rental": {
+    "perDay": "/ gün",
+    "from": "Başlanğıc",
+    "to": "Son",
+    "total": "Gün: {{count}} · cəmi {{amount}}",
+    "request": "Sorğu göndər",
+    "requestNote": "Sahibi sorğunu təsdiq və ya rədd edəcək. Tarixlər yalnız təsdiqdən sonra sizin olur.",
+    "loginRequired": "İcarə sorğusu göndərmək üçün daxil olun.",
+    "sentTitle": "Sorğu göndərildi",
+    "sentText": "Sahibi onu kabinetində görəcək. Cavab \"İcarə\" bölməsində görünəcək.",
+    "myBookings": "Rezervlərim",
+    "unavailableDays": "Məşğul günlər",
+    "messagePlaceholder": "Sahibinə mesaj (məcburi deyil)",
+    "term": {
+      "minDays": "Minimum müddət: {{count}} gün",
+      "maxDays": "Maksimum müddət: {{count}} gün",
+      "deposit": "Girov: {{amount}}",
+      "noDeposit": "Girovsuz",
+      "kmPerDay": "Yürüş: gündə {{count}} km",
+      "unlimitedKm": "Limitsiz yürüş",
+      "minDriverAge": "Sürücünün yaşı {{count}}-dən"
+    },
+    "errors": {
+      "past": "Keçmiş tarixi seçmək olmaz",
+      "order": "Son tarix başlanğıc tarixdən əvvəl ola bilməz",
+      "tooShort": "Minimum icarə müddəti: {{count}} gün",
+      "tooLong": "Maksimum icarə müddəti: {{count}} gün",
+      "unavailable": "Bu tarixlərdə avtomobil məşğuldur"
+    },
+    "status": {
+      "PENDING": "Cavab gözlənilir",
+      "CONFIRMED": "Təsdiqlənib",
+      "DECLINED": "Rədd edilib",
+      "CANCELLED": "Ləğv edilib"
+    },
+    "daysCount": "Gün: {{count}}",
+    "contactOwner": "Sahibinin telefonu ({{name}})",
+    "confirm": "Təsdiq et",
+    "decline": "Rədd et",
+    "cancel": "Ləğv et",
+    "empty": {
+      "incoming": "Avtomobillərinizə hələ sorğu yoxdur.",
+      "mine": "Hələ heç nə rezerv etməmisiniz.",
+      "calendar": "İcarədə avtomobiliniz yoxdur. İcarə elanı əlavə edin."
+    },
+    "tabs": {
+      "incoming": "Avtomobillərimə sorğular",
+      "mine": "Rezervlərim",
+      "calendar": "Bağlı günlər"
+    },
+    "pageTitle": "İcarə",
+    "pageSubtitle": "Avtomobillərinizin sorğuları, rezervləri və təqvimi",
+    "car": "Avtomobil",
+    "blockNote": "Səbəb (məcburi deyil)",
+    "blockDays": "Tarixləri bağla",
+    "unblockDays": "Aç",
+    "noBlocks": "Bağlı tarix yoxdur."
   }
 }

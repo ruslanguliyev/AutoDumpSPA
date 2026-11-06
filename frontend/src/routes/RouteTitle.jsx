@@ -8,6 +8,7 @@ import { formatTitle } from '@/shared/hooks/useDocumentTitle';
 /** Section pages whose title is fixed. Detail pages set their own title from their data. */
 const SECTION_TITLES = {
   '/autosearch': ['nav.cars', 'Cars'],
+  '/rent': ['nav.rent', 'Rent'],
   '/parts': ['nav.parts', 'Parts'],
   '/sellers': ['nav.sellers', 'Sellers'],
   '/dealers': ['nav.sellers', 'Sellers'],

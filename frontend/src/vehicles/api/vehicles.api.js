@@ -7,6 +7,7 @@ query Vehicles($filter: VehiclesFilterInput) {
     items {
       id brand model version year mileage fuel transmission
       engineVolume power drive condition color vehicleType bodyType
+      purpose rental { deposit minDays maxDays kmPerDay minDriverAge }
       price currency location description imageUrls
       isHot isCreditAvailable isBarterAvailable
       hasDamage isRepainted wasInAccident
@@ -23,6 +24,7 @@ query VehicleById($id: String!) {
   vehicleById(id: $id) {
     id listingId brand model version year mileage fuel transmission
     engineVolume power drive condition color vehicleType bodyType
+    purpose rental { deposit minDays maxDays kmPerDay minDriverAge }
     price currency location description imageUrls
     isHot isCreditAvailable isBarterAvailable
     hasDamage isRepainted wasInAccident
@@ -49,6 +51,8 @@ const mapVehicle = (row) => ({
   color: row.color ?? null,
   vehicleType: row.vehicleType ?? 'car',
   bodyType: row.bodyType ?? null,
+  purpose: row.purpose ?? 'SALE',
+  rental: row.rental ?? null,
   price: row.price != null ? Number(row.price) : null,
   currency: row.currency ?? 'AZN',
   location: row.location ?? null,
@@ -76,6 +80,9 @@ const buildVehiclesFilterInput = (filters = {}) => ({
   brand: filters.brand || null,
   model: filters.model || null,
   sellerId: filters.sellerId || null,
+  purpose: filters.purpose || null,
+  availableFrom: filters.availableFrom || null,
+  availableTo: filters.availableTo || null,
   yearFrom: filters.yearFrom ?? null,
   yearTo: filters.yearTo ?? null,
   priceFrom: filters.priceFrom ?? null,

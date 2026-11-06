@@ -6,6 +6,7 @@ import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
+import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import clsx from 'clsx';
 
@@ -60,6 +61,7 @@ export function DashboardSidebar() {
                   <Icon size={20} className="flex-shrink-0" aria-hidden />
                   {!sidebarCollapsed && <span>{t(item.key)}</span>}
                   {!sidebarCollapsed && item.key === 'nav.inquiries' && <InquiriesBadge />}
+                  {!sidebarCollapsed && item.key === 'nav.rentals' && <RentalsBadge />}
                 </NavLink>
               </li>
             );

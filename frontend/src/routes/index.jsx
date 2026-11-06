@@ -30,6 +30,7 @@ const SpecialistDetailPage = lazy(
 );
 const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
 const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
+const RentSearchPage = lazy(() => import('@/features/rentals/pages/RentSearchPage'));
 const NotFound = lazy(() => import('@/app/pages/notFound/NotFound'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
@@ -51,6 +52,9 @@ const MyServicesPage = lazy(() =>
 );
 const ModerationPage = lazy(() =>
   import('@/dashboard/pages/ModerationPage').then((m) => ({ default: m.ModerationPage }))
+);
+const RentalsPage = lazy(() =>
+  import('@/dashboard/pages/RentalsPage').then((m) => ({ default: m.RentalsPage }))
 );
 const InquiriesPage = lazy(() =>
   import('@/dashboard/pages/InquiriesPage').then((m) => ({ default: m.InquiriesPage }))
@@ -84,6 +88,7 @@ const dashboardRoutes = [
       { path: 'parts', element: <MyPartsPage /> },
       { path: 'services', element: <MyServicesPage /> },
       { path: 'inquiries', element: <InquiriesPage /> },
+      { path: 'rentals', element: <RentalsPage /> },
       { path: 'moderation', element: <ModerationPage /> },
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'settings', element: <SettingsPage /> },
@@ -95,6 +100,7 @@ const createAppRoutes = () => [
   { index: true, element: <Home /> },
   { path: 'about', element: <About /> },
   { path: 'autosearch', element: <AutoSearchResults /> },
+  { path: 'rent', element: <RentSearchPage /> },
   { path: 'parts', element: <PartsPage /> },
   { path: 'parts/:id', element: <PartDetailsPage /> },
   { path: 'vehicles/:id', element: <VehicleDetail /> },
