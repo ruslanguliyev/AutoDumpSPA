@@ -22,6 +22,7 @@ import { BidsModule } from './bids/bids.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
 import { ModerationModule } from './moderation/moderation.module';
+import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -54,6 +55,7 @@ import { PrismaModule } from './prisma/prisma.module';
     InquiriesModule,
     ModerationModule,
   ],
+  controllers: [HealthController],
   providers: [AppResolver, AppService],
 })
 export class AppModule {}
