@@ -20,7 +20,7 @@ query GetSpecialists($filter: SpecialistsFilterInput) {
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount
-    priceFrom mobileService verified available
+    priceFrom mobileService verified available promotionTier
   }
 }
 `;
@@ -32,7 +32,7 @@ query GetSpecialistBySlug($slug: String!) {
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount
-    priceFrom hourlyRate mobileService verified available
+    priceFrom hourlyRate mobileService verified available promotionTier
     portfolio
     supportedVehicles { id brand model yearFrom yearTo }
   }
@@ -46,7 +46,7 @@ query GetSpecialistsByIds {
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount
-    priceFrom mobileService verified available
+    priceFrom mobileService verified available promotionTier
   }
 }
 `;
@@ -73,6 +73,7 @@ const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
   rating: s.rating,
   reviewsCount: s.reviewsCount,
   verified: s.verified,
+  promotionTier: s.promotionTier ?? null,
   available: s.available,
   mobileService: s.mobileService,
   priceFrom: toNumberOrNull(s.priceFrom),

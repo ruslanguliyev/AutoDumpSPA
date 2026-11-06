@@ -6,6 +6,8 @@ import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import Skeleton from '@/shared/ui/Skeleton';
 import SpecialistHero from '@/specialists/components/SpecialistHero';
 import SpecialistSidebarCard from '@/specialists/components/SpecialistSidebarCard';
+import { PromoteInline } from '@/features/promotions/components/PromoteInline';
+import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import SpecialistGallery from '@/specialists/components/SpecialistGallery';
 import SpecialistHighlights from '@/specialists/components/SpecialistHighlights';
 import SpecialistCertifications from '@/specialists/components/SpecialistCertifications';
@@ -36,6 +38,8 @@ const SpecialistDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
 
   const { specialist, isLoading, error } = useSpecialistBySlug(slug);
+  // Counts an opened profile, so paid placement can be judged on results.
+  useTrackView('SPECIALIST', specialist?.id);
   useDocumentTitle(specialist?.name);
 
   const {
@@ -119,6 +123,7 @@ const SpecialistDetailPage = () => {
           {/* ── RIGHT COLUMN (sticky) ── */}
           <aside className="lg:sticky lg:top-6 lg:self-start">
             <SpecialistSidebarCard specialist={specialist} primaryService={primaryService} />
+            <PromoteInline targetType="SPECIALIST" targetId={specialist.id} className="mt-3" />
           </aside>
         </div>
 

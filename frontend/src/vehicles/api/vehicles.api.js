@@ -13,6 +13,7 @@ query Vehicles($filter: VehiclesFilterInput) {
       hasDamage isRepainted wasInAccident
       ownersCount seatsCount marketRegion
       seller { id name type hasPublicPage verified rating city phone logo }
+      promotionTier viewsCount
     }
     total
   }
@@ -30,6 +31,7 @@ query VehicleById($id: String!) {
     hasDamage isRepainted wasInAccident
     ownersCount seatsCount marketRegion
     seller { id name type hasPublicPage verified rating city phone logo }
+    promotionTier viewsCount
   }
 }
 `;
@@ -70,9 +72,10 @@ const mapVehicle = (row) => ({
   seatsCount: row.seatsCount ?? null,
   marketRegion: row.marketRegion ?? null,
   seller: row.seller ?? null,
+  promotionTier: row.promotionTier ?? null,
   engine: `${row.engineVolume}L • ${row.power} HP`,
   status: 'available',
-  views: 0,
+  views: row.viewsCount ?? 0,
   postedAt: null,
 });
 
@@ -122,6 +125,34 @@ export async function getVehicleById(id) {
     return mapVehicle(row);
   } catch {
     return null;
+  }
+}
+
+const PROMOTED_VEHICLES_QUERY = `
+query PromotedVehicles($tier: PromotionTier, $limit: Int) {
+  promotedVehicles(tier: $tier, limit: $limit) {
+    id brand model version year mileage fuel transmission
+    engineVolume power drive condition color vehicleType bodyType
+    purpose price currency location imageUrls
+    isHot isCreditAvailable isBarterAvailable
+    hasDamage isRepainted wasInAccident
+    ownersCount seatsCount marketRegion
+    seller { id name type hasPublicPage verified rating city phone logo }
+    promotionTier viewsCount
+  }
+}
+`;
+
+/**
+ * The paid block: VIP for a catalogue, PREMIUM for the home page. The server rotates
+ * the pool on the clock, so repeated calls genuinely return different cars.
+ */
+export async function getPromotedVehicles(tier = 'VIP', limit = 6) {
+  try {
+    const data = await gqlRequest(PROMOTED_VEHICLES_QUERY, { tier, limit });
+    return (data?.promotedVehicles ?? []).map(mapVehicle);
+  } catch {
+    return [];
   }
 }
 

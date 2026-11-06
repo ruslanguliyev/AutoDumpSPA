@@ -55,7 +55,8 @@
     "moderation": "Moderation",
     "rentals": "Rentals",
     "appointments": "Appointments",
-    "profile": "My business profile"
+    "profile": "My business profile",
+    "promotions": "Promotion"
   },
   "vehicles": {
     "title": "My Vehicles",
@@ -217,7 +218,8 @@
     },
     "sections": {
       "reports": "Reports",
-      "verification": "Verification"
+      "verification": "Verification",
+      "promotions": "Promotion"
     },
     "verification": {
       "hint": "Verified profiles get a badge in the catalogue. Check documents or the business in person before granting it.",

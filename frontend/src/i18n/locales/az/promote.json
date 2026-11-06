@@ -1,0 +1,117 @@
+{
+  "loading": "Yüklənir…",
+  "notFound": "Tapılmadı.",
+  "title": "İrəli çək",
+  "subtitle": "Ödənişli yerləşdirmə elanı kataloqda yuxarı qaldırır. O, həmişə reklam kimi işarələnir və qeydiyyatsız da alına bilər.",
+  "openTarget": "Səhifəni aç",
+  "fromPrice": "{{price}}-dən",
+  "chooseDuration": "Müddəti seçin",
+  "chooseCount": "Sayı seçin",
+  "dayCount_one": "{{count}} gün",
+  "dayCount_other": "{{count}} gün",
+  "bumpCount_one": "{{count}} dəfə irəli çək",
+  "bumpCount_other": "{{count}} dəfə irəli çək",
+  "perDay": "gündə {{price}}",
+  "bestValue": "Ən sərfəli",
+  "tier": {
+    "BUMP": {
+      "name": "İrəli çək"
+    },
+    "VIP": {
+      "name": "VIP"
+    },
+    "PREMIUM": {
+      "name": "Premium"
+    }
+  },
+  "feature": {
+    "top": "Elan kataloqda birinci yerə qalxır",
+    "vipBlock": "VIP bölməsində yer, ədalətli növbə ilə",
+    "dailyBump": "Hər gün yenidən yuxarı",
+    "homePage": "Əsas səhifədə göstərilir",
+    "thriceDaily": "Gündə üç dəfə yuxarı: səhər, günorta və axşam"
+  },
+  "active": {
+    "running": "Burada artıq {{tier}} işləyir — {{date}} tarixinədək.",
+    "bumpsLeft_one": "{{count}} irəli çək qalıb.",
+    "bumpsLeft_other": "{{count}} irəli çək qalıb."
+  },
+  "summary": {
+    "package": "Paket",
+    "bumps": "İrəli çəkmələr",
+    "bumpOnce": "Hər gün saat 09:00-da",
+    "bumpThrice": "Gündə üç dəfə: 09:00, 13:00, 19:00",
+    "listPrice": "Qiymət",
+    "credit": "Cari yerləşdirmənin istifadə olunmamış günləri",
+    "total": "Ödəniləcək"
+  },
+  "contact": {
+    "label": "Qəbz üçün e-poçt və ya telefon (istəyə bağlı)",
+    "placeholder": "you@example.com və ya +994 ..."
+  },
+  "pay": {
+    "button": "{{price}} ödə",
+    "working": "Ödəniş səhifəsinə keçirik…",
+    "note": "Ödəniş provayderin öz səhifəsində aparılır, kart məlumatlarını biz görmürük. Yerləşdirmə ödəniş təsdiqlənən kimi başlayır. Moderator elanı bloklayarsa, yerləşdirmə dayanır və geri qaytarılmır."
+  },
+  "mock": {
+    "notice": "Sınaq ödəniş şlüzü. Real pul köçürülmür və kart məlumatı soruşulmur: aşağıdakı düymələr sadəcə bankın deyəcəyini serverə bildirir.",
+    "for": "Nəyə görə",
+    "succeed": "Uğurlu ödəniş bildir",
+    "decline": "İmtina bildir",
+    "working": "Göndərilir…"
+  },
+  "status": {
+    "PENDING": "Ödəniş gözlənilir",
+    "PAID": "Yerləşdirmə işləyir",
+    "FAILED": "Ödəniş alınmadı",
+    "CANCELLED": "Sifariş ləğv edildi",
+    "EXPIRED": "Sifarişin vaxtı bitdi",
+    "REFUNDED": "Ödəniş geri qaytarıldı"
+  },
+  "statusDetail": "{{tier}}, {{what}}, «{{title}}» üçün — {{price}}.",
+  "paidHint": "Elan artıq yuxarı qalxdı. Baxış və müraciətləri şəxsi kabinetdə izləyə bilərsiniz.",
+  "resumePayment": "Ödənişi davam etdir",
+  "tryAgain": "Yenidən cəhd et",
+  "badge": {
+    "explain": "Ödənişli yerləşdirmə"
+  },
+  "promoteCta": "İrəli çək",
+  "block": {
+    "title": "İrəli çəkilənlər",
+    "label": "Reklam"
+  },
+  "mine": {
+    "title": "İrəli çəkmə",
+    "subtitle": "Nəyi irəli çəkmisiniz və bu nə verdi.",
+    "empty": "Hələ heç nə irəli çəkməmisiniz.",
+    "running": "İndi işləyir",
+    "finished": "Bitmiş",
+    "until": "{{date}} tarixinədək",
+    "bumps": "irəli çəkmə: {{total}}-dən {{used}}",
+    "nextBump": "növbəti irəli çəkmə {{time}}",
+    "granted": "bizdən hədiyyə",
+    "again": "Yenidən irəli çək",
+    "ended": {
+      "expired": "müddət bitdi",
+      "spent": "irəli çəkmələr bitdi",
+      "upgraded": "daha yüksək paketlə əvəz olundu",
+      "revoked": "administrator götürdü",
+      "target_blocked": "dayandı: elan bloklandı"
+    },
+    "views_one": "baxış",
+    "views_other": "baxış",
+    "contacts_one": "müraciət",
+    "contacts_other": "müraciət"
+  },
+  "admin": {
+    "title": "İrəli çəkmə",
+    "hint": "Alınmış və hədiyyə edilmiş yerləşdirmələr. Hədiyyə alan üçün pulsuzdur: kompensasiya və sınaq üçün istifadə edin.",
+    "activeOnly": "Yalnız aktiv",
+    "all": "Hamısı",
+    "empty": "Hələ boşdur.",
+    "paid": "ödənilib",
+    "granted": "hədiyyə",
+    "revoke": "Götür"
+  }
+}

@@ -5,6 +5,7 @@ import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import { LocationBadge } from '@/shared/ui/LocationBadge';
 import { CardCTA } from '@/shared/ui/CardCTA';
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 
 type SpecialistCardProps = {
   specialist: SpecialistProfile;
@@ -25,6 +26,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
     location,
     specializations,
     verified,
+    promotionTier,
   } = specialist;
 
   const displayRating = Number.isFinite(rating) ? rating : 0;
@@ -58,12 +60,15 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
           )}
         </div>
 
-        {verified && (
-          <Badge variant="verified">
-            <BadgeCheck size={12} aria-hidden="true" />
-            {t('card.verified')}
-          </Badge>
-        )}
+        <div className="flex flex-col items-end gap-1">
+          <PromotionBadge tier={promotionTier} />
+          {verified && (
+            <Badge variant="verified">
+              <BadgeCheck size={12} aria-hidden="true" />
+              {t('card.verified')}
+            </Badge>
+          )}
+        </div>
       </div>
 
       {/* Name */}

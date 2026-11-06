@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
 import { moderationApi } from '@/features/moderation/api/moderation.api';
 import { VerificationPanel } from '@/features/moderation/components/VerificationPanel';
+import { AdminPromotionsPanel } from '@/features/promotions/components/AdminPromotionsPanel';
 import type { Report, ReportStatus } from '@/features/moderation/api/moderation.api';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
@@ -126,7 +127,7 @@ function ReportCard({ report, onChanged }: { report: Report; onChanged: () => vo
 export function ModerationPage() {
   const { t } = useTranslation('dashboard');
   const queryClient = useQueryClient();
-  const [section, setSection] = useState<'reports' | 'verification'>('reports');
+  const [section, setSection] = useState<'reports' | 'verification' | 'promotions'>('reports');
   const [tab, setTab] = useState<ReportStatus>('OPEN');
   const reports = useQuery({ queryKey: ['moderation', 'reports', tab], queryFn: () => moderationApi.reports(tab) });
 
@@ -138,7 +139,7 @@ export function ModerationPage() {
       <DashboardHeader title={t('moderation.title')} subtitle={t('moderation.subtitle')} />
 
       <div className="flex gap-6 border-b border-border" role="tablist">
-        {(['reports', 'verification'] as const).map((key) => (
+        {(['reports', 'verification', 'promotions'] as const).map((key) => (
           <button
             key={key}
             type="button"
@@ -155,6 +156,7 @@ export function ModerationPage() {
       </div>
 
       {section === 'verification' ? <VerificationPanel /> : null}
+      {section === 'promotions' ? <AdminPromotionsPanel /> : null}
 
       <div className={`flex flex-wrap gap-2 ${section === 'reports' ? '' : 'hidden'}`} role="tablist">
         {TABS.map((status) => (

@@ -317,6 +317,7 @@ query Parts($filter: PartsFilterInput) {
       description price currency oemCode
       compatibility stock location imageUrl
       seller { id name type hasPublicPage verified rating city phone logo }
+      promotionTier
     }
     total
   }
@@ -362,6 +363,7 @@ query PartById($id: String!) {
     description price currency oemCode
     compatibility stock location imageUrl
     seller { id name type hasPublicPage verified rating city phone logo }
+    promotionTier
   }
 }
 `;

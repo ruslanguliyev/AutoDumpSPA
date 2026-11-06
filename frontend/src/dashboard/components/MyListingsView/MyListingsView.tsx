@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Eye, Heart, MessageSquare, Plus } from 'lucide-react';
+import { Eye, Heart, MessageSquare, Plus, TrendingUp } from 'lucide-react';
 
 import type { ListingKind, MyListing } from '@/dashboard/api/listings.api';
 import { useListingActions, useMyListings } from '@/dashboard/hooks/useMyListings';
@@ -10,6 +10,7 @@ import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 import { formatPrice } from '@/lib/format';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { useStartEditListing } from '@/features/addItem/api/editListing';
+import { promotePath } from '@/features/promotions/pages/PromotePage';
 
 type Props = {
   kind: ListingKind;
@@ -155,6 +156,16 @@ export function MyListingsView({ kind, section }: Props) {
                   </div>
 
                   <div className="flex flex-wrap gap-2 sm:justify-end">
+                    {/* Only a published listing can be promoted, so only it gets the button. */}
+                    {l.status === 'ACTIVE' ? (
+                      <Link
+                        to={promotePath('LISTING', l.id)}
+                        className="inline-flex items-center gap-1 rounded-lg border border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-accent"
+                      >
+                        <TrendingUp size={14} aria-hidden="true" />
+                        {t('promoteCta', { ns: 'promote' })}
+                      </Link>
+                    ) : null}
                     {(l.kind === 'vehicle' || l.kind === 'part') && (l.status === 'DRAFT' || l.status === 'ACTIVE') ? (
                       <ActionButton
                         disabled={busy || editor.pendingId !== null}

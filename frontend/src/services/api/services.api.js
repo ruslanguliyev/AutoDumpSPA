@@ -6,7 +6,7 @@ query GetServiceCenters($city: String) {
   serviceCenters(city: $city) {
     id slug name description type
     city phone website logoUrl coverImage
-    categories supportedBrands rating reviewsCount verified
+    categories supportedBrands rating reviewsCount verified promotionTier
   }
 }
 `;
@@ -18,7 +18,7 @@ query GetServiceCenter($id: String!) {
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
-    rating reviewsCount verified isActive
+    rating reviewsCount verified isActive promotionTier
     schedule contacts
     services {
       id code title category
@@ -36,7 +36,7 @@ query GetServiceCenterBySlug($slug: String!) {
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
-    rating reviewsCount verified isActive
+    rating reviewsCount verified isActive promotionTier
     schedule contacts
     services {
       id code title category
@@ -65,6 +65,7 @@ const mapServiceCenterRow = (row) => ({
   rating: row.rating,
   reviewsCount: row.reviewsCount ?? 0,
   verified: row.verified,
+  promotionTier: row.promotionTier ?? null,
   isActive: row.isActive ?? true,
   phone: row.phone ?? null,
   whatsapp: row.whatsapp ?? null,

@@ -17,6 +17,8 @@ import VehicleSummaryCard from "@/vehicles/pages/vehicleDetail/VehicleSummaryCar
 import { ContactSellerForm } from "@/features/inquiries/components/ContactSellerForm";
 import { ReportListingForm } from "@/features/moderation/components/ReportListingForm";
 import { RentalBookingCard } from "@/features/rentals/components/RentalBookingCard";
+import { PromoteInline } from "@/features/promotions/components/PromoteInline";
+import { useTrackView } from "@/features/promotions/hooks/usePromotions";
 
 import "@/shared/components/SellerCard/SellerCard.scss";
 import "@/shared/blocks/TrustBlock/TrustBlock.scss";
@@ -27,6 +29,8 @@ export default function VehicleDetail() {
     const { id } = useParams();
     const { data: car } = useAutoDetails(id);
     useDocumentTitle(car ? [car.brand, car.model, car.year].filter(Boolean).join(" ") : null);
+    // Counts an opened page, so whoever pays for placement can see what it brought.
+    useTrackView("LISTING", car?.listingId ?? undefined);
 
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
     const isFavorite = useFavoritesStore((s) =>
@@ -206,6 +210,12 @@ export default function VehicleDetail() {
                         <SellerCard seller={car.seller} actions={sellerActions} />
                         {car.purpose === "RENT" ? <RentalBookingCard car={car} /> : null}
                         <ContactSellerForm listingId={car.listingId} />
+                        {/* Anyone may pay to promote this advert, signed in or not. */}
+                        <PromoteInline
+                            targetType="LISTING"
+                            targetId={car.listingId}
+                            className="mt-3"
+                        />
                         <ReportListingForm listingId={car.listingId} className="mt-3" />
                         <TrustBlock variant="car" />
                     </div>

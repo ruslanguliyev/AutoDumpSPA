@@ -60,6 +60,7 @@ export const mapPartToEntity = (dto) => {
     imageUrl: fallbackImageUrl,
     image: dto.image ?? imageUrl ?? fallbackImageUrl,
     seller: dto.seller ?? null,
+    promotionTier: dto.promotionTier ?? null,
   };
 };
 

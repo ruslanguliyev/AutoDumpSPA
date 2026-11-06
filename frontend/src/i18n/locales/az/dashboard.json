@@ -55,7 +55,8 @@
     "moderation": "Moderasiya",
     "rentals": "İcarə",
     "appointments": "Qeydlər",
-    "profile": "Usta / servis profili"
+    "profile": "Usta / servis profili",
+    "promotions": "İrəli çəkmə"
   },
   "vehicles": {
     "title": "Mənim avtomobillərim",
@@ -217,7 +218,8 @@
     },
     "sections": {
       "reports": "Şikayətlər",
-      "verification": "Təsdiq"
+      "verification": "Təsdiq",
+      "promotions": "İrəli çəkmə"
     },
     "verification": {
       "hint": "Təsdiqlənmiş profillər kataloqda nişan alır. Nişan verməzdən əvvəl sənədləri və ya biznesi şəxsən yoxlayın.",

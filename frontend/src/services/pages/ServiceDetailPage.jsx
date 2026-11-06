@@ -11,6 +11,8 @@ import FullPriceList from '@/services/components/FullPriceList';
 import BrandsServiced from '@/services/components/BrandsServiced';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import ServiceSidebar from '@/services/components/ServiceSidebar';
+import { PromoteInline } from '@/features/promotions/components/PromoteInline';
+import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import SpecialistCard from '@/specialists/components/SpecialistCard';
 import './ServiceDetailPage.scss';
 
@@ -18,6 +20,8 @@ export default function ServiceDetailPage() {
   const { t } = useTranslation('services');
   const { idOrSlug } = useParams();
   const { service, isLoading, error } = useService(idOrSlug);
+  // Counts an opened profile, so paid placement can be judged on results.
+  useTrackView('SERVICE_CENTER', service?.id);
   useDocumentTitle(service?.name);
   const {
     specialists,
@@ -121,13 +125,16 @@ export default function ServiceDetailPage() {
           </div>
 
           {/* RIGHT COLUMN - STICKY SIDEBAR */}
-          <ServiceSidebar
-            serviceId={service.id}
-            accepting={service.isActive !== false}
-            schedule={service.schedule}
-            contacts={service.contacts}
-            location={service.location}
-          />
+          <div>
+            <ServiceSidebar
+              serviceId={service.id}
+              accepting={service.isActive !== false}
+              schedule={service.schedule}
+              contacts={service.contacts}
+              location={service.location}
+            />
+            <PromoteInline targetType="SERVICE_CENTER" targetId={service.id} className="mt-3" />
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Car, Package, Wrench, Heart, MessageSquare, Settings, ShieldCheck, CalendarDays, CalendarCheck, BadgeCheck } from 'lucide-react';
+import { LayoutDashboard, Car, Package, Wrench, Heart, MessageSquare, Settings, ShieldCheck, CalendarDays, CalendarCheck, BadgeCheck, TrendingUp } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
 
@@ -17,6 +17,7 @@ const allItems: NavItem[] = [
   { key: 'nav.rentals', path: '/dashboard/rentals', icon: CalendarDays },
   { key: 'nav.appointments', path: '/dashboard/appointments', icon: CalendarCheck },
   { key: 'nav.profile', path: '/dashboard/profile', icon: BadgeCheck },
+  { key: 'nav.promotions', path: '/dashboard/promotions', icon: TrendingUp },
   { key: 'nav.favorites', path: '/dashboard/favorites', icon: Heart },
   { key: 'nav.settings', path: '/dashboard/settings', icon: Settings },
 ];

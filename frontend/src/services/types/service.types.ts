@@ -1,3 +1,4 @@
+import type { PromotionTier } from '@/features/promotions/api/promotions.api';
 export type ServiceLocation = {
   country?: string | null;
   city?: string | null;
@@ -44,6 +45,8 @@ export type ServiceProfile = {
   rating?: number | null;
   reviewsCount?: number | null;
   verified?: boolean | null;
+  /** Paid placement badge, when the profile holds one. */
+  promotionTier?: PromotionTier | null;
   verificationLevel?: string | null;
   priceRange?: number | null;
   avgCheck?: number | null;

@@ -167,6 +167,10 @@ export class VehicleObject {
   /** VIP or PREMIUM while the listing holds paid placement, otherwise null. */
   @Field(() => PromotionTier, { nullable: true })
   promotionTier: PromotionTier | null;
+
+  /** How many times the detail page was opened. */
+  @Field(() => Int)
+  viewsCount: number;
 }
 
 @ObjectType()

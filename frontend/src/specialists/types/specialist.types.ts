@@ -1,3 +1,4 @@
+import type { PromotionTier } from '@/features/promotions/api/promotions.api';
 export enum Specialization {
   ENGINE = 'ENGINE',
   TRANSMISSION = 'TRANSMISSION',
@@ -35,6 +36,8 @@ export type SpecialistProfile = {
   rating?: number | null;
   reviewsCount?: number | null;
   verified?: boolean | null;
+  /** Paid placement badge, when the profile holds one. */
+  promotionTier?: PromotionTier | null;
   /** False when the specialist switched off new appointments. */
   available?: boolean | null;
   mobileService?: boolean | null;

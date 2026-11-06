@@ -304,11 +304,19 @@ describe('paid promotion of listings and profiles', () => {
       expect(quote.activeTier).toBe('VIP');
 
       // Thirty days of VIP cost 40 AZN and none of them has been used yet, so nearly
-      // all of it comes off; a package is never free, so 1 AZN is still charged.
+      // all of it comes off the 60 AZN that thirty days of Premium cost.
       const premium = quote.packages.find((p: any) => p.code === 'vehicle_premium_30d');
       expect(premium.listAmount).toBe(6000);
       expect(premium.creditAmount).toBeGreaterThan(3900);
       expect(premium.amount).toBe(premium.listAmount - premium.creditAmount);
+
+      // Taking the credit retires the VIP, so it is not offered on a package that is
+      // worth less than the days still left: nobody is nudged into losing value.
+      expect(quote.packages.find((p: any) => p.code === 'vehicle_premium_1d')).toMatchObject({
+        creditAmount: 0,
+        amount: 700,
+      });
+      expect(quote.packages.find((p: any) => p.code === 'vehicle_premium_5d').creditAmount).toBe(0);
 
       // A cheaper tier is not discounted by a dearer one, and VIP does not discount VIP.
       expect(quote.packages.find((p: any) => p.code === 'vehicle_vip_30d').creditAmount).toBe(0);

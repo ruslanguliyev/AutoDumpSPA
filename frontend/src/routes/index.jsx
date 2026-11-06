@@ -31,6 +31,11 @@ const SpecialistDetailPage = lazy(
 const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
 const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
 const RentSearchPage = lazy(() => import('@/features/rentals/pages/RentSearchPage'));
+const PromotePage = lazy(() => import('@/features/promotions/pages/PromotePage'));
+const MockPayPage = lazy(() => import('@/features/promotions/pages/MockPayPage'));
+const PromotionStatusPage = lazy(
+  () => import('@/features/promotions/pages/PromotionStatusPage')
+);
 const NotFound = lazy(() => import('@/app/pages/notFound/NotFound'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
@@ -71,6 +76,9 @@ const FavoritesPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@/dashboard/pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 );
+const PromotionsPage = lazy(() =>
+  import('@/dashboard/pages/PromotionsPage').then((m) => ({ default: m.PromotionsPage }))
+);
 
 const SellersPageRoute = () => {
   return <SellersPage />;
@@ -98,6 +106,7 @@ const dashboardRoutes = [
       { path: 'appointments', element: <AppointmentsPage /> },
       { path: 'profile', element: <ProfessionalProfilePage /> },
       { path: 'moderation', element: <ModerationPage /> },
+      { path: 'promotions', element: <PromotionsPage /> },
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'settings', element: <SettingsPage /> },
     ],
@@ -136,6 +145,11 @@ const createAppRoutes = () => [
       </ProtectedRoute>
     ),
   },
+  // Promotion can be bought without an account, exactly as on turbo.az, so these
+  // three pages are public and the order is addressed by its own secret token.
+  { path: 'promote/:targetType/:targetId', element: <PromotePage /> },
+  { path: 'promote/pay/:token', element: <MockPayPage /> },
+  { path: 'promote/order/:token', element: <PromotionStatusPage /> },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
   { path: '*', element: <NotFound /> },

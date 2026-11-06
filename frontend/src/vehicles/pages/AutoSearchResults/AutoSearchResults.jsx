@@ -4,6 +4,7 @@ import BackButton from '@/shared/ui/BackButton/BackButton';
 import VehicleSearchBox from '@/vehicles/components/VehicleSearchBox';
 import { useCarsFiltersUrlSync } from '@/features/filters/hooks/useCarsFiltersUrlSync';
 import { useAutos } from '@/vehicles/hooks/useAutos';
+import { PromotedVehicles } from '@/features/promotions/components/PromotedVehicles';
 import './AutoSearchResult.scss';
 
 export default function AutoSearchResults() {
@@ -18,6 +19,9 @@ export default function AutoSearchResults() {
       </div>
 
       <VehicleSearchBox />
+
+      {/* Paid placement, kept apart from the results and labelled as an advert. */}
+      <PromotedVehicles tier="VIP" limit={4} className="!py-0" />
 
       <h1
         id="auto-results"

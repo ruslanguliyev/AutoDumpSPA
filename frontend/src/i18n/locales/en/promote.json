@@ -1,0 +1,117 @@
+{
+  "loading": "Loading…",
+  "notFound": "We could not find this.",
+  "title": "Promote",
+  "subtitle": "Paid placement lifts your advert in the catalogue. It is always marked as an advert, and you can buy it without an account.",
+  "openTarget": "Open the page",
+  "fromPrice": "from {{price}}",
+  "chooseDuration": "Choose how long",
+  "chooseCount": "Choose how many",
+  "dayCount_one": "{{count}} day",
+  "dayCount_other": "{{count}} days",
+  "bumpCount_one": "{{count}} bump",
+  "bumpCount_other": "{{count}} bumps",
+  "perDay": "{{price}} a day",
+  "bestValue": "Best value",
+  "tier": {
+    "BUMP": {
+      "name": "Bump"
+    },
+    "VIP": {
+      "name": "VIP"
+    },
+    "PREMIUM": {
+      "name": "Premium"
+    }
+  },
+  "feature": {
+    "top": "Goes to the top of its catalogue",
+    "vipBlock": "A slot in the VIP block, in fair rotation",
+    "dailyBump": "Back to the top every day",
+    "homePage": "Shown on the home page",
+    "thriceDaily": "Back to the top three times a day: morning, midday and evening"
+  },
+  "active": {
+    "running": "{{tier}} is already running on this until {{date}}.",
+    "bumpsLeft_one": "{{count}} bump is still owed.",
+    "bumpsLeft_other": "{{count}} bumps are still owed."
+  },
+  "summary": {
+    "package": "Package",
+    "bumps": "Bumps",
+    "bumpOnce": "Every day at 09:00",
+    "bumpThrice": "Three times a day: 09:00, 13:00, 19:00",
+    "listPrice": "Price",
+    "credit": "Unused days of your current placement",
+    "total": "To pay"
+  },
+  "contact": {
+    "label": "Email or phone for the receipt (optional)",
+    "placeholder": "you@example.com or +994 ..."
+  },
+  "pay": {
+    "button": "Pay {{price}}",
+    "working": "Taking you to the payment page…",
+    "note": "You pay on the provider's own page; we never see your card. Placement starts as soon as the payment is confirmed. A listing blocked by a moderator loses its placement and is not refunded."
+  },
+  "mock": {
+    "notice": "Test payment gateway. No real money moves and nothing asks for card details: the buttons below only tell the server what a bank would have told it.",
+    "for": "For",
+    "succeed": "Report a successful payment",
+    "decline": "Report a declined payment",
+    "working": "Sending…"
+  },
+  "status": {
+    "PENDING": "Waiting for payment",
+    "PAID": "Placement is running",
+    "FAILED": "The payment did not go through",
+    "CANCELLED": "The order was cancelled",
+    "EXPIRED": "The order expired",
+    "REFUNDED": "The payment was refunded"
+  },
+  "statusDetail": "{{tier}}, {{what}}, for “{{title}}” — {{price}}.",
+  "paidHint": "Your advert has already moved to the top. You can follow the views and calls it brings in your dashboard.",
+  "resumePayment": "Carry on paying",
+  "tryAgain": "Try again",
+  "badge": {
+    "explain": "Paid placement"
+  },
+  "promoteCta": "Promote",
+  "block": {
+    "title": "Promoted",
+    "label": "Advert"
+  },
+  "mine": {
+    "title": "Promotion",
+    "subtitle": "What you have promoted, and what it brought in.",
+    "empty": "You have not promoted anything yet.",
+    "running": "Running",
+    "finished": "Finished",
+    "until": "until {{date}}",
+    "bumps": "bumps: {{used}} of {{total}}",
+    "nextBump": "next bump {{time}}",
+    "granted": "a gift from us",
+    "again": "Promote again",
+    "ended": {
+      "expired": "finished",
+      "spent": "all bumps spent",
+      "upgraded": "replaced by an upgrade",
+      "revoked": "withdrawn by an administrator",
+      "target_blocked": "stopped: the listing was blocked"
+    },
+    "views_one": "view",
+    "views_other": "views",
+    "contacts_one": "contact",
+    "contacts_other": "contacts"
+  },
+  "admin": {
+    "title": "Promotions",
+    "hint": "Placements bought and granted. Granting one costs the buyer nothing: use it for a compensation or a trial.",
+    "activeOnly": "Running only",
+    "all": "All",
+    "empty": "Nothing here yet.",
+    "paid": "paid",
+    "granted": "granted",
+    "revoke": "Withdraw"
+  }
+}

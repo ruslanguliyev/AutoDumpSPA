@@ -33,7 +33,7 @@ import {
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** How long a buyer has to finish paying before the order has to be started again. */
 const ORDER_TTL_MS = 30 * 60 * 1000;
-/** An upgrade never makes a package free: at least this much is always charged. */
+/** An upgrade is only offered when at least this much is still left to pay for it. */
 const MIN_CHARGE = 100;
 const MAX_CONTACT_LENGTH = 120;
 const MAX_GRANT_DAYS = 365;
@@ -233,6 +233,11 @@ export class PromotionsService {
   /**
    * Unused days of a cheaper placement pay for part of a dearer one, so nobody has to
    * throw away what they already bought in order to upgrade.
+   *
+   * The credit is only offered when the new package is worth more than what is left,
+   * because taking it retires the old placement. Otherwise there is no discount and
+   * both placements simply run side by side, the dearer one deciding the rank; that
+   * way an upgrade can never cost the buyer value they had already paid for.
    */
   private creditFor(
     placements: Promotion[],
@@ -245,10 +250,8 @@ export class PromotionsService {
       .map((p) => ({ promotion: p, value: remainingValue(p, now) }))
       .sort((a, b) => b.value - a.value)[0];
     if (!best || best.value <= 0) return { amount: 0, promotionId: null };
-    return {
-      amount: Math.min(best.value, Math.max(0, pkg.amount - MIN_CHARGE)),
-      promotionId: best.promotion.id,
-    };
+    if (pkg.amount - best.value < MIN_CHARGE) return { amount: 0, promotionId: null };
+    return { amount: best.value, promotionId: best.promotion.id };
   }
 
   async quote(target: TargetKey): Promise<PromotionQuoteObject> {

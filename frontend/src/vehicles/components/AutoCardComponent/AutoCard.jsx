@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { formatPrice, formatMileage, formatYear } from '@/lib/format';
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 
 export default function AutoCard({ car }) {
     const { t } = useTranslation("vehicle");
@@ -57,6 +58,10 @@ export default function AutoCard({ car }) {
             </div>
 
             <div className="auto-card__content">
+
+                {car.promotionTier ? (
+                    <PromotionBadge tier={car.promotionTier} className="mb-1.5" />
+                ) : null}
 
                 <div className="auto-card__price">
                     {formatPrice(car.price, 'EUR')}

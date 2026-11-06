@@ -27,6 +27,7 @@ export type GqlSpecialistListRow = {
   mobileService: boolean;
   verified: boolean;
   available: boolean;
+  promotionTier?: 'BUMP' | 'VIP' | 'PREMIUM' | null;
 };
 
 /** Row returned by `specialistBySlug`. */

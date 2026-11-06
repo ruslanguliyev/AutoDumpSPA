@@ -4,6 +4,7 @@ import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import { LocationBadge } from '@/shared/ui/LocationBadge';
 import { CardCTA } from '@/shared/ui/CardCTA';
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import type { ServiceProfile } from '@/services/types/service.types';
 
 type ServiceCardProps = {
@@ -40,6 +41,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           <img src={cover} alt={service.name} className="h-full w-full object-cover" />
           {/* BADGES */}
           <div className="absolute right-3 top-3 flex flex-wrap gap-1">
+            <PromotionBadge tier={service.promotionTier} />
             {promotedVariant && (
               <Badge variant={promotedVariant} className="text-[10px]">
                 {service.promotedLevel}
