@@ -1,6 +1,6 @@
 import '../auth/auth.types';
 import { Field, Float, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { ListingStatus } from '@prisma/client';
+import { ListingPurpose, ListingStatus } from '@prisma/client';
 
 const globalWithEnums = globalThis as typeof globalThis & {
   __listingStatusRegistered?: boolean;
@@ -13,6 +13,11 @@ if (!globalWithEnums.__listingStatusRegistered) {
   });
   globalWithEnums.__listingStatusRegistered = true;
 }
+
+registerEnumType(ListingPurpose, {
+  name: 'ListingPurpose',
+  description: 'Whether a listing is for sale or for rent',
+});
 
 @ObjectType()
 export class ListingObject {
@@ -30,6 +35,9 @@ export class ListingObject {
 
   @Field(() => ListingStatus)
   status: ListingStatus;
+
+  @Field(() => ListingPurpose)
+  purpose: ListingPurpose;
 
   @Field()
   sellerId: string;
@@ -51,6 +59,10 @@ export class CreateListingInput {
 
   @Field(() => Float)
   price: number;
+
+  /** SALE (default) or RENT. For RENT the price is the price per day. */
+  @Field(() => ListingPurpose, { nullable: true })
+  purpose?: ListingPurpose;
 }
 
 @InputType()
@@ -108,6 +120,9 @@ export class MyListingObject {
 
   @Field(() => ListingStatus)
   status: ListingStatus;
+
+  @Field(() => ListingPurpose)
+  purpose: ListingPurpose;
 
   /** 'vehicle' | 'part' | 'service' | 'unknown' */
   @Field()

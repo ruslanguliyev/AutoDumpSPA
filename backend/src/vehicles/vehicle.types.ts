@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { ListingPurpose } from '@prisma/client';
 
 @ObjectType()
 export class VehicleSellerObject {
@@ -29,6 +30,25 @@ export class VehicleSellerObject {
 
   @Field({ nullable: true })
   logo: string | null;
+}
+
+@ObjectType()
+export class RentalTermsObject {
+  @Field(() => Float, { nullable: true })
+  deposit?: number | null;
+
+  @Field(() => Int)
+  minDays: number;
+
+  @Field(() => Int, { nullable: true })
+  maxDays?: number | null;
+
+  /** Included kilometres per day; null means unlimited. */
+  @Field(() => Int, { nullable: true })
+  kmPerDay?: number | null;
+
+  @Field(() => Int, { nullable: true })
+  minDriverAge?: number | null;
 }
 
 @ObjectType()
@@ -86,6 +106,13 @@ export class VehicleObject {
 
   @Field()
   vehicleType: string;
+
+  @Field(() => ListingPurpose)
+  purpose: ListingPurpose;
+
+  /** Rental conditions; only set for rental listings. */
+  @Field(() => RentalTermsObject, { nullable: true })
+  rental?: RentalTermsObject | null;
 
   /** Body style: sedan, suv, coupe ... (null for older listings). */
   @Field({ nullable: true })
@@ -148,6 +175,17 @@ export class PaginatedVehicles {
 
 @InputType()
 export class VehiclesFilterInput {
+  /** SALE (default for search) or RENT. */
+  @Field(() => ListingPurpose, { nullable: true })
+  purpose?: ListingPurpose;
+
+  /** Rental search: only cars free for the whole period (YYYY-MM-DD). */
+  @Field({ nullable: true })
+  availableFrom?: string;
+
+  @Field({ nullable: true })
+  availableTo?: string;
+
   /** Only vehicles of this seller. */
   @Field({ nullable: true })
   sellerId?: string;

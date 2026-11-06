@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import {
   Listing,
+  ListingPurpose,
   ListingStatus,
   Prisma,
 } from '@prisma/client';
@@ -39,6 +40,7 @@ export class ListingsService {
         description: input.description,
         price: input.price,
         status: ListingStatus.DRAFT,
+        purpose: input.purpose ?? ListingPurpose.SALE,
         sellerId: seller.id,
       },
     });
@@ -77,6 +79,15 @@ export class ListingsService {
     }
     if (!listing.title.trim()) {
       throw new BadRequestException('Listing title is required to publish');
+    }
+    if (listing.purpose === ListingPurpose.RENT) {
+      const terms = await this.prisma.rentalTerms.findUnique({ where: { listingId: listing.id } });
+      if (!terms) {
+        throw new BadRequestException('Set the rental terms before publishing a rental listing');
+      }
+      if (!(Number(listing.price) > 0)) {
+        throw new BadRequestException('A rental listing needs a price per day');
+      }
     }
 
     const updated = await this.prisma.listing.update({
@@ -228,6 +239,7 @@ export class ListingsService {
         currency: v?.currency ?? p?.currency ?? null,
         thumbnail: v?.imageUrls?.[0] ?? p?.imageUrl ?? null,
         blockedReason: l.blockedReason,
+        purpose: l.purpose,
         inquiriesCount: l._count.inquiries,
         favoritesCount: itemId ? (favCount.get(itemId) ?? 0) : 0,
         createdAt: l.createdAt,

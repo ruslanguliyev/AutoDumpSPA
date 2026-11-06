@@ -23,6 +23,18 @@ enum SellerType {
   PARTS_DEALER
 }
 
+enum ListingPurpose {
+  SALE
+  RENT
+}
+
+enum RentalStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  CANCELLED
+}
+
 enum InquiryStatus {
   NEW
   READ
@@ -62,13 +74,14 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  seller        Seller?
-  bids          Bid[]
-  serviceCenter ServiceCenter?
-  specialist    Specialist?
-  favorites     Favorite[]
-  inquiries     Inquiry[]
-  reports       Report[]
+  seller         Seller?
+  bids           Bid[]
+  serviceCenter  ServiceCenter?
+  specialist     Specialist?
+  favorites      Favorite[]
+  inquiries      Inquiry[]
+  reports        Report[]
+  rentalBookings RentalBooking[]
 }
 
 model Seller {
@@ -92,25 +105,30 @@ model Seller {
 }
 
 model Listing {
-  id            String        @id @default(cuid())
+  id            String         @id @default(cuid())
   title         String
   description   String
-  price         Decimal       @db.Decimal(12, 2)
+  price         Decimal        @db.Decimal(12, 2)
   status        ListingStatus
   /// Why a moderator blocked the listing (shown to the owner)
   blockedReason String?
+  /// SALE listings are sold, RENT listings are rented out per day (price = price per day)
+  purpose       ListingPurpose @default(SALE)
   sellerId      String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
-  seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  vehicles  Vehicle[]
-  parts     Part[]
-  services  Service[]
-  images    Image[]
-  auctions  Auction[]
-  inquiries Inquiry[]
-  reports   Report[]
+  seller         Seller          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  vehicles       Vehicle[]
+  parts          Part[]
+  services       Service[]
+  images         Image[]
+  auctions       Auction[]
+  inquiries      Inquiry[]
+  reports        Report[]
+  rentalTerms    RentalTerms?
+  rentalBookings RentalBooking[]
+  rentalBlocks   RentalBlock[]
 }
 
 model Vehicle {
@@ -351,4 +369,54 @@ model Report {
   @@index([listingId])
   @@index([status, createdAt])
   @@index([reporterId])
+}
+
+model RentalTerms {
+  listingId    String   @id
+  deposit      Decimal? @db.Decimal(12, 2)
+  minDays      Int      @default(1)
+  maxDays      Int?
+  /// Included kilometres per day; null means unlimited
+  kmPerDay     Int?
+  minDriverAge Int?
+  listing      Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model RentalBooking {
+  id          String       @id @default(cuid())
+  listingId   String
+  renterId    String
+  /// First and last rental day, inclusive (dates without time)
+  startDate   DateTime     @db.Date
+  endDate     DateTime     @db.Date
+  days        Int
+  pricePerDay Decimal      @db.Decimal(12, 2)
+  totalPrice  Decimal      @db.Decimal(12, 2)
+  deposit     Decimal?     @db.Decimal(12, 2)
+  currency    String       @default("AZN")
+  message     String?
+  phone       String?
+  status      RentalStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  decidedAt   DateTime?
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  renter  User    @relation(fields: [renterId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, status])
+  @@index([renterId])
+}
+
+/// Days on which the owner cannot rent the car out (it is used elsewhere, in service ...)
+model RentalBlock {
+  id        String   @id @default(cuid())
+  listingId String
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  note      String?
+  createdAt DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
 }

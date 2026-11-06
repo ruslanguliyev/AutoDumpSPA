@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListingStatus, Prisma } from '@prisma/client';
+import { ListingPurpose, ListingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { isHiddenFromPublic } from '../listings/listing-status';
 import { ListingsService } from '../listings/listings.service';
@@ -72,6 +72,7 @@ export class PartsService {
     const where: Prisma.PartWhereInput = {
       listing: {
         status: ListingStatus.ACTIVE,
+        purpose: ListingPurpose.SALE,
         ...(filter?.sellerId ? { sellerId: filter.sellerId } : {}),
       },
     };

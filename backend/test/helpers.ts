@@ -20,6 +20,19 @@ export interface TestContext {
     token: string,
     opts?: { title?: string; brand?: string; model?: string; publish?: boolean },
   ) => Promise<{ listingId: string; vehicleId: string }>;
+  /**
+   * Create a rental listing (price = per day) with one car and the given terms; optionally publish it.
+   */
+  createRentalListing: (
+    token: string,
+    opts?: {
+      title?: string;
+      brand?: string;
+      pricePerDay?: number;
+      terms?: Record<string, number>;
+      publish?: boolean;
+    },
+  ) => Promise<{ listingId: string; vehicleId: string }>;
   close: () => Promise<void>;
 }
 
@@ -89,6 +102,43 @@ export async function createTestContext(): Promise<TestContext> {
     return { listingId, vehicleId };
   };
 
+  const createRentalListing: TestContext['createRentalListing'] = async (token, opts = {}) => {
+    const price = opts.pricePerDay ?? 50;
+    const listing = await gql(
+      `mutation($t: String!, $p: Float!) {
+        createListing(input: { title: $t, description: "d", price: $p, purpose: RENT }) { id purpose }
+      }`,
+      { t: opts.title ?? 'Rental car', p: price },
+      token,
+    );
+    if (!listing.data) throw new Error(`createListing failed: ${JSON.stringify(listing.errors)}`);
+    const listingId = listing.data.createListing.id as string;
+    const vehicle = await gql(
+      `mutation($l: String!, $b: String!, $p: Float!) {
+        createVehicle(listingId: $l, input: {
+          brand: $b, model: "Rent", year: 2022, mileage: 1000, fuel: "Petrol",
+          transmission: "Automatic", engineVolume: 2.0, power: 150, price: $p, currency: "AZN", location: "Baku"
+        }) { id }
+      }`,
+      { l: listingId, b: opts.brand ?? 'RentBrand', p: price },
+      token,
+    );
+    const vehicleId = vehicle.data!.createVehicle.id as string;
+    if (opts.terms) {
+      const terms = await gql(
+        `mutation($l: String!, $i: RentalTermsInput!) { setRentalTerms(listingId: $l, input: $i) }`,
+        { l: listingId, i: opts.terms },
+        token,
+      );
+      if (!terms.data) throw new Error(`setRentalTerms failed: ${JSON.stringify(terms.errors)}`);
+    }
+    if (opts.publish) {
+      const pub = await gql(`mutation($id: String!) { publishListing(id: $id) { status } }`, { id: listingId }, token);
+      if (!pub.data) throw new Error(`publish failed: ${JSON.stringify(pub.errors)}`);
+    }
+    return { listingId, vehicleId };
+  };
+
   return {
     app,
     prisma,
@@ -96,6 +146,7 @@ export async function createTestContext(): Promise<TestContext> {
     registerUser,
     registerSeller,
     createVehicleListing,
+    createRentalListing,
     close: async () => {
       await app.close();
     },

@@ -55,6 +55,7 @@ input CreateInquiryInput {
 input CreateListingInput {
   description: String!
   price: Float!
+  purpose: ListingPurpose
   title: String!
 }
 
@@ -241,10 +242,17 @@ type ListingObject {
   description: String!
   id: String!
   price: Float!
+  purpose: ListingPurpose!
   sellerId: String!
   status: ListingStatus!
   title: String!
   updatedAt: DateTime!
+}
+
+"""Whether a listing is for sale or for rent"""
+enum ListingPurpose {
+  RENT
+  SALE
 }
 
 """Listing status enum"""
@@ -264,7 +272,9 @@ input ListingsFilterInput {
 
 type Mutation {
   addFavorite(itemId: String!, type: String!): Boolean!
+  addRentalBlock(endDate: String!, listingId: String!, note: String, startDate: String!): RentalBlockObject!
   blockListing(listingId: String!, reason: String!): Boolean!
+  cancelRental(id: String!): RentalBookingObject!
   changePassword(input: ChangePasswordInput!): AuthPayload!
   closeListing(id: String!): ListingObject!
   createAuction(input: CreateAuctionInput!): AuctionObject!
@@ -276,6 +286,7 @@ type Mutation {
   createServiceCenter(input: CreateServiceCenterInput!): ServiceCenterObject!
   createSpecialist(input: CreateSpecialistInput!): SpecialistObject!
   createVehicle(input: CreateVehicleInput!, listingId: String!): VehicleObject!
+  decideRental(confirm: Boolean!, id: String!): RentalBookingObject!
   deleteListing(id: String!): Boolean!
   deletePart(id: String!): Boolean!
   deleteService(id: String!): Boolean!
@@ -288,7 +299,10 @@ type Mutation {
   publishListing(id: String!): ListingObject!
   register(email: String!, fullName: String!, password: String!): AuthPayload!
   removeFavorite(itemId: String!, type: String!): Boolean!
+  removeRentalBlock(id: String!): Boolean!
   reportListing(input: ReportListingInput!): Boolean!
+  requestRental(input: RequestRentalInput!): RentalBookingObject!
+  setRentalTerms(input: RentalTermsInput!, listingId: String!): Boolean!
   startAuction(id: String!): AuctionObject!
   syncFavorites(items: [FavoriteRefInput!]!): Int!
   unblockListing(listingId: String!): Boolean!
@@ -313,6 +327,7 @@ type MyListingObject {
   itemId: String
   kind: String!
   price: Float!
+  purpose: ListingPurpose!
   status: ListingStatus!
   thumbnail: String
   title: String!
@@ -392,19 +407,24 @@ type Query {
   bidsByAuction(auctionId: String!): [BidObject!]!
   hello: String!
   imagesByListing(listingId: String!): [ImageObject!]!
+  incomingRentals: [RentalBookingObject!]!
   listing(id: String!): ListingObject!
   listings(filter: ListingsFilterInput, page: Int! = 1, perPage: Int! = 20): PaginatedListings!
   me: UserObject!
   myBids: [BidObject!]!
   myFavorites: [FavoriteItemObject!]!
   myListings(status: ListingStatus): [MyListingObject!]!
+  myRentals: [RentalBookingObject!]!
   mySeller: SellerObject
   myServiceCenter: ServiceCenterObject
   mySpecialist: SpecialistObject
   partById(id: String!): PartObject!
   partByListing(listingId: String!): PartObject
   parts(filter: PartsFilterInput): PaginatedParts!
+  pendingRentalRequestsCount: Int!
   receivedInquiries(status: InquiryStatus): [InquiryObject!]!
+  rentalAvailability(from: String, listingId: String!, to: String): [UnavailableRangeObject!]!
+  rentalBlocks(listingId: String!): [RentalBlockObject!]!
   reports(status: ReportStatus = OPEN): [ReportObject!]!
   sellerById(id: String!): SellerObject!
   sellers: [SellerObject!]!
@@ -420,6 +440,61 @@ type Query {
   vehicleById(id: String!): VehicleObject!
   vehicleByListing(listingId: String!): VehicleObject
   vehicles(filter: VehiclesFilterInput): PaginatedVehicles!
+}
+
+type RentalBlockObject {
+  endDate: String!
+  id: String!
+  listingId: String!
+  note: String
+  startDate: String!
+}
+
+type RentalBookingObject {
+  createdAt: DateTime!
+  currency: String!
+  days: Int!
+  decidedAt: DateTime
+  deposit: Float
+  endDate: String!
+  id: String!
+  listingId: String!
+  listingTitle: String!
+  message: String
+  phone: String
+  pricePerDay: Float!
+  renterEmail: String
+  renterName: String!
+  sellerName: String!
+  sellerPhone: String
+  startDate: String!
+  status: RentalStatus!
+  thumbnail: String
+  totalPrice: Float!
+  vehicleId: String
+}
+
+enum RentalStatus {
+  CANCELLED
+  CONFIRMED
+  DECLINED
+  PENDING
+}
+
+input RentalTermsInput {
+  deposit: Float
+  kmPerDay: Int
+  maxDays: Int
+  minDays: Int
+  minDriverAge: Int
+}
+
+type RentalTermsObject {
+  deposit: Float
+  kmPerDay: Int
+  maxDays: Int
+  minDays: Int!
+  minDriverAge: Int
 }
 
 input ReportListingInput {
@@ -457,6 +532,14 @@ enum ReportStatus {
   ACTIONED
   DISMISSED
   OPEN
+}
+
+input RequestRentalInput {
+  endDate: String!
+  listingId: String!
+  message: String
+  phone: String
+  startDate: String!
 }
 
 type SellerObject {
@@ -577,6 +660,12 @@ input SpecialistsFilterInput {
   minRating: Float
   skills: [String!]
   specializations: [String!]
+}
+
+type UnavailableRangeObject {
+  endDate: String!
+  reason: String!
+  startDate: String!
 }
 
 input UpdateListingInput {
@@ -748,6 +837,8 @@ type VehicleObject {
   ownersCount: Int!
   power: Int!
   price: Float
+  purpose: ListingPurpose!
+  rental: RentalTermsObject
   seatsCount: Int
   seller: VehicleSellerObject
   transmission: String!
@@ -770,6 +861,8 @@ type VehicleSellerObject {
 }
 
 input VehiclesFilterInput {
+  availableFrom: String
+  availableTo: String
   brand: String
   condition: String
   fuel: String
@@ -779,6 +872,7 @@ input VehiclesFilterInput {
   offset: Int
   priceFrom: Float
   priceTo: Float
+  purpose: ListingPurpose
   sellerId: String
   transmission: String
   vehicleType: String

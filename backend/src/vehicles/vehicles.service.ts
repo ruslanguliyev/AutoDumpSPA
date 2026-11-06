@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListingStatus, Prisma } from '@prisma/client';
+import { ListingPurpose, ListingStatus, Prisma, RentalStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { isHiddenFromPublic } from '../listings/listing-status';
 import { ListingsService } from '../listings/listings.service';
@@ -13,6 +13,13 @@ import {
   UpdateVehicleInput,
   VehiclesFilterInput,
 } from './vehicle.types';
+
+/** Strict "YYYY-MM-DD" to a UTC-midnight Date; anything else is ignored. */
+function parseDay(value: string | null | undefined): Date | undefined {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return undefined;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
 
 /** Body style is a short lowercase identifier such as "sedan"; empty means "not set". */
 export function normalizeBodyType(value: string | null | undefined): string | null {
@@ -26,7 +33,7 @@ export function normalizeBodyType(value: string | null | undefined): string | nu
 
 const vehicleWithListingSeller = Prisma.validator<Prisma.VehicleDefaultArgs>()({
   include: {
-    listing: { include: { seller: true } },
+    listing: { include: { seller: true, rentalTerms: true } },
   },
 });
 
@@ -80,6 +87,16 @@ export class VehiclesService {
       ownersCount: row.ownersCount,
       seatsCount: row.seatsCount,
       marketRegion: row.marketRegion,
+      purpose: row.listing.purpose,
+      rental: row.listing.rentalTerms
+        ? {
+            deposit: row.listing.rentalTerms.deposit === null ? null : Number(row.listing.rentalTerms.deposit),
+            minDays: row.listing.rentalTerms.minDays,
+            maxDays: row.listing.rentalTerms.maxDays,
+            kmPerDay: row.listing.rentalTerms.kmPerDay,
+            minDriverAge: row.listing.rentalTerms.minDriverAge,
+          }
+        : null,
       seller: seller
         ? {
             id: seller.id,
@@ -100,12 +117,25 @@ export class VehiclesService {
     filter?: VehiclesFilterInput | null,
   ): Prisma.VehicleWhereInput {
     // Public search shows only published listings.
-    const where: Prisma.VehicleWhereInput = {
-      listing: {
-        status: ListingStatus.ACTIVE,
-        ...(filter?.sellerId ? { sellerId: filter.sellerId } : {}),
-      },
+    // Sale and rental offers are separate catalogues: search shows sales unless asked otherwise.
+    // A seller's own page lists everything they offer.
+    const purpose = filter?.purpose ?? (filter?.sellerId ? undefined : ListingPurpose.SALE);
+    const listingWhere: Prisma.ListingWhereInput = {
+      status: ListingStatus.ACTIVE,
+      ...(filter?.sellerId ? { sellerId: filter.sellerId } : {}),
+      ...(purpose ? { purpose } : {}),
     };
+
+    // Rental search: hide cars that are already booked (confirmed) or blocked in the wanted period.
+    const from = parseDay(filter?.availableFrom);
+    const to = parseDay(filter?.availableTo ?? filter?.availableFrom);
+    if (from && to) {
+      const overlap = { startDate: { lte: to }, endDate: { gte: from } };
+      listingWhere.rentalBookings = { none: { status: RentalStatus.CONFIRMED, ...overlap } };
+      listingWhere.rentalBlocks = { none: overlap };
+    }
+
+    const where: Prisma.VehicleWhereInput = { listing: listingWhere };
 
     if (filter?.brand?.trim()) {
       where.brand = {
@@ -193,7 +223,7 @@ export class VehiclesService {
         skip: offset,
         take: limit,
         include: {
-          listing: { include: { seller: true } },
+          listing: { include: { seller: true, rentalTerms: true } },
         },
       }),
       this.prisma.vehicle.count({ where }),
@@ -209,7 +239,7 @@ export class VehiclesService {
     const row = await this.prisma.vehicle.findUnique({
       where: { id },
       include: {
-        listing: { include: { seller: true } },
+        listing: { include: { seller: true, rentalTerms: true } },
       },
     });
     if (!row || isHiddenFromPublic(row.listing.status)) {
@@ -265,7 +295,7 @@ export class VehiclesService {
     const row = await this.prisma.vehicle.findUniqueOrThrow({
       where: { id: created.id },
       include: {
-        listing: { include: { seller: true } },
+        listing: { include: { seller: true, rentalTerms: true } },
       },
     });
     return this.mapVehicle(row);
@@ -343,7 +373,7 @@ export class VehiclesService {
     const row = await this.prisma.vehicle.findUniqueOrThrow({
       where: { id },
       include: {
-        listing: { include: { seller: true } },
+        listing: { include: { seller: true, rentalTerms: true } },
       },
     });
     return this.mapVehicle(row);
@@ -354,7 +384,7 @@ export class VehiclesService {
     const row = await this.prisma.vehicle.findFirst({
       where: { listingId },
       include: {
-        listing: { include: { seller: true } },
+        listing: { include: { seller: true, rentalTerms: true } },
       },
     });
     if (!row) return null;
