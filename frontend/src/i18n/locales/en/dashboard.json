@@ -81,7 +81,42 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Account and preferences",
-    "content": "Settings content will be available soon."
+    "saved": "Saved",
+    "save": "Save",
+    "saving": "Saving…",
+    "account": {
+      "title": "Account",
+      "subtitle": "Your name is shown in inquiries and on your profile.",
+      "email": "Email",
+      "fullName": "Full name"
+    },
+    "seller": {
+      "title": "Seller profile",
+      "subtitle": "Buyers see this information on your listings.",
+      "name": "Name",
+      "city": "City",
+      "phone": "Phone",
+      "phoneInvalid": "Enter a number like +994 50 123 45 67",
+      "showPhone": "Show my phone number on listings",
+      "none": "A seller profile is created automatically when you add your first listing.",
+      "createListing": "Add a listing"
+    },
+    "password": {
+      "title": "Change password",
+      "hint": "At least {{min}} characters.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Repeat new password",
+      "change": "Change password",
+      "changed": "Password changed",
+      "mismatch": "Passwords do not match",
+      "tooShort": "Password must be at least {{min}} characters"
+    },
+    "errors": {
+      "currentIncorrect": "The current password is incorrect",
+      "tooManyAttempts": "Too many wrong attempts. Please try again in 15 minutes.",
+      "samePassword": "The new password must be different from the current one"
+    }
   },
   "listings": {
     "add": "Add listing",

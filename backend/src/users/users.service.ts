@@ -1,17 +1,26 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
+import { FailureLimiter } from '../common/utils/failure-limiter';
+import { assertValidPassword, normalizeFullName } from '../auth/credentials';
 import { ChangePasswordInput, UpdateProfileInput } from './user.types';
 
 const SALT_ROUNDS = 10;
+const PASSWORD_WINDOW_MS = 15 * 60 * 1000;
+const MAX_WRONG_CURRENT_PASSWORDS = 5;
 
 @Injectable()
 export class UsersService {
+  /** Someone with a stolen token must not be able to guess the current password. */
+  private readonly wrongPasswords = new FailureLimiter(MAX_WRONG_CURRENT_PASSWORDS, PASSWORD_WINDOW_MS);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getMe(userId: string) {
@@ -34,7 +43,7 @@ export class UsersService {
 
     const user = await this.prisma.user.update({
       where: { id: userId },
-      data: { fullName: input.fullName },
+      data: { fullName: normalizeFullName(input.fullName) },
     });
 
     const { passwordHash: _, ...userWithoutPassword } = user;
@@ -42,6 +51,15 @@ export class UsersService {
   }
 
   async changePassword(userId: string, input: ChangePasswordInput): Promise<boolean> {
+    if (this.wrongPasswords.isBlocked(userId)) {
+      throw new HttpException(
+        'Too many wrong attempts. Please try again in 15 minutes.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    assertValidPassword(input.newPassword);
+
     if (input.currentPassword === input.newPassword) {
       throw new BadRequestException(
         'New password must be different from current password',
@@ -61,8 +79,10 @@ export class UsersService {
       user.passwordHash,
     );
     if (!isCurrentPasswordValid) {
+      this.wrongPasswords.record(userId);
       throw new UnauthorizedException('Current password is incorrect');
     }
+    this.wrongPasswords.reset(userId);
 
     const passwordHash = await bcrypt.hash(input.newPassword, SALT_ROUNDS);
 

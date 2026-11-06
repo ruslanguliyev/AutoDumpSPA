@@ -81,7 +81,42 @@
   "settings": {
     "title": "Parametrlər",
     "subtitle": "Hesab və seçimlər",
-    "content": "Parametrlər tezliklə mövcud olacaq."
+    "saved": "Yadda saxlanıldı",
+    "save": "Yadda saxla",
+    "saving": "Saxlanılır…",
+    "account": {
+      "title": "Hesab",
+      "subtitle": "Adınız müraciətlərdə və profilinizdə göstərilir.",
+      "email": "Email",
+      "fullName": "Ad və soyad"
+    },
+    "seller": {
+      "title": "Satıcı profili",
+      "subtitle": "Alıcılar bu məlumatı elanlarınızda görür.",
+      "name": "Ad",
+      "city": "Şəhər",
+      "phone": "Telefon",
+      "phoneInvalid": "Nömrəni +994 50 123 45 67 formatında daxil edin",
+      "showPhone": "Telefonu elanlarda göstər",
+      "none": "Satıcı profili ilk elanı əlavə edəndə avtomatik yaradılır.",
+      "createListing": "Elan əlavə et"
+    },
+    "password": {
+      "title": "Şifrənin dəyişdirilməsi",
+      "hint": "Ən azı {{min}} simvol.",
+      "current": "Cari şifrə",
+      "new": "Yeni şifrə",
+      "confirm": "Yeni şifrəni təkrarlayın",
+      "change": "Şifrəni dəyiş",
+      "changed": "Şifrə dəyişdirildi",
+      "mismatch": "Şifrələr uyğun gəlmir",
+      "tooShort": "Şifrə ən azı {{min}} simvol olmalıdır"
+    },
+    "errors": {
+      "currentIncorrect": "Cari şifrə yanlışdır",
+      "tooManyAttempts": "Çox sayda yanlış cəhd. 15 dəqiqədən sonra yenidən cəhd edin.",
+      "samePassword": "Yeni şifrə cari şifrədən fərqli olmalıdır"
+    }
   },
   "listings": {
     "add": "Elan əlavə et",

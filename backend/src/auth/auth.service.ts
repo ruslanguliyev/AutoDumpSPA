@@ -11,15 +11,12 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole } from '@prisma/client';
 import { FailureLimiter } from '../common/utils/failure-limiter';
+import { assertValidPassword, normalizeFullName } from './credentials';
 
 const SALT_ROUNDS = 10;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX_EMAIL_LENGTH = 254;
-const MIN_PASSWORD_LENGTH = 8;
-/** bcrypt only uses the first 72 bytes of a password. */
-const MAX_PASSWORD_BYTES = 72;
-const MAX_NAME_LENGTH = 100;
 
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const MAX_FAILED_LOGINS_PER_EMAIL = 10;
@@ -50,25 +47,12 @@ export class AuthService {
     rawFullName: string,
   ): Promise<AuthResult> {
     const email = normalizeEmail(rawEmail);
-    const fullName = (rawFullName ?? '').trim();
 
     if (!email || email.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(email)) {
       throw new BadRequestException('Invalid email address');
     }
-    if ((password ?? '').length < MIN_PASSWORD_LENGTH) {
-      throw new BadRequestException(
-        `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
-      );
-    }
-    if (Buffer.byteLength(password, 'utf8') > MAX_PASSWORD_BYTES) {
-      throw new BadRequestException(`Password must be at most ${MAX_PASSWORD_BYTES} bytes long`);
-    }
-    if (!fullName) {
-      throw new BadRequestException('Full name is required');
-    }
-    if (fullName.length > MAX_NAME_LENGTH) {
-      throw new BadRequestException(`Full name must be at most ${MAX_NAME_LENGTH} characters`);
-    }
+    assertValidPassword(password);
+    const fullName = normalizeFullName(rawFullName);
 
     const existing = await this.findUserByEmail(email);
     if (existing) {
