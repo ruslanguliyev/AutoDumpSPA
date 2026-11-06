@@ -59,6 +59,7 @@
                  "partName":  "Hissənin adı",
                  "partNumber":  "Artikul",
                  "compatibility":  "Uyğunluq",
+                 "stock":  "Anbardakı say",
                  "autoTitle":  "Avtobaşlıq",
                  "manualTitle":  "Öz başlığınız",
                  "listingBasics":  "Əsas məlumat",
@@ -188,5 +189,31 @@
                      "listing":  "Başlıqsız",
                      "vehicle":  "Başlıqsız avtomobil",
                      "part":  "Başlıqsız hissə"
-                 }
+                 },
+  "vehicleForm": {
+    "transmission": {
+      "Automatic": "Avtomat",
+      "Manual": "Mexanika",
+      "Semi-Automatic": "Robot / Variator"
+    },
+    "fuel": {
+      "Petrol": "Benzin",
+      "Diesel": "Dizel",
+      "Electric": "Elektrik",
+      "Hybrid": "Hibrid",
+      "Gas": "Qaz"
+    },
+    "drivetrain": {
+      "FWD": "Ön",
+      "RWD": "Arxa",
+      "AWD": "Tam"
+    },
+    "specsNotFound": "Məlumat tapılmadı — əl ilə doldurun",
+    "generation": "NƏSİL",
+    "loadingGenerations": "Nəsillər yüklənir...",
+    "present": "indi",
+    "engineVolume": "MÜHƏRRİK HƏCMİ (L)",
+    "power": "GÜC (A.G.)",
+    "loading": "Yüklənir..."
+  }
 }

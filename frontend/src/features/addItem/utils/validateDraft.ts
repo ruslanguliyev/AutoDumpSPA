@@ -7,6 +7,25 @@ import {
 
 const trim = (value: string | undefined | null) => String(value ?? '').trim();
 
+/** Engine volume in litres ("2.0", "2,5"); undefined when missing or implausible. */
+export const parseEngineVolume = (value: string | undefined | null): number | undefined => {
+  const n = parseFloat(trim(value).replace(',', '.'));
+  return Number.isFinite(n) && n > 0 && n <= 20 ? n : undefined;
+};
+
+/** Power in horsepower ("150", "150 hp"); undefined when missing or implausible. */
+export const parsePower = (value: string | undefined | null): number | undefined => {
+  const n = parseInt(trim(value), 10);
+  return Number.isFinite(n) && n > 0 && n <= 3000 ? n : undefined;
+};
+
+/** Stock quantity as a whole number >= 0; undefined when invalid. */
+export const parseStock = (value: string | number | undefined | null): number | undefined => {
+  const raw = trim(value === undefined || value === null ? '' : String(value));
+  if (!/^\d{1,6}$/.test(raw)) return undefined;
+  return parseInt(raw, 10);
+};
+
 const buildVehicleTitle = (draft: ListingDraft) => {
   const vehicle = draft.vehicle;
   if (!vehicle) return '';
@@ -51,6 +70,8 @@ export const validateVehicle = (draft: ListingDraft) => {
   const vehicle = draft.vehicle;
   if (!vehicle) return false;
   if (!trim(vehicle.brand) || !trim(vehicle.model)) return false;
+  if (parseEngineVolume(vehicle.displacement) === undefined) return false;
+  if (parsePower(vehicle.horsepower) === undefined) return false;
   if (!isModelAllowedForBrand(vehicle.brand, vehicle.model)) return false;
   if (
     trim(vehicle.trim) &&
@@ -65,7 +86,7 @@ export const validatePart = (draft: ListingDraft) => {
   if (draft.type !== 'part') return true;
   const part = draft.part;
   if (!part) return false;
-  return trim(part.name).length > 0;
+  return trim(part.name).length > 0 && parseStock(part.stock) !== undefined;
 };
 
 export const validatePricing = (draft: ListingDraft) => {

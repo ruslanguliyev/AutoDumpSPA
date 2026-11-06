@@ -66,6 +66,21 @@ const PartStep = () => {
             onChange={(event) => setPartField('condition', event.target.value)}
           />
         </div>
+        <div>
+          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            {t('form.stock')}
+          </label>
+          <input
+            className={inputClass}
+            type="number"
+            min={0}
+            step={1}
+            inputMode="numeric"
+            placeholder="1"
+            value={draft.part.stock}
+            onChange={(event) => setPartField('stock', event.target.value)}
+          />
+        </div>
         <div className="md:col-span-2">
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {t('form.compatibility')}

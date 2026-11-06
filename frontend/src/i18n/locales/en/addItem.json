@@ -59,6 +59,7 @@
                  "partName":  "Part name",
                  "partNumber":  "Part number",
                  "compatibility":  "Compatibility",
+                 "stock":  "Quantity in stock",
                  "autoTitle":  "Auto title",
                  "manualTitle":  "Manual title",
                  "listingBasics":  "Listing basics",
@@ -188,5 +189,31 @@
                      "listing":  "Untitled listing",
                      "vehicle":  "Untitled vehicle",
                      "part":  "Untitled part"
-                 }
+                 },
+  "vehicleForm": {
+    "transmission": {
+      "Automatic": "Automatic",
+      "Manual": "Manual",
+      "Semi-Automatic": "Robot / CVT"
+    },
+    "fuel": {
+      "Petrol": "Petrol",
+      "Diesel": "Diesel",
+      "Electric": "Electric",
+      "Hybrid": "Hybrid",
+      "Gas": "Gas"
+    },
+    "drivetrain": {
+      "FWD": "Front",
+      "RWD": "Rear",
+      "AWD": "All-wheel"
+    },
+    "specsNotFound": "No data found — please fill in manually",
+    "generation": "GENERATION",
+    "loadingGenerations": "Loading generations...",
+    "present": "present",
+    "engineVolume": "ENGINE VOLUME (L)",
+    "power": "POWER (HP)",
+    "loading": "Loading..."
+  }
 }

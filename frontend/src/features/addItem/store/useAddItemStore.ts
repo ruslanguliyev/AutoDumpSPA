@@ -59,6 +59,8 @@ export type ListingPart = {
   partNumber: string;
   condition: string;
   compatibility: string;
+  /** Units in stock, kept as text while typing. */
+  stock: string;
 };
 
 export type ListingDraft = {
@@ -182,6 +184,7 @@ export const createEmptyDraft = (type: ListingType): ListingDraft => ({
           partNumber: '',
           condition: '',
           compatibility: '',
+          stock: '1',
         }
       : undefined,
 });

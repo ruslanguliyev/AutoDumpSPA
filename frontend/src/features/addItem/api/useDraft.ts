@@ -5,7 +5,12 @@ import {
   type ListingDraft,
   type ListingType,
 } from '@/features/addItem/store/useAddItemStore';
-import { validateDraft } from '@/features/addItem/utils/validateDraft';
+import {
+  parseEngineVolume,
+  parsePower,
+  parseStock,
+  validateDraft,
+} from '@/features/addItem/utils/validateDraft';
 
 const DRAFTS_STORAGE_KEY = 'autodump:add-item-drafts';
 export const DRAFT_QUERY_KEY = 'add-item-draft';
@@ -262,8 +267,9 @@ async function syncDraftToBackend(draft: ListingDraft) {
         transmission: v.transmission || 'Automatic',
         displacement: v.displacement || undefined,
         horsepower: v.horsepower || undefined,
-        // engineVolume / power are intentionally not sent: the wizard has no inputs for them
-        // and overwriting would reset real values of an existing listing.
+        // Only send engine volume / power when the user entered valid values.
+        engineVolume: parseEngineVolume(v.displacement),
+        power: parsePower(v.horsepower),
         version: v.trim || undefined,
         drive: v.drivetrain || undefined,
         condition: draft.common.condition,
@@ -286,6 +292,7 @@ async function syncDraftToBackend(draft: ListingDraft) {
         model: p.model,
         condition: p.condition || draft.common.condition,
         oemCode: p.partNumber || undefined,
+        stock: parseStock(p.stock),
         category: draft.common.category || undefined,
         compatibility: p.compatibility
           .split(',')
@@ -389,7 +396,7 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
       name: sellerProfile.name,
       phone: sellerProfile.phone ?? '',
       email: '',
-      location: '',
+      location: sellerProfile.city ?? '',
       showPhone: sellerProfile.showPhone,
     },
     vehicle:
@@ -418,6 +425,7 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
             partNumber: '',
             condition: 'used',
             compatibility: '',
+            stock: '1',
           }
         : undefined,
   };

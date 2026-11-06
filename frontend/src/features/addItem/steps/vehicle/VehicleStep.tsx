@@ -29,23 +29,23 @@ const inputClass =
 const YEAR_OPTIONS = Array.from({ length: 2026 - 1990 + 1 }, (_, i) => String(2026 - i));
 
 const TRANSMISSION_OPTIONS = [
-  { value: 'Automatic', label: 'Автомат' },
-  { value: 'Manual', label: 'Механика' },
-  { value: 'Semi-Automatic', label: 'Робот/Вариатор' },
+  { value: 'Automatic' },
+  { value: 'Manual' },
+  { value: 'Semi-Automatic' },
 ] as const;
 
 const FUEL_OPTIONS = [
-  { value: 'Petrol', label: 'Бензин' },
-  { value: 'Diesel', label: 'Дизель' },
-  { value: 'Electric', label: 'Электро' },
-  { value: 'Hybrid', label: 'Гибрид' },
-  { value: 'Gas', label: 'Газ' },
+  { value: 'Petrol' },
+  { value: 'Diesel' },
+  { value: 'Electric' },
+  { value: 'Hybrid' },
+  { value: 'Gas' },
 ] as const;
 
 const DRIVETRAIN_OPTIONS = [
-  { value: 'FWD', label: 'Передний' },
-  { value: 'RWD', label: 'Задний' },
-  { value: 'AWD', label: 'Полный' },
+  { value: 'FWD' },
+  { value: 'RWD' },
+  { value: 'AWD' },
 ] as const;
 
 const VehicleStep = () => {
@@ -145,7 +145,7 @@ const VehicleStep = () => {
         const specs = await fetchCarSpecs(brand, model, year);
         if (cancelled) return;
         if (!specs) {
-          setSpecsError('Данные не найдены — заполните вручную');
+          setSpecsError(t('vehicleForm.specsNotFound'));
           setSpecsLoading(false);
           return;
         }
@@ -167,7 +167,7 @@ const VehicleStep = () => {
         }
       } catch {
         if (!cancelled) {
-          setSpecsError('Данные не найдены — заполните вручную');
+          setSpecsError(t('vehicleForm.specsNotFound'));
         }
       } finally {
         if (!cancelled) {
@@ -299,10 +299,10 @@ const VehicleStep = () => {
         {generations.length > 0 ? (
           <div className="md:col-span-2">
             <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              ПОКОЛЕНИЕ
+              {t('vehicleForm.generation')}
             </label>
             {gensLoading ? (
-              <p className="text-xs text-muted-foreground animate-pulse">Загрузка поколений...</p>
+              <p className="text-xs text-muted-foreground animate-pulse">{t('vehicleForm.loadingGenerations')}</p>
             ) : (
               <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                 {generations.map((gen) => {
@@ -353,7 +353,7 @@ const VehicleStep = () => {
                           {gen.generationName}
                         </p>
                         <p className="text-[11px] text-muted-foreground">
-                          {gen.yearFrom} - {gen.yearTo ?? 'н.в.'}
+                          {gen.yearFrom} - {gen.yearTo ?? t('vehicleForm.present')}
                         </p>
                       </div>
                     </button>
@@ -365,12 +365,12 @@ const VehicleStep = () => {
         ) : null}
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            ОБЪЁМ (Л)
+            {t('vehicleForm.engineVolume')}
           </label>
           <div className="relative">
             <input
               className={inputClass}
-              placeholder={specsLoading ? 'Загрузка...' : '2.0'}
+              placeholder={specsLoading ? t('vehicleForm.loading') : '2.0'}
               value={v.displacement ?? ''}
               onChange={(event) => setVehicleField('displacement', event.target.value)}
               disabled={specsLoading}
@@ -384,11 +384,11 @@ const VehicleStep = () => {
         </div>
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            МОЩНОСТЬ (Л.С.)
+            {t('vehicleForm.power')}
           </label>
           <input
             className={inputClass}
-            placeholder={specsLoading ? 'Загрузка...' : '150'}
+            placeholder={specsLoading ? t('vehicleForm.loading') : '150'}
             value={v.horsepower ?? ''}
             onChange={(event) => setVehicleField('horsepower', event.target.value)}
             disabled={specsLoading}
@@ -443,7 +443,7 @@ const VehicleStep = () => {
             <option value="">{t('form.transmissionPlaceholder')}</option>
             {TRANSMISSION_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label}
+                {t('vehicleForm.transmission.' + opt.value)}
               </option>
             ))}
           </select>
@@ -460,7 +460,7 @@ const VehicleStep = () => {
             <option value="">{t('form.fuelPlaceholder')}</option>
             {FUEL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label}
+                {t('vehicleForm.fuel.' + opt.value)}
               </option>
             ))}
           </select>
@@ -477,7 +477,7 @@ const VehicleStep = () => {
             <option value="">{t('form.drivetrainPlaceholder')}</option>
             {DRIVETRAIN_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label}
+                {t('vehicleForm.drivetrain.' + opt.value)}
               </option>
             ))}
           </select>

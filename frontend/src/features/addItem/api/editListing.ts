@@ -15,12 +15,12 @@ query EditListing($id: String!) {
   mySeller { id name type phone showPhone }
   vehicleByListing(listingId: $id) {
     id brand model generation version year mileage fuel transmission
-    displacement horsepower drive condition location description
+    displacement horsepower engineVolume power drive condition location description
     price currency imageUrls
   }
   partByListing(listingId: $id) {
     id name category brand model condition oemCode description
-    price currency location imageUrl compatibility
+    price currency location imageUrl compatibility stock
   }
 }
 `;
@@ -53,6 +53,8 @@ type EditQueryResult = {
     transmission: string;
     displacement: string | null;
     horsepower: string | null;
+    engineVolume: number | null;
+    power: number | null;
     drive: string | null;
     condition: string | null;
     location: string | null;
@@ -75,6 +77,7 @@ type EditQueryResult = {
     location: string | null;
     imageUrl: string | null;
     compatibility: string[];
+    stock: number | null;
   } | null;
 };
 
@@ -141,8 +144,9 @@ export const buildDraftFromServer = (
           model: v.model,
           generation: v.generation ?? '',
           year: String(v.year ?? ''),
-          displacement: v.displacement ?? '',
-          horsepower: v.horsepower ?? '',
+          // Older listings only have the numeric columns; show those so nothing looks empty.
+          displacement: v.displacement ?? (v.engineVolume != null ? String(v.engineVolume) : ''),
+          horsepower: v.horsepower ?? (v.power != null ? String(v.power) : ''),
           trim: v.version ?? '',
           mileage: String(v.mileage ?? ''),
           transmission: v.transmission ?? '',
@@ -158,6 +162,7 @@ export const buildDraftFromServer = (
           partNumber: p.oemCode ?? '',
           condition: p.condition,
           compatibility: (p.compatibility ?? []).join(', '),
+          stock: String(p.stock ?? 0),
         }
       : undefined,
   };

@@ -59,6 +59,7 @@
                  "partName":  "Название запчасти",
                  "partNumber":  "Артикул",
                  "compatibility":  "Совместимость",
+                 "stock":  "Количество в наличии",
                  "autoTitle":  "Автозаголовок",
                  "manualTitle":  "Свой заголовок",
                  "listingBasics":  "Основные данные",
@@ -188,5 +189,31 @@
                      "listing":  "Без названия",
                      "vehicle":  "Автомобиль без названия",
                      "part":  "Запчасть без названия"
-                 }
+                 },
+  "vehicleForm": {
+    "transmission": {
+      "Automatic": "Автомат",
+      "Manual": "Механика",
+      "Semi-Automatic": "Робот/Вариатор"
+    },
+    "fuel": {
+      "Petrol": "Бензин",
+      "Diesel": "Дизель",
+      "Electric": "Электро",
+      "Hybrid": "Гибрид",
+      "Gas": "Газ"
+    },
+    "drivetrain": {
+      "FWD": "Передний",
+      "RWD": "Задний",
+      "AWD": "Полный"
+    },
+    "specsNotFound": "Данные не найдены — заполните вручную",
+    "generation": "ПОКОЛЕНИЕ",
+    "loadingGenerations": "Загрузка поколений...",
+    "present": "н.в.",
+    "engineVolume": "ОБЪЁМ (Л)",
+    "power": "МОЩНОСТЬ (Л.С.)",
+    "loading": "Загрузка..."
+  }
 }
