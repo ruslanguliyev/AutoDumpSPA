@@ -1,5 +1,6 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { ListingPurpose } from '@prisma/client';
+import { PromotionTier } from '../promotions/promotion.types';
 
 @ObjectType()
 export class VehicleSellerObject {
@@ -162,6 +163,10 @@ export class VehicleObject {
 
   @Field(() => VehicleSellerObject, { nullable: true })
   seller: VehicleSellerObject | null;
+
+  /** VIP or PREMIUM while the listing holds paid placement, otherwise null. */
+  @Field(() => PromotionTier, { nullable: true })
+  promotionTier: PromotionTier | null;
 }
 
 @ObjectType()

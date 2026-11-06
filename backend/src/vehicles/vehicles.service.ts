@@ -4,9 +4,22 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListingPurpose, ListingStatus, Prisma, RentalStatus } from '@prisma/client';
+import {
+  ListingPurpose,
+  ListingStatus,
+  Prisma,
+  PromotionTier,
+  RentalStatus,
+} from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { isHiddenFromPublic } from '../listings/listing-status';
+import {
+  PROMOTED_FIRST,
+  PROMOTED_POOL_LIMIT,
+  rankOf,
+  visibleTier,
+} from '../promotions/promotion-pricing';
+import { rotate } from '../promotions/promotion-rotation';
 import { ListingsService } from '../listings/listings.service';
 import {
   CreateVehicleInput,
@@ -110,6 +123,7 @@ export class VehiclesService {
             logo: null,
           }
         : null,
+      promotionTier: visibleTier(row.listing.promotionRank, row.listing.promotedUntil),
     };
   }
 
@@ -219,7 +233,9 @@ export class VehiclesService {
     const [rows, total] = await this.prisma.$transaction([
       this.prisma.vehicle.findMany({
         where,
-        orderBy: { id: 'desc' },
+        // Paid placement first, then by the moment of the last bump, which for a
+        // listing nobody promoted is simply when it was published.
+        orderBy: PROMOTED_FIRST.map((key) => ({ listing: key })),
         skip: offset,
         take: limit,
         include: {
@@ -233,6 +249,36 @@ export class VehiclesService {
       items: rows.map((r) => this.mapVehicle(r)),
       total,
     };
+  }
+
+  /**
+   * The promoted block above a catalogue, or the home page when `minTier` is PREMIUM.
+   *
+   * The pool is read in rank order and then rotated by the clock, so every paying
+   * listing spends the same time at the front instead of leaving it to chance.
+   */
+  async getPromotedVehicles(
+    minTier: PromotionTier,
+    limit = 6,
+    purpose: ListingPurpose = ListingPurpose.SALE,
+  ) {
+    const now = new Date();
+    const rows = await this.prisma.vehicle.findMany({
+      where: {
+        listing: {
+          status: ListingStatus.ACTIVE,
+          purpose,
+          promotionRank: { gte: rankOf(minTier) },
+          promotedUntil: { gt: now },
+        },
+      },
+      orderBy: PROMOTED_FIRST.map((key) => ({ listing: key })),
+      take: PROMOTED_POOL_LIMIT,
+      include: {
+        listing: { include: { seller: true, rentalTerms: true } },
+      },
+    });
+    return rotate(rows, limit, now.getTime()).map((r) => this.mapVehicle(r));
   }
 
   async getVehicleById(id: string) {

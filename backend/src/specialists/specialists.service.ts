@@ -3,8 +3,21 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Specialist, SpecialistVehicle, UserRole } from '@prisma/client';
+import {
+  Prisma,
+  PromotionTier,
+  Specialist,
+  SpecialistVehicle,
+  UserRole,
+} from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import {
+  PROMOTED_FIRST,
+  PROMOTED_POOL_LIMIT,
+  rankOf,
+  visibleTier,
+} from '../promotions/promotion-pricing';
+import { rotate } from '../promotions/promotion-rotation';
 import { normalizePhone } from '../sellers/sellers.service';
 import {
   CreateSpecialistInput,
@@ -214,10 +227,22 @@ export class SpecialistsService {
 
     const rows = await this.prisma.specialist.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      orderBy: PROMOTED_FIRST,
       include: { supportedVehicles: true },
     });
     return rows.map((r) => this.toSpecialistObject(r));
+  }
+
+  /** The promoted block above the specialists catalogue; rotated, not shuffled. */
+  async getPromotedSpecialists(minTier: PromotionTier, limit = 6) {
+    const now = new Date();
+    const rows = await this.prisma.specialist.findMany({
+      where: { promotionRank: { gte: rankOf(minTier) }, promotedUntil: { gt: now } },
+      orderBy: PROMOTED_FIRST,
+      take: PROMOTED_POOL_LIMIT,
+      include: { supportedVehicles: true },
+    });
+    return rotate(rows, limit, now.getTime()).map((r) => this.toSpecialistObject(r));
   }
 
   private toSpecialistObject(s: SpecialistWithVehicles): SpecialistObject {
@@ -248,6 +273,7 @@ export class SpecialistsService {
       mobileService: s.mobileService,
       portfolio: s.portfolio,
       verified: s.verified,
+      promotionTier: visibleTier(s.promotionRank, s.promotedUntil),
       available: s.available,
       supportedVehicles: (s.supportedVehicles ?? []).map((v) => ({
         id: v.id,

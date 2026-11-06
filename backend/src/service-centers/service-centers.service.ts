@@ -5,11 +5,19 @@ import {
 } from '@nestjs/common';
 import {
   Prisma,
+  PromotionTier,
   ServiceCenter,
   ServiceCenterService,
   UserRole,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import {
+  PROMOTED_FIRST,
+  PROMOTED_POOL_LIMIT,
+  rankOf,
+  visibleTier,
+} from '../promotions/promotion-pricing';
+import { rotate } from '../promotions/promotion-rotation';
 import { normalizePhone } from '../sellers/sellers.service';
 import {
   CreateServiceCenterInput,
@@ -47,6 +55,7 @@ export class ServiceCentersService {
       rating: row.rating,
       reviewsCount: row.reviewsCount,
       verified: row.verified,
+      promotionTier: visibleTier(row.promotionRank, row.promotedUntil),
       isActive: row.isActive,
       schedule: row.schedule as Record<string, unknown> | null,
       contacts: row.contacts as Record<string, unknown> | null,
@@ -255,9 +264,25 @@ export class ServiceCentersService {
   async getServiceCenters(city?: string | null) {
     const rows = await this.prisma.serviceCenter.findMany({
       where: city ? { city } : {},
-      orderBy: { createdAt: 'desc' },
+      orderBy: PROMOTED_FIRST,
       include: { services: true },
     });
     return rows.map((r) => this.mapServiceRow(r));
+  }
+
+  /** The promoted block above the service catalogue; rotated, not shuffled. */
+  async getPromotedServiceCenters(minTier: PromotionTier, limit = 6) {
+    const now = new Date();
+    const rows = await this.prisma.serviceCenter.findMany({
+      where: {
+        isActive: true,
+        promotionRank: { gte: rankOf(minTier) },
+        promotedUntil: { gt: now },
+      },
+      orderBy: PROMOTED_FIRST,
+      take: PROMOTED_POOL_LIMIT,
+      include: { services: true },
+    });
+    return rotate(rows, limit, now.getTime()).map((r) => this.mapServiceRow(r));
   }
 }

@@ -5,8 +5,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListingStatus, Prisma, ReportStatus } from '@prisma/client';
+import { ListingStatus, Prisma, PromotionTarget, ReportStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { PromotionsService } from '../promotions/promotions.service';
 import { ReviewTargetType } from '../reviews/review.types';
 import { AdminProfileObject, ReportListingInput } from './moderation.types';
 
@@ -30,7 +31,10 @@ type ReportRow = Prisma.ReportGetPayload<{ include: typeof reportInclude }>;
 
 @Injectable()
 export class ModerationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly promotions: PromotionsService,
+  ) {}
 
   /** A signed-in user reports a published listing that is not theirs. */
   async reportListing(userId: string, input: ReportListingInput) {
@@ -112,6 +116,14 @@ export class ModerationService {
         data: { status: ReportStatus.ACTIONED, resolvedAt: new Date() },
       }),
     ]);
+
+    // Paid placement does not survive a block, and it is not refunded: that is the
+    // rule the buyer agreed to, and the one thing that stops promotion being a way
+    // to buy your way past moderation.
+    await this.promotions.endPromotionsFor(
+      { targetType: PromotionTarget.LISTING, targetId: listingId },
+      'target_blocked',
+    );
     return true;
   }
 

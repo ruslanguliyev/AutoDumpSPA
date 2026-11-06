@@ -40,7 +40,8 @@ let counter = 0;
 
 export async function createTestContext(): Promise<TestContext> {
   const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
-  const app = moduleRef.createNestApplication();
+  // rawBody mirrors main.ts: payment callbacks are signed over the bytes as sent.
+  const app = moduleRef.createNestApplication({ rawBody: true });
   await app.init();
   const prisma = app.get(PrismaService);
 

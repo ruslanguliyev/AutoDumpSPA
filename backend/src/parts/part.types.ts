@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { PromotionTier } from '../promotions/promotion.types';
 
 @ObjectType()
 export class PartSellerObject {
@@ -80,6 +81,10 @@ export class PartObject {
 
   @Field(() => PartSellerObject, { nullable: true })
   seller: PartSellerObject | null;
+
+  /** VIP or PREMIUM while the listing holds paid placement, otherwise null. */
+  @Field(() => PromotionTier, { nullable: true })
+  promotionTier: PromotionTier | null;
 }
 
 @ObjectType()

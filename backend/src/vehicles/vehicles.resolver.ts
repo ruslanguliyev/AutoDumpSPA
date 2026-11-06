@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ListingPurpose, PromotionTier } from '@prisma/client';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
@@ -23,6 +24,23 @@ export class VehiclesResolver {
     filter?: VehiclesFilterInput | null,
   ): Promise<PaginatedVehicles> {
     return this.vehiclesService.getVehicles(filter ?? undefined);
+  }
+
+  /**
+   * The promoted block shown above the catalogue, or on the home page when `tier` is
+   * PREMIUM. Clearly separate from the ranked results, and always labelled as paid.
+   */
+  @Query(() => [VehicleObject])
+  async promotedVehicles(
+    @Args('tier', { type: () => PromotionTier, nullable: true }) tier?: PromotionTier | null,
+    @Args('limit', { type: () => Int, nullable: true }) limit?: number | null,
+    @Args('purpose', { type: () => ListingPurpose, nullable: true }) purpose?: ListingPurpose | null,
+  ): Promise<VehicleObject[]> {
+    return this.vehiclesService.getPromotedVehicles(
+      tier ?? PromotionTier.VIP,
+      limit ?? 6,
+      purpose ?? ListingPurpose.SALE,
+    );
   }
 
   @Query(() => VehicleObject)

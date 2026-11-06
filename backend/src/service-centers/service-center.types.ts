@@ -1,5 +1,6 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
+import { PromotionTier } from '../promotions/promotion.types';
 
 @ObjectType()
 export class ServiceCenterServiceObject {
@@ -98,6 +99,11 @@ export class ServiceCenterObject {
 
   @Field()
   verified: boolean;
+
+  /** VIP or PREMIUM while the profile holds paid placement, otherwise null. */
+  @Field(() => PromotionTier, { nullable: true })
+  promotionTier: PromotionTier | null;
+
 
   @Field()
   isActive: boolean;

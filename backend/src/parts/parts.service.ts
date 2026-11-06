@@ -3,9 +3,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListingPurpose, ListingStatus, Prisma } from '@prisma/client';
+import { ListingPurpose, ListingStatus, Prisma, PromotionTier } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { isHiddenFromPublic } from '../listings/listing-status';
+import {
+  PROMOTED_FIRST,
+  PROMOTED_POOL_LIMIT,
+  rankOf,
+  visibleTier,
+} from '../promotions/promotion-pricing';
+import { rotate } from '../promotions/promotion-rotation';
 import { ListingsService } from '../listings/listings.service';
 import {
   CreatePartInput,
@@ -62,6 +69,7 @@ export class PartsService {
             logo: null,
           }
         : null,
+      promotionTier: visibleTier(row.listing.promotionRank, row.listing.promotedUntil),
     };
   }
 
@@ -144,7 +152,7 @@ export class PartsService {
     const [rows, total] = await this.prisma.$transaction([
       this.prisma.part.findMany({
         where,
-        orderBy: { id: 'desc' },
+        orderBy: PROMOTED_FIRST.map((key) => ({ listing: key })),
         skip: offset,
         take: limit,
         include: {
@@ -158,6 +166,25 @@ export class PartsService {
       items: rows.map((r) => this.mapPart(r)),
       total,
     };
+  }
+
+  /** The promoted block above the parts catalogue; see getPromotedVehicles. */
+  async getPromotedParts(minTier: PromotionTier, limit = 6) {
+    const now = new Date();
+    const rows = await this.prisma.part.findMany({
+      where: {
+        listing: {
+          status: ListingStatus.ACTIVE,
+          purpose: ListingPurpose.SALE,
+          promotionRank: { gte: rankOf(minTier) },
+          promotedUntil: { gt: now },
+        },
+      },
+      orderBy: PROMOTED_FIRST.map((key) => ({ listing: key })),
+      take: PROMOTED_POOL_LIMIT,
+      include: { listing: { include: { seller: true } } },
+    });
+    return rotate(rows, limit, now.getTime()).map((r) => this.mapPart(r));
   }
 
   async getPartById(id: string) {

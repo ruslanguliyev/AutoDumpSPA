@@ -1,3 +1,4 @@
+import { PromotionTier } from '../promotions/promotion.types';
 import {
   Field,
   Float,
@@ -88,6 +89,11 @@ export class SpecialistObject {
 
   @Field()
   verified: boolean;
+
+  /** VIP or PREMIUM while the profile holds paid placement, otherwise null. */
+  @Field(() => PromotionTier, { nullable: true })
+  promotionTier: PromotionTier | null;
+
 
   @Field()
   available: boolean;

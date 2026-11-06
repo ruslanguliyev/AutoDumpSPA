@@ -70,6 +70,31 @@ enum ReportStatus {
   DISMISSED
 }
 
+/// Paid placement products, from cheapest to dearest. Each tier includes the one below it.
+enum PromotionTier {
+  /// Moves the listing back to the top of its catalogue, a fixed number of times.
+  BUMP
+  /// A slot in the VIP block plus one automatic bump a day, for a number of days.
+  VIP
+  /// Everything VIP has, plus the home page and three bumps a day.
+  PREMIUM
+}
+
+enum PromotionTarget {
+  LISTING
+  SPECIALIST
+  SERVICE_CENTER
+}
+
+enum PromotionOrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  EXPIRED
+  REFUNDED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -81,16 +106,17 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  seller         Seller?
-  bids           Bid[]
-  serviceCenter  ServiceCenter?
-  specialist     Specialist?
-  favorites      Favorite[]
-  inquiries      Inquiry[]
-  reports        Report[]
-  rentalBookings RentalBooking[]
-  reviews        Review[]
-  appointments   Appointment[]
+  seller          Seller?
+  bids            Bid[]
+  serviceCenter   ServiceCenter?
+  specialist      Specialist?
+  favorites       Favorite[]
+  inquiries       Inquiry[]
+  reports         Report[]
+  rentalBookings  RentalBooking[]
+  reviews         Review[]
+  appointments    Appointment[]
+  promotionOrders PromotionOrder[]
 }
 
 model Seller {
@@ -127,20 +153,33 @@ model Listing {
   /// SALE listings are sold, RENT listings are rented out per day (price = price per day)
   purpose       ListingPurpose @default(SALE)
   sellerId      String
+  /// Highest active promotion: 0 none, 1 VIP, 2 PREMIUM. Catalogues sort by it first.
+  promotionRank Int            @default(0)
+  /// When the current VIP/PREMIUM placement runs out; null when there is none.
+  promotedUntil DateTime?
+  /// Moves to "now" on every bump. Catalogues order by this instead of createdAt.
+  bumpedAt      DateTime       @default(now())
+  /// How often the detail page was opened and the contacts revealed.
+  viewsCount    Int            @default(0)
+  contactsCount Int            @default(0)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
-  seller         Seller          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  vehicles       Vehicle[]
-  parts          Part[]
-  services       Service[]
-  images         Image[]
-  auctions       Auction[]
-  inquiries      Inquiry[]
-  reports        Report[]
-  rentalTerms    RentalTerms?
-  rentalBookings RentalBooking[]
-  rentalBlocks   RentalBlock[]
+  seller          Seller           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  vehicles        Vehicle[]
+  parts           Part[]
+  services        Service[]
+  images          Image[]
+  auctions        Auction[]
+  inquiries       Inquiry[]
+  reports         Report[]
+  rentalTerms     RentalTerms?
+  rentalBookings  RentalBooking[]
+  rentalBlocks    RentalBlock[]
+  promotions      Promotion[]
+  promotionOrders PromotionOrder[]
+
+  @@index([status, promotionRank, bumpedAt])
 }
 
 model Vehicle {
@@ -215,10 +254,10 @@ model Service {
 }
 
 model ServiceCenter {
-  id              String   @id @default(cuid())
-  userId          String   @unique
+  id              String    @id @default(cuid())
+  userId          String    @unique
   name            String
-  slug            String?  @unique
+  slug            String?   @unique
   description     String?
   legalName       String?
   type            String?
@@ -232,19 +271,28 @@ model ServiceCenter {
   gallery         String[]
   categories      String[]
   supportedBrands String[]
-  rating          Float    @default(0)
-  reviewsCount    Int      @default(0)
-  verified        Boolean  @default(false)
-  isActive        Boolean  @default(true)
+  rating          Float     @default(0)
+  reviewsCount    Int       @default(0)
+  verified        Boolean   @default(false)
+  isActive        Boolean   @default(true)
   schedule        Json?
   contacts        Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  promotionRank   Int       @default(0)
+  promotedUntil   DateTime?
+  bumpedAt        DateTime  @default(now())
+  viewsCount      Int       @default(0)
+  contactsCount   Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  user     User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  services     ServiceCenterService[]
-  reviews      Review[]
-  appointments Appointment[]
+  user            User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  services        ServiceCenterService[]
+  reviews         Review[]
+  appointments    Appointment[]
+  promotions      Promotion[]
+  promotionOrders PromotionOrder[]
+
+  @@index([promotionRank, bumpedAt])
 }
 
 model ServiceCenterService {
@@ -264,10 +312,10 @@ model ServiceCenterService {
 }
 
 model Specialist {
-  id              String   @id @default(cuid())
-  userId          String   @unique
+  id              String    @id @default(cuid())
+  userId          String    @unique
   name            String
-  slug            String   @unique
+  slug            String    @unique
   bio             String?
   city            String
   phone           String?
@@ -276,22 +324,31 @@ model Specialist {
   coverImage      String?
   skills          String[]
   specializations String[]
-  experience      Int      @default(0)
-  rating          Float    @default(0)
-  reviewsCount    Int      @default(0)
-  hourlyRate      Decimal? @db.Decimal(10, 2)
-  priceFrom       Decimal? @db.Decimal(10, 2)
-  mobileService   Boolean  @default(false)
-  verified        Boolean  @default(false)
-  available       Boolean  @default(true)
+  experience      Int       @default(0)
+  rating          Float     @default(0)
+  reviewsCount    Int       @default(0)
+  hourlyRate      Decimal?  @db.Decimal(10, 2)
+  priceFrom       Decimal?  @db.Decimal(10, 2)
+  mobileService   Boolean   @default(false)
+  verified        Boolean   @default(false)
+  available       Boolean   @default(true)
   portfolio       String[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  promotionRank   Int       @default(0)
+  promotedUntil   DateTime?
+  bumpedAt        DateTime  @default(now())
+  viewsCount      Int       @default(0)
+  contactsCount   Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   supportedVehicles SpecialistVehicle[]
   reviews           Review[]
   appointments      Appointment[]
+  promotions        Promotion[]
+  promotionOrders   PromotionOrder[]
+
+  @@index([promotionRank, bumpedAt])
 }
 
 model SpecialistVehicle {
@@ -487,4 +544,115 @@ model RentalBlock {
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
+}
+
+/// A paid (or administrator-granted) placement of one listing or professional profile.
+/// Exactly one target is set, enforced by a CHECK constraint.
+model Promotion {
+  id              String          @id @default(cuid())
+  targetType      PromotionTarget
+  listingId       String?
+  specialistId    String?
+  serviceCenterId String?
+  tier            PromotionTier
+  packageCode     String
+  /// What was paid for this placement, in qapik. Zero for administrator grants.
+  amount          Int             @default(0)
+  currency        String          @default("AZN")
+  startsAt        DateTime        @default(now())
+  endsAt          DateTime
+  /// Automatic bumps: how many the package carries, how many were spent, when the next is due.
+  bumpsTotal      Int             @default(0)
+  bumpsUsed       Int             @default(0)
+  nextBumpAt      DateTime?
+  lastBumpAt      DateTime?
+  /// The target's counters the moment the placement started, so the buyer can see
+  /// how many views and contacts the money actually brought.
+  viewsAtStart    Int             @default(0)
+  contactsAtStart Int             @default(0)
+  active          Boolean         @default(true)
+  /// Why it stopped: "expired", "spent", "upgraded", "revoked", "target_blocked".
+  endedReason     String?
+  endedAt         DateTime?
+  /// Administrator who granted it by hand, if nobody paid.
+  grantedBy       String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  listing       Listing?        @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  specialist    Specialist?     @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  serviceCenter ServiceCenter?  @relation(fields: [serviceCenterId], references: [id], onDelete: Cascade)
+  order         PromotionOrder?
+
+  @@index([active, endsAt])
+  @@index([active, nextBumpAt])
+  @@index([active, tier])
+  @@index([listingId])
+  @@index([specialistId])
+  @@index([serviceCenterId])
+}
+
+/// A checkout for a promotion. Visitors do not have to be signed in, so the order is
+/// addressed by an unguessable token rather than by its id.
+model PromotionOrder {
+  id                  String               @id @default(cuid())
+  /// Secret handle of the order; also the reference sent to the payment provider.
+  token               String               @unique
+  targetType          PromotionTarget
+  listingId           String?
+  specialistId        String?
+  serviceCenterId     String?
+  tier                PromotionTier
+  packageCode         String
+  /// Price list amount, the upgrade credit taken off it, and what is actually charged
+  /// (all in qapik). amount = listAmount - creditAmount.
+  listAmount          Int
+  creditAmount        Int                  @default(0)
+  amount              Int
+  currency            String               @default("AZN")
+  /// Placement whose unused days funded creditAmount; it is retired when this order is paid.
+  creditedPromotionId String?
+  status              PromotionOrderStatus @default(PENDING)
+  /// Where to send the receipt. Optional, and stored exactly as the buyer typed it.
+  contactEmail        String?
+  contactPhone        String?
+  /// Set when a signed-in user checked out, so it shows up in their dashboard.
+  userId              String?
+  /// An unpaid order stops being payable after this moment.
+  expiresAt           DateTime
+  paidAt              DateTime?
+  /// The placement this order bought; null until the provider confirms the payment.
+  promotionId         String?              @unique
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  user          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing       Listing?       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  specialist    Specialist?    @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  serviceCenter ServiceCenter? @relation(fields: [serviceCenterId], references: [id], onDelete: Cascade)
+  promotion     Promotion?     @relation(fields: [promotionId], references: [id])
+  payments      Payment[]
+
+  @@index([status, expiresAt])
+  @@index([userId, createdAt])
+}
+
+/// One charge attempt reported by the payment provider, kept for reconciliation and
+/// disputes. The provider's own id makes a repeated callback a no-op.
+model Payment {
+  id                String   @id @default(cuid())
+  orderId           String
+  provider          String
+  providerPaymentId String
+  status            String
+  amount            Int
+  currency          String   @default("AZN")
+  /// Raw callback payload, for support.
+  payload           Json?
+  createdAt         DateTime @default(now())
+
+  order PromotionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerPaymentId])
+  @@index([orderId])
 }

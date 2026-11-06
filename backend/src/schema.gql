@@ -13,6 +13,18 @@ type AdminProfileObject {
   verified: Boolean!
 }
 
+type AdminPromotionObject {
+  active: Boolean!
+  amount: Int!
+  endedReason: String
+  endsAt: DateTime!
+  id: String!
+  paid: Boolean!
+  startsAt: DateTime!
+  target: PromotionTargetObject!
+  tier: PromotionTier!
+}
+
 type AppointmentObject {
   createdAt: DateTime!
   customerEmail: String!
@@ -110,6 +122,14 @@ input CreatePartInput {
   oemCode: String
   price: Float
   stock: Int!
+}
+
+input CreatePromotionOrderInput {
+  contactEmail: String
+  contactPhone: String
+  packageCode: String!
+  targetId: String!
+  targetType: PromotionTarget!
 }
 
 input CreateSellerInput {
@@ -310,6 +330,7 @@ type Mutation {
   addRentalBlock(endDate: String!, listingId: String!, note: String, startDate: String!): RentalBlockObject!
   blockListing(listingId: String!, reason: String!): Boolean!
   cancelAppointment(id: String!): AppointmentObject!
+  cancelPromotionOrder(token: String!): Boolean!
   cancelRental(id: String!): RentalBookingObject!
   changePassword(input: ChangePasswordInput!): AuthPayload!
   closeListing(id: String!): ListingObject!
@@ -317,6 +338,7 @@ type Mutation {
   createInquiry(input: CreateInquiryInput!): InquiryObject!
   createListing(input: CreateListingInput!): ListingObject!
   createPart(input: CreatePartInput!, listingId: String!): PartObject!
+  createPromotionOrder(input: CreatePromotionOrderInput!): PromotionOrderObject!
   createSeller(input: CreateSellerInput!): SellerObject!
   createService(input: CreateServiceInput!, listingId: String!): ServiceObject!
   createServiceCenter(input: CreateServiceCenterInput!): ServiceCenterObject!
@@ -331,6 +353,7 @@ type Mutation {
   deleteVehicle(id: String!): Boolean!
   dismissReport(id: String!): Boolean!
   finishAuction(id: String!): AuctionObject!
+  grantPromotion(days: Int!, targetId: String!, targetType: PromotionTarget!, tier: PromotionTier!): Boolean!
   login(email: String!, password: String!): AuthPayload!
   markInquiryRead(id: String!): InquiryObject!
   placeBid(input: PlaceBidInput!): BidObject!
@@ -341,11 +364,14 @@ type Mutation {
   reportListing(input: ReportListingInput!): Boolean!
   requestAppointment(input: RequestAppointmentInput!): AppointmentObject!
   requestRental(input: RequestRentalInput!): RentalBookingObject!
+  revokePromotion(id: String!): Boolean!
   setProfileVerified(targetId: String!, targetType: ReviewTargetType!, verified: Boolean!): Boolean!
   setRentalTerms(input: RentalTermsInput!, listingId: String!): Boolean!
   startAuction(id: String!): AuctionObject!
   submitReview(input: SubmitReviewInput!): ReviewObject!
   syncFavorites(items: [FavoriteRefInput!]!): Int!
+  trackPromotionContact(targetId: String!, targetType: PromotionTarget!): Boolean!
+  trackPromotionView(targetId: String!, targetType: PromotionTarget!): Boolean!
   unblockListing(listingId: String!): Boolean!
   unpublishListing(id: String!): ListingObject!
   updateListing(id: String!, input: UpdateListingInput!): ListingObject!
@@ -407,6 +433,7 @@ type PartObject {
   name: String!
   oemCode: String
   price: Float
+  promotionTier: PromotionTier
   seller: PartSellerObject
   stock: Int!
 }
@@ -442,8 +469,92 @@ input PlaceBidInput {
   auctionId: String!
 }
 
+type PromotionObject {
+  active: Boolean!
+  amount: Int!
+  bumpsTotal: Int!
+  bumpsUsed: Int!
+  contactsGained: Int!
+  endedReason: String
+  endsAt: DateTime!
+  id: String!
+  nextBumpAt: DateTime
+  startsAt: DateTime!
+  target: PromotionTargetObject!
+  tier: PromotionTier!
+  viewsGained: Int!
+}
+
+type PromotionOrderObject {
+  amount: Int!
+  bumps: Int!
+  creditAmount: Int!
+  currency: String!
+  days: Int!
+  expiresAt: DateTime!
+  listAmount: Int!
+  packageCode: String!
+  paidAt: DateTime
+  payUrl: String
+  status: PromotionOrderStatus!
+  target: PromotionTargetObject!
+  tier: PromotionTier!
+  token: String!
+}
+
+enum PromotionOrderStatus {
+  CANCELLED
+  EXPIRED
+  FAILED
+  PAID
+  PENDING
+  REFUNDED
+}
+
+type PromotionPackageObject {
+  amount: Int!
+  bumps: Int!
+  bumpsPerDay: Int!
+  code: String!
+  creditAmount: Int!
+  days: Int!
+  listAmount: Int!
+  recommended: Boolean!
+  tier: PromotionTier!
+}
+
+type PromotionQuoteObject {
+  activeTier: PromotionTier
+  activeUntil: DateTime
+  bumpsLeft: Int!
+  currency: String!
+  packages: [PromotionPackageObject!]!
+  target: PromotionTargetObject!
+}
+
+enum PromotionTarget {
+  LISTING
+  SERVICE_CENTER
+  SPECIALIST
+}
+
+type PromotionTargetObject {
+  href: String
+  imageUrl: String
+  targetId: String!
+  targetType: PromotionTarget!
+  title: String!
+}
+
+enum PromotionTier {
+  BUMP
+  PREMIUM
+  VIP
+}
+
 type Query {
   adminProfiles(limit: Int, search: String, targetType: ReviewTargetType!): [AdminProfileObject!]!
+  adminPromotions(activeOnly: Boolean): [AdminPromotionObject!]!
   auction(id: String!): AuctionObject!
   auctionByListing(listingId: String!): AuctionObject
   bidsByAuction(auctionId: String!): [BidObject!]!
@@ -458,6 +569,7 @@ type Query {
   myBids: [BidObject!]!
   myFavorites: [FavoriteItemObject!]!
   myListings(status: ListingStatus): [MyListingObject!]!
+  myPromotions: [PromotionObject!]!
   myRentals: [RentalBookingObject!]!
   mySeller: SellerObject
   myServiceCenter: ServiceCenterObject
@@ -467,6 +579,12 @@ type Query {
   parts(filter: PartsFilterInput): PaginatedParts!
   pendingAppointmentsCount: Int!
   pendingRentalRequestsCount: Int!
+  promotedParts(limit: Int, tier: PromotionTier): [PartObject!]!
+  promotedServiceCenters(limit: Int, tier: PromotionTier): [ServiceCenterObject!]!
+  promotedSpecialists(limit: Int, tier: PromotionTier): [SpecialistObject!]!
+  promotedVehicles(limit: Int, purpose: ListingPurpose, tier: PromotionTier): [VehicleObject!]!
+  promotionOrder(token: String!): PromotionOrderObject!
+  promotionQuote(targetId: String!, targetType: PromotionTarget!): PromotionQuoteObject!
   receivedInquiries(status: InquiryStatus): [InquiryObject!]!
   rentalAvailability(from: String, listingId: String!, to: String): [UnavailableRangeObject!]!
   rentalBlocks(listingId: String!): [RentalBlockObject!]!
@@ -659,6 +777,7 @@ type ServiceCenterObject {
   logoUrl: String
   name: String!
   phone: String
+  promotionTier: PromotionTier
   rating: Float!
   reviewsCount: Int!
   schedule: JSON
@@ -712,6 +831,7 @@ type SpecialistObject {
   phone: String
   portfolio: [String!]!
   priceFrom: Float
+  promotionTier: PromotionTier
   rating: Float!
   reviewsCount: Int!
   skills: [String!]!
@@ -921,6 +1041,7 @@ type VehicleObject {
   ownersCount: Int!
   power: Int!
   price: Float
+  promotionTier: PromotionTier
   purpose: ListingPurpose!
   rental: RentalTermsObject
   seatsCount: Int

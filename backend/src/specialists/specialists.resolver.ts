@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { PromotionTier } from '@prisma/client';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
@@ -21,6 +22,18 @@ export class SpecialistsResolver {
     @CurrentUser() user: AuthUser,
   ): Promise<SpecialistObject | null> {
     return this.specialistsService.getSpecialistByUserId(user.id);
+  }
+
+  /**
+   * The promoted block shown above the catalogue, or on the home page when `tier` is
+   * PREMIUM. Clearly separate from the ranked results, and always labelled as paid.
+   */
+  @Query(() => [SpecialistObject])
+  async promotedSpecialists(
+    @Args('tier', { type: () => PromotionTier, nullable: true }) tier?: PromotionTier | null,
+    @Args('limit', { type: () => Int, nullable: true }) limit?: number | null,
+  ): Promise<SpecialistObject[]> {
+    return this.specialistsService.getPromotedSpecialists(tier ?? PromotionTier.VIP, limit ?? 6);
   }
 
   @Query(() => SpecialistObject)
