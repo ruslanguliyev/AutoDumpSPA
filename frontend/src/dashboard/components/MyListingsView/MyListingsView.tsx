@@ -21,6 +21,7 @@ const STATUS_STYLES: Record<MyListing['status'], string> = {
   ACTIVE: 'bg-emerald-500/15 text-emerald-600',
   DRAFT: 'bg-amber-500/15 text-amber-600',
   SOLD: 'bg-muted text-muted-foreground',
+  BLOCKED: 'bg-destructive/15 text-destructive',
 };
 
 const publicPath = (l: MyListing): string | null => {
@@ -121,6 +122,11 @@ export function MyListingsView({ kind, section }: Props) {
                     <p className="mt-1 text-sm font-medium text-foreground">
                       {formatPrice(l.price, l.currency ?? 'AZN')}
                     </p>
+                    {l.status === 'BLOCKED' ? (
+                      <p className="mt-2 rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                        {t('listings.blockedNotice')}{l.blockedReason ? `: ${l.blockedReason}` : ''}
+                      </p>
+                    ) : null}
                     <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                       <span
                         className="inline-flex items-center gap-1"
@@ -134,7 +140,7 @@ export function MyListingsView({ kind, section }: Props) {
                       >
                         <Heart size={14} aria-hidden="true" /> {l.favoritesCount}
                       </span>
-                      {href && l.status !== 'DRAFT' ? (
+                      {href && (l.status === 'ACTIVE' || l.status === 'SOLD') ? (
                         <Link to={href} className="inline-flex items-center gap-1 hover:text-foreground">
                           <Eye size={14} aria-hidden="true" /> {t('listings.view')}
                         </Link>
@@ -143,7 +149,7 @@ export function MyListingsView({ kind, section }: Props) {
                   </div>
 
                   <div className="flex flex-wrap gap-2 sm:justify-end">
-                    {(l.kind === 'vehicle' || l.kind === 'part') && l.status !== 'SOLD' ? (
+                    {(l.kind === 'vehicle' || l.kind === 'part') && (l.status === 'DRAFT' || l.status === 'ACTIVE') ? (
                       <ActionButton
                         disabled={busy || editor.pendingId !== null}
                         onClick={() => editor.start(l.id)}

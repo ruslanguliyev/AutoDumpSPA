@@ -7,6 +7,7 @@ import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
 import { ContactSellerForm } from '@/features/inquiries/components/ContactSellerForm';
+import { ReportListingForm } from '@/features/moderation/components/ReportListingForm';
 import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
@@ -249,6 +250,7 @@ export default function PartDetailsPage() {
               }
             />
             <ContactSellerForm listingId={part.listingId} />
+            <ReportListingForm listingId={part.listingId} />
           </div>
         </div>
       </div>

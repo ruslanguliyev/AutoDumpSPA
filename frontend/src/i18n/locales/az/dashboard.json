@@ -51,7 +51,8 @@
     "services": "Mənim xidmətlərim",
     "favorites": "Seçilmişlər",
     "settings": "Parametrlər",
-    "inquiries": "Müraciətlər"
+    "inquiries": "Müraciətlər",
+    "moderation": "Moderasiya"
   },
   "vehicles": {
     "title": "Mənim avtomobillərim",
@@ -137,9 +138,11 @@
     "status": {
       "DRAFT": "Qaralama",
       "ACTIVE": "Dərc olunub",
-      "SOLD": "Satılıb"
+      "SOLD": "Satılıb",
+      "BLOCKED": "Bloklanıb"
     },
-    "edit": "Redaktə et"
+    "edit": "Redaktə et",
+    "blockedNotice": "Moderator tərəfindən bloklanıb"
   },
   "inquiries": {
     "title": "Müraciətlər",
@@ -164,5 +167,49 @@
     "send": "Göndər",
     "sending": "Göndərilir…",
     "sent": "Mesaj göndərildi. Satıcı onu \"Müraciətlər\" bölməsində görəcək."
+  },
+  "report": {
+    "open": "Elandan şikayət et",
+    "loginToReport": "Şikayət üçün daxil olun",
+    "title": "Elandan şikayət et",
+    "reason": "Səbəb",
+    "details": "Təfərrüatlar (məcburi deyil)",
+    "detailsPlaceholder": "Problem nədir?",
+    "submit": "Şikayəti göndər",
+    "cancel": "Ləğv et",
+    "thanks": "Təşəkkürlər! Elanı yoxlayacağıq.",
+    "alreadyReported": "Bu elandan artıq şikayət etmisiniz.",
+    "reasons": {
+      "SPAM": "Spam və ya reklam",
+      "SCAM": "Fırıldaqçılıq",
+      "WRONG_INFO": "Yanlış məlumat",
+      "PROHIBITED": "Qadağan olunmuş məhsul",
+      "ALREADY_SOLD": "Artıq satılıb",
+      "OTHER": "Digər"
+    }
+  },
+  "moderation": {
+    "title": "Moderasiya",
+    "subtitle": "Elanlarla bağlı şikayətlər",
+    "seller": "Satıcı",
+    "reportedBy": "Şikayət edən: {{email}}",
+    "moreReports": "daha {{count}} şikayət",
+    "dismiss": "Şikayəti rədd et",
+    "block": "Elanı blokla",
+    "unblock": "Blokdan çıxar",
+    "blockReason": "Bloklama səbəbi (satıcı görəcək)",
+    "blockReasonPlaceholder": "Məsələn: qadağan olunmuş məhsul",
+    "confirmBlock": "Blokla",
+    "noAccess": "Giriş yoxdur: bu bölmə yalnız moderatorlar üçündür.",
+    "tabs": {
+      "OPEN": "Açıq",
+      "ACTIONED": "Həll olunub",
+      "DISMISSED": "Rədd edilib"
+    },
+    "empty": {
+      "OPEN": "Açıq şikayət yoxdur.",
+      "ACTIONED": "Elanın bloklanmasına səbəb olan şikayətlər burada görünür.",
+      "DISMISSED": "Rədd edilmiş şikayət yoxdur."
+    }
   }
 }

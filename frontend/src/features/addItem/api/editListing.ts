@@ -31,7 +31,7 @@ type EditQueryResult = {
     title: string;
     description: string;
     price: number;
-    status: 'DRAFT' | 'ACTIVE' | 'SOLD';
+    status: 'DRAFT' | 'ACTIVE' | 'SOLD' | 'BLOCKED';
     sellerId: string;
   };
   mySeller: {
@@ -185,6 +185,9 @@ export const prepareEditDraft = async (listingId: string): Promise<ListingDraft>
   }
   if (!data.vehicleByListing && !data.partByListing) {
     throw new Error('Only vehicle and part listings can be edited');
+  }
+  if (data.listing.status === 'BLOCKED') {
+    throw new Error('This listing was blocked by moderation');
   }
   if (data.listing.status === 'SOLD') {
     throw new Error('Relist the item before editing it');

@@ -49,6 +49,9 @@ const MyPartsPage = lazy(() =>
 const MyServicesPage = lazy(() =>
   import('@/dashboard/pages/MyServicesPage').then((m) => ({ default: m.MyServicesPage }))
 );
+const ModerationPage = lazy(() =>
+  import('@/dashboard/pages/ModerationPage').then((m) => ({ default: m.ModerationPage }))
+);
 const InquiriesPage = lazy(() =>
   import('@/dashboard/pages/InquiriesPage').then((m) => ({ default: m.InquiriesPage }))
 );
@@ -81,6 +84,7 @@ const dashboardRoutes = [
       { path: 'parts', element: <MyPartsPage /> },
       { path: 'services', element: <MyServicesPage /> },
       { path: 'inquiries', element: <InquiriesPage /> },
+      { path: 'moderation', element: <ModerationPage /> },
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'settings', element: <SettingsPage /> },
     ],

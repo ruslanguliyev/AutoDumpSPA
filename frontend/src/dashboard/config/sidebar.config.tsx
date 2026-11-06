@@ -1,4 +1,4 @@
-import { LayoutDashboard, Car, Package, Wrench, Heart, MessageSquare, Settings } from 'lucide-react';
+import { LayoutDashboard, Car, Package, Wrench, Heart, MessageSquare, Settings, ShieldCheck } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
 
@@ -18,6 +18,13 @@ const allItems: NavItem[] = [
   { key: 'nav.settings', path: '/dashboard/settings', icon: Settings },
 ];
 
-export function getSidebarNavItems(profile: ActiveProfile): NavItem[] {
-  return allItems;
+const adminItems: NavItem[] = [
+  { key: 'nav.moderation', path: '/dashboard/moderation', icon: ShieldCheck },
+];
+
+export function getSidebarNavItems(_profile: ActiveProfile, isAdmin = false): NavItem[] {
+  if (!isAdmin) return allItems;
+  // Moderation goes right before Settings.
+  const settings = allItems[allItems.length - 1];
+  return [...allItems.slice(0, -1), ...adminItems, settings];
 }

@@ -5,11 +5,13 @@ import { LayoutDashboard, Car, Package, Wrench, Heart, Settings } from 'lucide-r
 import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
+import { useAuthStore } from '@/features/auth/store/useAuthStore';
 
 export function DashboardBottomNav() {
   const { t } = useTranslation('dashboard');
   const activeProfile = useActiveProfile();
-  const items = getSidebarNavItems(activeProfile);
+  const isAdmin = useAuthStore((s) => s.user?.role === 'ADMIN');
+  const items = getSidebarNavItems(activeProfile, isAdmin);
 
   return (
     <nav

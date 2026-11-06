@@ -51,7 +51,8 @@
     "services": "My Services",
     "favorites": "Favorites",
     "settings": "Settings",
-    "inquiries": "Inquiries"
+    "inquiries": "Inquiries",
+    "moderation": "Moderation"
   },
   "vehicles": {
     "title": "My Vehicles",
@@ -137,9 +138,11 @@
     "status": {
       "DRAFT": "Draft",
       "ACTIVE": "Published",
-      "SOLD": "Sold"
+      "SOLD": "Sold",
+      "BLOCKED": "Blocked"
     },
-    "edit": "Edit"
+    "edit": "Edit",
+    "blockedNotice": "Blocked by a moderator"
   },
   "inquiries": {
     "title": "Inquiries",
@@ -164,5 +167,49 @@
     "send": "Send",
     "sending": "Sending…",
     "sent": "Message sent. The seller will see it in their Inquiries."
+  },
+  "report": {
+    "open": "Report this listing",
+    "loginToReport": "Log in to report",
+    "title": "Report this listing",
+    "reason": "Reason",
+    "details": "Details (optional)",
+    "detailsPlaceholder": "What is wrong with it?",
+    "submit": "Send report",
+    "cancel": "Cancel",
+    "thanks": "Thank you! We will review the listing.",
+    "alreadyReported": "You have already reported this listing.",
+    "reasons": {
+      "SPAM": "Spam or advertising",
+      "SCAM": "Scam",
+      "WRONG_INFO": "Wrong information",
+      "PROHIBITED": "Prohibited item",
+      "ALREADY_SOLD": "Already sold",
+      "OTHER": "Other"
+    }
+  },
+  "moderation": {
+    "title": "Moderation",
+    "subtitle": "Reports about listings",
+    "seller": "Seller",
+    "reportedBy": "Reported by {{email}}",
+    "moreReports": "{{count}} more report(s)",
+    "dismiss": "Dismiss report",
+    "block": "Block listing",
+    "unblock": "Unblock",
+    "blockReason": "Reason for blocking (the seller will see it)",
+    "blockReasonPlaceholder": "For example: prohibited item",
+    "confirmBlock": "Block listing",
+    "noAccess": "No access: this section is for moderators only.",
+    "tabs": {
+      "OPEN": "Open",
+      "ACTIONED": "Actioned",
+      "DISMISSED": "Dismissed"
+    },
+    "empty": {
+      "OPEN": "No open reports.",
+      "ACTIONED": "Reports that led to a blocked listing appear here.",
+      "DISMISSED": "No dismissed reports."
+    }
   }
 }

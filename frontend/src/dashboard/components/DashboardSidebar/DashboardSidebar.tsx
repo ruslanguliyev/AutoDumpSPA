@@ -6,13 +6,15 @@ import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
+import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import clsx from 'clsx';
 
 export function DashboardSidebar() {
   const { t } = useTranslation('dashboard');
   const activeProfile = useActiveProfile();
   const { sidebarCollapsed, toggleSidebar } = useDashboardUIStore();
-  const items = getSidebarNavItems(activeProfile);
+  const isAdmin = useAuthStore((s) => s.user?.role === 'ADMIN');
+  const items = getSidebarNavItems(activeProfile, isAdmin);
 
   return (
     <aside
