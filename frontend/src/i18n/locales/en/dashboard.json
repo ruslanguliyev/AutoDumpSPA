@@ -214,6 +214,23 @@
       "OPEN": "No open reports.",
       "ACTIONED": "Reports that led to a blocked listing appear here.",
       "DISMISSED": "No dismissed reports."
+    },
+    "sections": {
+      "reports": "Reports",
+      "verification": "Verification"
+    },
+    "verification": {
+      "hint": "Verified profiles get a badge in the catalogue. Check documents or the business in person before granting it.",
+      "kind": {
+        "SPECIALIST": "Specialists",
+        "SERVICE_CENTER": "Service centers",
+        "SELLER": "Sellers"
+      },
+      "search": "Search by name",
+      "empty": "Nothing found.",
+      "verified": "Verified",
+      "grant": "Verify",
+      "revoke": "Remove badge"
     }
   },
   "rentSearch": {

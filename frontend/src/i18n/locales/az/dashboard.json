@@ -214,6 +214,23 @@
       "OPEN": "Açıq şikayət yoxdur.",
       "ACTIONED": "Elanın bloklanmasına səbəb olan şikayətlər burada görünür.",
       "DISMISSED": "Rədd edilmiş şikayət yoxdur."
+    },
+    "sections": {
+      "reports": "Şikayətlər",
+      "verification": "Təsdiq"
+    },
+    "verification": {
+      "hint": "Təsdiqlənmiş profillər kataloqda nişan alır. Nişan verməzdən əvvəl sənədləri və ya biznesi şəxsən yoxlayın.",
+      "kind": {
+        "SPECIALIST": "Ustalar",
+        "SERVICE_CENTER": "Servislər",
+        "SELLER": "Satıcılar"
+      },
+      "search": "Ada görə axtar",
+      "empty": "Heç nə tapılmadı.",
+      "verified": "Təsdiqlənib",
+      "grant": "Təsdiq et",
+      "revoke": "Nişanı götür"
     }
   },
   "rentSearch": {

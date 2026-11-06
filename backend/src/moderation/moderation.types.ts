@@ -1,4 +1,5 @@
-import { Field, InputType, ObjectType, registerEnumType, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, ObjectType, registerEnumType, Int } from '@nestjs/graphql';
+import { ReviewTargetType } from '../reviews/review.types';
 import { ReportReason, ReportStatus, ListingStatus } from '@prisma/client';
 
 registerEnumType(ReportReason, { name: 'ReportReason' });
@@ -60,4 +61,32 @@ export class ReportObject {
 
   @Field()
   createdAt: Date;
+}
+
+/** A seller, specialist or service center as an administrator sees it when verifying profiles. */
+@ObjectType()
+export class AdminProfileObject {
+  @Field()
+  id: string;
+
+  @Field(() => ReviewTargetType)
+  targetType: ReviewTargetType;
+
+  @Field()
+  name: string;
+
+  @Field()
+  city: string;
+
+  @Field(() => String, { nullable: true })
+  slug: string | null;
+
+  @Field(() => Float)
+  rating: number;
+
+  @Field(() => Int)
+  reviewsCount: number;
+
+  @Field()
+  verified: boolean;
 }

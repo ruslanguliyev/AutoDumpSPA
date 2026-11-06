@@ -1,12 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ReportStatus } from '@prisma/client';
 import { AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { AdminGuard } from '../common/guards/admin.guard';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
 import { ModerationService } from './moderation.service';
-import { ReportListingInput, ReportObject } from './moderation.types';
+import { ReviewTargetType } from '../reviews/review.types';
+import { AdminProfileObject, ReportListingInput, ReportObject } from './moderation.types';
 
 @Resolver()
 export class ModerationResolver {
@@ -44,5 +45,25 @@ export class ModerationResolver {
   @Mutation(() => Boolean)
   unblockListing(@Args('listingId') listingId: string) {
     return this.moderationService.unblockListing(listingId);
+  }
+
+  @UseGuards(AdminGuard)
+  @Query(() => [AdminProfileObject])
+  adminProfiles(
+    @Args('targetType', { type: () => ReviewTargetType }) targetType: ReviewTargetType,
+    @Args('search', { type: () => String, nullable: true }) search?: string | null,
+    @Args('limit', { type: () => Int, nullable: true }) limit?: number | null,
+  ) {
+    return this.moderationService.listProfiles(targetType, search, limit ?? undefined);
+  }
+
+  @UseGuards(AdminGuard)
+  @Mutation(() => Boolean)
+  setProfileVerified(
+    @Args('targetType', { type: () => ReviewTargetType }) targetType: ReviewTargetType,
+    @Args('targetId') targetId: string,
+    @Args('verified') verified: boolean,
+  ) {
+    return this.moderationService.setVerified(targetType, targetId, verified);
   }
 }

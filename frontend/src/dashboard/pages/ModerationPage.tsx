@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
 import { moderationApi } from '@/features/moderation/api/moderation.api';
+import { VerificationPanel } from '@/features/moderation/components/VerificationPanel';
 import type { Report, ReportStatus } from '@/features/moderation/api/moderation.api';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
@@ -125,6 +126,7 @@ function ReportCard({ report, onChanged }: { report: Report; onChanged: () => vo
 export function ModerationPage() {
   const { t } = useTranslation('dashboard');
   const queryClient = useQueryClient();
+  const [section, setSection] = useState<'reports' | 'verification'>('reports');
   const [tab, setTab] = useState<ReportStatus>('OPEN');
   const reports = useQuery({ queryKey: ['moderation', 'reports', tab], queryFn: () => moderationApi.reports(tab) });
 
@@ -135,7 +137,26 @@ export function ModerationPage() {
     <div className="space-y-8">
       <DashboardHeader title={t('moderation.title')} subtitle={t('moderation.subtitle')} />
 
-      <div className="flex flex-wrap gap-2" role="tablist">
+      <div className="flex gap-6 border-b border-border" role="tablist">
+        {(['reports', 'verification'] as const).map((key) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={section === key}
+            onClick={() => setSection(key)}
+            className={`-mb-px border-b-2 px-1 pb-3 text-sm font-semibold transition ${
+              section === key ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {t(`moderation.sections.${key}`)}
+          </button>
+        ))}
+      </div>
+
+      {section === 'verification' ? <VerificationPanel /> : null}
+
+      <div className={`flex flex-wrap gap-2 ${section === 'reports' ? '' : 'hidden'}`} role="tablist">
         {TABS.map((status) => (
           <button
             key={status}
@@ -152,7 +173,7 @@ export function ModerationPage() {
         ))}
       </div>
 
-      {reports.isLoading ? (
+      {section !== 'reports' ? null : reports.isLoading ? (
         <CardWrapper className="py-16 text-center text-muted-foreground">{t('listings.loading')}</CardWrapper>
       ) : reports.error ? (
         <CardWrapper className="py-16 text-center text-destructive">

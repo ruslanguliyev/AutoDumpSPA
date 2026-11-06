@@ -10,6 +10,18 @@ export const REPORT_REASONS = [
 ] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];
 
+export type ProfileKind = 'SPECIALIST' | 'SERVICE_CENTER' | 'SELLER';
+export type AdminProfile = {
+  id: string;
+  targetType: ProfileKind;
+  name: string;
+  city: string;
+  slug: string | null;
+  rating: number;
+  reviewsCount: number;
+  verified: boolean;
+};
+
 export type ReportStatus = 'OPEN' | 'ACTIONED' | 'DISMISSED';
 
 export type Report = {
@@ -57,4 +69,22 @@ export const moderationApi = {
 
   unblock: (listingId: string) =>
     gqlRequest(`mutation($listingId: String!) { unblockListing(listingId: $listingId) }`, { listingId }),
+
+  profiles: (targetType: ProfileKind, search: string) =>
+    gqlRequest<{ adminProfiles: AdminProfile[] }>(
+      `query($targetType: ReviewTargetType!, $search: String) {
+        adminProfiles(targetType: $targetType, search: $search, limit: 100) {
+          id targetType name city slug rating reviewsCount verified
+        }
+      }`,
+      { targetType, search: search.trim() || null },
+    ).then((d) => d.adminProfiles),
+
+  setVerified: (targetType: ProfileKind, targetId: string, verified: boolean) =>
+    gqlRequest(
+      `mutation($targetType: ReviewTargetType!, $targetId: String!, $verified: Boolean!) {
+        setProfileVerified(targetType: $targetType, targetId: $targetId, verified: $verified)
+      }`,
+      { targetType, targetId, verified },
+    ),
 };

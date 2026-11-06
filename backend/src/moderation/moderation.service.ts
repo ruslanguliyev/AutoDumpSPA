@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { ListingStatus, Prisma, ReportStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { ReportListingInput } from './moderation.types';
+import { ReviewTargetType } from '../reviews/review.types';
+import { AdminProfileObject, ReportListingInput } from './moderation.types';
 
 const MAX_DETAILS_LENGTH = 1000;
 const MAX_REASON_NOTE_LENGTH = 500;
@@ -159,5 +160,39 @@ export class ModerationService {
         createdAt: r.createdAt,
       };
     });
+  }
+
+  /** Profiles (newest first) an administrator can verify; `search` matches the name. */
+  async listProfiles(type: ReviewTargetType, search?: string | null, limit = 50): Promise<AdminProfileObject[]> {
+    const take = Math.min(Math.max(Math.trunc(limit) || 50, 1), 100);
+    const q = search?.trim();
+    const where = q ? { name: { contains: q, mode: 'insensitive' as const } } : {};
+    const args = { where, orderBy: { createdAt: 'desc' as const }, take };
+
+    if (type === ReviewTargetType.SELLER) {
+      const rows = await this.prisma.seller.findMany(args);
+      return rows.map((r) => ({ ...r, targetType: type, slug: null }));
+    }
+    if (type === ReviewTargetType.SPECIALIST) {
+      const rows = await this.prisma.specialist.findMany(args);
+      return rows.map((r) => ({ ...r, targetType: type }));
+    }
+    const rows = await this.prisma.serviceCenter.findMany(args);
+    return rows.map((r) => ({ ...r, targetType: type }));
+  }
+
+  async setVerified(type: ReviewTargetType, id: string, verified: boolean): Promise<boolean> {
+    const data = { verified };
+    try {
+      if (type === ReviewTargetType.SELLER) await this.prisma.seller.update({ where: { id }, data });
+      else if (type === ReviewTargetType.SPECIALIST) await this.prisma.specialist.update({ where: { id }, data });
+      else await this.prisma.serviceCenter.update({ where: { id }, data });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException('Profile not found');
+      }
+      throw error;
+    }
+    return true;
   }
 }
