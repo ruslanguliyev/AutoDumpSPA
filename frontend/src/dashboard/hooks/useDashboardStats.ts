@@ -11,7 +11,7 @@ export function useDashboardStats() {
 
   const query = useQuery({
     queryKey: [...DASHBOARD_STATS_QUERY_KEY, activeProfile],
-    queryFn: () => dashboardApi.getStats(activeProfile),
+    queryFn: () => dashboardApi.getStats(),
     staleTime: 30_000,
   });
 

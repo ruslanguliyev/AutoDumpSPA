@@ -1,32 +1,11 @@
 import { gqlRequest } from '@/lib/graphql';
+import { listingsApi } from '@/dashboard/api/listings.api';
+import { inquiriesApi } from '@/features/inquiries/api/inquiries.api';
 import type {
-  ActiveProfile,
-  DashboardStats,
+  ActivityItem,
   DashboardActivity,
-  PerformanceChartData,
-  RevenueData,
-  ServiceBookingsData,
+  DashboardStats,
 } from '@/dashboard/types/dashboard.types';
-
-const GET_LISTINGS_STATS = `
-  query GetListingsStats($filter: ListingsFilterInput) {
-    listings(filter: $filter, page: 1, perPage: 1000) {
-      items {
-        id
-        status
-      }
-      total
-    }
-  }
-`;
-
-const MY_SELLER = `
-  query MySeller {
-    mySeller {
-      id
-    }
-  }
-`;
 
 const MY_BIDS = `
   query MyBids {
@@ -39,17 +18,6 @@ const MY_BIDS = `
   }
 `;
 
-type ListingsStatsResponse = {
-  listings: {
-    items: Array<{ id: string; status: string }>;
-    total: number;
-  };
-};
-
-type MySellerResponse = {
-  mySeller: { id: string } | null;
-};
-
 type MyBidsResponse = {
   myBids: Array<{
     id: string;
@@ -59,128 +27,62 @@ type MyBidsResponse = {
   }>;
 };
 
-function buildStats(activeCount: number, draftCount: number): DashboardStats {
-  return {
-    stats: [
-      {
-        id: 'activeListings',
-        labelKey: 'stats.activeListings',
-        value: activeCount,
-        icon: 'car',
-      },
-      {
-        id: 'pendingModeration',
-        labelKey: 'stats.pendingModeration',
-        value: draftCount,
-        icon: 'clock',
-      },
-      {
-        id: 'totalViews',
-        labelKey: 'stats.totalViews',
-        value: 0,
-        icon: 'eye',
-      },
-      {
-        id: 'favorites',
-        labelKey: 'stats.favorites',
-        value: 0,
-        icon: 'heart',
-      },
-      {
-        id: 'messages',
-        labelKey: 'stats.messages',
-        value: 0,
-        icon: 'message',
-      },
-    ],
-  };
-}
+const toIso = (value: string | number | Date): string =>
+  typeof value === 'string' ? value : new Date(value).toISOString();
 
-const mockChartData = (): PerformanceChartData => {
-  const days = 14;
-  const series: PerformanceChartData['series'] = [];
-  for (let i = days - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    series.push({
-      date: d.toISOString().slice(0, 10),
-      value: Math.round(80 + Math.random() * 120 + Math.sin(i * 0.5) * 30),
-    });
-  }
-  return { series };
-};
+const snippet = (text: string, max = 60): string =>
+  text.length > max ? `${text.slice(0, max).trimEnd()}…` : text;
 
 export const dashboardApi = {
-  async getStats(profile: ActiveProfile): Promise<DashboardStats> {
-    try {
-      let sellerId: string | null = null;
+  /** Every number comes from the backend; nothing here is estimated. */
+  async getStats(): Promise<DashboardStats> {
+    const [listings, unreadInquiries] = await Promise.all([
+      listingsApi.mine(),
+      inquiriesApi.unreadCount(),
+    ]);
 
-      if (profile.type === 'seller' || profile.type === 'service') {
-        sellerId = profile.id;
-      } else {
-        const sellerData = await gqlRequest<MySellerResponse>(MY_SELLER);
-        sellerId = sellerData.mySeller?.id ?? null;
-        if (!sellerId) {
-          return { stats: [] };
-        }
-      }
+    const activeListings = listings.filter((l) => l.status === 'ACTIVE').length;
+    const drafts = listings.filter((l) => l.status === 'DRAFT').length;
+    const favorites = listings.reduce((sum, l) => sum + l.favoritesCount, 0);
 
-      const data = await gqlRequest<ListingsStatsResponse>(GET_LISTINGS_STATS, {
-        filter: { sellerId },
-      });
-
-      const items = data.listings?.items ?? [];
-      const activeCount = items.filter((i) => i.status === 'ACTIVE').length;
-      const draftCount = items.filter((i) => i.status === 'DRAFT').length;
-
-      return buildStats(activeCount, draftCount);
-    } catch {
-      return { stats: [] };
-    }
+    return {
+      stats: [
+        { id: 'activeListings', labelKey: 'stats.activeListings', value: activeListings, icon: 'car' },
+        { id: 'drafts', labelKey: 'stats.drafts', value: drafts, icon: 'clock' },
+        { id: 'favorites', labelKey: 'stats.favorites', value: favorites, icon: 'heart' },
+        { id: 'unreadInquiries', labelKey: 'stats.unreadInquiries', value: unreadInquiries, icon: 'message' },
+      ],
+    };
   },
 
-  async getActivity(_profile: ActiveProfile): Promise<DashboardActivity> {
-    try {
-      const data = await gqlRequest<MyBidsResponse>(MY_BIDS);
-      const bids = data.myBids ?? [];
-      return {
-        items: bids.map((bid) => ({
-          id: bid.id,
-          type: 'bid' as const,
-          title: 'activity.newBid',
-          subtitle: `${bid.amount} AZN`,
-          timestamp:
-            typeof bid.createdAt === 'string'
-              ? bid.createdAt
-              : new Date(bid.createdAt).toISOString(),
-        })),
-      };
-    } catch {
-      return { items: [] };
-    }
-  },
+  /** Latest inquiries received by the seller plus the user's own bids, newest first. */
+  async getActivity(): Promise<DashboardActivity> {
+    const [inquiries, bids] = await Promise.all([
+      inquiriesApi.received().catch(() => []),
+      gqlRequest<MyBidsResponse>(MY_BIDS)
+        .then((data) => data.myBids ?? [])
+        .catch(() => []),
+    ]);
 
-  async getPerformanceChart(_profile: ActiveProfile): Promise<PerformanceChartData> {
-    try {
-      return mockChartData();
-    } catch {
-      return { series: [] };
-    }
-  },
+    const items: ActivityItem[] = [
+      ...inquiries.map<ActivityItem>((inquiry) => ({
+        id: `inquiry-${inquiry.id}`,
+        type: 'message' as const,
+        title: 'activity.newInquiry',
+        subtitle: `${inquiry.listingTitle}: ${snippet(inquiry.message)}`,
+        timestamp: toIso(inquiry.createdAt),
+      })),
+      ...bids.map<ActivityItem>((bid) => ({
+        id: `bid-${bid.id}`,
+        type: 'bid' as const,
+        title: 'activity.newBid',
+        subtitle: `${bid.amount} AZN`,
+        timestamp: toIso(bid.createdAt),
+      })),
+    ];
 
-  async getRevenue(_profile: ActiveProfile): Promise<RevenueData> {
-    try {
-      return { total: 0, period: 'month' };
-    } catch {
-      return { total: 0, period: 'month' };
-    }
-  },
-
-  async getServiceBookings(_profile: ActiveProfile): Promise<ServiceBookingsData> {
-    try {
-      return { upcoming: 0, completed: 0, cancelled: 0 };
-    } catch {
-      return { upcoming: 0, completed: 0, cancelled: 0 };
-    }
+    return {
+      items: items.sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
+    };
   },
 };

@@ -4,16 +4,14 @@
   },
   "overview": {
     "title": "Ümumi baxış",
-    "subtitle": "Fəaliyyətinizin ümumi görünüşü"
+    "subtitle": "Fəaliyyətinizin ümumi görünüşü",
+    "statsError": "Statistikanı yükləmək alınmadı"
   },
   "stats": {
     "activeListings": "Aktiv elanlar",
-    "totalViews": "Baxışlar (7 gün)",
-    "pendingModeration": "Moderasiyada",
     "favorites": "Seçilmişlər",
-    "messages": "Mesajlar",
-    "revenue": "Gəlir",
-    "vsLastMonth": "keçən aya nisbətən"
+    "drafts": "Qaralamalar",
+    "unreadInquiries": "Yeni müraciətlər"
   },
   "activity": {
     "title": "Son fəaliyyət",
@@ -23,27 +21,14 @@
     "newMessage": "Yeni mesaj",
     "listingApproved": "Elan təsdiqləndi",
     "listingPublished": "Elan dərc edildi",
-    "addedToFavorites": "Seçilmişlərə əlavə edildi"
-  },
-  "chart": {
-    "title": "Səmərəlilik",
-    "empty": "Hələ məlumat yoxdur"
-  },
-  "revenue": {
-    "title": "Gəlir",
-    "period": "Bu {{period}}"
-  },
-  "serviceBookings": {
-    "title": "Qeydiyyatlar",
-    "upcoming": "Gələn",
-    "completed": "Tamamlandı",
-    "cancelled": "Ləğv edildi"
+    "addedToFavorites": "Seçilmişlərə əlavə edildi",
+    "newInquiry": "Yeni müraciət"
   },
   "quickActions": {
     "title": "Sürətli hərəkətlər",
-    "addVehicle": "Avtomobil əlavə et",
-    "addService": "Xidmət əlavə et",
-    "boostListing": "Elanı gücləndir"
+    "createListing": "Elan yarat",
+    "openInquiries": "Müraciətlər",
+    "openFavorites": "Seçilmişlər"
   },
   "profileSwitcher": {
     "ariaLabel": "Profili dəyiş",

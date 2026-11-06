@@ -4,16 +4,14 @@
   },
   "overview": {
     "title": "Обзор",
-    "subtitle": "Ваша активность в одном месте"
+    "subtitle": "Ваша активность в одном месте",
+    "statsError": "Не удалось загрузить статистику"
   },
   "stats": {
     "activeListings": "Активные объявления",
-    "totalViews": "Просмотры (7 дн.)",
-    "pendingModeration": "На модерации",
     "favorites": "Избранное",
-    "messages": "Сообщения",
-    "revenue": "Доход",
-    "vsLastMonth": "к прошлому месяцу"
+    "drafts": "Черновики",
+    "unreadInquiries": "Новые обращения"
   },
   "activity": {
     "title": "Недавняя активность",
@@ -23,27 +21,14 @@
     "newMessage": "Новое сообщение",
     "listingApproved": "Объявление одобрено",
     "listingPublished": "Объявление опубликовано",
-    "addedToFavorites": "Добавлено в избранное"
-  },
-  "chart": {
-    "title": "Эффективность",
-    "empty": "Пока нет данных"
-  },
-  "revenue": {
-    "title": "Доход",
-    "period": "За {{period}}"
-  },
-  "serviceBookings": {
-    "title": "Записи",
-    "upcoming": "Предстоящие",
-    "completed": "Выполнено",
-    "cancelled": "Отменено"
+    "addedToFavorites": "Добавлено в избранное",
+    "newInquiry": "Новое обращение"
   },
   "quickActions": {
     "title": "Быстрые действия",
-    "addVehicle": "Добавить авто",
-    "addService": "Добавить услугу",
-    "boostListing": "Продвинуть объявление"
+    "createListing": "Создать объявление",
+    "openInquiries": "Обращения",
+    "openFavorites": "Избранное"
   },
   "profileSwitcher": {
     "ariaLabel": "Переключить профиль",

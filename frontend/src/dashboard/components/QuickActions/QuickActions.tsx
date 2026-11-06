@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Wrench, Zap } from 'lucide-react';
+import { Heart, MessageSquare, Plus } from 'lucide-react';
 
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
@@ -11,9 +11,9 @@ type QuickAction = {
 };
 
 const baseActions: QuickAction[] = [
-  { key: 'quickActions.addVehicle', icon: Plus, to: '/add' },
-  { key: 'quickActions.addService', icon: Wrench, to: '/add' },
-  { key: 'quickActions.boostListing', icon: Zap, to: '/dashboard' },
+  { key: 'quickActions.createListing', icon: Plus, to: '/add' },
+  { key: 'quickActions.openInquiries', icon: MessageSquare, to: '/dashboard/inquiries' },
+  { key: 'quickActions.openFavorites', icon: Heart, to: '/dashboard/favorites' },
 ];
 
 type QuickActionsProps = {

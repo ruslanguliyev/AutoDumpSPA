@@ -47,14 +47,7 @@ export function StatCard({ stat, isLoading }: StatCardProps) {
 
   if (isLoading) return <StatCardSkeleton />;
 
-  const valueFormatted =
-    stat.id === 'revenue'
-      ? new Intl.NumberFormat(undefined, {
-          style: 'currency',
-          currency: 'AZN',
-          maximumFractionDigits: 0,
-        }).format(stat.value ?? 0)
-      : formatNumber(stat.value);
+  const valueFormatted = formatNumber(stat.value);
 
   const changePositive = (stat.change ?? 0) > 0;
   const changeNeutral = (stat.change ?? 0) === 0;

@@ -10,7 +10,7 @@ export function useDashboardActivity() {
 
   const query = useQuery({
     queryKey: [...DASHBOARD_ACTIVITY_QUERY_KEY, activeProfile],
-    queryFn: () => dashboardApi.getActivity(activeProfile),
+    queryFn: () => dashboardApi.getActivity(),
     staleTime: 30_000,
   });
 

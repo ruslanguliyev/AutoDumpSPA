@@ -4,16 +4,14 @@
   },
   "overview": {
     "title": "Overview",
-    "subtitle": "Your activity at a glance"
+    "subtitle": "Your activity at a glance",
+    "statsError": "Failed to load statistics"
   },
   "stats": {
     "activeListings": "Active Listings",
-    "totalViews": "Total Views (7d)",
-    "pendingModeration": "Pending Moderation",
     "favorites": "Favorites",
-    "messages": "Messages",
-    "revenue": "Revenue",
-    "vsLastMonth": "vs last month"
+    "drafts": "Drafts",
+    "unreadInquiries": "New inquiries"
   },
   "activity": {
     "title": "Recent Activity",
@@ -23,27 +21,14 @@
     "newMessage": "New message",
     "listingApproved": "Listing approved",
     "listingPublished": "Listing published",
-    "addedToFavorites": "Added to favorites"
-  },
-  "chart": {
-    "title": "Performance",
-    "empty": "No data yet"
-  },
-  "revenue": {
-    "title": "Revenue",
-    "period": "This {{period}}"
-  },
-  "serviceBookings": {
-    "title": "Bookings",
-    "upcoming": "Upcoming",
-    "completed": "Completed",
-    "cancelled": "Cancelled"
+    "addedToFavorites": "Added to favorites",
+    "newInquiry": "New inquiry"
   },
   "quickActions": {
     "title": "Quick Actions",
-    "addVehicle": "Add vehicle",
-    "addService": "Add service",
-    "boostListing": "Boost listing"
+    "createListing": "Create listing",
+    "openInquiries": "Inquiries",
+    "openFavorites": "Favorites"
   },
   "profileSwitcher": {
     "ariaLabel": "Switch profile",

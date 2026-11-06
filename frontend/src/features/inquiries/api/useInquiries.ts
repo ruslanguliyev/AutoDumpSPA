@@ -35,7 +35,10 @@ export const useMarkInquiryRead = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: inquiriesApi.markRead,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['inquiries'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['inquiries'] });
+      qc.invalidateQueries({ queryKey: ['dashboard'] });
+    },
   });
 };
 

@@ -3,13 +3,7 @@ export type ActiveProfile =
   | { type: 'seller'; id: string }
   | { type: 'service'; id: string };
 
-export type DashboardStatId =
-  | 'activeListings'
-  | 'totalViews'
-  | 'pendingModeration'
-  | 'favorites'
-  | 'messages'
-  | 'revenue';
+export type DashboardStatId = 'activeListings' | 'drafts' | 'favorites' | 'unreadInquiries';
 
 export type DashboardStat = {
   id: DashboardStatId;
@@ -23,16 +17,11 @@ export type DashboardStat = {
 export type ActivityItem = {
   id: string;
   type: 'listing' | 'view' | 'bid' | 'message' | 'moderation' | 'favorite' | 'booking';
+  /** Translation key inside the `dashboard` namespace. */
   title: string;
   subtitle?: string;
   timestamp: string;
   meta?: Record<string, string | number>;
-};
-
-export type ChartDataPoint = {
-  date: string;
-  value: number;
-  label?: string;
 };
 
 export type DashboardStats = {
@@ -41,20 +30,4 @@ export type DashboardStats = {
 
 export type DashboardActivity = {
   items: ActivityItem[];
-};
-
-export type PerformanceChartData = {
-  series: ChartDataPoint[];
-};
-
-export type RevenueData = {
-  total: number;
-  period: string;
-  breakdown?: { label: string; value: number }[];
-};
-
-export type ServiceBookingsData = {
-  upcoming: number;
-  completed: number;
-  cancelled: number;
 };
