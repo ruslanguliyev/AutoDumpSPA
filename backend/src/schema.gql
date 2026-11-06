@@ -97,7 +97,6 @@ input CreateServiceCenterInput {
   logoUrl: String
   name: String!
   phone: String
-  reviewsCount: Int
   schedule: JSON
   services: [CreateServiceCenterServiceInput!]
   slug: String
@@ -289,6 +288,7 @@ type Mutation {
   decideRental(confirm: Boolean!, id: String!): RentalBookingObject!
   deleteListing(id: String!): Boolean!
   deletePart(id: String!): Boolean!
+  deleteReview(id: String!): Boolean!
   deleteService(id: String!): Boolean!
   deleteVehicle(id: String!): Boolean!
   dismissReport(id: String!): Boolean!
@@ -304,6 +304,7 @@ type Mutation {
   requestRental(input: RequestRentalInput!): RentalBookingObject!
   setRentalTerms(input: RentalTermsInput!, listingId: String!): Boolean!
   startAuction(id: String!): AuctionObject!
+  submitReview(input: SubmitReviewInput!): ReviewObject!
   syncFavorites(items: [FavoriteRefInput!]!): Int!
   unblockListing(listingId: String!): Boolean!
   unpublishListing(id: String!): ListingObject!
@@ -426,6 +427,7 @@ type Query {
   rentalAvailability(from: String, listingId: String!, to: String): [UnavailableRangeObject!]!
   rentalBlocks(listingId: String!): [RentalBlockObject!]!
   reports(status: ReportStatus = OPEN): [ReportObject!]!
+  reviews(limit: Int, offset: Int, targetId: String!, targetType: ReviewTargetType!): ReviewListObject!
   sellerById(id: String!): SellerObject!
   sellers: [SellerObject!]!
   sentInquiries: [InquiryObject!]!
@@ -542,6 +544,28 @@ input RequestRentalInput {
   startDate: String!
 }
 
+type ReviewListObject {
+  average: Float!
+  distribution: [Int!]!
+  items: [ReviewObject!]!
+  total: Int!
+}
+
+type ReviewObject {
+  authorName: String!
+  comment: String
+  createdAt: DateTime!
+  id: String!
+  mine: Boolean!
+  rating: Int!
+}
+
+enum ReviewTargetType {
+  SELLER
+  SERVICE_CENTER
+  SPECIALIST
+}
+
 type SellerObject {
   city: String!
   contactEmail: String
@@ -551,6 +575,7 @@ type SellerObject {
   name: String!
   phone: String
   rating: Float!
+  reviewsCount: Int!
   showPhone: Boolean!
   type: SellerType!
   updatedAt: DateTime!
@@ -662,6 +687,13 @@ input SpecialistsFilterInput {
   specializations: [String!]
 }
 
+input SubmitReviewInput {
+  comment: String
+  rating: Int!
+  targetId: String!
+  targetType: ReviewTargetType!
+}
+
 type UnavailableRangeObject {
   endDate: String!
   reason: String!
@@ -716,7 +748,6 @@ input UpdateServiceCenterInput {
   logoUrl: String
   name: String
   phone: String
-  reviewsCount: Int
   schedule: JSON
   services: [CreateServiceCenterServiceInput!]
   slug: String

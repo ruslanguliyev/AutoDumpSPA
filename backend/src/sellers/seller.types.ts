@@ -37,6 +37,9 @@ export class SellerObject {
   @Field()
   rating: number;
 
+  @Field(() => Int)
+  reviewsCount: number;
+
   @Field()
   verified: boolean;
 

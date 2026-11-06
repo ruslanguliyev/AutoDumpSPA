@@ -82,6 +82,7 @@ model User {
   inquiries      Inquiry[]
   reports        Report[]
   rentalBookings RentalBooking[]
+  reviews        Review[]
 }
 
 model Seller {
@@ -95,13 +96,16 @@ model Seller {
   showPhone    Boolean    @default(true)
   /// Contact email for the seller's own use (never shown publicly)
   contactEmail String?
-  rating       Float
+  /// Average of the reviews (0 while there are none), kept in sync by the reviews service
+  rating       Float      @default(0)
+  reviewsCount Int        @default(0)
   verified     Boolean    @default(false)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   listings Listing[]
+  reviews  Review[]
 }
 
 model Listing {
@@ -231,6 +235,7 @@ model ServiceCenter {
 
   user     User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   services ServiceCenterService[]
+  reviews  Review[]
 }
 
 model ServiceCenterService {
@@ -276,6 +281,7 @@ model Specialist {
 
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   supportedVehicles SpecialistVehicle[]
+  reviews           Review[]
 }
 
 model SpecialistVehicle {
@@ -287,6 +293,32 @@ model SpecialistVehicle {
   yearTo       Int?
 
   specialist Specialist @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+}
+
+/// A 1-5 star review of a seller, specialist or service center. Exactly one target is set
+/// (enforced by a CHECK constraint) and every author can review a target once.
+model Review {
+  id              String   @id @default(cuid())
+  authorId        String
+  sellerId        String?
+  specialistId    String?
+  serviceCenterId String?
+  rating          Int
+  comment         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  author        User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  seller        Seller?        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  specialist    Specialist?    @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  serviceCenter ServiceCenter? @relation(fields: [serviceCenterId], references: [id], onDelete: Cascade)
+
+  @@unique([authorId, sellerId])
+  @@unique([authorId, specialistId])
+  @@unique([authorId, serviceCenterId])
+  @@index([sellerId, createdAt])
+  @@index([specialistId, createdAt])
+  @@index([serviceCenterId, createdAt])
 }
 
 model Image {

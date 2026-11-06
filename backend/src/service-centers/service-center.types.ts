@@ -195,9 +195,6 @@ export class CreateServiceCenterInput {
   @Field(() => [String], { nullable: true })
   supportedBrands?: string[];
 
-  @Field(() => Int, { nullable: true })
-  reviewsCount?: number;
-
   @Field({ nullable: true })
   verified?: boolean;
 
@@ -260,9 +257,6 @@ export class UpdateServiceCenterInput {
 
   @Field(() => [String], { nullable: true })
   supportedBrands?: string[];
-
-  @Field(() => Int, { nullable: true })
-  reviewsCount?: number;
 
   @Field({ nullable: true })
   verified?: boolean;

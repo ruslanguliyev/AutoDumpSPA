@@ -130,7 +130,7 @@ export class ServiceCentersService {
           categories: input.categories ?? [],
           supportedBrands: input.supportedBrands ?? [],
           rating: 0,
-          reviewsCount: input.reviewsCount ?? 0,
+          reviewsCount: 0,
           verified: input.verified ?? false,
           isActive: input.isActive ?? true,
           ...(input.schedule !== undefined
@@ -191,9 +191,6 @@ export class ServiceCentersService {
             : {}),
           ...(input.supportedBrands !== undefined
             ? { supportedBrands: input.supportedBrands }
-            : {}),
-          ...(input.reviewsCount !== undefined
-            ? { reviewsCount: input.reviewsCount }
             : {}),
           ...(input.verified !== undefined ? { verified: input.verified } : {}),
           ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
