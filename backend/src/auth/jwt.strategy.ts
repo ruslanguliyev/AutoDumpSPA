@@ -8,6 +8,8 @@ import { User } from '@prisma/client';
 export interface JwtPayload {
   sub: string;
   email: string;
+  /** Token version; tokens issued before versioning existed have none (= 0). */
+  tv?: number;
 }
 
 @Injectable()
@@ -25,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: JwtPayload): Promise<Omit<User, 'passwordHash'>> {
     const user = await this.authService.validateUserById(payload.sub);
-    if (!user) {
+    if (!user || (payload.tv ?? 0) !== user.tokenVersion) {
       throw new UnauthorizedException();
     }
     const { passwordHash: _, ...userWithoutPassword } = user;

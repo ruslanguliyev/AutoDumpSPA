@@ -125,11 +125,17 @@ export class AuthService {
     });
   }
 
+  /** Signs a token for the user's current token version. */
+  issueAuthResult(user: User): AuthResult {
+    return this.buildAuthResult(user);
+  }
+
   private buildAuthResult(user: User): AuthResult {
     const { passwordHash: _, ...userWithoutPassword } = user;
     const accessToken = this.jwtService.sign({
       sub: user.id,
       email: user.email,
+      tv: user.tokenVersion,
     });
     return {
       accessToken,

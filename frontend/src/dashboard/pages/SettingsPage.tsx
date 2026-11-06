@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
 import { settingsApi } from '@/dashboard/api/settings.api';
+import { saveAccessToken } from '@/features/auth/api/auth.storage';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { isValidPhone } from '@/features/addItem/utils/validateDraft';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
@@ -121,9 +122,13 @@ function PasswordSection() {
   const [next, setNext] = useState('');
   const [confirm, setConfirm] = useState('');
 
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const change = useMutation({
     mutationFn: () => settingsApi.changePassword(current, next),
-    onSuccess: () => {
+    onSuccess: (freshToken) => {
+      // The server revoked the old token; keep this browser signed in with the new one.
+      saveAccessToken(freshToken);
+      setAccessToken(freshToken);
       setCurrent('');
       setNext('');
       setConfirm('');

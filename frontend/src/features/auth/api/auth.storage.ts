@@ -51,6 +51,11 @@ const ME_QUERY = `
   }
 `;
 
+export const saveAccessToken = (token: string) => {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(TOKEN_KEY, token);
+};
+
 export const clearAuthSession = () => {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(TOKEN_KEY);

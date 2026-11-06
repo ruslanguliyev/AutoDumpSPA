@@ -261,7 +261,7 @@ input ListingsFilterInput {
 
 type Mutation {
   addFavorite(itemId: String!, type: String!): Boolean!
-  changePassword(input: ChangePasswordInput!): Boolean!
+  changePassword(input: ChangePasswordInput!): AuthPayload!
   closeListing(id: String!): ListingObject!
   createAuction(input: CreateAuctionInput!): AuctionObject!
   createInquiry(input: CreateInquiryInput!): InquiryObject!

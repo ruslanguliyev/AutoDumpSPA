@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthUser } from '../auth/auth.types';
+import { AuthResult } from '../auth/auth.service';
+import { AuthPayload, AuthUser } from '../auth/auth.types';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
 import { ChangePasswordInput, UpdateProfileInput, UserObject } from './user.types';
@@ -26,11 +27,12 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Boolean)
+  /** Returns a new token: the old one (and every other session) stops working. */
+  @Mutation(() => AuthPayload)
   async changePassword(
     @CurrentUser() user: AuthUser,
     @Args('input') input: ChangePasswordInput,
-  ): Promise<boolean> {
+  ): Promise<AuthResult> {
     return this.usersService.changePassword(user.id, input);
   }
 }

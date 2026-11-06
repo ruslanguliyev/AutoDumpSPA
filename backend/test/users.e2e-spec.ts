@@ -8,7 +8,7 @@ describe('account settings', () => {
   afterAll(() => ctx.close());
 
   const UPDATE = `mutation($n: String!) { updateProfile(input: { fullName: $n }) { fullName email } }`;
-  const CHANGE = `mutation($c: String!, $n: String!) { changePassword(input: { currentPassword: $c, newPassword: $n }) }`;
+  const CHANGE = `mutation($c: String!, $n: String!) { changePassword(input: { currentPassword: $c, newPassword: $n }) { accessToken } }`;
   const LOGIN = `mutation($e: String!, $p: String!) { login(email: $e, password: $p) { accessToken } }`;
 
   /** A user whose email we know, so that we can log in again with a new password. */
@@ -39,10 +39,38 @@ describe('account settings', () => {
   });
 
   describe('changePassword', () => {
+    it('logs out every old session but keeps the current one via the returned token', async () => {
+      const oldToken = await newUser('sessions@test.local');
+      // a second session of the same account, e.g. another device
+      const otherDevice = (await ctx.gql(LOGIN, { e: 'sessions@test.local', p: 'Passw0rd!x' })).data.login.accessToken;
+      expect((await ctx.gql('{ me { email } }', undefined, otherDevice)).data.me.email).toBe('sessions@test.local');
+
+      const changed = await ctx.gql(CHANGE, { c: 'Passw0rd!x', n: 'Br4nd-new-pass' }, oldToken);
+      const freshToken = changed.data.changePassword.accessToken;
+
+      expect((await ctx.gql('{ me { email } }', undefined, oldToken)).errors).toBeDefined();
+      expect((await ctx.gql('{ me { email } }', undefined, otherDevice)).errors).toBeDefined();
+      expect((await ctx.gql('{ me { email } }', undefined, freshToken)).data.me.email).toBe('sessions@test.local');
+
+      // and it stays that way: a second password change works with the fresh token only
+      const again = await ctx.gql(CHANGE, { c: 'Br4nd-new-pass', n: 'Another-pass-9' }, freshToken);
+      expect(again.data.changePassword.accessToken).toEqual(expect.any(String));
+      expect((await ctx.gql('{ me { email } }', undefined, freshToken)).errors).toBeDefined();
+    });
+
+    it('still accepts tokens issued before versioning existed (no "tv" claim)', async () => {
+      const token = await newUser('legacy@test.local');
+      const user = await ctx.prisma.user.findFirstOrThrow({ where: { email: 'legacy@test.local' } });
+      const { JwtService } = await import('@nestjs/jwt');
+      const legacy = new JwtService({ secret: process.env.JWT_SECRET }).sign({ sub: user.id, email: user.email });
+      expect(token).not.toBe(legacy);
+      expect((await ctx.gql('{ me { email } }', undefined, legacy)).data.me.email).toBe('legacy@test.local');
+    });
+
     it('changes the password: the old one stops working and the new one works', async () => {
       const token = await newUser('pw@test.local');
       const res = await ctx.gql(CHANGE, { c: 'Passw0rd!x', n: 'Br4nd-new-pass' }, token);
-      expect(res.data.changePassword).toBe(true);
+      expect(res.data.changePassword.accessToken).toEqual(expect.any(String));
 
       expect((await ctx.gql(LOGIN, { e: 'pw@test.local', p: 'Passw0rd!x' })).errors).toBeDefined();
       expect((await ctx.gql(LOGIN, { e: 'pw@test.local', p: 'Br4nd-new-pass' })).data.login.accessToken).toEqual(

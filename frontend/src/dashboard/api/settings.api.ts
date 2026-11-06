@@ -32,13 +32,16 @@ export const settingsApi = {
       { fullName },
     ).then((d) => d.updateProfile),
 
+  /** Returns a fresh access token: the old one (and every other session) is revoked by the server. */
   changePassword: (currentPassword: string, newPassword: string) =>
-    gqlRequest<{ changePassword: boolean }>(
+    gqlRequest<{ changePassword: { accessToken: string } }>(
       `mutation($currentPassword: String!, $newPassword: String!) {
-        changePassword(input: { currentPassword: $currentPassword, newPassword: $newPassword })
+        changePassword(input: { currentPassword: $currentPassword, newPassword: $newPassword }) {
+          accessToken
+        }
       }`,
       { currentPassword, newPassword },
-    ).then((d) => d.changePassword),
+    ).then((d) => d.changePassword.accessToken),
 
   mySeller: () =>
     gqlRequest<{ mySeller: SellerProfile | null }>(

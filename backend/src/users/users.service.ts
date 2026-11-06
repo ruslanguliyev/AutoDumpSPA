@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthResult, AuthService } from '../auth/auth.service';
 import { FailureLimiter } from '../common/utils/failure-limiter';
 import { assertValidPassword, normalizeFullName } from '../auth/credentials';
 import { ChangePasswordInput, UpdateProfileInput } from './user.types';
@@ -21,7 +22,10 @@ export class UsersService {
   /** Someone with a stolen token must not be able to guess the current password. */
   private readonly wrongPasswords = new FailureLimiter(MAX_WRONG_CURRENT_PASSWORDS, PASSWORD_WINDOW_MS);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
 
   async getMe(userId: string) {
     const user = await this.prisma.user.findUnique({
@@ -50,7 +54,11 @@ export class UsersService {
     return userWithoutPassword;
   }
 
-  async changePassword(userId: string, input: ChangePasswordInput): Promise<boolean> {
+  /**
+   * Changes the password and logs the account out everywhere else: the token version is bumped,
+   * so every previously issued token stops working. Returns a fresh token for the current session.
+   */
+  async changePassword(userId: string, input: ChangePasswordInput): Promise<AuthResult> {
     if (this.wrongPasswords.isBlocked(userId)) {
       throw new HttpException(
         'Too many wrong attempts. Please try again in 15 minutes.',
@@ -86,11 +94,11 @@ export class UsersService {
 
     const passwordHash = await bcrypt.hash(input.newPassword, SALT_ROUNDS);
 
-    await this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: { id: userId },
-      data: { passwordHash },
+      data: { passwordHash, tokenVersion: { increment: 1 } },
     });
 
-    return true;
+    return this.authService.issueAuthResult(updated);
   }
 }
