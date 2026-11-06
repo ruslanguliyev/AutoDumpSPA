@@ -189,5 +189,21 @@
     "safetyTip2": "Inspect the car thoroughly before purchase",
     "safetyTip3": "Never pay in advance without seeing the car",
     "safetyTip4": "Check all documents carefully"
+  },
+  "reviews": {
+    "basedOn_one": "based on {{count}} review",
+    "basedOn_other": "based on {{count}} reviews",
+    "title": "Reviews",
+    "empty": "No reviews yet. Be the first to leave one.",
+    "write": "Leave a review",
+    "yourRating": "Your rating",
+    "commentPlaceholder": "Tell others about your experience (optional)",
+    "submit": "Publish review",
+    "update": "Save changes",
+    "loginToReview": "Log in to leave a review",
+    "you": "you",
+    "edit": "Edit",
+    "delete": "Delete",
+    "showMore": "Show more ({{count}})"
   }
 }

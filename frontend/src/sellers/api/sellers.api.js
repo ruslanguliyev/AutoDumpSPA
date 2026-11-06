@@ -2,7 +2,7 @@ import { gqlRequest } from '@/lib/graphql';
 const GET_SELLERS_QUERY = `
 query GetSellers {
   sellers {
-    id userId type name city phone rating verified listingsCount createdAt
+    id userId type name city phone rating reviewsCount verified listingsCount createdAt
   }
 }
 `;
@@ -10,13 +10,14 @@ query GetSellers {
 const GET_SELLER_QUERY = `
 query GetSeller($id: String!) {
   sellerById(id: $id) {
-    id userId type name city phone rating verified listingsCount createdAt
+    id userId type name city phone rating reviewsCount verified listingsCount createdAt
   }
 }
 `;
 
 const mapSeller = (row) => ({
   id: row.id,
+  userId: row.userId,
   name: row.name,
   city: row.city,
   phone: row.phone ?? null,
@@ -34,7 +35,7 @@ const mapSeller = (row) => ({
   hasPublicPage: true,
   listingsCount: row.listingsCount ?? 0,
   logo: null,
-  votes: 0,
+  votes: row.reviewsCount ?? 0,
   createdAt: row.createdAt,
 });
 

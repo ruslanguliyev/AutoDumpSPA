@@ -16,6 +16,8 @@ import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useSellerListings } from "@/sellers/hooks/useSellerListings";
 import { useDocumentTitle } from "@/shared/hooks/useDocumentTitle";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
+import { useAuthStore } from "@/features/auth/store/useAuthStore";
+import { ReviewsSection } from "@/features/reviews/components/ReviewsSection";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
 import AutoCard from "@/vehicles/components/AutoCardComponent/AutoCard";
@@ -99,6 +101,7 @@ export default function SellerDetailPage({
     seller ? s.isFavorited("seller", seller.id) : false
   );
 
+  const viewerId = useAuthStore((s) => s.user?.id);
   const ratingNumber = Number(seller?.rating);
   const ratingValue = Number.isFinite(ratingNumber) ? ratingNumber : null;
   const votesNumber = Number(seller?.votes);
@@ -536,7 +539,11 @@ export default function SellerDetailPage({
           )}
 
           {activeTab === "reviews" && (
-            <div className="seller-listings__empty">{t("detail.empty.reviewsSoon")}</div>
+            <ReviewsSection
+              targetType="SELLER"
+              targetId={seller?.id}
+              canReview={!viewerId || viewerId !== seller?.userId}
+            />
           )}
 
           {activeTab === "about" && (

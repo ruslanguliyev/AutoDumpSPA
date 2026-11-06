@@ -9,7 +9,7 @@ import SpecialistSidebarCard from '@/specialists/components/SpecialistSidebarCar
 import SpecialistGallery from '@/specialists/components/SpecialistGallery';
 import SpecialistHighlights from '@/specialists/components/SpecialistHighlights';
 import SpecialistCertifications from '@/specialists/components/SpecialistCertifications';
-import SpecialistReviewsPreview from '@/specialists/components/SpecialistReviewsPreview';
+import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { useSpecialistBySlug } from '@/specialists/hooks/useSpecialists';
 import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices';
 
@@ -84,11 +84,7 @@ const SpecialistDetailPage = () => {
 
   const primarySpecialization = specialist.specializations?.[0] ?? null;
   const certifications = specialist.certifications ?? [];
-  const reviews = specialist.reviews ?? [];
   const portfolio = specialist.portfolio ?? [];
-  const reviewsCount = Number.isFinite(specialist.reviewsCount)
-    ? Number(specialist.reviewsCount)
-    : reviews.length;
 
   return (
     <div className="w-full bg-background pb-16" data-theme="light">
@@ -117,7 +113,7 @@ const SpecialistDetailPage = () => {
               <SpecialistCertifications certifications={certifications} />
             ) : null}
 
-            <SpecialistReviewsPreview reviews={reviews} totalCount={reviewsCount} />
+            <ReviewsSection targetType="SPECIALIST" targetId={specialist.id} />
           </div>
 
           {/* ── RIGHT COLUMN (sticky) ── */}

@@ -9,7 +9,7 @@ import ServiceHeader from '@/services/components/ServiceHeader';
 import ServiceGallery from '@/services/components/ServiceGallery';
 import FullPriceList from '@/services/components/FullPriceList';
 import BrandsServiced from '@/services/components/BrandsServiced';
-import ReviewsPreview from '@/services/components/ReviewsPreview';
+import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import ServiceSidebar from '@/services/components/ServiceSidebar';
 import SpecialistCard from '@/specialists/components/SpecialistCard';
 import './ServiceDetailPage.scss';
@@ -117,10 +117,7 @@ export default function ServiceDetailPage() {
                 )}
               </div>
             </section>
-            <ReviewsPreview
-              ratingValue={ratingValue}
-              reviewsCount={reviewsCount}
-            />
+            <ReviewsSection targetType="SERVICE_CENTER" targetId={service.id} />
           </div>
 
           {/* RIGHT COLUMN - STICKY SIDEBAR */}

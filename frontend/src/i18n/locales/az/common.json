@@ -189,5 +189,21 @@
     "safetyTip2": "Alışdan əvvəl avtomobili diqqətlə yoxlayın",
     "safetyTip3": "Avtomobili görmədən əvvəl heç vaxt ödəniş etməyin",
     "safetyTip4": "Bütün sənədləri diqqətlə yoxlayın"
+  },
+  "reviews": {
+    "basedOn_one": "{{count}} rəy əsasında",
+    "basedOn_other": "{{count}} rəy əsasında",
+    "title": "Rəylər",
+    "empty": "Hələ rəy yoxdur. İlk rəyi siz yazın.",
+    "write": "Rəy yaz",
+    "yourRating": "Sizin qiymətiniz",
+    "commentPlaceholder": "Təcrübənizi bölüşün (məcburi deyil)",
+    "submit": "Rəyi dərc et",
+    "update": "Yadda saxla",
+    "loginToReview": "Rəy yazmaq üçün daxil olun",
+    "you": "siz",
+    "edit": "Dəyiş",
+    "delete": "Sil",
+    "showMore": "Daha çox göstər ({{count}})"
   }
 }
