@@ -1,4 +1,4 @@
-# AutoBAZ frontend: build the Vite app, serve it with nginx. Build context: ./frontend
+# AvtoBaz frontend: build the Vite app, serve it with nginx. Build context: ./frontend
 FROM node:24-slim AS build
 WORKDIR /app
 

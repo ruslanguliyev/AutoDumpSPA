@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="640" viewBox="0 0 1024 640" role="img" aria-label="AvtoBaz">
+  <title>AvtoBaz</title>
+  <!-- light plate so the dark lettering stays readable on dark themes -->
+  <rect width="1024" height="640" rx="56" fill="#FFFFFF"/>
+  <!-- car -->
+  <path fill="#E0422F" d="M110 345 C106 308 128 284 168 276 L292 244 C338 196 392 160 452 152 L606 152 C656 152 698 188 728 238 L792 250 C834 258 858 288 858 332 L858 352 L110 352 Z"/>
+  <path fill="#F7F1EA" d="M326 238 C358 200 402 174 452 168 L596 168 C630 168 654 192 676 238 Z"/>
+  <path fill="#F7F1EA" d="M158 296 C190 286 232 284 262 288 C246 300 200 306 158 304 Z"/>
+  <!-- wheels -->
+  <circle cx="262" cy="352" r="68" fill="#1E1E1E"/>
+  <circle cx="262" cy="352" r="30" fill="#E0422F"/>
+  <circle cx="704" cy="352" r="68" fill="#1E1E1E"/>
+  <circle cx="704" cy="352" r="30" fill="#E0422F"/>
+  <!-- price tag -->
+  <g transform="translate(760 34) rotate(8 100 150)">
+    <path fill="#F7CF4A" stroke="#1E1E1E" stroke-width="16" stroke-linejoin="round"
+          d="M100 70 L184 140 C190 146 194 154 194 162 L194 340 C194 358 180 372 162 372 L38 372 C20 372 6 358 6 340 L6 162 C6 154 10 146 16 140 Z"/>
+    <circle cx="100" cy="52" r="26" fill="none" stroke="#1E1E1E" stroke-width="14"/>
+    <circle cx="100" cy="114" r="12" fill="#1E1E1E"/>
+    <text x="100" y="300" text-anchor="middle" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-weight="900" font-size="130" fill="#1E1E1E">₼</text>
+  </g>
+  <!-- wordmark -->
+  <text x="512" y="600" text-anchor="middle" font-family="'Arial Black', Impact, Arial, Helvetica, sans-serif" font-weight="900" font-style="italic" font-size="190" letter-spacing="-4"><tspan fill="#E0422F">AVTO</tspan><tspan fill="#1E1E1E">BAZ</tspan></text>
+</svg>

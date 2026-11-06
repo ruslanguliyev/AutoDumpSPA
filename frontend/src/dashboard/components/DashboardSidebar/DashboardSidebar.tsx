@@ -26,7 +26,7 @@ export function DashboardSidebar() {
     >
       <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-4">
         {!sidebarCollapsed && (
-          <span className="text-sm font-semibold text-sidebar-foreground">AutoDump</span>
+          <span className="text-sm font-semibold text-sidebar-foreground">AvtoBaz</span>
         )}
         <button
           type="button"

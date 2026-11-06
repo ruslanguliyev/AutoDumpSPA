@@ -1,4 +1,4 @@
-# AUTODUMP (Vite)
+# AvtoBaz frontend (Vite)
 
 ## Local dev
 

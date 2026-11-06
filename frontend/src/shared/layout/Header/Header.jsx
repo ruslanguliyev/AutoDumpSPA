@@ -6,7 +6,7 @@ import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
 import { useTranslation } from "react-i18next";
-import logoUrl from "@/assets/images/autodump-logo.PNG";
+import logoUrl from "@/assets/images/avtobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
 import { PARTS_MEGA_MENU, AUTO_SERVICES_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
 import "./header.scss";
@@ -141,7 +141,7 @@ export default function Header() {
             <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
                 <div className="header__container">
                     <Link to="/" className="header__brand" aria-label={t('common.goHome')}>
-                        <img src={logoUrl} alt="AutoDump" className="header__logo" />
+                        <img src={logoUrl} alt="AvtoBaz" className="header__logo" />
                     </Link>
 
                     {!isMobile ? (

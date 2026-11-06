@@ -9,7 +9,7 @@ const Footer = () => {
                 {/* Верхняя строка */}
                 <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 mb-4">
                     <div className="text-foreground">
-                        <strong>AutoDump</strong> — {t('footer.tagline')}
+                        <strong>AvtoBaz</strong> — {t('footer.tagline')}
                     </div>
                 </div>
 
@@ -55,9 +55,6 @@ const Footer = () => {
                 <hr className="my-4 border-border" />
                 <div className="d-flex flex-column flex-lg-row justify-content-between gap-2 text-muted-foreground small">
                     <div>{t('footer.copyright')}</div>
-                    <div className="d-flex flex-wrap gap-3">
-                        <span className="text-muted-foreground">{t('footer.family')}</span>
-                    </div>
                 </div>
             </div>
         </footer>

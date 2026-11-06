@@ -1,4 +1,4 @@
-# AutoBAZ: database + API + website in one command.
+# AvtoBaz: database + API + website in one command.
 #
 #   cp .env.example .env     # then edit the secrets
 #   docker compose up -d --build
