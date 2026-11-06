@@ -8,7 +8,7 @@ import { DashboardHeader } from '@/dashboard/components/DashboardHeader/Dashboar
 import { settingsApi } from '@/dashboard/api/settings.api';
 import { saveAccessToken } from '@/features/auth/api/auth.storage';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
-import { isValidPhone } from '@/features/addItem/utils/validateDraft';
+import { isValidEmail, isValidPhone } from '@/features/addItem/utils/validateDraft';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
 const inputClass =
@@ -182,7 +182,7 @@ function SellerSection() {
   const errorText = useErrorText();
   const queryClient = useQueryClient();
   const seller = useQuery({ queryKey: ['settings', 'seller'], queryFn: settingsApi.mySeller });
-  const [form, setForm] = useState({ name: '', city: '', phone: '', showPhone: true });
+  const [form, setForm] = useState({ name: '', city: '', phone: '', showPhone: true, contactEmail: '' });
 
   useEffect(() => {
     if (seller.data) {
@@ -191,6 +191,7 @@ function SellerSection() {
         city: seller.data.city,
         phone: seller.data.phone ?? '',
         showPhone: seller.data.showPhone,
+        contactEmail: seller.data.contactEmail ?? '',
       });
     }
   }, [seller.data]);
@@ -218,11 +219,14 @@ function SellerSection() {
 
   const phoneTrimmed = form.phone.trim();
   const phoneInvalid = phoneTrimmed.length > 0 && !isValidPhone(phoneTrimmed);
+  const emailTrimmed = form.contactEmail.trim();
+  const emailInvalid = emailTrimmed.length > 0 && !isValidEmail(emailTrimmed);
   const nameInvalid = form.name.trim().length === 0;
   const unchanged =
     form.name.trim() === seller.data.name &&
     form.city.trim() === seller.data.city &&
     phoneTrimmed === (seller.data.phone ?? '') &&
+    emailTrimmed.toLowerCase() === (seller.data.contactEmail ?? '') &&
     form.showPhone === seller.data.showPhone;
 
   const update = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => {
@@ -232,12 +236,13 @@ function SellerSection() {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (phoneInvalid || nameInvalid || unchanged) return;
+    if (phoneInvalid || emailInvalid || nameInvalid || unchanged) return;
     save.mutate({
       name: form.name.trim(),
       city: form.city.trim(),
       phone: phoneTrimmed,
       showPhone: form.showPhone,
+      contactEmail: emailTrimmed,
     });
   };
 
@@ -264,13 +269,26 @@ function SellerSection() {
           />
           {phoneInvalid ? <p className="mt-1 text-xs text-destructive">{t('settings.seller.phoneInvalid')}</p> : null}
         </div>
+        <div className="md:col-span-2">
+          <label className={labelClass} htmlFor="seller-email">{t('settings.seller.contactEmail')}</label>
+          <input
+            id="seller-email"
+            type="email"
+            className={inputClass}
+            placeholder="sales@example.com"
+            value={form.contactEmail}
+            onChange={(e) => update('contactEmail', e.target.value)}
+          />
+          <p className="mt-1 text-xs text-muted-foreground">{t('settings.seller.contactEmailHint')}</p>
+          {emailInvalid ? <p className="mt-1 text-xs text-destructive">{t('settings.seller.emailInvalid')}</p> : null}
+        </div>
         <label className="flex items-center gap-2 text-sm text-foreground md:col-span-2">
           <input type="checkbox" checked={form.showPhone} onChange={(e) => update('showPhone', e.target.checked)} />
           {t('settings.seller.showPhone')}
         </label>
         <div className="space-y-3 md:col-span-2">
           <Feedback error={errorText(save.error)} success={save.isSuccess ? t('settings.saved') : null} />
-          <button type="submit" className={buttonClass} disabled={save.isPending || phoneInvalid || nameInvalid || unchanged}>
+          <button type="submit" className={buttonClass} disabled={save.isPending || phoneInvalid || emailInvalid || nameInvalid || unchanged}>
             {save.isPending ? t('settings.saving') : t('settings.save')}
           </button>
         </div>

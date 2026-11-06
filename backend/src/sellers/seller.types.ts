@@ -26,6 +26,10 @@ export class SellerObject {
   @Field()
   showPhone: boolean;
 
+  /** Private: only filled for the seller themselves (mySeller / create / update). */
+  @Field({ nullable: true })
+  contactEmail?: string | null;
+
   /** Number of published listings. Only filled by the public seller queries. */
   @Field(() => Int, { nullable: true })
   listingsCount?: number | null;
@@ -59,6 +63,9 @@ export class CreateSellerInput {
 
   @Field({ nullable: true })
   showPhone?: boolean;
+
+  @Field({ nullable: true })
+  contactEmail?: string;
 }
 
 @InputType()
@@ -78,4 +85,8 @@ export class UpdateSellerInput {
 
   @Field({ nullable: true })
   showPhone?: boolean;
+
+  /** Empty string clears the contact email. */
+  @Field({ nullable: true })
+  contactEmail?: string;
 }

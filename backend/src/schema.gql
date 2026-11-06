@@ -76,6 +76,7 @@ input CreatePartInput {
 
 input CreateSellerInput {
   city: String!
+  contactEmail: String
   name: String!
   phone: String
   showPhone: Boolean
@@ -153,6 +154,7 @@ input CreateSpecialistVehicleInput {
 }
 
 input CreateVehicleInput {
+  bodyType: String
   brand: String!
   color: String
   condition: String
@@ -415,6 +417,7 @@ type Query {
 
 type SellerObject {
   city: String!
+  contactEmail: String
   createdAt: DateTime!
   id: String!
   listingsCount: Int
@@ -560,6 +563,7 @@ input UpdateProfileInput {
 
 input UpdateSellerInput {
   city: String
+  contactEmail: String
   name: String
   phone: String
   showPhone: Boolean
@@ -619,6 +623,7 @@ input UpdateSpecialistInput {
 }
 
 input UpdateVehicleInput {
+  bodyType: String
   brand: String
   color: String
   condition: String
@@ -672,6 +677,7 @@ enum UserRole {
 }
 
 type VehicleObject {
+  bodyType: String
   brand: String!
   color: String
   condition: String!

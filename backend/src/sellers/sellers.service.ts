@@ -31,9 +31,24 @@ export function normalizePhone(value: string | null | undefined): string | null 
   return phone;
 }
 
-/** Public view of a seller: the phone is only visible when the seller allows it. */
-export function toPublicSeller<T extends Pick<Seller, 'phone' | 'showPhone'>>(seller: T): T {
-  return seller.showPhone ? seller : { ...seller, phone: null };
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/** Trims and validates a contact email. Empty input means "no email" (null). */
+export function normalizeContactEmail(value: string | null | undefined): string | null {
+  const email = (value ?? '').trim().toLowerCase();
+  if (!email) return null;
+  if (email.length > 254 || !EMAIL_PATTERN.test(email)) {
+    throw new BadRequestException('Invalid contact email');
+  }
+  return email;
+}
+
+/**
+ * Public view of a seller: the phone is only visible when the seller allows it and the
+ * contact email is never visible.
+ */
+export function toPublicSeller<T extends Pick<Seller, 'phone' | 'showPhone' | 'contactEmail'>>(seller: T): T {
+  return { ...seller, phone: seller.showPhone ? seller.phone : null, contactEmail: null };
 }
 
 @Injectable()
@@ -56,6 +71,7 @@ export class SellersService {
         name: input.name,
         city: input.city,
         phone: normalizePhone(input.phone),
+        contactEmail: normalizeContactEmail(input.contactEmail),
         ...(input.showPhone !== undefined ? { showPhone: input.showPhone } : {}),
         rating: 0,
         verified: false,
@@ -86,6 +102,9 @@ export class SellersService {
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.city !== undefined ? { city: input.city } : {}),
         ...(input.phone !== undefined ? { phone: normalizePhone(input.phone) } : {}),
+        ...(input.contactEmail !== undefined
+          ? { contactEmail: normalizeContactEmail(input.contactEmail) }
+          : {}),
         ...(input.showPhone !== undefined ? { showPhone: input.showPhone } : {}),
       },
     });

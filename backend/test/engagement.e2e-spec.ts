@@ -111,5 +111,21 @@ describe('favorites, inquiries and seller phone', () => {
       const cleared = await ctx.gql(`mutation { updateSeller(input: { phone: "" }) { phone } }`, undefined, seller);
       expect(cleared.data.updateSeller.phone).toBeNull();
     });
+
+    it('keeps the seller contact email private and validates it', async () => {
+      const bad = await ctx.gql(`mutation { updateSeller(input: { contactEmail: "nope" }) { id } }`, undefined, seller);
+      expect(bad.errors?.[0].message).toMatch(/invalid contact email/i);
+
+      const saved = await ctx.gql(`mutation { updateSeller(input: { contactEmail: "  Sales@Shop.TEST " }) { contactEmail } }`, undefined, seller);
+      expect(saved.data.updateSeller.contactEmail).toBe('sales@shop.test');
+      expect((await ctx.gql('{ mySeller { contactEmail } }', undefined, seller)).data.mySeller.contactEmail).toBe('sales@shop.test');
+
+      const sellerId = (await ctx.gql('{ mySeller { id } }', undefined, seller)).data.mySeller.id;
+      expect((await ctx.gql(`query($id: String!) { sellerById(id: $id) { contactEmail } }`, { id: sellerId })).data.sellerById.contactEmail).toBeNull();
+      expect((await ctx.gql('{ sellers { contactEmail } }')).data.sellers.every((s: any) => s.contactEmail === null)).toBe(true);
+
+      const cleared = await ctx.gql(`mutation { updateSeller(input: { contactEmail: "" }) { contactEmail } }`, undefined, seller);
+      expect(cleared.data.updateSeller.contactEmail).toBeNull();
+    });
   });
 });

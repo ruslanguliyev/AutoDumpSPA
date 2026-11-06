@@ -12,6 +12,7 @@ export type SellerProfile = {
   city: string;
   phone: string | null;
   showPhone: boolean;
+  contactEmail: string | null;
 };
 
 export type SellerProfileInput = {
@@ -20,6 +21,8 @@ export type SellerProfileInput = {
   /** Empty string removes the stored phone number. */
   phone: string;
   showPhone: boolean;
+  /** Empty string removes the stored contact email. */
+  contactEmail: string;
 };
 
 export const settingsApi = {
@@ -45,12 +48,12 @@ export const settingsApi = {
 
   mySeller: () =>
     gqlRequest<{ mySeller: SellerProfile | null }>(
-      `query { mySeller { id name city phone showPhone } }`,
+      `query { mySeller { id name city phone showPhone contactEmail } }`,
     ).then((d) => d.mySeller),
 
   updateSeller: (input: SellerProfileInput) =>
     gqlRequest<{ updateSeller: SellerProfile }>(
-      `mutation($input: UpdateSellerInput!) { updateSeller(input: $input) { id name city phone showPhone } }`,
+      `mutation($input: UpdateSellerInput!) { updateSeller(input: $input) { id name city phone showPhone contactEmail } }`,
       { input },
     ).then((d) => d.updateSeller),
 };

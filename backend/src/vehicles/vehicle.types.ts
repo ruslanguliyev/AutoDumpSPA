@@ -87,6 +87,10 @@ export class VehicleObject {
   @Field()
   vehicleType: string;
 
+  /** Body style: sedan, suv, coupe ... (null for older listings). */
+  @Field({ nullable: true })
+  bodyType?: string | null;
+
   @Field(() => Float, { nullable: true })
   price: number | null;
 
@@ -238,6 +242,9 @@ export class CreateVehicleInput {
   @Field({ nullable: true })
   vehicleType?: string;
 
+  @Field({ nullable: true })
+  bodyType?: string;
+
   @Field(() => Float, { nullable: true })
   price?: number;
 
@@ -330,6 +337,9 @@ export class UpdateVehicleInput {
 
   @Field({ nullable: true })
   vehicleType?: string;
+
+  @Field({ nullable: true })
+  bodyType?: string;
 
   @Field(() => Float, { nullable: true })
   price?: number;

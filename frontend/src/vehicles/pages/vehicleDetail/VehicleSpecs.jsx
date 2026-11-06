@@ -41,6 +41,15 @@ const VehicleSpecs = ({ car }) => {
             <span className="spec-value">{car.code}</span>
           </div>
 
+          {car.bodyType ? (
+            <div className="spec-row">
+              <span className="spec-name">{t('specs.bodyType')}:</span>
+              <span className="spec-value">
+                {t(`form.vehicleCategories.${car.bodyType}`, { ns: 'addItem', defaultValue: car.bodyType })}
+              </span>
+            </div>
+          ) : null}
+
           <div className="spec-row">
             <span className="spec-name">{t('specs.year')}:</span>
             <span className="spec-value">{car.year}</span>

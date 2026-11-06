@@ -99,7 +99,10 @@
       "phoneInvalid": "Nömrəni +994 50 123 45 67 formatında daxil edin",
       "showPhone": "Telefonu elanlarda göstər",
       "none": "Satıcı profili ilk elanı əlavə edəndə avtomatik yaradılır.",
-      "createListing": "Elan əlavə et"
+      "createListing": "Elan əlavə et",
+      "contactEmail": "Əlaqə emaili",
+      "contactEmailHint": "Yalnız sizə görünür. Müraciət bildirişləri bura göndəriləcək.",
+      "emailInvalid": "Düzgün email daxil edin"
     },
     "password": {
       "title": "Şifrənin dəyişdirilməsi",

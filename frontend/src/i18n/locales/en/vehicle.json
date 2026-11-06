@@ -96,6 +96,7 @@
     "brand": "Brand",
     "model": "Model",
     "version": "Version",
+    "bodyType": "Body type",
     "code": "Vehicle Code",
     "year": "Year",
     "engine": "Engine",

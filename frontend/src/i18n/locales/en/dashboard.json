@@ -99,7 +99,10 @@
       "phoneInvalid": "Enter a number like +994 50 123 45 67",
       "showPhone": "Show my phone number on listings",
       "none": "A seller profile is created automatically when you add your first listing.",
-      "createListing": "Add a listing"
+      "createListing": "Add a listing",
+      "contactEmail": "Contact email",
+      "contactEmailHint": "Visible only to you. Inquiry notifications will be sent here.",
+      "emailInvalid": "Enter a valid email address"
     },
     "password": {
       "title": "Change password",

@@ -96,6 +96,7 @@
     "brand": "Marka",
     "model": "Model",
     "version": "Versiya",
+    "bodyType": "Kuzov tipi",
     "code": "Avtomobil kodu",
     "year": "İl",
     "engine": "Mühərrik",

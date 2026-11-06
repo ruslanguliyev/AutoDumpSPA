@@ -5,7 +5,9 @@ import {
   type ListingDraft,
   type ListingType,
 } from '@/features/addItem/store/useAddItemStore';
+import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog';
 import {
+  isValidEmail,
   parseEngineVolume,
   parsePower,
   parseStock,
@@ -184,8 +186,8 @@ mutation UpdateSeller($input: UpdateSellerInput!) {
 
 const MY_SELLER_AND_ME = `
 query {
-  mySeller { id name type city phone showPhone }
-  me { fullName }
+  mySeller { id name type city phone showPhone contactEmail }
+  me { fullName email }
 }
 `;
 
@@ -202,6 +204,7 @@ type SellerGql = {
   city: string;
   phone: string | null;
   showPhone: boolean;
+  contactEmail?: string | null;
 };
 
 /** Last seller contact data pushed to the server, so autosave does not resend it every time. */
@@ -209,11 +212,19 @@ let lastSyncedContact = '';
 
 const syncSellerContact = async (draft: ListingDraft) => {
   const phone = draft.seller.phone.trim();
+  const email = draft.seller.email.trim();
   const showPhone = draft.seller.showPhone;
-  if (!phone) return; // never clear a stored number implicitly
-  const key = JSON.stringify({ phone, showPhone });
+  const emailToSave = email && isValidEmail(email) ? email : '';
+  // Never clear stored values implicitly: only send what the user has filled in.
+  if (!phone && !emailToSave) return;
+  const key = JSON.stringify({ phone, emailToSave, showPhone });
   if (key === lastSyncedContact) return;
-  await gqlRequest(UPDATE_SELLER, { input: { phone, showPhone } });
+  await gqlRequest(UPDATE_SELLER, {
+    input: {
+      ...(phone ? { phone, showPhone } : {}),
+      ...(emailToSave ? { contactEmail: emailToSave } : {}),
+    },
+  });
   lastSyncedContact = key;
 };
 
@@ -221,16 +232,16 @@ const syncSellerContact = async (draft: ListingDraft) => {
  * Every listing needs a seller profile. New users have none, so create a minimal one
  * (name from the account) and let the wizard's seller step fill in the rest.
  */
-const ensureSellerProfile = async (): Promise<SellerGql> => {
+const ensureSellerProfile = async (): Promise<{ seller: SellerGql; accountEmail: string }> => {
   const { mySeller, me } = await gqlRequest<{
     mySeller: SellerGql | null;
-    me: { fullName: string };
+    me: { fullName: string; email: string };
   }>(MY_SELLER_AND_ME);
-  if (mySeller) return mySeller;
+  if (mySeller) return { seller: mySeller, accountEmail: me.email };
   const { createSeller } = await gqlRequest<{ createSeller: SellerGql }>(CREATE_SELLER, {
     input: { type: 'PRIVATE', name: me.fullName, city: '' },
   });
-  return createSeller;
+  return { seller: createSeller, accountEmail: me.email };
 };
 
 async function syncDraftToBackend(draft: ListingDraft) {
@@ -267,6 +278,8 @@ async function syncDraftToBackend(draft: ListingDraft) {
         transmission: v.transmission || 'Automatic',
         displacement: v.displacement || undefined,
         horsepower: v.horsepower || undefined,
+        // Body style (the wizard's "category" for vehicles); unknown values are not sent.
+        bodyType: isVehicleCategoryId(draft.common.category.trim()) ? draft.common.category.trim() : undefined,
         // Only send engine volume / power when the user entered valid values.
         engineVolume: parseEngineVolume(v.displacement),
         power: parsePower(v.horsepower),
@@ -320,7 +333,7 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
     throw new Error('Please log in to create a listing');
   }
 
-  const sellerProfile = await ensureSellerProfile();
+  const { seller: sellerProfile, accountEmail } = await ensureSellerProfile();
 
   const { createListing: listing } = await gqlRequest<{ createListing: ListingGql }>(
     CREATE_LISTING,
@@ -395,7 +408,7 @@ export const createDraft = async (type: ListingType): Promise<ListingDraft> => {
       type: sellerProfile.type === 'PRIVATE' ? 'private' : 'dealer',
       name: sellerProfile.name,
       phone: sellerProfile.phone ?? '',
-      email: '',
+      email: sellerProfile.contactEmail || accountEmail,
       location: sellerProfile.city ?? '',
       showPhone: sellerProfile.showPhone,
     },

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -11,6 +12,16 @@ import {
   UpdateVehicleInput,
   VehiclesFilterInput,
 } from './vehicle.types';
+
+/** Body style is a short lowercase identifier such as "sedan"; empty means "not set". */
+export function normalizeBodyType(value: string | null | undefined): string | null {
+  const bodyType = (value ?? '').trim().toLowerCase();
+  if (!bodyType) return null;
+  if (!/^[a-z_]{1,30}$/.test(bodyType)) {
+    throw new BadRequestException('Invalid body type');
+  }
+  return bodyType;
+}
 
 const vehicleWithListingSeller = Prisma.validator<Prisma.VehicleDefaultArgs>()({
   include: {
@@ -50,6 +61,7 @@ export class VehiclesService {
       condition: row.condition,
       color: row.color,
       vehicleType: row.vehicleType,
+      bodyType: row.bodyType,
       price:
         row.price === null || row.price === undefined
           ? null
@@ -231,6 +243,7 @@ export class VehiclesService {
         condition: input.condition ?? 'used',
         color: input.color ?? null,
         vehicleType: input.vehicleType ?? 'car',
+        bodyType: normalizeBodyType(input.bodyType),
         price: input.price ?? null,
         currency: input.currency ?? 'AZN',
         location: input.location ?? null,
@@ -291,6 +304,9 @@ export class VehiclesService {
         ...(input.color !== undefined ? { color: input.color } : {}),
         ...(input.vehicleType !== undefined
           ? { vehicleType: input.vehicleType }
+          : {}),
+        ...(input.bodyType !== undefined
+          ? { bodyType: normalizeBodyType(input.bodyType) }
           : {}),
         ...(input.price !== undefined ? { price: input.price } : {}),
         ...(input.currency !== undefined ? { currency: input.currency } : {}),

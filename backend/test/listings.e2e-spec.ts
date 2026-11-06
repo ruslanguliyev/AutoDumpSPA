@@ -126,4 +126,18 @@ describe('listings: visibility, publishing, ownership', () => {
     const one = await ctx.gql(`query($id: String!) { sellerById(id: $id) { listingsCount } }`, { id: shopId });
     expect(one.data.sellerById.listingsCount).toBe(1);
   });
+
+  it('stores the body type of a vehicle, shows it publicly and rejects garbage', async () => {
+    const { listingId, vehicleId } = await ctx.createVehicleListing(owner, { brand: 'BodyBrand', publish: true });
+    const update = (bodyType: string) =>
+      ctx.gql(`mutation($id: String!, $b: String!) { updateVehicle(id: $id, input: { bodyType: $b }) { bodyType } }`, { id: vehicleId, b: bodyType }, owner);
+
+    expect((await update('  SUV ')).data.updateVehicle.bodyType).toBe('suv');
+    const publicRead = await ctx.gql(`query($id: String!) { vehicleById(id: $id) { bodyType } }`, { id: vehicleId });
+    expect(publicRead.data.vehicleById.bodyType).toBe('suv');
+
+    expect((await update('Not a body type!')).errors?.[0].message).toMatch(/invalid body type/i);
+    expect((await update('')).data.updateVehicle.bodyType).toBeNull();
+    expect(listingId).toBeDefined();
+  });
 });

@@ -98,8 +98,17 @@ export const validatePricing = (draft: ListingDraft) => {
 export const isValidPhone = (value: string | undefined | null) =>
   /^\+?[0-9\s\-()]{6,20}$/.test(trim(value));
 
+/** Same rule as the backend. */
+export const isValidEmail = (value: string | undefined | null) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trim(value));
+
 export const validateSeller = (draft: ListingDraft) => {
-  return trim(draft.seller.name).length > 0 && isValidPhone(draft.seller.phone);
+  const email = trim(draft.seller.email);
+  return (
+    trim(draft.seller.name).length > 0 &&
+    isValidPhone(draft.seller.phone) &&
+    (email === '' || isValidEmail(email))
+  );
 };
 
 export const validatePhotos = (draft: ListingDraft) => {

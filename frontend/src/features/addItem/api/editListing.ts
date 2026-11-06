@@ -12,10 +12,10 @@ import { gqlRequest } from '@/lib/graphql';
 const EDIT_QUERY = `
 query EditListing($id: String!) {
   listing(id: $id) { id title description price status sellerId }
-  mySeller { id name type phone showPhone }
+  mySeller { id name type phone showPhone contactEmail }
   vehicleByListing(listingId: $id) {
     id brand model generation version year mileage fuel transmission
-    displacement horsepower engineVolume power drive condition location description
+    displacement horsepower engineVolume power bodyType drive condition location description
     price currency imageUrls
   }
   partByListing(listingId: $id) {
@@ -40,6 +40,7 @@ type EditQueryResult = {
     type: string;
     phone: string | null;
     showPhone: boolean;
+    contactEmail: string | null;
   } | null;
   vehicleByListing: {
     id: string;
@@ -55,6 +56,7 @@ type EditQueryResult = {
     horsepower: string | null;
     engineVolume: number | null;
     power: number | null;
+    bodyType: string | null;
     drive: string | null;
     condition: string | null;
     location: string | null;
@@ -91,7 +93,7 @@ const toImages = (urls: string[]): ListingImage[] =>
 
 /**
  * Builds a wizard draft from a listing stored on the server.
- * Fields the backend does not persist (email, VIN, vehicle category) are carried over
+ * Fields the backend does not persist (VIN, which the wizard has no input for) are carried over
  * from an existing local draft when there is one.
  */
 export const buildDraftFromServer = (
@@ -119,7 +121,7 @@ export const buildDraftFromServer = (
     common: {
       title: listing.title,
       description,
-      category: v ? (previous?.common.category ?? '') : (p?.category ?? ''),
+      category: v ? (v.bodyType ?? previous?.common.category ?? '') : (p?.category ?? ''),
       condition: toCondition(v?.condition ?? p?.condition),
       pricing: {
         price: price && price > 0 ? price : null,
@@ -133,7 +135,7 @@ export const buildDraftFromServer = (
       type: mySeller?.type === 'PRIVATE' ? 'private' : 'dealer',
       name: mySeller?.name ?? previous?.seller.name ?? '',
       phone: mySeller?.phone ?? previous?.seller.phone ?? '',
-      email: previous?.seller.email ?? '',
+      email: mySeller?.contactEmail ?? previous?.seller.email ?? '',
       location,
       showPhone: mySeller?.showPhone ?? previous?.seller.showPhone ?? true,
     },
