@@ -15,7 +15,8 @@
     "test": "jest",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "admin:grant": "ts-node scripts/grant-admin.ts"
   },
   "dependencies": {
     "@apollo/server": "^5.4.0",

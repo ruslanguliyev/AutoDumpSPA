@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ListingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { isHiddenFromPublic } from '../listings/listing-status';
 import { ListingsService } from '../listings/listings.service';
 import {
   CreateVehicleInput,
@@ -211,7 +212,7 @@ export class VehiclesService {
         listing: { include: { seller: true } },
       },
     });
-    if (!row || row.listing.status === ListingStatus.DRAFT) {
+    if (!row || isHiddenFromPublic(row.listing.status)) {
       throw new NotFoundException('Vehicle not found');
     }
     return this.mapVehicle(row);
@@ -358,7 +359,7 @@ export class VehiclesService {
     });
     if (!row) return null;
     if (
-      row.listing.status === ListingStatus.DRAFT &&
+      isHiddenFromPublic(row.listing.status) &&
       row.listing.seller.userId !== requesterUserId
     ) {
       return null;

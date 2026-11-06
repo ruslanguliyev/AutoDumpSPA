@@ -21,6 +21,7 @@ import { AuctionsModule } from './auctions/auctions.module';
 import { BidsModule } from './bids/bids.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
+import { ModerationModule } from './moderation/moderation.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -51,6 +52,7 @@ import { PrismaModule } from './prisma/prisma.module';
     BidsModule,
     FavoritesModule,
     InquiriesModule,
+    ModerationModule,
   ],
   providers: [AppResolver, AppService],
 })

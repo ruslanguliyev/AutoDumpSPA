@@ -32,6 +32,23 @@ enum ListingStatus {
   DRAFT
   ACTIVE
   SOLD
+  /// Hidden by a moderator; the owner cannot publish it again
+  BLOCKED
+}
+
+enum ReportReason {
+  SPAM
+  SCAM
+  WRONG_INFO
+  PROHIBITED
+  ALREADY_SOLD
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  ACTIONED
+  DISMISSED
 }
 
 model User {
@@ -51,6 +68,7 @@ model User {
   specialist    Specialist?
   favorites     Favorite[]
   inquiries     Inquiry[]
+  reports       Report[]
 }
 
 model Seller {
@@ -74,14 +92,16 @@ model Seller {
 }
 
 model Listing {
-  id          String        @id @default(cuid())
-  title       String
-  description String
-  price       Decimal       @db.Decimal(12, 2)
-  status      ListingStatus
-  sellerId    String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  price         Decimal       @db.Decimal(12, 2)
+  status        ListingStatus
+  /// Why a moderator blocked the listing (shown to the owner)
+  blockedReason String?
+  sellerId      String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   vehicles  Vehicle[]
@@ -90,6 +110,7 @@ model Listing {
   images    Image[]
   auctions  Auction[]
   inquiries Inquiry[]
+  reports   Report[]
 }
 
 model Vehicle {
@@ -312,4 +333,22 @@ model Inquiry {
 
   @@index([listingId])
   @@index([fromUserId])
+}
+
+model Report {
+  id         String       @id @default(cuid())
+  listingId  String
+  reporterId String
+  reason     ReportReason
+  details    String?
+  status     ReportStatus @default(OPEN)
+  createdAt  DateTime     @default(now())
+  resolvedAt DateTime?
+
+  listing  Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporter User    @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([status, createdAt])
+  @@index([reporterId])
 }

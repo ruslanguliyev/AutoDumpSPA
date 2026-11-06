@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { ListingStatus } from '@prisma/client';
+import { HIDDEN_STATUSES, isHiddenFromPublic } from '../listings/listing-status';
 import { PrismaService } from '../prisma/prisma.service';
 
 export const FAVORITE_TYPES = ['vehicle', 'part'] as const;
@@ -27,7 +27,7 @@ export class FavoritesService {
             where: { id: itemId },
             select: { listing: { select: { status: true } } },
           });
-    if (!row || row.listing.status === ListingStatus.DRAFT) {
+    if (!row || isHiddenFromPublic(row.listing.status)) {
       throw new NotFoundException(`${type} not found`);
     }
   }
@@ -77,10 +77,10 @@ export class FavoritesService {
 
     const [vehicles, parts] = await Promise.all([
       this.prisma.vehicle.findMany({
-        where: { id: { in: vehicleIds }, listing: { status: { not: ListingStatus.DRAFT } } },
+        where: { id: { in: vehicleIds }, listing: { status: { notIn: HIDDEN_STATUSES } } },
       }),
       this.prisma.part.findMany({
-        where: { id: { in: partIds }, listing: { status: { not: ListingStatus.DRAFT } } },
+        where: { id: { in: partIds }, listing: { status: { notIn: HIDDEN_STATUSES } } },
       }),
     ]);
     const vById = new Map(vehicles.map((v) => [v.id, v]));

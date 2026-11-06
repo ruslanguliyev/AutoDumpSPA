@@ -250,6 +250,7 @@ type ListingObject {
 """Listing status enum"""
 enum ListingStatus {
   ACTIVE
+  BLOCKED
   DRAFT
   SOLD
 }
@@ -263,6 +264,7 @@ input ListingsFilterInput {
 
 type Mutation {
   addFavorite(itemId: String!, type: String!): Boolean!
+  blockListing(listingId: String!, reason: String!): Boolean!
   changePassword(input: ChangePasswordInput!): AuthPayload!
   closeListing(id: String!): ListingObject!
   createAuction(input: CreateAuctionInput!): AuctionObject!
@@ -278,6 +280,7 @@ type Mutation {
   deletePart(id: String!): Boolean!
   deleteService(id: String!): Boolean!
   deleteVehicle(id: String!): Boolean!
+  dismissReport(id: String!): Boolean!
   finishAuction(id: String!): AuctionObject!
   login(email: String!, password: String!): AuthPayload!
   markInquiryRead(id: String!): InquiryObject!
@@ -285,8 +288,10 @@ type Mutation {
   publishListing(id: String!): ListingObject!
   register(email: String!, fullName: String!, password: String!): AuthPayload!
   removeFavorite(itemId: String!, type: String!): Boolean!
+  reportListing(input: ReportListingInput!): Boolean!
   startAuction(id: String!): AuctionObject!
   syncFavorites(items: [FavoriteRefInput!]!): Int!
+  unblockListing(listingId: String!): Boolean!
   unpublishListing(id: String!): ListingObject!
   updateListing(id: String!, input: UpdateListingInput!): ListingObject!
   updatePart(id: String!, input: UpdatePartInput!): PartObject!
@@ -299,6 +304,7 @@ type Mutation {
 }
 
 type MyListingObject {
+  blockedReason: String
   createdAt: DateTime!
   currency: String
   favoritesCount: Int!
@@ -399,6 +405,7 @@ type Query {
   partByListing(listingId: String!): PartObject
   parts(filter: PartsFilterInput): PaginatedParts!
   receivedInquiries(status: InquiryStatus): [InquiryObject!]!
+  reports(status: ReportStatus = OPEN): [ReportObject!]!
   sellerById(id: String!): SellerObject!
   sellers: [SellerObject!]!
   sentInquiries: [InquiryObject!]!
@@ -413,6 +420,43 @@ type Query {
   vehicleById(id: String!): VehicleObject!
   vehicleByListing(listingId: String!): VehicleObject
   vehicles(filter: VehiclesFilterInput): PaginatedVehicles!
+}
+
+input ReportListingInput {
+  details: String
+  listingId: String!
+  reason: ReportReason!
+}
+
+type ReportObject {
+  createdAt: DateTime!
+  details: String
+  id: String!
+  itemId: String
+  kind: String!
+  listingId: String!
+  listingStatus: ListingStatus!
+  listingTitle: String!
+  openReportsForListing: Int!
+  reason: ReportReason!
+  reporterEmail: String!
+  sellerName: String!
+  status: ReportStatus!
+}
+
+enum ReportReason {
+  ALREADY_SOLD
+  OTHER
+  PROHIBITED
+  SCAM
+  SPAM
+  WRONG_INFO
+}
+
+enum ReportStatus {
+  ACTIONED
+  DISMISSED
+  OPEN
 }
 
 type SellerObject {

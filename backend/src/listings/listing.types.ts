@@ -123,6 +123,10 @@ export class MyListingObject {
   @Field({ nullable: true })
   thumbnail?: string | null;
 
+  /** Set when a moderator blocked the listing. */
+  @Field({ nullable: true })
+  blockedReason?: string | null;
+
   @Field(() => Int)
   inquiriesCount: number;
 

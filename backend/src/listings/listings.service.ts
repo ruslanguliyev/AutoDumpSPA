@@ -10,6 +10,7 @@ import {
   Prisma,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { isHiddenFromPublic } from './listing-status';
 import { SellersService } from '../sellers/sellers.service';
 import {
   CreateListingInput,
@@ -62,6 +63,7 @@ export class ListingsService {
 
   async publishListing(userId: string, id: string) {
     const listing = await this.getOwnedListing(userId, id);
+    this.assertNotBlocked(listing);
 
     const [vehicles, parts, services] = await this.prisma.$transaction([
       this.prisma.vehicle.count({ where: { listingId: listing.id } }),
@@ -86,6 +88,7 @@ export class ListingsService {
 
   async closeListing(userId: string, id: string) {
     const listing = await this.getOwnedListing(userId, id);
+    this.assertNotBlocked(listing);
     const updated = await this.prisma.listing.update({
       where: { id: listing.id },
       data: { status: ListingStatus.SOLD },
@@ -118,7 +121,7 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException('Listing not found');
     }
-    if (listing.status === ListingStatus.DRAFT) {
+    if (isHiddenFromPublic(listing.status)) {
       const ownSeller = requesterUserId
         ? await this.sellersService.getSellerByUserId(requesterUserId)
         : null;
@@ -224,6 +227,7 @@ export class ListingsService {
         itemId,
         currency: v?.currency ?? p?.currency ?? null,
         thumbnail: v?.imageUrls?.[0] ?? p?.imageUrl ?? null,
+        blockedReason: l.blockedReason,
         inquiriesCount: l._count.inquiries,
         favoritesCount: itemId ? (favCount.get(itemId) ?? 0) : 0,
         createdAt: l.createdAt,
@@ -235,11 +239,21 @@ export class ListingsService {
   /** Move an owned listing back to DRAFT (unpublish). */
   async unpublishListing(userId: string, id: string) {
     const listing = await this.getOwnedListing(userId, id);
+    this.assertNotBlocked(listing);
     const updated = await this.prisma.listing.update({
       where: { id: listing.id },
       data: { status: ListingStatus.DRAFT },
     });
     return this.toListingObject(updated);
+  }
+
+  /** A listing blocked by a moderator cannot be republished, closed or unpublished by its owner. */
+  private assertNotBlocked(listing: Listing) {
+    if (listing.status === ListingStatus.BLOCKED) {
+      throw new ForbiddenException(
+        'This listing was blocked by moderation. Contact support to have it reviewed.',
+      );
+    }
   }
 
   private async getOwnedListing(userId: string, listingId: string): Promise<Listing> {
