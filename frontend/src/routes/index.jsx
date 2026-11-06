@@ -30,6 +30,7 @@ const SpecialistDetailPage = lazy(
 );
 const AddEntryPage = lazy(() => import('@/features/addItem/pages/AddEntryPage'));
 const AddWizardPage = lazy(() => import('@/features/addItem/pages/AddWizardPage'));
+const NotFound = lazy(() => import('@/app/pages/notFound/NotFound'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 
@@ -119,6 +120,7 @@ const createAppRoutes = () => [
   },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
+  { path: '*', element: <NotFound /> },
 ];
 
 const router = createBrowserRouter([

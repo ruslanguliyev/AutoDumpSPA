@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CalendarDays, Clock, Heart, MapPin, Phone } from "lucide-react";
 import { useAutoDetails } from "@/vehicles/hooks/useAutoDetails";
+import { useDocumentTitle } from "@/shared/hooks/useDocumentTitle";
 import { useSpecialistsQuery } from "@/specialists/hooks/useSpecialists";
 import SpecialistCard from "@/specialists/components/SpecialistCard";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
@@ -23,6 +24,7 @@ export default function VehicleDetail() {
     const { t } = useTranslation(["sellers", "vehicle", "specialists"]);
     const { id } = useParams();
     const { data: car } = useAutoDetails(id);
+    useDocumentTitle(car ? [car.brand, car.model, car.year].filter(Boolean).join(" ") : null);
 
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
     const isFavorite = useFavoritesStore((s) =>

@@ -124,6 +124,7 @@
     "tryAgain": "Yenidən cəhd et",
     "somethingWentWrong": "Nəsə səhv getdi",
     "pageNotFound": "Səhifə tapılmadı",
+    "pageNotFoundHint": "Axtardığınız səhifə mövcud deyil və ya köçürülüb.",
     "goHome": "Ana səhifəyə get"
   },
   "footer": {

@@ -9,6 +9,7 @@ import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCa
 import { ContactSellerForm } from '@/features/inquiries/components/ContactSellerForm';
 import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
+import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,7 @@ export default function PartDetailsPage() {
   const { t } = useTranslation(['part', 'common']);
   const { id } = useParams();
   const { data: part, isLoading, error } = usePartDetails(id);
+  useDocumentTitle(part?.name);
 
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const isFavorited = useFavoritesStore((s) =>

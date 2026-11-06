@@ -14,6 +14,7 @@ import {
 
 import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useSellerListings } from "@/sellers/hooks/useSellerListings";
+import { useDocumentTitle } from "@/shared/hooks/useDocumentTitle";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import Breadcrumbs from "@/shared/ui/Breadcrumbs/Breadcrumbs";
@@ -91,6 +92,8 @@ export default function SellerDetailPage({
     };
   }, [sellers, sellerId, fullSellerData]);
 
+  useDocumentTitle(seller?.name);
+
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const isFavorite = useFavoritesStore((s) =>
     seller ? s.isFavorited("seller", seller.id) : false
@@ -103,7 +106,7 @@ export default function SellerDetailPage({
 
   const city =
     typeof seller?.city === "string" && seller.city.trim() ? seller.city.trim() : null;
-  const country = seller?.country ?? "Germany";
+  const country = seller?.country ?? null;
 
   const listingsCount = Number.isFinite(seller?.listingsCount)
     ? seller.listingsCount

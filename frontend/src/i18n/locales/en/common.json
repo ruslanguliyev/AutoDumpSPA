@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Dashboard",
     "home": "Home",
     "sellers": "Sellers",
     "cars": "Cars",
@@ -123,6 +124,7 @@
     "tryAgain": "Try again",
     "somethingWentWrong": "Something went wrong",
     "pageNotFound": "Page not found",
+    "pageNotFoundHint": "The page you are looking for does not exist or has been moved.",
     "goHome": "Go to home"
   },
   "footer": {

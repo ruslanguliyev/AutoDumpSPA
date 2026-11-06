@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +36,7 @@ const SpecialistDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
 
   const { specialist, isLoading, error } = useSpecialistBySlug(slug);
+  useDocumentTitle(specialist?.name);
 
   const {
     services: _services,

@@ -1,3 +1,4 @@
+import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import BackButton from '@/shared/ui/BackButton/BackButton';
@@ -17,6 +18,7 @@ export default function ServiceDetailPage() {
   const { t } = useTranslation('services');
   const { idOrSlug } = useParams();
   const { service, isLoading, error } = useService(idOrSlug);
+  useDocumentTitle(service?.name);
   const {
     specialists,
     isLoading: specialistsLoading,

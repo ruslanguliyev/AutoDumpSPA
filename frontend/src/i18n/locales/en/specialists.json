@@ -2,6 +2,11 @@
   "title": "Specialists",
   "subtitle": "Find verified auto specialists for your vehicle",
   "filters": {
+    "filters": "Filters",
+    "searchPlaceholder": "Search by brand...",
+    "updating": "Updating...",
+    "available_one": "{{count}} specialist available",
+    "available_other": "{{count}} specialists available",
     "title": "Filters",
     "subtitle": "Refine by vehicle and service type",
     "brand": "Brand",

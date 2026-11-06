@@ -2,6 +2,11 @@
   "title": "Ustalar",
   "subtitle": "Avtomobiliniz üçün təsdiqlənmiş ustaları tapın",
   "filters": {
+    "filters": "Filtrlər",
+    "searchPlaceholder": "Marka üzrə axtarış...",
+    "updating": "Yenilənir...",
+    "available_one": "{{count}} usta",
+    "available_other": "{{count}} usta",
     "title": "Filtrlər",
     "subtitle": "Avtomobil və xidmət növünə görə dəqiqləşdirin",
     "brand": "Marka",

@@ -2,6 +2,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 
 import MainLayout from '@/shared/layout/MainLayout';
 import ScrollToTopOnRouteChange from '@/shared/hooks/ScrollToTopOnRouteChange';
+import RouteTitle from '@/routes/RouteTitle';
 
 const isDashboardPath = (pathname) =>
   /^(\/[a-z]{2})?\/dashboard(\/|$)/.test(pathname);
@@ -13,6 +14,7 @@ const LayoutRoute = () => {
     return (
       <>
         <ScrollToTopOnRouteChange />
+        <RouteTitle />
         <Outlet />
       </>
     );
@@ -21,6 +23,7 @@ const LayoutRoute = () => {
   return (
     <>
       <ScrollToTopOnRouteChange />
+      <RouteTitle />
       <MainLayout />
     </>
   );
