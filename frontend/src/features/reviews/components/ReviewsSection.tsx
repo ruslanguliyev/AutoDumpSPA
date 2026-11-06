@@ -6,6 +6,7 @@ import { Star } from 'lucide-react';
 
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import type { Review, ReviewTargetType } from '@/features/reviews/api/reviews.api';
+import { useMyProfessional } from '@/features/professional/hooks/useProfessional';
 import { useDeleteReview, useReviews, useSubmitReview } from '@/features/reviews/hooks/useReviews';
 
 const PAGE = 5;
@@ -112,8 +113,12 @@ export function ReviewsSection({
   const [editing, setEditing] = useState(false);
   const { data } = useReviews(targetType, targetId, limit);
   const remove = useDeleteReview();
+  const own = useMyProfessional();
 
   if (!targetId) return null;
+  const isOwnProfile =
+    (targetType === 'SPECIALIST' && own.specialist?.id === targetId) ||
+    (targetType === 'SERVICE_CENTER' && own.serviceCenter?.id === targetId);
   const total = data?.total ?? 0;
   const mine = data?.items.find((r) => r.mine);
   const date = (value: string) => new Date(value).toLocaleDateString(i18n.language);
@@ -148,7 +153,7 @@ export function ReviewsSection({
         <p className="mt-4 text-sm text-muted-foreground">{t('reviews.empty')}</p>
       )}
 
-      {canReview && !(isAuthenticated && mine && !editing) ? (
+      {canReview && !isOwnProfile && !(isAuthenticated && mine && !editing) ? (
         <div className="mt-5 border-t border-border pt-5">
           {!isAuthenticated ? (
             <p className="text-sm text-muted-foreground">

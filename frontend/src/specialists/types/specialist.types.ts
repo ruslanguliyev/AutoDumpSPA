@@ -35,6 +35,8 @@ export type SpecialistProfile = {
   rating?: number | null;
   reviewsCount?: number | null;
   verified?: boolean | null;
+  /** False when the specialist switched off new appointments. */
+  available?: boolean | null;
   mobileService?: boolean | null;
   priceFrom?: number | null;
   avatarUrl?: string | null;

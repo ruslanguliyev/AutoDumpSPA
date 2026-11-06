@@ -7,6 +7,7 @@ import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
 import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
+import { AppointmentsBadge } from '@/dashboard/components/AppointmentsBadge';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import clsx from 'clsx';
 
@@ -62,6 +63,7 @@ export function DashboardSidebar() {
                   {!sidebarCollapsed && <span>{t(item.key)}</span>}
                   {!sidebarCollapsed && item.key === 'nav.inquiries' && <InquiriesBadge />}
                   {!sidebarCollapsed && item.key === 'nav.rentals' && <RentalsBadge />}
+                  {!sidebarCollapsed && item.key === 'nav.appointments' && <AppointmentsBadge />}
                 </NavLink>
               </li>
             );

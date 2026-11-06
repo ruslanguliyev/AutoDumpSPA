@@ -6,6 +6,7 @@ import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
 import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
+import { AppointmentsBadge } from '@/dashboard/components/AppointmentsBadge';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 
 export function DashboardBottomNav() {
@@ -16,7 +17,7 @@ export function DashboardBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-border bg-background/95 py-2 backdrop-blur md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-1 overflow-x-auto border-t border-border bg-background/95 py-2 backdrop-blur md:hidden"
       aria-label="Mobile navigation"
     >
       {items.map((item) => {
@@ -27,7 +28,7 @@ export function DashboardBottomNav() {
             to={item.path}
             end={item.path === '/dashboard'}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+              `flex shrink-0 flex-col items-center gap-1 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                 isActive
                   ? 'text-primary'
                   : 'text-muted-foreground hover:text-foreground'
@@ -39,6 +40,7 @@ export function DashboardBottomNav() {
               {t(item.key)}
               {item.key === 'nav.inquiries' && <InquiriesBadge />}
               {item.key === 'nav.rentals' && <RentalsBadge />}
+              {item.key === 'nav.appointments' && <AppointmentsBadge />}
             </span>
           </NavLink>
         );

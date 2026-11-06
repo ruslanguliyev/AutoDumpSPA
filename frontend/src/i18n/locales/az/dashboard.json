@@ -53,7 +53,9 @@
     "settings": "Parametrlər",
     "inquiries": "Müraciətlər",
     "moderation": "Moderasiya",
-    "rentals": "İcarə"
+    "rentals": "İcarə",
+    "appointments": "Qeydlər",
+    "profile": "Usta / servis profili"
   },
   "vehicles": {
     "title": "Mənim avtomobillərim",
@@ -280,5 +282,84 @@
     "blockDays": "Tarixləri bağla",
     "unblockDays": "Aç",
     "noBlocks": "Bağlı tarix yoxdur."
+  },
+  "appointment": {
+    "title": "Görüş təyin et",
+    "date": "Tarix",
+    "time": "Saat",
+    "vehiclePlaceholder": "Avtomobiliniz (məs. BMW X5 2018)",
+    "messagePlaceholder": "Nə etmək lazımdır? (məcburi deyil)",
+    "phonePlaceholder": "Telefon nömrəniz",
+    "request": "Sorğu göndər",
+    "note": "Usta qeydi təsdiq edəcək və ya başqa vaxt təklif edəcək. Görüşdən əvvəl heç nə ödəmirsiniz.",
+    "loginRequired": "Qeyd olunmaq üçün daxil olun.",
+    "notAccepting": "Bu profil hazırda qeyd qəbul etmir.",
+    "sentTitle": "Sorğu göndərildi",
+    "sentText": "Cavab kabinetdə \"Qeydlər\" bölməsində görünəcək.",
+    "myBookings": "Qeydlərim",
+    "status": {
+      "PENDING": "Cavab gözlənilir",
+      "CONFIRMED": "Təsdiqlənib",
+      "DECLINED": "Rədd edilib",
+      "CANCELLED": "Ləğv edilib"
+    },
+    "kind": {
+      "SPECIALIST": "Usta",
+      "SERVICE_CENTER": "Servis"
+    },
+    "vehicle": "Avtomobil",
+    "callThem": "Telefon",
+    "confirm": "Təsdiq et",
+    "decline": "Rədd et",
+    "cancel": "Ləğv et",
+    "empty": {
+      "incoming": "Hələ sorğu yoxdur.",
+      "mine": "Hələ heç yerə yazılmamısınız."
+    },
+    "tabs": {
+      "incoming": "Mənə sorğular",
+      "mine": "Görüşlərim"
+    },
+    "pageTitle": "Qeydlər",
+    "pageSubtitle": "Profilinizə gələn sorğular və öz qeydləriniz"
+  },
+  "professional": {
+    "pageTitle": "Usta və ya servis profili",
+    "pageSubtitle": "Kataloqda görünmək və qeyd sorğuları almaq üçün usta və ya servis kimi qeydiyyatdan keçin",
+    "choose": "Nəyi qeydiyyatdan keçirəcəyinizi seçin: usta (fərdi mütəxəssis) və ya servis.",
+    "kind": {
+      "specialist": "Usta",
+      "center": "Servis"
+    },
+    "intro": {
+      "specialist": "Fərdi usta: mexanik, elektrik, detailing ustası. Müştərilər sizi \"Mütəxəssislər\" kataloqunda tapacaq.",
+      "center": "Ünvanı və qiymət siyahısı olan emalatxana. Müştərilər sizi \"Servislər\" kataloqunda tapacaq."
+    },
+    "name": "Ad",
+    "centerName": "Servisin adı",
+    "city": "Şəhər",
+    "address": "Ünvan",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp (rəqəmlər)",
+    "website": "Sayt",
+    "experience": "Təcrübə (il)",
+    "priceFrom": "Qiymət (AZN-dən)",
+    "hourlyRate": "Saatlıq tarif (AZN)",
+    "about": "Haqqında",
+    "specializations": "İxtisaslar",
+    "mobile": "Müştərinin yanına gələ bilərəm",
+    "accepting": "Yeni qeydlər qəbul edirəm",
+    "categories": "Kateqoriyalar",
+    "brands": "Avtomobil markaları",
+    "listHint": "vergüllə ayırın",
+    "priceList": "Qiymət siyahısı",
+    "serviceTitle": "Xidmət",
+    "priceFromShort": "Qiymət (-dən)",
+    "addService": "Xidmət əlavə et",
+    "remove": "Sil",
+    "create": "Profil yarat",
+    "save": "Yadda saxla",
+    "saved": "Saxlanıldı",
+    "viewPublic": "Açıq səhifəyə bax"
   }
 }

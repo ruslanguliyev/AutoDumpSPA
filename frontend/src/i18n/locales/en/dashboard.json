@@ -53,7 +53,9 @@
     "settings": "Settings",
     "inquiries": "Inquiries",
     "moderation": "Moderation",
-    "rentals": "Rentals"
+    "rentals": "Rentals",
+    "appointments": "Appointments",
+    "profile": "My business profile"
   },
   "vehicles": {
     "title": "My Vehicles",
@@ -280,5 +282,84 @@
     "blockDays": "Block dates",
     "unblockDays": "Unblock",
     "noBlocks": "No blocked dates."
+  },
+  "appointment": {
+    "title": "Book a visit",
+    "date": "Date",
+    "time": "Time",
+    "vehiclePlaceholder": "Your car (e.g. BMW X5 2018)",
+    "messagePlaceholder": "What needs to be done? (optional)",
+    "phonePlaceholder": "Your phone number",
+    "request": "Send request",
+    "note": "The master will confirm or suggest another time. You pay nothing until the visit.",
+    "loginRequired": "Log in to book a visit.",
+    "notAccepting": "This profile is not accepting appointments right now.",
+    "sentTitle": "Request sent",
+    "sentText": "You will see the answer in your dashboard under \"Appointments\".",
+    "myBookings": "My appointments",
+    "status": {
+      "PENDING": "Awaiting answer",
+      "CONFIRMED": "Confirmed",
+      "DECLINED": "Declined",
+      "CANCELLED": "Cancelled"
+    },
+    "kind": {
+      "SPECIALIST": "Specialist",
+      "SERVICE_CENTER": "Service center"
+    },
+    "vehicle": "Car",
+    "callThem": "Phone",
+    "confirm": "Confirm",
+    "decline": "Decline",
+    "cancel": "Cancel",
+    "empty": {
+      "incoming": "No requests yet.",
+      "mine": "You have not booked any visits yet."
+    },
+    "tabs": {
+      "incoming": "Requests to me",
+      "mine": "My visits"
+    },
+    "pageTitle": "Appointments",
+    "pageSubtitle": "Visit requests to your profile and the visits you booked"
+  },
+  "professional": {
+    "pageTitle": "Business profile",
+    "pageSubtitle": "Register as a specialist or a service center to appear in the catalogue and receive visit requests",
+    "choose": "Choose what you want to register: a specialist (individual master) or a service center.",
+    "kind": {
+      "specialist": "Specialist",
+      "center": "Service center"
+    },
+    "intro": {
+      "specialist": "An individual master: mechanic, electrician, detailer. Customers find you in the Specialists catalogue.",
+      "center": "A workshop or detailing studio with an address and a price list. Customers find you in the Services catalogue."
+    },
+    "name": "Name",
+    "centerName": "Service center name",
+    "city": "City",
+    "address": "Address",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp (digits)",
+    "website": "Website",
+    "experience": "Experience (years)",
+    "priceFrom": "Price from (AZN)",
+    "hourlyRate": "Hourly rate (AZN)",
+    "about": "About",
+    "specializations": "Specializations",
+    "mobile": "I can come to the customer",
+    "accepting": "Accepting new appointments",
+    "categories": "Categories",
+    "brands": "Car brands",
+    "listHint": "comma separated",
+    "priceList": "Price list",
+    "serviceTitle": "Service",
+    "priceFromShort": "Price from",
+    "addService": "Add service",
+    "remove": "Remove",
+    "create": "Create profile",
+    "save": "Save changes",
+    "saved": "Saved",
+    "viewPublic": "View public page"
   }
 }

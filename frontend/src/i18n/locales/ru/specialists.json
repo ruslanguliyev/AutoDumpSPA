@@ -67,16 +67,10 @@
     "recentReviews": "Последние отзывы",
     "viewAll": "Смотреть все {{count}}",
     "viewAllLink": "Смотреть все",
-    "bookConsultation": "Забронировать консультацию",
     "sendMessage": "Написать сообщение",
     "startingAt": "Начиная с",
     "available": "Доступен",
-    "nextSlot": "Следующий слот",
-    "nextSlotValue": "Завтра, 10:00",
-    "virtualConsultation": "Онлайн-консультация доступна",
-    "noCharge": "Оплата только после подтверждения консультации.",
     "contactInfo": "Контактная информация",
-    "viewOnMap": "Показать на карте",
     "workingHours": "Рабочие часы",
     "priceOnRequest": "Цена по запросу",
     "validUntil": "Действует до {{date}}",
@@ -96,7 +90,8 @@
       "services": "Сервисы пока не указаны.",
       "portfolio": "Портфолио пустое.",
       "reviews": "Отзывов пока нет."
-    }
+    },
+    "unavailable": "Не принимает"
   },
   "specializations": {
     "ENGINE": "Двигатель",

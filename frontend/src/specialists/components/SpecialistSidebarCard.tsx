@@ -1,4 +1,4 @@
-import { Calendar, Clock3, MapPin, MessageCircle, PhoneCall, Video } from 'lucide-react';
+import { MapPin, MessageCircle, PhoneCall } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SpecialistDetail } from '@/specialists/types/specialist.types';
 
@@ -7,6 +7,7 @@ const btnBase =
 const btnPrimary = 'bg-primary text-primary-foreground hover:bg-primary/90';
 const btnOutline = 'border border-border bg-card text-foreground hover:bg-muted hover:bg-muted/80';
 import type { ServiceProfile } from '@/services/types/service.types';
+import { AppointmentRequestCard } from '@/features/appointments/components/AppointmentRequestCard';
 
 type SpecialistSidebarCardProps = {
   specialist: SpecialistDetail;
@@ -51,48 +52,19 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
             )}
           </div>
 
-          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-primary ring-1 ring-primary/20">
-            {t('detail.available')}
-          </span>
-        </div>
-
-        {/* Info rows */}
-        <div className="mt-1 space-y-2 text-sm">
-          <div className="flex items-center gap-2.5 text-muted-foreground">
-            <Calendar size={15} className="shrink-0 text-primary" aria-hidden="true" />
-            <span>
-              <span className="font-medium text-foreground">{t('detail.nextSlot')}:</span>{' '}
-              {t('detail.nextSlotValue')}
+          {specialist.available === false ? (
+            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t('detail.unavailable')}
             </span>
-          </div>
-          <div className="flex items-center gap-2.5 text-muted-foreground">
-            <Video size={15} className="shrink-0 text-muted-foreground" aria-hidden="true" />
-            <span>{t('detail.virtualConsultation')}</span>
-          </div>
+          ) : (
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-primary ring-1 ring-primary/20">
+              {t('detail.available')}
+            </span>
+          )}
         </div>
 
         {/* Actions */}
         <div className="mt-4 flex flex-col gap-2">
-          {phone ? (
-            <a
-              href={`tel:${sanitizePhone(phone)}`}
-              aria-label={t('detail.bookConsultation')}
-              className={`${btnBase} ${btnPrimary}`}
-              style={{ textDecoration: 'none' }}
-            >
-              {t('detail.bookConsultation')}
-            </a>
-          ) : (
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              className={`${btnBase} ${btnPrimary}`}
-            >
-              {t('detail.bookConsultation')}
-            </button>
-          )}
-
           {whatsapp ? (
             <a
               href={`https://wa.me/${sanitizeWhatsApp(whatsapp)}`}
@@ -125,12 +97,14 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               {t('detail.sendMessage')}
             </button>
             )}
-
-          <p className="m-0 text-center text-xs text-muted-foreground">
-            {t('detail.noCharge')}
-          </p>
         </div>
       </div>
+
+      <AppointmentRequestCard
+        targetType="SPECIALIST"
+        targetId={specialist.id}
+        accepting={specialist.available !== false}
+      />
 
       {/* Contact info card */}
       <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:p-6">
@@ -146,12 +120,6 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
                 <p className="font-medium text-foreground mb-0">{specialist.name}</p>
                 {address ? <p className="mt-0.5 mb-0">{address}</p> : null}
                 {city ? <p className="mt-0.5 mb-0">{city}</p> : null}
-                <button
-                  type="button"
-                  className="text-sm font-medium text-primary no-underline hover:no-underline"
-                >
-                  {t('detail.viewOnMap')}
-                </button>
               </div>
             </div>
           ) : null}
@@ -177,14 +145,6 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
             </div>
           ) : null}
 
-          <div className="flex gap-3">
-            <div className="mt-1 text-primary/70">
-              <Clock3 size={18} aria-hidden="true" />
-            </div>
-            <div>
-              <p className="mt-0.5 mb-0 text-muted-foreground">Mon – Fri · 8:00 – 18:00</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

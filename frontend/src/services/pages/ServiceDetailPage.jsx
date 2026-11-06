@@ -122,6 +122,8 @@ export default function ServiceDetailPage() {
 
           {/* RIGHT COLUMN - STICKY SIDEBAR */}
           <ServiceSidebar
+            serviceId={service.id}
+            accepting={service.isActive !== false}
             schedule={service.schedule}
             contacts={service.contacts}
             location={service.location}

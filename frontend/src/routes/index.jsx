@@ -56,6 +56,12 @@ const ModerationPage = lazy(() =>
 const RentalsPage = lazy(() =>
   import('@/dashboard/pages/RentalsPage').then((m) => ({ default: m.RentalsPage }))
 );
+const AppointmentsPage = lazy(() =>
+  import('@/dashboard/pages/AppointmentsPage').then((m) => ({ default: m.AppointmentsPage }))
+);
+const ProfessionalProfilePage = lazy(() =>
+  import('@/dashboard/pages/ProfessionalProfilePage').then((m) => ({ default: m.ProfessionalProfilePage }))
+);
 const InquiriesPage = lazy(() =>
   import('@/dashboard/pages/InquiriesPage').then((m) => ({ default: m.InquiriesPage }))
 );
@@ -89,6 +95,8 @@ const dashboardRoutes = [
       { path: 'services', element: <MyServicesPage /> },
       { path: 'inquiries', element: <InquiriesPage /> },
       { path: 'rentals', element: <RentalsPage /> },
+      { path: 'appointments', element: <AppointmentsPage /> },
+      { path: 'profile', element: <ProfessionalProfilePage /> },
       { path: 'moderation', element: <ModerationPage /> },
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'settings', element: <SettingsPage /> },

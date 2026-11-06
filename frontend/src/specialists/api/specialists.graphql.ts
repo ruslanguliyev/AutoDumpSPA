@@ -73,6 +73,7 @@ const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
   rating: s.rating,
   reviewsCount: s.reviewsCount,
   verified: s.verified,
+  available: s.available,
   mobileService: s.mobileService,
   priceFrom: toNumberOrNull(s.priceFrom),
   avatarUrl: s.avatarUrl ?? null,
