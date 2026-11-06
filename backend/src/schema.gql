@@ -2,6 +2,32 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AppointmentObject {
+  createdAt: DateTime!
+  customerEmail: String!
+  customerName: String!
+  date: String!
+  decidedAt: DateTime
+  id: String!
+  message: String
+  phone: String!
+  status: AppointmentStatus!
+  targetId: String!
+  targetName: String!
+  targetPhone: String
+  targetSlug: String
+  targetType: ReviewTargetType!
+  time: String
+  vehicle: String
+}
+
+enum AppointmentStatus {
+  CANCELLED
+  CONFIRMED
+  DECLINED
+  PENDING
+}
+
 type AuctionObject {
   currentPrice: Float!
   endTime: DateTime!
@@ -102,7 +128,6 @@ input CreateServiceCenterInput {
   slug: String
   supportedBrands: [String!]
   type: String
-  verified: Boolean
   website: String
   whatsapp: String
 }
@@ -273,6 +298,7 @@ type Mutation {
   addFavorite(itemId: String!, type: String!): Boolean!
   addRentalBlock(endDate: String!, listingId: String!, note: String, startDate: String!): RentalBlockObject!
   blockListing(listingId: String!, reason: String!): Boolean!
+  cancelAppointment(id: String!): AppointmentObject!
   cancelRental(id: String!): RentalBookingObject!
   changePassword(input: ChangePasswordInput!): AuthPayload!
   closeListing(id: String!): ListingObject!
@@ -285,6 +311,7 @@ type Mutation {
   createServiceCenter(input: CreateServiceCenterInput!): ServiceCenterObject!
   createSpecialist(input: CreateSpecialistInput!): SpecialistObject!
   createVehicle(input: CreateVehicleInput!, listingId: String!): VehicleObject!
+  decideAppointment(confirm: Boolean!, id: String!): AppointmentObject!
   decideRental(confirm: Boolean!, id: String!): RentalBookingObject!
   deleteListing(id: String!): Boolean!
   deletePart(id: String!): Boolean!
@@ -301,6 +328,7 @@ type Mutation {
   removeFavorite(itemId: String!, type: String!): Boolean!
   removeRentalBlock(id: String!): Boolean!
   reportListing(input: ReportListingInput!): Boolean!
+  requestAppointment(input: RequestAppointmentInput!): AppointmentObject!
   requestRental(input: RequestRentalInput!): RentalBookingObject!
   setRentalTerms(input: RentalTermsInput!, listingId: String!): Boolean!
   startAuction(id: String!): AuctionObject!
@@ -408,10 +436,12 @@ type Query {
   bidsByAuction(auctionId: String!): [BidObject!]!
   hello: String!
   imagesByListing(listingId: String!): [ImageObject!]!
+  incomingAppointments: [AppointmentObject!]!
   incomingRentals: [RentalBookingObject!]!
   listing(id: String!): ListingObject!
   listings(filter: ListingsFilterInput, page: Int! = 1, perPage: Int! = 20): PaginatedListings!
   me: UserObject!
+  myAppointments: [AppointmentObject!]!
   myBids: [BidObject!]!
   myFavorites: [FavoriteItemObject!]!
   myListings(status: ListingStatus): [MyListingObject!]!
@@ -422,6 +452,7 @@ type Query {
   partById(id: String!): PartObject!
   partByListing(listingId: String!): PartObject
   parts(filter: PartsFilterInput): PaginatedParts!
+  pendingAppointmentsCount: Int!
   pendingRentalRequestsCount: Int!
   receivedInquiries(status: InquiryStatus): [InquiryObject!]!
   rentalAvailability(from: String, listingId: String!, to: String): [UnavailableRangeObject!]!
@@ -534,6 +565,16 @@ enum ReportStatus {
   ACTIONED
   DISMISSED
   OPEN
+}
+
+input RequestAppointmentInput {
+  date: String!
+  message: String
+  phone: String!
+  targetId: String!
+  targetType: ReviewTargetType!
+  time: String
+  vehicle: String
 }
 
 input RequestRentalInput {
@@ -753,7 +794,6 @@ input UpdateServiceCenterInput {
   slug: String
   supportedBrands: [String!]
   type: String
-  verified: Boolean
   website: String
   whatsapp: String
 }

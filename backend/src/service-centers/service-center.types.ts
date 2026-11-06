@@ -196,9 +196,6 @@ export class CreateServiceCenterInput {
   supportedBrands?: string[];
 
   @Field({ nullable: true })
-  verified?: boolean;
-
-  @Field({ nullable: true })
   isActive?: boolean;
 
   @Field(() => GraphQLJSON, { nullable: true })
@@ -257,9 +254,6 @@ export class UpdateServiceCenterInput {
 
   @Field(() => [String], { nullable: true })
   supportedBrands?: string[];
-
-  @Field({ nullable: true })
-  verified?: boolean;
 
   @Field({ nullable: true })
   isActive?: boolean;

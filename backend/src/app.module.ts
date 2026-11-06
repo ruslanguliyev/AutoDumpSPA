@@ -24,6 +24,7 @@ import { InquiriesModule } from './inquiries/inquiries.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { RentalsModule } from './rentals/rentals.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { AppointmentsModule } from './appointments/appointments.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -58,6 +59,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ModerationModule,
     RentalsModule,
     ReviewsModule,
+    AppointmentsModule,
   ],
   controllers: [HealthController],
   providers: [AppResolver, AppService],

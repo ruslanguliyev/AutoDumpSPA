@@ -10,6 +10,7 @@ import {
   UserRole,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { normalizePhone } from '../sellers/sellers.service';
 import {
   CreateServiceCenterInput,
   CreateServiceCenterServiceInput,
@@ -121,7 +122,7 @@ export class ServiceCentersService {
           type: input.type ?? null,
           city: input.city,
           address: input.address ?? null,
-          phone: input.phone ?? null,
+          phone: normalizePhone(input.phone),
           whatsapp: input.whatsapp ?? null,
           website: input.website ?? null,
           logoUrl: input.logoUrl ?? null,
@@ -131,7 +132,7 @@ export class ServiceCentersService {
           supportedBrands: input.supportedBrands ?? [],
           rating: 0,
           reviewsCount: 0,
-          verified: input.verified ?? false,
+          verified: false,
           isActive: input.isActive ?? true,
           ...(input.schedule !== undefined
             ? { schedule: input.schedule as Prisma.InputJsonValue }
@@ -144,8 +145,8 @@ export class ServiceCentersService {
 
       await this.replaceServices(tx, serviceCenter.id, input.services);
 
-      await tx.user.update({
-        where: { id: userId },
+      await tx.user.updateMany({
+        where: { id: userId, role: { not: UserRole.ADMIN } },
         data: { role: UserRole.SERVICE },
       });
 
@@ -178,7 +179,7 @@ export class ServiceCentersService {
           ...(input.type !== undefined ? { type: input.type } : {}),
           ...(input.city !== undefined ? { city: input.city } : {}),
           ...(input.address !== undefined ? { address: input.address } : {}),
-          ...(input.phone !== undefined ? { phone: input.phone } : {}),
+          ...(input.phone !== undefined ? { phone: normalizePhone(input.phone) } : {}),
           ...(input.whatsapp !== undefined ? { whatsapp: input.whatsapp } : {}),
           ...(input.website !== undefined ? { website: input.website } : {}),
           ...(input.logoUrl !== undefined ? { logoUrl: input.logoUrl } : {}),
@@ -192,7 +193,6 @@ export class ServiceCentersService {
           ...(input.supportedBrands !== undefined
             ? { supportedBrands: input.supportedBrands }
             : {}),
-          ...(input.verified !== undefined ? { verified: input.verified } : {}),
           ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
           ...(input.schedule !== undefined
             ? {

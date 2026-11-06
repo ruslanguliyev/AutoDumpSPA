@@ -35,6 +35,13 @@ enum RentalStatus {
   CANCELLED
 }
 
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  CANCELLED
+}
+
 enum InquiryStatus {
   NEW
   READ
@@ -83,6 +90,7 @@ model User {
   reports        Report[]
   rentalBookings RentalBooking[]
   reviews        Review[]
+  appointments   Appointment[]
 }
 
 model Seller {
@@ -234,8 +242,9 @@ model ServiceCenter {
   updatedAt       DateTime @updatedAt
 
   user     User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  services ServiceCenterService[]
-  reviews  Review[]
+  services     ServiceCenterService[]
+  reviews      Review[]
+  appointments Appointment[]
 }
 
 model ServiceCenterService {
@@ -282,6 +291,7 @@ model Specialist {
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   supportedVehicles SpecialistVehicle[]
   reviews           Review[]
+  appointments      Appointment[]
 }
 
 model SpecialistVehicle {
@@ -319,6 +329,32 @@ model Review {
   @@index([sellerId, createdAt])
   @@index([specialistId, createdAt])
   @@index([serviceCenterId, createdAt])
+}
+
+/// A customer's request for a visit to a specialist or a service center. Exactly one target is
+/// set (CHECK constraint); the owner of the profile confirms or declines it.
+model Appointment {
+  id              String            @id @default(cuid())
+  customerId      String
+  specialistId    String?
+  serviceCenterId String?
+  /// Requested day (no time zone) and an optional preferred time like "14:30"
+  date            DateTime          @db.Date
+  time            String?
+  vehicle         String?
+  message         String?
+  phone           String
+  status          AppointmentStatus @default(PENDING)
+  createdAt       DateTime          @default(now())
+  decidedAt       DateTime?
+
+  customer      User           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  specialist    Specialist?    @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  serviceCenter ServiceCenter? @relation(fields: [serviceCenterId], references: [id], onDelete: Cascade)
+
+  @@index([specialistId, status])
+  @@index([serviceCenterId, status])
+  @@index([customerId])
 }
 
 model Image {

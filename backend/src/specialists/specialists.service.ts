@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Prisma, Specialist, SpecialistVehicle, UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { normalizePhone } from '../sellers/sellers.service';
 import {
   CreateSpecialistInput,
   SpecialistObject,
@@ -45,7 +46,7 @@ export class SpecialistsService {
           slug: input.slug,
           bio: input.bio,
           city: input.city,
-          phone: input.phone,
+          phone: normalizePhone(input.phone),
           whatsapp: input.whatsapp,
           avatarUrl: input.avatarUrl,
           coverImage: input.coverImage,
@@ -73,8 +74,8 @@ export class SpecialistsService {
         include: { supportedVehicles: true },
       });
 
-      await tx.user.update({
-        where: { id: userId },
+      await tx.user.updateMany({
+        where: { id: userId, role: { not: UserRole.ADMIN } },
         data: { role: UserRole.SPECIALIST },
       });
 
@@ -124,7 +125,7 @@ export class SpecialistsService {
           ...(input.slug !== undefined ? { slug: input.slug } : {}),
           ...(input.bio !== undefined ? { bio: input.bio } : {}),
           ...(input.city !== undefined ? { city: input.city } : {}),
-          ...(input.phone !== undefined ? { phone: input.phone } : {}),
+          ...(input.phone !== undefined ? { phone: normalizePhone(input.phone) } : {}),
           ...(input.whatsapp !== undefined ? { whatsapp: input.whatsapp } : {}),
           ...(input.avatarUrl !== undefined ? { avatarUrl: input.avatarUrl } : {}),
           ...(input.coverImage !== undefined

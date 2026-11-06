@@ -78,8 +78,8 @@ export class SellersService {
       },
     });
 
-    await this.prisma.user.update({
-      where: { id: userId },
+    await this.prisma.user.updateMany({
+      where: { id: userId, role: { not: UserRole.ADMIN } },
       data: { role: userRoleForSellerType(input.type as SellerType) },
     });
 
