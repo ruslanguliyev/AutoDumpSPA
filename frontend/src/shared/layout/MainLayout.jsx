@@ -1,33 +1,23 @@
-import Header from '@/shared/layout/Header/Header';
-import Footer from '@/shared/layout/Footer/Footer';
 import { Outlet } from 'react-router-dom';
 
-const AdSlot = () => {
-  return (
-    <div className="sticky top-24">
-      <div className="flex h-[calc(100vh-144px)] min-h-[600px] items-center justify-center rounded-2xl border border-dashed border-foreground/15 bg-card/30 p-4 text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground/70">
-        Ad Space
-      </div>
-    </div>
-  );
-};
+import Header from '@/shared/layout/Header/Header';
+import Footer from '@/shared/layout/Footer/Footer';
+import { AdRails } from '@/shared/layout/AdRails';
 
+/**
+ * The shell every public page sits in. AdRails reserves the two 160px columns at
+ * 1440px and wider and does nothing at all below that; no page passes ad content yet.
+ */
 const MainLayout = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <Header />
       <div className="flex-1">
-        <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-[220px_minmax(0,1fr)_220px]">
-          <aside className="hidden xl:block" aria-label="Left advertisement">
-            <AdSlot />
-          </aside>
+        <AdRails>
           <main className="min-w-0">
             <Outlet />
           </main>
-          <aside className="hidden xl:block" aria-label="Right advertisement">
-            <AdSlot />
-          </aside>
-        </div>
+        </AdRails>
       </div>
       <Footer />
     </div>
@@ -35,4 +25,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-    

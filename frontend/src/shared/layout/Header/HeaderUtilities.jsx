@@ -1,101 +1,133 @@
+import { useEffect, useRef, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { changeLanguage } from '@/i18n/config';
 import { useTranslation } from 'react-i18next';
-import { useThemeStore } from '@/shared/store/theme';
-import { HeaderIconButton } from './HeaderIconButton';
-import { useState, useRef, useEffect } from 'react';
 
-export const HeaderLanguageSelector = ({ value, onChange, onOpen }) => {
+import { changeLanguage } from '@/i18n/config';
+import { useThemeStore } from '@/shared/store/theme';
+import Button from '@/shared/ui/button';
+
+const LANGUAGES = [
+  { code: 'az', label: 'AZ' },
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+];
+
+/**
+ * Three segments rather than a dropdown: with only three locales, the current one and
+ * the alternatives are all readable at a glance and reachable in one tap.
+ *
+ * `compact` is the phone header, where the bar has room for one control rather than
+ * three, so the current language opens a small menu instead.
+ */
+export const HeaderLanguageSelector = ({ value, onChange, compact = false, className = '' }) => {
   const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
-  const popoverRef = useRef(null);
+  const rootRef = useRef(null);
 
   const handleLanguageChange = async (lang) => {
-    if (lang === value) {
-      setIsOpen(false);
-      return;
-    }
+    setIsOpen(false);
+    if (lang === value) return;
     try {
       await changeLanguage(lang);
       await onChange(lang);
-      setIsOpen(false);
     } catch (error) {
       console.error('Failed to change language:', error);
     }
   };
 
-  // Закрытие при клике вне области
   useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (e) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
+    if (!isOpen) return undefined;
+    const onPointerDown = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) setIsOpen(false);
     };
-    window.addEventListener('pointerdown', handleClickOutside);
-    return () => window.removeEventListener('pointerdown', handleClickOutside);
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => window.removeEventListener('pointerdown', onPointerDown);
   }, [isOpen]);
 
-  // Закрыть другие попапы при открытии LanguageBar
-  useEffect(() => {
-    if (isOpen && onOpen) {
-      onOpen();
-    }
-  }, [isOpen, onOpen]);
-
-  const languages = [
-    { code: 'en', label: 'EN' },
-    { code: 'ru', label: 'RU' },
-    { code: 'az', label: 'AZ' },
-  ];
+  if (compact) {
+    return (
+      <div className={`relative ${className}`.trim()} ref={rootRef}>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t('labels.languageSwitcher')}
+          aria-haspopup="menu"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((open) => !open)}
+          className="text-[13px] font-semibold"
+        >
+          {String(value).toUpperCase()}
+        </Button>
+        {isOpen ? (
+          <div
+            role="menu"
+            aria-label={t('labels.languageSwitcher')}
+            className="absolute right-0 top-full z-50 mt-2 overflow-hidden rounded-[var(--radius)] border border-border bg-card py-1 shadow-[var(--shadow-card)]"
+          >
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                role="menuitem"
+                lang={lang.code}
+                aria-current={lang.code === value ? 'true' : undefined}
+                onClick={() => handleLanguageChange(lang.code)}
+                className={`flex h-11 w-full items-center px-4 text-[14px] font-semibold transition hover:bg-foreground/5 ${
+                  lang.code === value ? 'text-primary-text' : 'text-foreground'
+                }`}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
-    <div className="header__action" ref={popoverRef}>
-      <HeaderIconButton
-        aria-label={t('labels.language')}
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        aria-controls="popover-language"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span className="header__languageText">
-          {value.toUpperCase()}
-        </span>
-      </HeaderIconButton>
-      {isOpen ? (
-        <div id="popover-language" className="header__popover header__popover--language" role="menu">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              type="button"
-              role="menuitem"
-              className={`header__popoverItem ${lang.code === value ? 'header__popoverItem--active' : ''}`}
-              onClick={() => handleLanguageChange(lang.code)}
-            >
-              {lang.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
+    <div
+      role="group"
+      aria-label={t('labels.languageSwitcher')}
+      className={`inline-flex h-11 items-center overflow-hidden rounded-[var(--radius)] border border-border-strong dark:border-border ${className}`.trim()}
+    >
+      {LANGUAGES.map((lang) => {
+        const isActive = lang.code === value;
+        return (
+          <button
+            key={lang.code}
+            type="button"
+            lang={lang.code}
+            aria-current={isActive ? 'true' : undefined}
+            onClick={() => handleLanguageChange(lang.code)}
+            className={`h-full px-3 text-[13px] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${
+              isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-transparent text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+            }`}
+          >
+            {lang.label}
+          </button>
+        );
+      })}
     </div>
   );
 };
 
-export const HeaderThemeToggle = () => {
+export const HeaderThemeToggle = ({ className = '' }) => {
   const { t } = useTranslation('common');
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const isDark = theme === 'dark';
-  
+
   return (
-    <div className="header__action">
-      <HeaderIconButton
-        aria-label={isDark ? t('labels.switchToLight') : t('labels.switchToDark')}
-        onClick={toggleTheme}
-      >
-        {isDark ? <Sun size={22} /> : <Moon size={22} />}
-      </HeaderIconButton>
-    </div>
+    <Button
+      variant="icon"
+      aria-label={isDark ? t('labels.switchToLight') : t('labels.switchToDark')}
+      onClick={toggleTheme}
+      className={className}
+    >
+      {isDark ? <Sun size={20} /> : <Moon size={20} />}
+    </Button>
   );
 };
-

@@ -1,64 +1,122 @@
-import "./footer.scss";
+import { Link } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
+import { HeaderLanguageSelector } from '@/shared/layout/Header/HeaderUtilities';
+import Button from '@/shared/ui/button';
+import logoUrl from '@/assets/images/avtobaz-logo.svg';
+
+const columnTitleClass =
+  'mb-3 text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground';
+
+const linkClass =
+  'inline-flex min-h-9 items-center text-[14px] text-muted-foreground no-underline transition-colors hover:text-foreground hover:underline hover:underline-offset-4';
+
+const FooterColumn = ({ title, links }) => (
+  <div>
+    <h2 className={columnTitleClass}>{title}</h2>
+    <ul className="flex list-none flex-col">
+      {links.map((link) => (
+        <li key={link.label}>
+          <Link to={link.to} className={linkClass}>
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 const Footer = () => {
-    const { t } = useTranslation('common');
-    return (
-        <footer className="footer mt-12 border-t border-border pt-6 pb-12">
-            <div className="footer__container mx-auto w-full max-w-[1280px] px-4">
-                {/* Верхняя строка */}
-                <div className="mb-6 flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
-                    <div className="text-foreground">
-                        <strong>AvtoBaz</strong> — {t('footer.tagline')}
-                    </div>
-                </div>
+  const { t } = useTranslation('common');
+  const { language, setLanguage } = useLanguageSync();
 
-                {/* Основная сетка */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    {/* Компания */}
-                    <div>
-                        <h6 className="mb-4 text-base font-medium uppercase text-muted-foreground">{t('footer.company')}</h6>
-                        <ul className="list-none">
-                            <li><a href="/about.html" className="footer__link">{t('footer.about')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.press')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.legal')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.privacy')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.imprint')}</a></li>
-                        </ul>
-                    </div>
+  const columns = [
+    {
+      title: t('footer.company'),
+      links: [
+        { label: t('footer.about'), to: '/about' },
+        { label: t('footer.press'), to: '/about' },
+      ],
+    },
+    {
+      title: t('footer.forBuyers'),
+      links: [
+        { label: t('footer.browseCars'), to: '/autosearch' },
+        { label: t('footer.rentCar'), to: '/rent' },
+        { label: t('footer.findParts'), to: '/parts' },
+      ],
+    },
+    {
+      title: t('footer.forSellers'),
+      links: [
+        { label: t('footer.postListing'), to: '/add' },
+        { label: t('footer.promoteListing'), to: '/add' },
+      ],
+    },
+    {
+      title: t('footer.forDealers'),
+      links: [
+        { label: t('footer.dealerAccounts'), to: '/sellers' },
+        { label: t('footer.bulkUpload'), to: '/add' },
+      ],
+    },
+  ];
 
-                    {/* Услуги */}
-                    <div>
-                        <h6 className="mb-4 text-base font-medium uppercase text-muted-foreground">{t('footer.auto_services')}</h6>
-                        <ul className="list-none">
-                            <li><a href="#" className="footer__link">{t('footer.forBuyers')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.forSellers')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.forDealers')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.help')}</a></li>
-                        </ul>
-                    </div>
+  const legalLinks = [
+    { label: t('footer.privacy'), to: '/about' },
+    { label: t('footer.imprint'), to: '/about' },
+    { label: t('footer.help'), to: '/about' },
+  ];
 
-                    {/* Аукционы */}
-                    <div>
-                        <h6 className="mb-4 text-base font-medium uppercase text-muted-foreground">{t('footer.auctions')}</h6>
-                        <ul className="list-none">
-                            <li><a href="#" className="footer__link">{t('footer.currentAuctions')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.howItWorks')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.rules')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.guarantees')}</a></li>
-                            <li><a href="#" className="footer__link">{t('footer.sellerVerification')}</a></li>
-                        </ul>
-                    </div>
-                </div>
+  return (
+    <footer className="mt-12 border-t border-border bg-background">
+      <div className="mx-auto w-full max-w-[1280px] px-4 py-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))] lg:gap-6">
+          {/* Brand, tagline, and the legal links that sit under them in the design. */}
+          <div>
+            <Link to="/" className="inline-flex items-center" aria-label={t('common.goHome')}>
+              <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
+            </Link>
+            <p className="mt-3 max-w-[280px] text-[14px] leading-relaxed text-muted-foreground">
+              <span className="font-semibold text-foreground">AvtoBaz</span> — {t('footer.tagline')}
+            </p>
 
-                {/* Нижняя часть */}
-                <hr className="my-6 border-border" />
-                <div className="flex flex-col justify-between gap-2 text-sm text-muted-foreground lg:flex-row">
-                    <div>{t('footer.copyright')}</div>
-                </div>
-            </div>
-        </footer>
-    );
+            <h2 className={`${columnTitleClass} mt-6`}>{t('footer.legalAndHelp')}</h2>
+            <ul className="flex list-none flex-col">
+              {legalLinks.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className={linkClass}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {columns.map((column) => (
+            <FooterColumn key={column.title} title={column.title} links={column.links} />
+          ))}
+        </div>
+
+        {/* Phones get the one action that matters instead of a wall of links. */}
+        <Button asChild className="mt-8 w-full md:hidden">
+          <Link to="/add">
+            <Plus size={18} aria-hidden="true" />
+            {t('nav.addListing')}
+          </Link>
+        </Button>
+      </div>
+
+      <div className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center justify-between gap-4 px-4 py-5 sm:flex-row">
+          <p className="text-[13px] text-muted-foreground">{t('footer.copyright')}</p>
+          <HeaderLanguageSelector value={language} onChange={setLanguage} />
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

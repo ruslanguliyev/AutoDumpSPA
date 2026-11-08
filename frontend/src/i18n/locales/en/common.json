@@ -64,7 +64,8 @@
         "ac": "Auto AC",
         "mobileService": "Mobile Service"
       }
-    }
+    },
+    "more": "More"
   },
   "buttons": {
     "search": "Search",
@@ -114,7 +115,9 @@
     "mobileCounters": "Mobile counters",
     "primaryNavigation": "Primary navigation",
     "headerActions": "Header actions",
-    "mobileNavigation": "Mobile navigation"
+    "mobileNavigation": "Mobile navigation",
+    "moreNavigation": "More sections",
+    "languageSwitcher": "Language"
   },
   "common": {
     "loading": "Loading...",
@@ -147,7 +150,15 @@
     "guarantees": "Guarantees / Escrow",
     "sellerVerification": "Seller verification",
     "copyright": "© 2026 AvtoBaz. All rights reserved.",
-    "tagline": "a marketplace for everything automotive: cars for sale and rent, parts, mechanics and auto services."
+    "tagline": "a marketplace for everything automotive: cars for sale and rent, parts, mechanics and auto services.",
+    "browseCars": "Browse cars",
+    "rentCar": "Rent a car",
+    "findParts": "Find parts",
+    "postListing": "Post a listing",
+    "promoteListing": "Promote a listing",
+    "dealerAccounts": "Dealer accounts",
+    "bulkUpload": "Bulk upload",
+    "legalAndHelp": "Legal & Help"
   },
   "languages": {
     "ru": "Русский",

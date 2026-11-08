@@ -15,6 +15,9 @@ interface MegaMenuProps {
   onClose?: () => void;
 }
 
+const triggerClass =
+  'inline-flex h-11 cursor-pointer items-center gap-1 rounded-[var(--radius)] px-2.5 text-[15px] font-semibold text-foreground transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+
 export function MegaMenu({
   config,
   labelKey,
@@ -55,7 +58,7 @@ export function MegaMenu({
         handleOpen();
       }
     },
-    [handleOpen, handleClose]
+    [handleOpen, handleClose],
   );
 
   // Close on click outside (desktop)
@@ -73,7 +76,7 @@ export function MegaMenu({
   const label = t(labelKey);
 
   return (
-    <div ref={containerRef} className="header__megaWrap">
+    <div ref={containerRef} className={isMobile ? 'w-full' : 'relative'}>
       <div
         role="button"
         tabIndex={0}
@@ -81,7 +84,7 @@ export function MegaMenu({
         aria-haspopup="true"
         aria-controls={`mega-${config.id}`}
         id={`mega-trigger-${config.id}`}
-        className="header__megaTrigger"
+        className={isMobile ? `${triggerClass} w-full justify-between px-4` : triggerClass}
         onClick={isMobile ? handleOpen : undefined}
         onMouseEnter={!isMobile ? handleOpen : undefined}
         onMouseLeave={!isMobile ? handleClose : undefined}
@@ -89,7 +92,7 @@ export function MegaMenu({
       >
         <Link
           to={config.href}
-          className="header__megaLink"
+          className="text-inherit no-underline"
           onClick={(e) => {
             if (isMobile) e.preventDefault();
           }}
@@ -98,7 +101,8 @@ export function MegaMenu({
         </Link>
         <ChevronDown
           size={16}
-          className={`header__megaChevron ${isOpen ? 'header__megaChevron--open' : ''}`}
+          strokeWidth={1.5}
+          className={`shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden
         />
       </div>
@@ -108,21 +112,31 @@ export function MegaMenu({
           id={`mega-${config.id}`}
           role="menu"
           aria-labelledby={`mega-trigger-${config.id}`}
-          className="header__megaPanel"
+          className={
+            isMobile
+              ? 'px-4 pb-2'
+              : 'absolute left-0 top-full z-50 mt-2 w-max max-w-[min(90vw,880px)] rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]'
+          }
           onMouseEnter={!isMobile ? handleOpen : undefined}
           onMouseLeave={!isMobile ? handleClose : undefined}
         >
-          <div className="header__megaGrid">
+          <div
+            className={
+              isMobile ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6'
+            }
+          >
             {config.sections.map((section) => (
-              <div key={section.titleKey} className="header__megaColumn">
-                <h3 className="header__megaTitle">{t(section.titleKey)}</h3>
-                <ul className="header__megaList">
+              <div key={section.titleKey}>
+                <h3 className="mb-2 text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                  {t(section.titleKey)}
+                </h3>
+                <ul className="space-y-0.5">
                   {section.items.map((item) => (
                     <li key={item.labelKey}>
                       <Link
                         to={item.href ?? config.href}
                         role="menuitem"
-                        className="header__megaItem"
+                        className="flex min-h-11 items-center rounded-[var(--radius)] px-2 text-[14px] text-foreground transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         onClick={handleClose}
                       >
                         {t(item.labelKey)}

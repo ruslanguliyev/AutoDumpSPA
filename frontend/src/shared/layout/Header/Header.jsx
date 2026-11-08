@@ -1,15 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Hammer, Heart, Home, Info, Menu, Package, Plus, X, User, Wrench } from "lucide-react";
+import { ChevronDown, Heart, Menu, Plus, User, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
-import { useTranslation } from "react-i18next";
 import logoUrl from "@/assets/images/avtobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
-import { PARTS_MEGA_MENU, AUTO_SERVICES_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
-import "./header.scss";
+import { PARTS_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
+import Button from "@/shared/ui/button";
+
+/** Below this the drawer carries the whole navigation. */
+const DESKTOP_QUERY = "(max-width: 1023.98px)";
 
 const useMediaQuery = (query) => {
     const getMatch = () => {
@@ -21,28 +25,33 @@ const useMediaQuery = (query) => {
 
     useEffect(() => {
         const mql = window.matchMedia(query);
-        const onChange = (e) => setMatches(e.matches);
+        const sync = () => setMatches(mql.matches);
 
-        setMatches(mql.matches);
+        sync();
         if (typeof mql.addEventListener === "function") {
-            mql.addEventListener("change", onChange);
-            return () => mql.removeEventListener("change", onChange);
+            mql.addEventListener("change", sync);
+            return () => mql.removeEventListener("change", sync);
         }
 
         // Safari fallback
-        mql.addListener(onChange);
-        return () => mql.removeListener(onChange);
+        mql.addListener(sync);
+        return () => mql.removeListener(sync);
     }, [query]);
 
     return matches;
 };
 
+const navLinkClass =
+    "inline-flex h-11 items-center rounded-[var(--radius)] px-2.5 text-[15px] font-semibold text-foreground no-underline transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+const popoverClass =
+    "absolute right-0 top-full z-50 mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-border bg-card py-1 shadow-[var(--shadow-card)]";
+
+const popoverItemClass =
+    "flex min-h-11 w-full items-center px-4 text-left text-[14px] text-foreground no-underline transition hover:bg-foreground/5";
+
 export default function Header() {
-    // The desktop row (logo + six nav links + six actions) needs ~1200px in Russian,
-    // the widest of the three locales. Below that it used to overflow its box and the
-    // links drew on top of "Add listing", so everything narrower gets the drawer, which
-    // already carries the same links.
-    const isMobile = useMediaQuery("(max-width: 1239.98px)");
+    const isMobile = useMediaQuery(DESKTOP_QUERY);
     const location = useLocation();
     const { t } = useTranslation('common');
 
@@ -51,8 +60,9 @@ export default function Header() {
     const logout = useAuthStore((state) => state.logout);
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [openPopover, setOpenPopover] = useState(null); // 'user' | 'favorites' | null
+    const [openPopover, setOpenPopover] = useState(null); // 'user' | 'favorites' | 'more' | null
     const [scrolled, setScrolled] = useState(false);
+    const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
 
     const { language, setLanguage } = useLanguageSync();
 
@@ -68,23 +78,68 @@ export default function Header() {
         return t('labels.favoritesCount', { count });
     }, [favoriteItems, t]);
 
-    const [expandedMobileMenu, setExpandedMobileMenu] = useState(null); // 'parts' | 'auto_services' | null
-
-    const mobileMenuItems = useMemo(
+    /** Six destinations. Parts carries the mega-menu; the rest are plain links. */
+    const navItems = useMemo(
         () => [
-            { to: "/add", label: t('nav.addListing'), Icon: Plus },
-            { to: "/", label: t('nav.home'), Icon: Home },
-            { to: "/autosearch", label: t('nav.cars'), Icon: Home },
-            { to: "/rent", label: t('nav.rent'), Icon: Home },
-            { to: "/sellers", label: t('nav.sellers'), Icon: Info },
-            { to: "/parts", label: t('nav.parts'), Icon: Package, megaMenu: PARTS_MEGA_MENU },
-            { to: "/services", label: t('nav.auto_services'), Icon: Wrench, megaMenu: AUTO_SERVICES_MEGA_MENU },
-            { to: "/specialists", label: t('nav.specialists'), Icon: Hammer },
-            { to: "/favorites", label: t('nav.favorites'), Icon: Heart },
-            { to: "/dashboard", label: t('nav.account'), Icon: User },
+            { key: 'cars', to: '/autosearch', label: t('nav.cars') },
+            { key: 'rent', to: '/rent', label: t('nav.rent') },
+            { key: 'parts', to: '/parts', label: t('nav.parts'), megaMenu: PARTS_MEGA_MENU },
+            { key: 'services', to: '/services', label: t('nav.auto_services') },
+            { key: 'specialists', to: '/specialists', label: t('nav.specialists') },
+            { key: 'sellers', to: '/sellers', label: t('nav.sellers') },
         ],
         [t]
     );
+
+    // ---- Priority-plus navigation -------------------------------------------------
+    // The row is as wide as the locale makes it: "Ehtiyat hissələri" and "Автоуслуги"
+    // are not "Parts" and "Services". Rather than pick a breakpoint that happens to fit
+    // one language, measure what fits and put the rest behind "More".
+    const navRef = useRef(null);
+    const measureRef = useRef(null);
+    const [visibleCount, setVisibleCount] = useState(navItems.length);
+
+    useLayoutEffect(() => {
+        if (isMobile) return undefined;
+        const nav = navRef.current;
+        const measure = measureRef.current;
+        if (!nav || !measure) return undefined;
+
+        const GAP = 4;
+
+        const compute = () => {
+            const children = Array.from(measure.children);
+            if (children.length < 2) return;
+            const widths = children.map((child) => child.getBoundingClientRect().width);
+            const moreWidth = widths[widths.length - 1];
+            const itemWidths = widths.slice(0, -1);
+            const available = nav.getBoundingClientRect().width;
+
+            const everything = itemWidths.reduce((sum, w) => sum + w, 0) + GAP * (itemWidths.length - 1);
+            if (everything <= available) {
+                setVisibleCount(itemWidths.length);
+                return;
+            }
+
+            let used = moreWidth;
+            let count = 0;
+            for (let i = 0; i < itemWidths.length; i += 1) {
+                const next = used + itemWidths[i] + GAP;
+                if (next > available) break;
+                used = next;
+                count += 1;
+            }
+            setVisibleCount(count);
+        };
+
+        compute();
+        const observer = new ResizeObserver(compute);
+        observer.observe(nav);
+        return () => observer.disconnect();
+    }, [isMobile, navItems, language]);
+
+    const visibleItems = navItems.slice(0, visibleCount);
+    const overflowItems = navItems.slice(visibleCount);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 10);
@@ -93,16 +148,13 @@ export default function Header() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Close the drawer when:
-    // - navigating
-    // - switching to desktop
+    // Close everything when navigating or when crossing the breakpoint.
     useEffect(() => {
         setIsDrawerOpen(false);
         setOpenPopover(null);
         setExpandedMobileMenu(null);
     }, [location.pathname, isMobile]);
 
-    // ESC to close
     useEffect(() => {
         const onKeyDown = (e) => {
             if (e.key !== "Escape") return;
@@ -114,182 +166,182 @@ export default function Header() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [isDrawerOpen, openPopover, expandedMobileMenu]);
 
-    // Click outside closes desktop popovers
     useEffect(() => {
-        if (!openPopover) return;
+        if (!openPopover) return undefined;
         const onPointerDown = (e) => {
             const root = popoverRootRef.current;
-            if (!root) return;
-            if (root.contains(e.target)) return;
+            if (!root || root.contains(e.target)) return;
             setOpenPopover(null);
         };
         window.addEventListener("pointerdown", onPointerDown);
         return () => window.removeEventListener("pointerdown", onPointerDown);
     }, [openPopover]);
 
-    // Prevent background scroll while drawer is open (mobile only)
     useEffect(() => {
-        if (!isMobile || !isDrawerOpen) return;
-        const prevOverflow = document.body.style.overflow;
+        if (!isDrawerOpen) return undefined;
+        const previous = document.body.style.overflow;
         document.body.style.overflow = "hidden";
         return () => {
-            document.body.style.overflow = prevOverflow;
+            document.body.style.overflow = previous;
         };
-    }, [isMobile, isDrawerOpen]);
+    }, [isDrawerOpen]);
 
-    const openDrawer = () => setIsDrawerOpen(true);
-    const closeDrawer = () => setIsDrawerOpen(false);
-    const closePopover = () => setOpenPopover(null);
+    const closeDrawer = useCallback(() => setIsDrawerOpen(false), []);
+    const closePopover = useCallback(() => setOpenPopover(null), []);
     const togglePopover = (key) => setOpenPopover((cur) => (cur === key ? null : key));
+
+    const renderNavItem = (item) =>
+        item.megaMenu ? (
+            <MegaMenu key={item.key} config={item.megaMenu} labelKey="nav.parts" />
+        ) : (
+            <Link key={item.key} to={item.to} className={navLinkClass}>
+                {item.label}
+            </Link>
+        );
 
     return (
         <>
-            <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
-                <div className="header__container">
-                    <Link to="/" className="header__brand" aria-label={t('common.goHome')}>
-                        <img src={logoUrl} alt="AvtoBaz" className="header__logo" />
+            <header
+                className={`sticky top-0 z-50 bg-background transition-shadow ${
+                    scrolled ? 'shadow-[var(--shadow-card)]' : ''
+                }`}
+            >
+                <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center gap-4 px-4">
+                    <Link to="/" className="flex shrink-0 items-center" aria-label={t('common.goHome')}>
+                        <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
                     </Link>
 
                     {!isMobile ? (
-                        <div className="header__desktop" ref={popoverRootRef}>
-                            <nav className="header__nav" aria-label={t('labels.primaryNavigation')}>
-                                <Link to="/autosearch">{t('nav.cars')}</Link>
-                                <Link to="/rent">{t('nav.rent')}</Link>
-                                <MegaMenu
-                                    config={PARTS_MEGA_MENU}
-                                    labelKey="nav.parts"
-                                />
-                                <MegaMenu
-                                    config={AUTO_SERVICES_MEGA_MENU}
-                                    labelKey="nav.auto_services"
-                                />
-                                <Link to="/specialists">{t('nav.specialists')}</Link>
-                                <Link to="/sellers">{t('nav.sellers')}</Link>
-                            </nav>
+                        <div className="flex min-w-0 flex-1 items-center gap-4" ref={popoverRootRef}>
+                            <nav
+                                ref={navRef}
+                                className="relative min-w-0 flex-1"
+                                aria-label={t('labels.primaryNavigation')}
+                            >
+                                <div className="flex items-center gap-1">
+                                    {visibleItems.map(renderNavItem)}
 
-                            <div className="header__actions" aria-label={t('labels.headerActions')}>
-                                <div className="header__action">
-                                    <Link
-                                        to="/add"
-                                        className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/20 hover:bg-white/10 transition-colors"
-                                        style={{ textDecoration: 'none' }}
-                                        aria-label={t('nav.addListing')}
-                                    >
-                                        <Plus size={18} className="shrink-0" aria-hidden />
-                                        <span>{t('nav.add')}</span>
-                                    </Link>
-                                </div>
-                                <HeaderLanguageSelector
-                                    value={language}
-                                    onChange={setLanguage}
-                                    onOpen={closePopover}
-                                />
-                                <HeaderThemeToggle />
-
-                                <div className="header__action">
-                                    <button
-                                        type="button"
-                                        className="header__iconBtn"
-                                        aria-label={t('labels.account')}
-                                        aria-haspopup="menu"
-                                        aria-expanded={openPopover === "user"}
-                                        aria-controls="popover-user"
-                                        onClick={() => togglePopover("user")}
-                                    >
-                                        <User size={22} />
-                                    </button>
-                                    {openPopover === "user" ? (
-                                        <div id="popover-user" className="header__popover" role="menu">
-                                            {isAuthenticated && user ? (
-                                                <>
-                                                    <div className="px-3 py-2 text-xs text-muted-foreground border-b border-border">
-                                                        {user.fullName}
-                                                    </div>
-                                                    <Link to="/dashboard" role="menuitem" onClick={closePopover}>
-                                                        {t('nav.dashboard') ?? 'Dashboard'}
-                                                    </Link>
-                                                    <button
-                                                        type="button"
-                                                        role="menuitem"
-                                                        className="w-full text-left px-3 py-2 text-sm hover:bg-muted/50 text-destructive"
-                                                        onClick={() => { logout(); closePopover(); }}
-                                                    >
-                                                        {t('buttons.logout') ?? 'Çıxış'}
-                                                    </button>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Link to="/login" role="menuitem" onClick={closePopover}>
-                                                        {t('buttons.login')}
-                                                    </Link>
-                                                    <Link to="/register" role="menuitem" onClick={closePopover}>
-                                                        {t('buttons.signup')}
-                                                    </Link>
-                                                </>
-                                            )}
+                                    {overflowItems.length > 0 ? (
+                                        <div className="relative">
+                                            <button
+                                                type="button"
+                                                className={`${navLinkClass} gap-1`}
+                                                aria-haspopup="menu"
+                                                aria-expanded={openPopover === 'more'}
+                                                aria-controls="popover-more"
+                                                onClick={() => togglePopover('more')}
+                                            >
+                                                {t('nav.more')}
+                                                <ChevronDown
+                                                    size={16}
+                                                    strokeWidth={1.5}
+                                                    aria-hidden="true"
+                                                    className={openPopover === 'more' ? 'rotate-180 transition-transform' : 'transition-transform'}
+                                                />
+                                            </button>
+                                            {openPopover === 'more' ? (
+                                                <div
+                                                    id="popover-more"
+                                                    role="menu"
+                                                    aria-label={t('labels.moreNavigation')}
+                                                    className={`${popoverClass} left-0 right-auto`}
+                                                >
+                                                    {overflowItems.map((item) => (
+                                                        <Link
+                                                            key={item.key}
+                                                            to={item.to}
+                                                            role="menuitem"
+                                                            className={popoverItemClass}
+                                                            onClick={closePopover}
+                                                        >
+                                                            {item.label}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            ) : null}
                                         </div>
                                     ) : null}
                                 </div>
 
-                                <div className="header__action">
-                                    <button
-                                        type="button"
-                                        className="header__iconBtn"
+                                {/* Off-layout copy used only to measure natural widths. */}
+                                <div
+                                    ref={measureRef}
+                                    aria-hidden="true"
+                                    className="pointer-events-none invisible absolute left-0 top-0 flex items-center gap-1 whitespace-nowrap"
+                                >
+                                    {navItems.map((item) => (
+                                        <span key={item.key} className={`${navLinkClass} ${item.megaMenu ? 'pr-7' : ''}`}>
+                                            {item.label}
+                                        </span>
+                                    ))}
+                                    <span className={`${navLinkClass} pr-7`}>{t('nav.more')}</span>
+                                </div>
+                            </nav>
+
+                            <div className="flex shrink-0 items-center gap-2" aria-label={t('labels.headerActions')}>
+                                <HeaderLanguageSelector value={language} onChange={setLanguage} />
+                                <HeaderThemeToggle />
+
+                                <div className="relative">
+                                    <Button
+                                        variant="icon"
                                         aria-label={favoritesCountLabel}
                                         aria-haspopup="menu"
                                         aria-expanded={openPopover === "favorites"}
                                         aria-controls="popover-favorites"
                                         onClick={() => togglePopover("favorites")}
                                     >
-                                        <Heart size={22} />
+                                        <Heart size={20} />
                                         {favoritesCount > 0 ? (
-                                            <span className="count-badge" aria-hidden="true">
+                                            <span
+                                                aria-hidden="true"
+                                                className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-primary-foreground"
+                                            >
                                                 {favoritesCount}
                                             </span>
                                         ) : null}
-                                    </button>
+                                    </Button>
                                     {openPopover === "favorites" ? (
-                                        <div id="popover-favorites" className="header__popover" role="menu">
-                                            <div className="header__popoverTitle">{t('labels.favorites')}</div>
+                                        <div id="popover-favorites" className={popoverClass} role="menu">
+                                            <div className="px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                                                {t('labels.favorites')}
+                                            </div>
                                             {favoriteItems?.length ? (
-                                                <div className="header__popoverList">
+                                                <div className="max-h-[320px] overflow-y-auto">
                                                     {favoriteItems.slice(0, 6).map((fav) => {
                                                         const to =
-                                                            fav.type === "vehicle"
-                                                                ? `/vehicles/${fav.id}`
-                                                                : `/parts/${fav.id}`;
+                                                            fav.type === "vehicle" ? `/vehicles/${fav.id}` : `/parts/${fav.id}`;
                                                         const title =
                                                             fav.title ||
                                                             (fav.type === "vehicle"
                                                                 ? t('labels.vehicleWithNumber', { id: fav.id })
                                                                 : t('labels.partWithNumber', { id: fav.id }));
                                                         return (
-                                                            <div key={fav.key} className="header__listItem" role="menuitem">
+                                                            <div key={fav.key} className="flex items-center gap-2 pr-2" role="menuitem">
                                                                 <Link
                                                                     to={to}
-                                                                    className="header__listLink"
+                                                                    className="flex min-h-11 flex-1 items-center gap-3 px-4 text-[14px] text-foreground no-underline transition hover:bg-foreground/5"
                                                                     onClick={closePopover}
                                                                 >
                                                                     {fav.thumbnail ? (
                                                                         <img
                                                                             src={fav.thumbnail}
                                                                             alt=""
-                                                                            className="header__listThumb"
                                                                             loading="lazy"
+                                                                            className="h-10 w-14 shrink-0 rounded-lg object-cover"
                                                                         />
                                                                     ) : (
-                                                                        <div className="header__listThumb header__listThumb--placeholder" />
+                                                                        <div className="h-10 w-14 shrink-0 rounded-lg bg-card-muted" />
                                                                     )}
-                                                                    <div className="header__listMain">
-                                                                        <div className="header__listTitle">{title}</div>
-                                                                        <div className="header__listMeta">
+                                                                    <span className="min-w-0">
+                                                                        <span className="block truncate">{title}</span>
+                                                                        <span className="block text-[12px] text-muted-foreground">
                                                                             {fav.type === "vehicle" ? t('labels.vehicle') : t('labels.part')}
-                                                                        </div>
-                                                                    </div>
+                                                                        </span>
+                                                                    </span>
                                                                 </Link>
-                                                                <button
-                                                                    type="button"
-                                                                    className="header__removeBtn"
+                                                                <Button
+                                                                    variant="icon"
                                                                     aria-label={t('labels.removeFromFavorites')}
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
@@ -298,16 +350,21 @@ export default function Header() {
                                                                     }}
                                                                 >
                                                                     <X size={16} />
-                                                                </button>
+                                                                </Button>
                                                             </div>
                                                         );
                                                     })}
-                                                    <Link to="/favorites" role="menuitem" onClick={closePopover}>
+                                                    <Link
+                                                        to="/favorites"
+                                                        role="menuitem"
+                                                        className={popoverItemClass}
+                                                        onClick={closePopover}
+                                                    >
                                                         {t('labels.viewAllFavorites')}
                                                     </Link>
                                                 </div>
                                             ) : (
-                                                <div className="header__empty" role="note">
+                                                <div className="px-4 py-3 text-[14px] text-muted-foreground" role="note">
                                                     {t('labels.noFavorites')}
                                                 </div>
                                             )}
@@ -315,108 +372,172 @@ export default function Header() {
                                     ) : null}
                                 </div>
 
+                                <div className="relative">
+                                    <Button
+                                        variant="icon"
+                                        aria-label={t('labels.account')}
+                                        aria-haspopup="menu"
+                                        aria-expanded={openPopover === "user"}
+                                        aria-controls="popover-user"
+                                        onClick={() => togglePopover("user")}
+                                    >
+                                        <User size={20} />
+                                    </Button>
+                                    {openPopover === "user" ? (
+                                        <div id="popover-user" className={popoverClass} role="menu">
+                                            {isAuthenticated && user ? (
+                                                <>
+                                                    <div className="border-b border-border px-4 py-2 text-[12px] text-muted-foreground">
+                                                        {user.fullName}
+                                                    </div>
+                                                    <Link to="/dashboard" role="menuitem" className={popoverItemClass} onClick={closePopover}>
+                                                        {t('nav.dashboard')}
+                                                    </Link>
+                                                    <button
+                                                        type="button"
+                                                        role="menuitem"
+                                                        className={`${popoverItemClass} text-destructive`}
+                                                        onClick={() => { logout(); closePopover(); }}
+                                                    >
+                                                        {t('buttons.logout')}
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Link to="/login" role="menuitem" className={popoverItemClass} onClick={closePopover}>
+                                                        {t('buttons.login')}
+                                                    </Link>
+                                                    <Link to="/register" role="menuitem" className={popoverItemClass} onClick={closePopover}>
+                                                        {t('buttons.signup')}
+                                                    </Link>
+                                                </>
+                                            )}
+                                        </div>
+                                    ) : null}
+                                </div>
+
+                                <Button asChild>
+                                    <Link to="/add">
+                                        <Plus size={18} aria-hidden="true" />
+                                        <span className="hidden xl:inline">{t('nav.addListing')}</span>
+                                        <span className="xl:hidden">{t('nav.add')}</span>
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                     ) : (
-                        <div className="header__mobile">
-                            <div className="header__mobileIndicators" aria-label={t('labels.mobileCounters')}>
-                                {favoritesCount > 0 ? (
-                                    <span className="header__mobileIndicator" aria-label={`${t('labels.favorites')}: ${favoritesCount}`}>
-                                        <Heart size={16} />
-                                        <span className="header__mobileIndicatorCount">{favoritesCount}</span>
-                                    </span>
-                                ) : null}
-                            </div>
+                        <div className="flex flex-1 items-center justify-end gap-1">
+                            <HeaderLanguageSelector value={language} onChange={setLanguage} compact />
 
-                            <button
-                                type="button"
-                                className="header__burger"
-                                onClick={openDrawer}
+                            <Button asChild variant="icon" aria-label={favoritesCountLabel}>
+                                <Link to="/favorites" className="relative">
+                                    <Heart size={20} />
+                                    {favoritesCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-primary-foreground"
+                                        >
+                                            {favoritesCount}
+                                        </span>
+                                    ) : null}
+                                </Link>
+                            </Button>
+
+                            <Button
+                                variant="icon"
+                                onClick={() => setIsDrawerOpen(true)}
                                 aria-label={t('labels.openMenu')}
                                 aria-haspopup="dialog"
                                 aria-expanded={isDrawerOpen}
                                 aria-controls="mobile-drawer"
                             >
-                                <Menu size={26} />
-                            </button>
+                                <Menu size={22} />
+                            </Button>
                         </div>
                     )}
                 </div>
             </header>
 
             {isMobile && isDrawerOpen ? (
-                <div className="mobile-menu" aria-hidden={!isDrawerOpen}>
+                <div className="fixed inset-0 z-[60]">
                     <button
                         type="button"
-                        className="mobile-overlay"
+                        className="absolute inset-0 h-full w-full bg-foreground/40 backdrop-blur-[2px]"
                         onClick={closeDrawer}
                         aria-label={t('labels.closeMenu')}
                     />
 
                     <aside
                         id="mobile-drawer"
-                        className="mobile-drawer"
                         role="dialog"
                         aria-modal="true"
                         aria-label={t('labels.mobileNavigation')}
+                        className="absolute right-0 top-0 flex h-full w-[min(88vw,360px)] flex-col overflow-y-auto border-l border-border bg-background"
                     >
-                        <div className="mobile-drawer__header">
-                            <span className="mobile-drawer__title">{t('labels.menu')}</span>
-                            <button
-                                type="button"
-                                className="mobile-drawer__close"
-                                onClick={closeDrawer}
-                                aria-label={t('labels.closeMenu')}
-                            >
-                                <X size={22} />
-                            </button>
+                        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
+                            <span className="text-[15px] font-semibold text-foreground">{t('labels.menu')}</span>
+                            <Button variant="icon" onClick={closeDrawer} aria-label={t('labels.closeMenu')}>
+                                <X size={20} />
+                            </Button>
                         </div>
 
-                        {/* Mobile utilities (compact, no layout shift in the top header) */}
-                        <div className="flex items-center gap-2 px-4 pb-2" style={{ flexWrap: 'wrap' }}>
-                            <HeaderLanguageSelector
-                                value={language}
-                                onChange={setLanguage}
-                                compact
-                                onOpen={closePopover}
-                            />
+                        <div className="flex flex-wrap items-center gap-2 px-4 py-3">
+                            <HeaderLanguageSelector value={language} onChange={setLanguage} />
                             <HeaderThemeToggle />
                         </div>
 
-                        <nav className="mobile-drawer__nav" aria-label="Mobile navigation links">
-                            {mobileMenuItems.map((item) => {
-                                const { to, label, Icon, megaMenu } = item;
-                                const badgeCount = to === "/favorites" ? favoritesCount : 0;
-                                if (megaMenu) {
-                                    return (
-                                        <div key={megaMenu.id} className="mobile-drawer__megaItem">
-                                            <MegaMenu
-                                                config={megaMenu}
-                                                labelKey={megaMenu.id === 'parts' ? 'nav.parts' : 'nav.auto_services'}
-                                                isMobile
-                                                isExpanded={expandedMobileMenu === megaMenu.id}
-                                                onToggle={() =>
-                                                    setExpandedMobileMenu((prev) =>
-                                                        prev === megaMenu.id ? null : megaMenu.id
-                                                    )
-                                                }
-                                                onClose={() => setExpandedMobileMenu(null)}
-                                            />
-                                        </div>
-                                    );
-                                }
-                                return (
-                                    <Link key={to} to={to} onClick={closeDrawer}>
-                                        <Icon size={18} />
-                                        <span className="mobile-drawer__label">{label}</span>
-                                        {badgeCount > 0 ? (
-                                            <span className="mobile-drawer__badge" aria-hidden="true">
-                                                {badgeCount}
-                                            </span>
-                                        ) : null}
+                        <nav className="flex flex-col px-2 pb-4" aria-label={t('labels.mobileNavigation')}>
+                            {navItems.map((item) =>
+                                item.megaMenu ? (
+                                    <MegaMenu
+                                        key={item.key}
+                                        config={item.megaMenu}
+                                        labelKey="nav.parts"
+                                        isMobile
+                                        isExpanded={expandedMobileMenu === item.megaMenu.id}
+                                        onToggle={() =>
+                                            setExpandedMobileMenu((prev) => (prev === item.megaMenu.id ? null : item.megaMenu.id))
+                                        }
+                                        onClose={() => setExpandedMobileMenu(null)}
+                                    />
+                                ) : (
+                                    <Link
+                                        key={item.key}
+                                        to={item.to}
+                                        onClick={closeDrawer}
+                                        className={`${navLinkClass} w-full justify-start px-4`}
+                                    >
+                                        {item.label}
                                     </Link>
-                                );
-                            })}
+                                )
+                            )}
+
+                            <span className="my-2 h-px bg-border" aria-hidden="true" />
+
+                            <Link to="/favorites" onClick={closeDrawer} className={`${navLinkClass} w-full justify-start gap-2 px-4`}>
+                                <Heart size={18} aria-hidden="true" />
+                                {t('nav.favorites')}
+                                {favoritesCount > 0 ? (
+                                    <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-primary-foreground">
+                                        {favoritesCount}
+                                    </span>
+                                ) : null}
+                            </Link>
+                            <Link
+                                to={isAuthenticated ? '/dashboard' : '/login'}
+                                onClick={closeDrawer}
+                                className={`${navLinkClass} w-full justify-start gap-2 px-4`}
+                            >
+                                <User size={18} aria-hidden="true" />
+                                {isAuthenticated ? t('nav.dashboard') : t('nav.account')}
+                            </Link>
+
+                            <Button asChild className="mx-2 mt-3" onClick={closeDrawer}>
+                                <Link to="/add">
+                                    <Plus size={18} aria-hidden="true" />
+                                    {t('nav.addListing')}
+                                </Link>
+                            </Button>
                         </nav>
                     </aside>
                 </div>

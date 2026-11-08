@@ -48,7 +48,8 @@ Bottom bar: "© 2026 AvtoBaz" + language switcher.
 10. **FAQ** — accordion, 6 questions: how to post, is it free, how promotion
     works, paying without an account, booking a mechanic, reporting a listing.
 
-Ad rails appear either side above 1440px.
+Ad rails appear either side above 1584px — see the Ad rails note in
+`components.md` for why that figure is not 1440px.
 
 ---
 

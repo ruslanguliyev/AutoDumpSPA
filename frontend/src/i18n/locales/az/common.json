@@ -64,7 +64,8 @@
         "ac": "Avto kondisioner",
         "mobileService": "Mobil servis"
       }
-    }
+    },
+    "more": "Daha çox"
   },
   "buttons": {
     "search": "Axtar",
@@ -114,7 +115,9 @@
     "mobileCounters": "Mobil sayğaclar",
     "primaryNavigation": "Əsas naviqasiya",
     "headerActions": "Başlıq hərəkətləri",
-    "mobileNavigation": "Mobil naviqasiya"
+    "mobileNavigation": "Mobil naviqasiya",
+    "moreNavigation": "Digər bölmələr",
+    "languageSwitcher": "Dil seçimi"
   },
   "common": {
     "loading": "Yüklənir...",
@@ -147,7 +150,15 @@
     "guarantees": "Zəmanətlər / Escrow",
     "sellerVerification": "Satıcının yoxlanılması",
     "copyright": "© 2026 AvtoBaz. Bütün hüquqlar qorunur.",
-    "tagline": "avtomobillərlə bağlı hər şeyin bazarı: avtomobillərin satışı və icarəsi, ehtiyat hissələri, ustalar və servislər."
+    "tagline": "avtomobillərlə bağlı hər şeyin bazarı: avtomobillərin satışı və icarəsi, ehtiyat hissələri, ustalar və servislər.",
+    "browseCars": "Avtomobillərə bax",
+    "rentCar": "Avtomobil icarəsi",
+    "findParts": "Ehtiyat hissəsi tap",
+    "postListing": "Elan yerləşdir",
+    "promoteListing": "Elanı irəli çək",
+    "dealerAccounts": "Diler hesabları",
+    "bulkUpload": "Toplu yükləmə",
+    "legalAndHelp": "Hüquq və kömək"
   },
   "languages": {
     "ru": "Русский",

@@ -74,23 +74,5 @@ export const PARTS_MEGA_MENU: MegaMenuConfig = {
   ],
 };
 
-/** Auto Xidmətləri mega menu structure */
-export const AUTO_SERVICES_MEGA_MENU: MegaMenuConfig = {
-  id: 'auto_services',
-  href: '/services',
-  sections: [
-    {
-      titleKey: 'nav.megaMenu.autoServices.section',
-      items: [
-        { labelKey: 'nav.megaMenu.autoServices.serviceCenters', href: '/services?type=garage' },
-        { labelKey: 'nav.megaMenu.autoServices.tuning', href: '/services?type=tuning' },
-        { labelKey: 'nav.megaMenu.autoServices.detailing', href: '/services?type=detailing' },
-        { labelKey: 'nav.megaMenu.autoServices.diagnostics', href: '/services?type=diagnostics' },
-        { labelKey: 'nav.megaMenu.autoServices.tireService', href: '/services?type=tire' },
-        { labelKey: 'nav.megaMenu.autoServices.electrician', href: '/services?type=electric' },
-        { labelKey: 'nav.megaMenu.autoServices.ac', href: '/services?type=ac' },
-        { labelKey: 'nav.megaMenu.autoServices.mobileService', href: '/services?type=mobile' },
-      ],
-    },
-  ],
-};
+/* Auto Services had a mega-menu here. The design gives one to Parts only, and the nav
+   has to fit six items at 1024px in Russian, so Auto Services is a plain link. */

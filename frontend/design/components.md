@@ -173,6 +173,25 @@ optional details; submit goes to the external app.
 
 ---
 
+## Header
+
+Sticky, 64px. Logo, then the nav, then the language switcher, theme toggle,
+Favorites, Account and the primary "+ Add listing". Below 1024px the whole
+navigation moves into the drawer; `pages.md` has the contents.
+
+- **The nav measures itself.** "Ehtiyat hissələri" and "Автоуслуги" are not
+  "Parts" and "Services", so no fixed breakpoint fits all three locales. The row
+  measures what fits in the space the actions leave and moves the rest behind a
+  **More** item. In Russian and Azerbaijani that is three items plus More at
+  1024px; English shows all six. Picking a breakpoint instead hands a hamburger
+  to ordinary laptop windows.
+- **"+ Add listing" drops its noun below 1280px** — "Add listing" becomes "Add",
+  "Добавить объявление" becomes "Добавить". The button is what buys the nav its
+  room at 1024px, so the short label is part of the layout, not a detail.
+- Only **Parts** carries a mega-menu.
+
+---
+
 ## Layout primitives
 
 - **Breadcrumbs** — 13px muted, `/` separators, last item `foreground`.
@@ -185,9 +204,16 @@ optional details; submit goes to the external app.
 - **Detail layout** — fluid main + 360px sidebar, `sticky top-24`, 32px gap.
   Below 1024px the sidebar stacks under the main column and the primary action
   moves into a **sticky bottom bar** (icon button + full-width primary).
-- **Ad rails** — only at ≥1440px: 160px sticky columns either side of the
+- **Ad rails** — only at **≥1584px**: 160px sticky columns either side of the
   1200px content column, 160×600 and 160×250 slots, dashed placeholder with an
-  "Ad" pill. Hidden below 1440px; nothing else changes.
+  "Ad" pill. Hidden below 1584px, where the content column keeps its full width
+  and nothing else changes.
+
+  This figure was 1440px in the first draft and the arithmetic does not work:
+  two 160px rails, two 16px gaps and two 16px gutters need 1584px before the
+  content column can be 1200px. At 1440px the content would have to shrink to
+  about 1040px — on the commonest desktop width, to make room for adverts.
+  The rails wait for the room instead.
 - **Empty state** — dashed `border-border-strong` box, muted icon, one line of
   text, one link out.
 - **Loading** — shimmer skeletons in `card-muted`, matching the real card's
