@@ -21,7 +21,7 @@ const AuthLayout = ({ title, subtitle, children, footerNote }: AuthLayoutProps) 
             backgroundSize: '28px 28px',
           }}
         />
-        <div className="relative w-full max-w-[420px] rounded-2xl border border-border bg-card/95 p-6 shadow-[var(--shadow)] backdrop-blur sm:p-8">
+        <div className="relative w-full max-w-[420px] rounded-2xl border border-border bg-card/95 p-6 shadow-[var(--shadow-card)] backdrop-blur sm:p-8">
           <div className="mb-6 flex flex-col items-center text-center">
             <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
               AB

@@ -51,7 +51,7 @@ export function AppointmentRequestCard({
   const [phone, setPhone] = useState('');
 
   if (!targetId) return null;
-  const box = `rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:p-6 ${className}`;
+  const box = `rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6 ${className}`;
 
   const ownProfile =
     (targetType === 'SPECIALIST' && mine.specialist?.id === targetId) ||

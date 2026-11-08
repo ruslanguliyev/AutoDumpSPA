@@ -59,7 +59,7 @@ export function DashboardSidebar() {
                     )
                   }
                 >
-                  <Icon size={20} className="flex-shrink-0" aria-hidden />
+                  <Icon size={20} className="shrink-0" aria-hidden />
                   {!sidebarCollapsed && <span>{t(item.key)}</span>}
                   {!sidebarCollapsed && item.key === 'nav.inquiries' && <InquiriesBadge />}
                   {!sidebarCollapsed && item.key === 'nav.rentals' && <RentalsBadge />}

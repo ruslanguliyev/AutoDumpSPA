@@ -176,7 +176,7 @@ const AddWizardPage = () => {
   if (!draftQuery.data) {
     return (
       <div className="mx-auto w-full max-w-[1200px] px-4 py-10">
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)]">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
           <h1 className="text-lg font-semibold text-foreground">{t('errors.draftNotFound')}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t('errors.draftNotFoundHint')}

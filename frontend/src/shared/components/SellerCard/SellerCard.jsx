@@ -83,7 +83,7 @@ export const SellerCard = ({
     return (
       <article
         onClick={onClick}
-        className="flex h-full w-full cursor-pointer flex-col rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] transition hover:shadow-[var(--shadow)]"
+        className="flex h-full w-full cursor-pointer flex-col rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-card)]"
       >
         {/* ROW 1: LOGO + BADGE */}
         <div className="flex items-center justify-between">

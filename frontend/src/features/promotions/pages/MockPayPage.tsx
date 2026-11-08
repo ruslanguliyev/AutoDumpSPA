@@ -49,7 +49,7 @@ export function MockPayPage() {
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-10">
-      <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)]">
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
         <p className="flex items-start gap-2 rounded-xl bg-amber-500/10 p-3 text-sm text-amber-800 dark:text-amber-300">
           <TriangleAlert size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
           {t('mock.notice')}

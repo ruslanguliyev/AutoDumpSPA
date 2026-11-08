@@ -49,7 +49,7 @@ function ActivityFeedSkeleton() {
       <div className="space-y-4">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="flex gap-4">
-            <div className="h-9 w-9 flex-shrink-0 animate-pulse rounded-full bg-muted" />
+            <div className="h-9 w-9 shrink-0 animate-pulse rounded-full bg-muted" />
             <div className="flex-1 space-y-2">
               <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
               <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
@@ -83,7 +83,7 @@ export function ActivityFeed({ items, isLoading, maxItems = 6 }: ActivityFeedPro
             const Icon = iconMap[item.type];
             return (
               <li key={item.id} className="flex gap-4">
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-muted/80 text-muted-foreground">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted/80 text-muted-foreground">
                   <Icon size={16} aria-hidden />
                 </div>
                 <div className="min-w-0 flex-1">

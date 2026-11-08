@@ -6,7 +6,7 @@ import type { ListingPurpose, ListingType } from '@/features/addItem/store/useAd
 import Button from '@/shared/ui/button';
 
 const cardClass =
-  'flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)]';
+  'flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]';
 
 const AddEntryPage = () => {
   const { t } = useTranslation('addItem');

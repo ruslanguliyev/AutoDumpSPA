@@ -1,5 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import '@fontsource-variable/inter';
 // Initialize theme BEFORE React renders to prevent FOUC
 import '@/shared/utils/theme-init';
 import { StrictMode } from 'react';

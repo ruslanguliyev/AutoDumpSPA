@@ -33,7 +33,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
   return (
     <div className="specialist-sidebar-card space-y-4">
       {/* Booking card */}
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:p-6">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
         {/* Price + availability */}
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -107,7 +107,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
       />
 
       {/* Contact info card */}
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:p-6">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
         <h2 className="text-sm font-semibold text-foreground">{t('detail.contactInfo')}</h2>
 
         <div className="mt-4 space-y-5 text-sm text-muted-foreground">

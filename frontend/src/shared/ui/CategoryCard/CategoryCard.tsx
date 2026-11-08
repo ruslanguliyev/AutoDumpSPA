@@ -14,7 +14,7 @@ const CategoryCard = ({ icon, label, href, className = '' }: CategoryCardProps) 
       to={href}
       className={`
         group flex flex-col items-center justify-center gap-3 rounded-xl
-        border border-border bg-card p-4 shadow-[var(--shadow)]
+        border border-border bg-card p-4 shadow-[var(--shadow-card)]
         transition-all duration-200 hover:-translate-y-1 hover:shadow-lg
         ${className}
       `}

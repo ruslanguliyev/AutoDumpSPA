@@ -13,7 +13,7 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <h1 className="service-name">{service.name}</h1>
             {service.verified && (
-              <span className="verified-badge flex-shrink-0">{t('header.verified')}</span>
+              <span className="verified-badge shrink-0">{t('header.verified')}</span>
             )}
           </div>
 
@@ -41,7 +41,7 @@ export default function ServiceHeader({ service, ratingValue, reviewsCount }) {
           )}
         </div>
 
-        <div className="flex items-center gap-2 flex-shrink-0 sm:self-start">
+        <div className="flex items-center gap-2 shrink-0 sm:self-start">
           <button
             type="button"
             className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-foreground hover:bg-muted sm:gap-2 sm:px-3 sm:text-sm"

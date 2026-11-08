@@ -77,7 +77,7 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
           : draft.common.condition;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)]">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
       <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
         <span>{t('preview.livePreview')}</span>
         <span

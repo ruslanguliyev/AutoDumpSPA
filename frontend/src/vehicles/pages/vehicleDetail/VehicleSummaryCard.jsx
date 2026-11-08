@@ -22,7 +22,7 @@ const VehicleSummaryCard = ({
   const subtitle = [engine, transmission].filter(Boolean).join(" • ");
 
   return (
-    <article className="vehicle-summary-card min-w-0 w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)] transition-shadow hover:shadow-[var(--shadow)]">
+    <article className="vehicle-summary-card min-w-0 w-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card)]">
       <header className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h1 className="vehicle-summary-card__title font-semibold leading-tight text-foreground">

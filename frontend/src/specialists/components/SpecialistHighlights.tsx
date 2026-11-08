@@ -49,7 +49,7 @@ const SpecialistHighlights = ({
   ];
 
   return (
-    <div className="grid gap-6 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow)] sm:grid-cols-2 sm:p-6">
+    <div className="grid gap-6 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:grid-cols-2 sm:p-6">
       {/* About */}
       <div>
         <h2 className="text-base font-semibold text-foreground">{t('detail.about')}</h2>

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
   const { t } = useTranslation('services');
   return (
-    <section className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow)] sm:rounded-2xl sm:p-6">
+    <section className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:rounded-2xl sm:p-6">
       <div className="status-section">
         <div className="status-row">
           <div className="status-left">

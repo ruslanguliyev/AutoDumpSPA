@@ -3,6 +3,10 @@ import type { ReactNode } from 'react';
 type BadgeVariant = 'verified' | 'premium' | 'boosted' | 'hot' | 'custom';
 
 type BadgeProps = {
+  /**
+   * `'premium'` is DEPRECATED (purple, predates the paid-placement tiers). Paid tiers are
+   * rendered by `PromotionBadge` from the `--promo-*` tokens; do not add new uses.
+   */
   variant?: BadgeVariant;
   className?: string;
   children: ReactNode;
@@ -12,6 +16,7 @@ const baseClasses = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 tex
 
 const variantClasses: Record<BadgeVariant, string> = {
   verified: 'bg-success/10 text-success ring-success/30',
+  /** @deprecated purple; use PromotionBadge (--promo-premium). Removed with the --premium token. */
   premium: 'bg-premium/10 text-premium ring-premium/30',
   boosted: 'bg-primary/10 text-primary ring-primary/30',
   hot: 'bg-destructive/10 text-destructive ring-destructive/30',

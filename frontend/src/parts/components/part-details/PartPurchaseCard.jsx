@@ -25,7 +25,7 @@ export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] lg:sticky lg:top-[157px]">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] lg:sticky lg:top-[157px]">
       <div className="space-y-4">
         {/* 1) Price block */}
         <div className="flex items-start justify-between gap-3">

@@ -173,7 +173,7 @@ export function PromotePage() {
                 }}
                 className={`rounded-2xl border p-4 text-left transition ${
                   active
-                    ? 'border-primary bg-card shadow-[var(--shadow)] ring-1 ring-primary'
+                    ? 'border-primary bg-card shadow-[var(--shadow-card)] ring-1 ring-primary'
                     : 'border-border bg-card hover:border-primary/40'
                 }`}
               >

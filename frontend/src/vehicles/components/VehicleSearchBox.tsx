@@ -29,7 +29,7 @@ const VehicleSearchBox = () => {
   };
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)] md:p-6">
+    <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] md:p-6">
       <div className="flex flex-col gap-4">
         <VehicleTypeSegment />
 

@@ -13,7 +13,7 @@ const SellerStep = () => {
   if (!draft) return null;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)]">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-foreground">{t('form.sellerTitle')}</h2>
         <p className="text-sm text-muted-foreground">

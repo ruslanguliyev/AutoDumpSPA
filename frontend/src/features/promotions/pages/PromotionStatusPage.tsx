@@ -35,7 +35,7 @@ export function PromotionStatusPage() {
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-10">
-      <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-[var(--shadow)]">
+      <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)]">
         <Icon
           size={44}
           className={`mx-auto ${tone} ${pending ? 'animate-spin' : ''}`}

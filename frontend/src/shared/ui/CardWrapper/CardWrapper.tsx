@@ -9,7 +9,7 @@ type CardWrapperOwnProps<E extends ElementType = 'article'> = {
 type CardWrapperProps<E extends ElementType = 'article'> = CardWrapperOwnProps<E> &
   Omit<ComponentPropsWithoutRef<E>, keyof CardWrapperOwnProps<E>>;
 
-const baseClasses = 'rounded-2xl bg-card border border-border shadow-[var(--shadow)] transition-all';
+const baseClasses = 'rounded-2xl bg-card border border-border shadow-[var(--shadow-card)] transition-all';
 const hoverClasses = 'hover:-translate-y-1 hover:shadow-lg';
 
 export function CardWrapper<E extends ElementType = 'article'>({

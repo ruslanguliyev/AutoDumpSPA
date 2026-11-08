@@ -24,7 +24,7 @@ const SpecialistCertifications = ({ certifications }: SpecialistCertificationsPr
   if (!certifications.length) return null;
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow)] sm:p-6">
+    <section className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
       <h2 className="text-base font-semibold text-foreground">{t('detail.certifications')}</h2>
       <div className="mt-4 flex flex-wrap gap-3">
         {certifications.map((cert) => {

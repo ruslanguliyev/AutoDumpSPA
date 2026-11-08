@@ -124,7 +124,7 @@ export function ReviewsSection({
   const date = (value: string) => new Date(value).toLocaleDateString(i18n.language);
 
   return (
-    <section className={`rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow)] sm:p-6 ${className}`}>
+    <section className={`rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6 ${className}`}>
       <h2 className="text-base font-semibold text-foreground">{t('reviews.title')}</h2>
 
       {total > 0 && data ? (

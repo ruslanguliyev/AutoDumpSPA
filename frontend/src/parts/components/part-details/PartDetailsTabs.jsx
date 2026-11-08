@@ -90,7 +90,7 @@ export const PartDetailsTabs = ({
                   'snap-start whitespace-nowrap px-3 py-2 text-xs font-extrabold transition sm:flex-1 sm:px-4 sm:py-3 sm:text-sm',
                   withDivider ? 'sm:border-r sm:border-border' : '',
                   isActive
-                    ? 'bg-foreground text-background shadow-[var(--shadow)]'
+                    ? 'bg-foreground text-background shadow-[var(--shadow-card)]'
                     : 'bg-transparent text-foreground hover:bg-background/70',
                 ]
                   .filter(Boolean)

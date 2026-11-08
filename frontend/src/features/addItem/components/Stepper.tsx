@@ -15,7 +15,7 @@ const Stepper = ({ steps, currentStepIndex, draft, onStepChange }: StepperProps)
   const { t } = useTranslation('addItem');
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow)]">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
       <div className="flex flex-wrap items-center gap-3">
         {steps.map((step, index) => {
           const isActive = index === currentStepIndex;

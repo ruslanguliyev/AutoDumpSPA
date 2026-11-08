@@ -8,7 +8,7 @@
   padding: 20px;
   width: 100%;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
   
 }
 
@@ -33,7 +33,7 @@
     justify-content: space-between;
     cursor: pointer;
 
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-card);
 
     .left {
       display: flex;

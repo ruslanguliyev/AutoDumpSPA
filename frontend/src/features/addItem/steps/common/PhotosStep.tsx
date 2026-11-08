@@ -127,7 +127,7 @@ const PhotosStep = () => {
   const uploading = pending.length > 0;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow)]">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-foreground">{t('form.photosTitle')}</h2>

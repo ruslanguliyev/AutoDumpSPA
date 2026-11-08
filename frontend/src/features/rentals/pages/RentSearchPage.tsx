@@ -35,7 +35,7 @@ function RentalCard({ car }: { car: RentalVehicle }) {
   return (
     <Link
       to={`/vehicles/${car.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow)] transition hover:-translate-y-0.5 hover:shadow-lg"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
         {photo ? <img src={photo} alt="" loading="lazy" className="h-full w-full object-cover transition group-hover:scale-[1.02]" /> : null}

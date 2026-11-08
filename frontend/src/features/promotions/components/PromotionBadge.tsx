@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import type { PromotionTier } from '@/features/promotions/api/promotions.api';
 
+/** Filled badge colours come from the --promo-* tokens (design/components.md). */
 const STYLES: Record<string, string> = {
-  VIP: 'bg-rose-600 text-white',
-  PREMIUM: 'bg-amber-500 text-white',
+  VIP: 'bg-promo-vip-fill text-promo-vip-on-fill',
+  PREMIUM: 'bg-promo-premium-fill text-promo-premium-on-fill',
 };
 
 /**

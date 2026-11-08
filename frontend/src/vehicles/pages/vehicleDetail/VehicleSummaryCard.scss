@@ -1,4 +1,4 @@
-/* Переопределяет Bootstrap h1 — заголовок карточки summary */
+/* Fixed title size for the summary card (was overriding Bootstrap h1) */
 .vehicle-summary-card {
   h1.vehicle-summary-card__title {
     font-size: 1.35rem !important; /* 20px */
