@@ -842,6 +842,9 @@
   &__header {
     display: flex;
     align-items: center;
+    // Both children refuse to shrink, so without wrapping a long service name pushes
+    // the badge out of the row and on top of the price.
+    flex-wrap: wrap;
     gap: 0.75rem;
     margin: 0 0 0.5rem 0 !important;
     padding: 0 !important;

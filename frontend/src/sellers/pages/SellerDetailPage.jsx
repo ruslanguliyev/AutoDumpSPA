@@ -198,9 +198,11 @@ export default function SellerDetailPage({
     return (
       <div className="seller-detail">
         <div className="seller-detail__container">
-          <h1>{t("detail.fallbackName")}</h1>
-          <p>{t("detail.missingId")}</p>
-          <Link to="/sellers">{t("detail.backToSellers")}</Link>
+          <h1 className="text-xl font-semibold text-foreground">{t("detail.fallbackName")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("detail.missingId")}</p>
+          <Link to="/sellers" className="mt-4 inline-block text-sm text-primary underline">
+            {t("detail.backToSellers")}
+          </Link>
         </div>
       </div>
     );
@@ -239,9 +241,13 @@ export default function SellerDetailPage({
     return (
       <div className="seller-detail">
         <div className="seller-detail__container">
-          <h1>{t("detail.notFound")}</h1>
-          <p>{t("detail.notAvailable", { id: sellerId })}</p>
-          <Link to="/sellers">{t("detail.backToSellers")}</Link>
+          <h1 className="text-xl font-semibold text-foreground">{t("detail.notFound")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("detail.notAvailable", { id: sellerId })}
+          </p>
+          <Link to="/sellers" className="mt-4 inline-block text-sm text-primary underline">
+            {t("detail.backToSellers")}
+          </Link>
         </div>
       </div>
     );

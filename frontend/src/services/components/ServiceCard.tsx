@@ -25,7 +25,12 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const city = service.location?.city || '';
   const cover = service.media?.cover;
 
+  /**
+   * One card, one promo mark. `promotionTier` is the paid-placement system; the legacy
+   * `promotedLevel` only speaks when the card has no tier, and never beside it.
+   */
   const getPromotedVariant = (): 'premium' | 'boosted' | null => {
+    if (service.promotionTier) return null;
     if (service.promotedLevel === 'premium') return 'premium';
     if (service.promotedLevel === 'boosted') return 'boosted';
     return null;

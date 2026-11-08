@@ -11,7 +11,7 @@ type AuthLayoutProps = {
 const AuthLayout = ({ title, subtitle, children, footerNote }: AuthLayoutProps) => {
   const { t } = useTranslation('auth');
   return (
-    <div data-theme="dark" className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
         <div
           className="pointer-events-none absolute inset-0 opacity-60"

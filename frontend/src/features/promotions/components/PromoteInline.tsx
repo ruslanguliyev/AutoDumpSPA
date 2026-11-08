@@ -9,10 +9,11 @@ import { promotePath } from '@/features/promotions/pages/PromotePage';
 
 const TIERS: PromotionTier[] = ['BUMP', 'VIP', 'PREMIUM'];
 const ICON = { BUMP: ArrowUp, VIP: Gem, PREMIUM: Crown } as const;
+/** Tier accents come from the --promo-* tokens, never from literal colours. */
 const ACCENT = {
-  BUMP: 'text-emerald-600',
-  VIP: 'text-rose-600',
-  PREMIUM: 'text-amber-500',
+  BUMP: 'text-promo-bump',
+  VIP: 'text-promo-vip',
+  PREMIUM: 'text-promo-premium',
 } as const;
 
 /**

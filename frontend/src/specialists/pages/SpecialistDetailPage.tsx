@@ -91,7 +91,7 @@ const SpecialistDetailPage = () => {
   const portfolio = specialist.portfolio ?? [];
 
   return (
-    <div className="w-full bg-background pb-16" data-theme="light">
+    <div className="w-full bg-background pb-16">
       <div className="mx-auto w-full max-w-[1280px] px-4 pt-6">
         <Breadcrumbs items={breadcrumbItems} />
       </div>

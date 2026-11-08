@@ -19,10 +19,11 @@ import { resolveMediaUrl } from '@/lib/mediaUrl';
 const TIERS: PromotionTier[] = ['BUMP', 'VIP', 'PREMIUM'];
 
 const TIER_ICON = { BUMP: ArrowUp, VIP: Gem, PREMIUM: Crown } as const;
+/** Tier accents come from the --promo-* tokens, never from literal colours. */
 const TIER_ACCENT = {
-  BUMP: 'text-emerald-600',
-  VIP: 'text-rose-600',
-  PREMIUM: 'text-amber-500',
+  BUMP: 'text-promo-bump',
+  VIP: 'text-promo-vip',
+  PREMIUM: 'text-promo-premium',
 } as const;
 
 /** What each tier adds on top of the one below it; rendered as a single checklist. */

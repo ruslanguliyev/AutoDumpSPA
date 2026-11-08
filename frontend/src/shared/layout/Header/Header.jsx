@@ -38,7 +38,11 @@ const useMediaQuery = (query) => {
 };
 
 export default function Header() {
-    const isMobile = useMediaQuery("(max-width: 768px)");
+    // The desktop row (logo + six nav links + six actions) needs ~1200px in Russian,
+    // the widest of the three locales. Below that it used to overflow its box and the
+    // links drew on top of "Add listing", so everything narrower gets the drawer, which
+    // already carries the same links.
+    const isMobile = useMediaQuery("(max-width: 1239.98px)");
     const location = useLocation();
     const { t } = useTranslation('common');
 
