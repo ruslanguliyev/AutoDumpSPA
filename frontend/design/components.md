@@ -101,9 +101,14 @@ label is not really a label, so the badge takes `border-muted-foreground` and
 
 ## Rating stars
 
-Five star outlines, stroke 1.5, filled up to the rounded value with `--star`,
-the rest `--subtle-foreground`. Beside them: `4.8 (34 reviews)` at 13px
-`muted-foreground`. Never render a bare number without the stars on cards.
+Five star outlines, stroke 1.5, filled to the nearest **half** with `--star`, the
+rest `--subtle-foreground`. The fraction decides the last star: under `.25` it
+rounds down, `.25`–`.74` draws a half star, `.75` and over rounds up. So 4.2 is
+four, 4.4 and 4.5 are four and a half, 4.8 is five. The half is the same star
+clipped down the middle, so both halves keep one outline.
+
+Beside them: `4.8 (34 reviews)` at 13px `muted-foreground`. Never render a bare
+number without the stars on cards.
 
 ---
 
