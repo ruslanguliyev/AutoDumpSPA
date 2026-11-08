@@ -112,14 +112,14 @@ const SpecialistHeader = ({ specialist, city }: SpecialistHeaderProps) => {
               </a>
             </Button>
           ) : (
-            <Button size="sm" variant="outline" className="rounded-xl" disabled>
+            <Button size="sm" variant="ghost" className="rounded-xl" disabled>
               <PhoneCall size={16} />
               {t('detail.call')}
             </Button>
           )}
 
           {whatsapp ? (
-            <Button asChild size="sm" variant="outline" className="rounded-xl">
+            <Button asChild size="sm" variant="ghost" className="rounded-xl">
               <a
                 href={`https://wa.me/${sanitizeWhatsApp(whatsapp)}`}
                 target="_blank"
@@ -131,7 +131,7 @@ const SpecialistHeader = ({ specialist, city }: SpecialistHeaderProps) => {
               </a>
             </Button>
           ) : (
-            <Button size="sm" variant="outline" className="rounded-xl" disabled>
+            <Button size="sm" variant="ghost" className="rounded-xl" disabled>
               <MessageCircle size={16} />
               {t('detail.whatsapp')}
             </Button>

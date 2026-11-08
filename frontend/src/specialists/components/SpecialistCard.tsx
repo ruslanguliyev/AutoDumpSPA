@@ -63,10 +63,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         <div className="flex flex-col items-end gap-1">
           <PromotionBadge tier={promotionTier} />
           {verified && (
-            <Badge variant="verified">
-              <BadgeCheck size={12} aria-hidden="true" />
-              {t('card.verified')}
-            </Badge>
+            <Badge variant="verified">{t('card.verified')}</Badge>
           )}
         </div>
       </div>

@@ -1,6 +1,26 @@
+import { Check } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-type BadgeVariant = 'verified' | 'premium' | 'boosted' | 'hot' | 'custom';
+/**
+ * The badges of design/components.md.
+ *
+ * Paid-placement tiers (VIP, PREMIUM) are not here: `PromotionBadge` owns them, so an
+ * advert is always labelled by one component and cannot be imitated by a stray badge.
+ * Colour never carries the meaning on its own — every variant pairs it with a label,
+ * and the status ones with an icon or a dot.
+ */
+export type BadgeVariant =
+  | 'verified'
+  | 'hot'
+  | 'ad'
+  | 'category'
+  | 'inStock'
+  | 'outOfStock'
+  | 'openNow'
+  | 'closed'
+  | 'boosted'
+  | 'premium'
+  | 'custom';
 
 type BadgeProps = {
   /**
@@ -8,24 +28,52 @@ type BadgeProps = {
    * rendered by `PromotionBadge` from the `--promo-*` tokens; do not add new uses.
    */
   variant?: BadgeVariant;
+  /** Leading icon or dot. `verified` supplies a check when this is left out. */
+  icon?: ReactNode;
   className?: string;
   children: ReactNode;
 };
 
-const baseClasses = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ring-1';
+/** Pill badges: 11px, 600, the letter-spacing the design asks for. */
+const pill =
+  'inline-flex items-center gap-1 rounded-full border px-2.5 py-[3px] text-[11px] font-semibold leading-none tracking-[0.04em]';
+
+/** Status words that are text, not a pill. */
+const plain = 'inline-flex items-center gap-1.5 text-[13px] font-semibold leading-none';
 
 const variantClasses: Record<BadgeVariant, string> = {
-  verified: 'bg-success/10 text-success ring-success/30',
+  verified: `${pill} border-success text-success`,
+  hot: `${pill} border-transparent bg-promo-vip-fill text-promo-vip-on-fill`,
+  // An advert label has to be readable, so this one departs from the first draft of
+  // components.md: --subtle-foreground only reaches 2.6:1 as a border on the light
+  // background, and the muted label was faint in dark. Border and label both firm up.
+  ad: `${pill} border-muted-foreground uppercase text-foreground`,
+  category: `${pill} border-transparent bg-primary text-primary-foreground`,
+  inStock: `${plain} text-success`,
+  outOfStock: `${plain} text-destructive`,
+  openNow: `${plain} text-success`,
+  closed: `${plain} text-muted-foreground`,
+  // --primary is a fill in dark theme, so the label takes --primary-text.
+  boosted: `${pill} border-primary/30 bg-primary/10 text-primary-text`,
   /** @deprecated purple; use PromotionBadge (--promo-premium). Removed with the --premium token. */
-  premium: 'bg-premium/10 text-premium ring-premium/30',
-  boosted: 'bg-primary/10 text-primary ring-primary/30',
-  hot: 'bg-destructive/10 text-destructive ring-destructive/30',
-  custom: '',
+  premium: `${pill} border-premium/30 bg-premium/10 text-premium`,
+  custom: pill,
 };
 
-export function Badge({ variant = 'custom', className = '', children }: BadgeProps) {
+const Dot = () => <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />;
+
+const defaultIcon: Partial<Record<BadgeVariant, ReactNode>> = {
+  verified: <Check size={12} strokeWidth={1.5} aria-hidden="true" />,
+  openNow: <Dot />,
+  closed: <Dot />,
+};
+
+export function Badge({ variant = 'custom', icon, className = '', children }: BadgeProps) {
+  const leading = icon === undefined ? defaultIcon[variant] : icon;
+
   return (
-    <span className={`${baseClasses} ${variantClasses[variant]} ${className}`.trim()}>
+    <span className={`${variantClasses[variant]} ${className}`.trim()}>
+      {leading}
       {children}
     </span>
   );

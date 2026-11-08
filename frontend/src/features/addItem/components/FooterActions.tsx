@@ -47,7 +47,7 @@ const FooterActions = ({
         <Button variant="ghost" size="md" onClick={onBack} disabled={isFirst}>
           {t('buttons.back')}
         </Button>
-        <Button variant="outline" size="md" onClick={onSave} disabled={isSaving}>
+        <Button variant="ghost" size="md" onClick={onSave} disabled={isSaving}>
           {isSaving ? t('buttons.saving') : isPublished ? t('buttons.saveChanges') : t('buttons.saveDraft')}
         </Button>
         {isLast ? (

@@ -10,7 +10,8 @@ type CardWrapperProps<E extends ElementType = 'article'> = CardWrapperOwnProps<E
   Omit<ComponentPropsWithoutRef<E>, keyof CardWrapperOwnProps<E>>;
 
 const baseClasses = 'rounded-2xl bg-card border border-border shadow-[var(--shadow-card)] transition-all';
-const hoverClasses = 'hover:-translate-y-1 hover:shadow-lg';
+/** The design asks hover to lift the card and brighten its border. */
+const hoverClasses = 'hover:-translate-y-1 hover:border-border-strong hover:shadow-lg';
 
 export function CardWrapper<E extends ElementType = 'article'>({
   as,

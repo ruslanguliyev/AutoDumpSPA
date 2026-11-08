@@ -83,13 +83,19 @@ Pill, 11–12px, weight 600, letter-spacing 0.04em, padding 3–4px / 10px.
 | HOT | filled `bg-promo-vip-fill text-promo-vip-on-fill` |
 | VIP | filled `bg-promo-vip-fill text-promo-vip-on-fill` |
 | PREMIUM | filled `bg-promo-premium-fill text-promo-premium-on-fill` |
-| Ad | outlined, `border-subtle-foreground text-muted-foreground`, uppercase |
+| Ad | outlined, `border-muted-foreground text-foreground`, uppercase |
 | Category | filled `bg-primary text-primary-foreground` |
 | Filter chip | outlined `border-border text-muted-foreground`, optional ✕ |
 
 `PromotionBadge` must read its colours from the `--promo-*` tokens. The old
 purple `premium` token is deprecated — see the note at the bottom of
 `tokens.css`.
+
+The **Ad** row was corrected during the build: `--subtle-foreground` reaches only
+2.6:1 as a border on the light background, below the 3:1 a border needs, and the
+muted label was hard to read in dark. Paid placement has to be legible or the
+label is not really a label, so the badge takes `border-muted-foreground` and
+`text-foreground`.
 
 ---
 
