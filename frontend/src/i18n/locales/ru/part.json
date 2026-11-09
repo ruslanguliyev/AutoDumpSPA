@@ -81,7 +81,10 @@
     "addToCart": "Добавить в корзину",
     "stockInStock": "В наличии. Готово к отправке в течение 1–2 рабочих дней.",
     "stockOutOfStock": "Нет в наличии",
-    "openPart": "Открыть {{name}}"
+    "openPart": "Открыть {{name}}",
+    "inStockCount": "В наличии: {{count}}",
+    "reviewsWord": "отзывов",
+    "stockInStockShort": "В наличии"
   },
   "search": {
     "title": "Поиск запчастей",

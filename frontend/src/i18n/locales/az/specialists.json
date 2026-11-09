@@ -43,7 +43,12 @@
     "experience_plural": "{{count}} il təcrübə",
     "reviews": "{{count}} rəy",
     "reviews_plural": "{{count}} rəy",
-    "viewProfile": "Profilə bax"
+    "viewProfile": "Profilə bax",
+    "priceFrom": "{{price}}-dən",
+    "priceOnRequest": "Qiymət sorğu ilə",
+    "available": "Boşdur",
+    "unavailable": "Məşğuldur",
+    "reviewsWord": "rəy"
   },
   "detail": {
     "loading": "Ustanın profili yüklənir…",

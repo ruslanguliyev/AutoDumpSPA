@@ -1,102 +1,131 @@
-import './AutoCard.scss';
 import { Link } from 'react-router-dom';
-import { Heart } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { useFavoritesStore } from "@/shared/store/favoritesStore";
+import { MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { formatPrice, formatMileage, formatYear } from '@/lib/format';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
+import { CardWrapper } from '@/shared/ui/CardWrapper';
+import { Badge } from '@/shared/ui/Badge';
+import { Chip } from '@/shared/ui/Chip';
+import { FavoriteButton } from '@/shared/ui/FavoriteButton';
+import Button from '@/shared/ui/button';
 
-export default function AutoCard({ car }) {
-    const { t } = useTranslation("vehicle");
+/**
+ * The car card, used by the catalogue, the home page, a seller's stock and the promoted
+ * strip. `variant="rent"` is the same card with the day price and the rental terms —
+ * one component, because a second one drifts.
+ */
+export default function AutoCard({ car, variant = 'sale' }) {
+    const { t } = useTranslation('vehicle');
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
-    const isFav = useFavoritesStore((s) => s.isFavorited("vehicle", car.id));
+    const isFav = useFavoritesStore((s) => s.isFavorited('vehicle', car?.id));
 
+    if (!car) return null;
+
+    const isRent = variant === 'rent';
     const mainImage = Array.isArray(car.image) ? car.image[0] : car.image;
+    const title = [car.brand, car.model].filter(Boolean).join(' ');
+    const meta = [
+        formatYear(car.year),
+        car.engine,
+        formatMileage(car.mileage),
+        car.transmission,
+    ].filter(Boolean);
+
+    const rental = car.rental ?? null;
+    const terms = isRent
+        ? [
+              rental?.minDays ? t('card.minDays', { count: rental.minDays }) : null,
+              rental?.deposit
+                  ? t('card.deposit', { amount: formatPrice(rental.deposit, car.currency || 'AZN') })
+                  : t('card.noDeposit'),
+              rental?.kmPerDay ? t('card.kmPerDay', { count: rental.kmPerDay }) : t('card.unlimitedKm'),
+          ].filter(Boolean)
+        : [];
 
     return (
-        <Link to={`/vehicles/${car.id}`} className="auto-card">
-
-            <div className="auto-card__image-wrapper">
+        <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-card-muted">
                 {mainImage ? (
                     <img
                         src={mainImage}
-                        alt={`${car.brand} ${car.model}`}
-                        className="auto-card__image"
-                        onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                        }}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover"
                     />
                 ) : null}
-                <div className={`auto-card__no-image${mainImage ? ' hidden' : ''}`}>
-                    <img src="/icons/sedan-car-model-svgrepo-com.svg" alt="" className="auto-card__no-image-icon" />
+
+                <div className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+                    {car.promotionTier ? <PromotionBadge tier={car.promotionTier} /> : null}
+                    {car.isHot ? <Badge variant="hot">{t('card.hot')}</Badge> : null}
                 </div>
 
-                {car.isHot && <span className="auto-card__badge">{t('badges.hot')}</span>}
-
-                {/* HEART BUTTON */}
-                <button
-                    className="auto-card__fav-btn"
-                    aria-label={isFav ? t('card.removeFromFavoritesAria') : t('card.addToFavoritesAria')}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                <FavoriteButton
+                    active={isFav}
+                    label={isFav ? t('card.removeFromFavoritesAria') : t('card.addToFavoritesAria')}
+                    onToggle={() =>
                         toggleFavorite({
-                            type: "vehicle",
+                            type: 'vehicle',
                             id: car.id,
-                            title: `${car.brand} ${car.model}`,
+                            title,
                             thumbnail: mainImage,
-                        });
-                    }}
-                >
-                    <Heart
-                        className={`fav-icon ${isFav ? "active" : ""}`}
-                        strokeWidth={1.7}
-                        fill={isFav ? "currentColor" : "none"}
-                    />
-                </button>
+                        })
+                    }
+                    className="absolute right-2 top-2 z-10"
+                />
             </div>
 
-            <div className="auto-card__content">
-
-                {car.promotionTier ? (
-                    <PromotionBadge tier={car.promotionTier} className="mb-1.5" />
-                ) : null}
-
-                <div className="auto-card__price">
-                    {formatPrice(car.price, 'EUR')}
-                </div>
-
-                <h3 className="auto-card__title">
-                    {car.brand} {car.model}
-                    {car.version && (
-                        <span className="auto-card__version"> • {car.version}</span>
-                    )}
-                </h3>
-
-                <p className="auto-card__details">
-                    {formatYear(car.year)} • {car.engine || '—'} • {formatMileage(car.mileage)} • {car.transmission || '—'}
+            <div className="flex flex-1 flex-col gap-2 p-4">
+                <p className="text-[20px] font-bold leading-none text-foreground">
+                    {formatPrice(car.price, car.currency || 'AZN')}
+                    {isRent ? (
+                        <span className="ml-1 text-[13px] font-medium text-muted-foreground">
+                            {t('card.perDay')}
+                        </span>
+                    ) : null}
                 </p>
 
-                <div className="auto-card__location">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="location-icon">
-                        <path strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19.5 10.5c0 7.142-7.5 11.5-7.5 11.5S4.5 
-                                 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
-                    <span>{car.location}</span>
-                </div>
+                <h3 className="text-[18px] font-semibold leading-snug text-foreground">
+                    {/* Stretched link: the whole card opens the listing, the heart does not. */}
+                    <Link to={`/vehicles/${car.id}`} className="after:absolute after:inset-0 after:content-['']">
+                        {title}
+                        {car.version ? (
+                            <span className="text-muted-foreground"> — {car.version}</span>
+                        ) : null}
+                    </Link>
+                </h3>
 
+                {meta.length > 0 ? (
+                    <p className="text-[13px] text-muted-foreground">{meta.join(' · ')}</p>
+                ) : null}
+
+                {car.location ? (
+                    <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                        <MapPin size={14} strokeWidth={1.5} aria-hidden="true" />
+                        {car.location}
+                    </p>
+                ) : null}
+
+                {isRent && terms.length > 0 ? (
+                    <ul className="mt-1 flex list-none flex-wrap gap-1.5">
+                        {terms.map((term) => (
+                            <li key={term}>
+                                <Chip>{term}</Chip>
+                            </li>
+                        ))}
+                    </ul>
+                ) : null}
+
+                {isRent ? (
+                    <>
+                        <div className="flex-1" />
+                        <Button asChild variant="secondary" className="relative z-10 mt-2 w-full">
+                            <Link to={`/vehicles/${car.id}`}>{t('card.checkAvailability')}</Link>
+                        </Button>
+                    </>
+                ) : null}
             </div>
-        </Link>
+        </CardWrapper>
     );
 }

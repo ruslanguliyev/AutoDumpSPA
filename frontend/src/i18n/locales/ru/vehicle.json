@@ -1,6 +1,9 @@
 {
   "title": "Автомобили",
-  "breadcrumbs": { "home": "Главная", "cars": "Автомобили" },
+  "breadcrumbs": {
+    "home": "Главная",
+    "cars": "Автомобили"
+  },
   "selector": {
     "title": "Выбор автомобиля",
     "vin": "VIN",
@@ -132,9 +135,18 @@
     "removeFromFavorites": "Удалить из избранного",
     "hot": "ХИТ",
     "addToFavoritesAria": "Добавить в избранное",
-    "removeFromFavoritesAria": "Удалить из избранного"
+    "removeFromFavoritesAria": "Удалить из избранного",
+    "perDay": "/ сутки",
+    "deposit": "Залог {{amount}}",
+    "noDeposit": "Без залога",
+    "minDays": "Мин. {{count}} дн.",
+    "kmPerDay": "{{count}} км/сутки",
+    "unlimitedKm": "Без ограничения пробега",
+    "checkAvailability": "Проверить даты"
   },
-  "badges": { "hot": "ХИТ" },
+  "badges": {
+    "hot": "ХИТ"
+  },
   "gallery": {
     "loadingImages": "Загрузка изображений…",
     "galleryAria": "Галерея {{name}}"
@@ -154,5 +166,7 @@
     "priceUpTo": "Цена до (€)",
     "firstRegistrationFrom": "Первая регистрация от"
   },
-  "home": { "availableVehicles": "Доступные автомобили" }
+  "home": {
+    "availableVehicles": "Доступные автомобили"
+  }
 }

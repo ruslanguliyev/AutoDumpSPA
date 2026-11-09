@@ -189,7 +189,9 @@
     "domain": {
       "cars": "Автомобили",
       "parts": "Запчасти"
-    }
+    },
+    "reviewsWord": "отзывов",
+    "viewSellerShort": "Смотреть продавца"
   },
   "trust": {
     "buyerProtection": "Защита покупателя",

@@ -189,7 +189,9 @@
     "domain": {
       "cars": "Avtomobillər",
       "parts": "Ehtiyat hissələri"
-    }
+    },
+    "reviewsWord": "rəy",
+    "viewSellerShort": "Satıcıya bax"
   },
   "trust": {
     "buyerProtection": "Alıcı müdafiəsi",

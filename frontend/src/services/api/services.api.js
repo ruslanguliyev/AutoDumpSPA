@@ -7,6 +7,7 @@ query GetServiceCenters($city: String) {
     id slug name description type
     city phone website logoUrl coverImage
     categories supportedBrands rating reviewsCount verified promotionTier
+    schedule
   }
 }
 `;

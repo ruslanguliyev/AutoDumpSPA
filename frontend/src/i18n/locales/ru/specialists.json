@@ -44,7 +44,12 @@
     "experience_plural": "{{count}} лет опыта",
     "reviews": "{{count}} отзыв",
     "reviews_plural": "{{count}} отзывов",
-    "viewProfile": "Смотреть профиль"
+    "viewProfile": "Смотреть профиль",
+    "priceFrom": "от {{price}}",
+    "priceOnRequest": "Цена по запросу",
+    "available": "Свободен",
+    "unavailable": "Занят",
+    "reviewsWord": "отзывов"
   },
   "detail": {
     "loading": "Загрузка профиля мастера…",

@@ -44,7 +44,7 @@ export default function RatingStars({
 
   return (
     <div
-      className={`rating-stars flex flex-row flex-nowrap items-center gap-1 leading-none whitespace-nowrap ${className}`.trim()}
+      className={`rating-stars flex flex-row flex-wrap items-center gap-x-1 gap-y-1 leading-none ${className}`.trim()}
       role="img"
       aria-label={`${safeValue.toFixed(1)} / 5`}
     >
@@ -75,7 +75,7 @@ export default function RatingStars({
           />
         );
       })}
-      <span className="rating-stars__value ml-1.5 text-[13px] text-muted-foreground">
+      <span className="rating-stars__value ml-1.5 whitespace-nowrap text-[13px] text-muted-foreground">
         {safeValue.toFixed(1)}
         {count === undefined || count === null ? null : ` (${count}${label ? ` ${label}` : ''})`}
       </span>

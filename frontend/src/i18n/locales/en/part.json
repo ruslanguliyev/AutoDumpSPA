@@ -81,7 +81,10 @@
     "addToCart": "Add to cart",
     "stockInStock": "In stock. Ready for dispatch in 1–2 working days.",
     "stockOutOfStock": "Out of stock",
-    "openPart": "Open {{name}}"
+    "openPart": "Open {{name}}",
+    "inStockCount": "In stock: {{count}}",
+    "reviewsWord": "reviews",
+    "stockInStockShort": "In stock"
   },
   "search": {
     "title": "Search Parts",

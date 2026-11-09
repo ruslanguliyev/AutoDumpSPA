@@ -35,12 +35,12 @@
       "rating45": "4.5+"
     },
     "radiusOptions": {
-      "any": "İstənilən məsafə",
       "5": "5 km",
       "10": "10 km",
       "25": "25 km",
       "50": "50 km",
-      "100": "100 km"
+      "100": "100 km",
+      "any": "İstənilən məsafə"
     }
   },
   "list": {
@@ -54,7 +54,11 @@
     "avgCheck": "Orta çek",
     "priceRange": "Qiymət aralığı",
     "viewService": "Ətraflı →",
-    "fallbackType": "Xidmət"
+    "fallbackType": "Xidmət",
+    "bookVisit": "Görüş təyin et",
+    "openNow": "Açıqdır",
+    "closed": "Bağlıdır",
+    "reviewsWord": "rəy"
   },
   "detail": {
     "loading": "Xidmət məlumatları yüklənir…",

@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { MapPin } from 'lucide-react';
 
 import { todayString } from '@/features/rentals/api/rentals.api';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { getVehicles } from '@/vehicles/api/vehicles.api';
+import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard.jsx';
 
 type RentalVehicle = {
   id: string;
@@ -29,44 +28,12 @@ const inputClass =
 const price = (value: number | null, currency: string) =>
   value == null ? '—' : `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)} ${currency}`;
 
+/**
+ * The rent catalogue shows the same car card as everywhere else, in its rent variant.
+ * A page-local copy would drift from the one the rest of the site uses.
+ */
 function RentalCard({ car }: { car: RentalVehicle }) {
-  const { t } = useTranslation('dashboard');
-  const photo = resolveMediaUrl(car.image?.[0]);
-  return (
-    <Link
-      to={`/vehicles/${car.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-lg"
-    >
-      <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
-        {photo ? <img src={photo} alt="" loading="lazy" className="h-full w-full object-cover transition group-hover:scale-[1.02]" /> : null}
-      </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-base font-semibold text-foreground">
-            {car.brand} {car.model} <span className="font-normal text-muted-foreground">{car.year}</span>
-          </h3>
-          <p className="shrink-0 text-right text-lg font-bold text-foreground">
-            {price(car.price, car.currency)}
-            <span className="block text-xs font-medium text-muted-foreground">{t('rental.perDay')}</span>
-          </p>
-        </div>
-        {car.location ? (
-          <p className="flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin size={12} aria-hidden="true" /> {car.location}
-          </p>
-        ) : null}
-        <ul className="mt-auto flex flex-wrap gap-2 pt-1 text-xs text-muted-foreground">
-          {car.rental ? <li className="rounded-full bg-muted px-2.5 py-1">{t('rental.term.minDays', { count: car.rental.minDays })}</li> : null}
-          {car.rental?.deposit ? <li className="rounded-full bg-muted px-2.5 py-1">{t('rental.term.deposit', { amount: price(car.rental.deposit, car.currency) })}</li> : null}
-          {car.rental ? (
-            <li className="rounded-full bg-muted px-2.5 py-1">
-              {car.rental.kmPerDay ? t('rental.term.kmPerDay', { count: car.rental.kmPerDay }) : t('rental.term.unlimitedKm')}
-            </li>
-          ) : null}
-        </ul>
-      </div>
-    </Link>
-  );
+  return <AutoCard car={{ ...car, image: resolveMediaUrl(car.image?.[0]) }} variant="rent" />;
 }
 
 /** Public catalogue of cars for rent with simple filters, including "free on these dates". */

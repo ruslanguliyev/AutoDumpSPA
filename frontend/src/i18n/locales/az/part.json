@@ -81,7 +81,10 @@
     "addToCart": "Səbətə əlavə et",
     "stockInStock": "Stokda var. 1–2 iş günü ərzində göndərməyə hazırdır.",
     "stockOutOfStock": "Stokda yoxdur",
-    "openPart": "{{name}} aç"
+    "openPart": "{{name}} aç",
+    "inStockCount": "Stokda: {{count}}",
+    "reviewsWord": "rəy",
+    "stockInStockShort": "Stokda"
   },
   "search": {
     "title": "Ehtiyat hissələri axtar",

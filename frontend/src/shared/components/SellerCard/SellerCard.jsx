@@ -2,9 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, MapPin, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import SellerGridCard from './SellerGridCard';
+
 const PUBLIC_SELLER_TYPES = new Set(['dealer', 'reseller']);
 const KNOWN_SELLER_TYPES = new Set(['dealer', 'reseller', 'private']);
-const KNOWN_DOMAINS = new Set(['cars', 'parts']);
 
 const getInitials = (name) => {
   const safe = String(name ?? '').trim();
@@ -21,23 +22,7 @@ const getTypeLabel = (type, t) => {
   return type;
 };
 
-const getDomainLabel = (domain, t) => {
-  const key = normalizeKey(domain);
-  if (!key) return t('seller.notAvailable');
-  if (KNOWN_DOMAINS.has(key)) return t(`seller.domain.${key}`);
-  return domain;
-};
 
-const getLocationLabel = (seller) => {
-  const value =
-    seller?.city ??
-    seller?.location?.city ??
-    seller?.address?.city ??
-    seller?.cityName;
-
-  const safe = typeof value === 'string' ? value.trim() : '';
-  return safe.length > 0 ? safe : null;
-};
 
 /**
  * Unified SellerCard component:
@@ -65,94 +50,9 @@ export const SellerCard = ({
   const type = seller?.type || null;
   const typeLabel = getTypeLabel(type, t);
 
+  // The sellers grid is the entity card of design/components.md; it has its own file.
   if (variant === 'grid') {
-    const ratingValue = Number.isFinite(ratingNumber) ? ratingNumber : null;
-    const domainLabel = getDomainLabel(seller?.domain, t);
-    const locationLabel = getLocationLabel(seller);
-    const listingsCount = Number.isFinite(seller?.listingsCount)
-      ? seller.listingsCount
-      : 0;
-
-    const badgeTone =
-      seller?.type === 'dealer'
-        ? 'bg-primary/10 text-primary ring-1 ring-primary/30'
-        : seller?.type === 'reseller'
-          ? 'bg-warning/10 text-warning ring-1 ring-warning/30'
-          : 'bg-muted text-muted-foreground ring-1 ring-border';
-
-    return (
-      <article
-        onClick={onClick}
-        className="flex h-full w-full cursor-pointer flex-col rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-card)]"
-      >
-        {/* ROW 1: LOGO + BADGE */}
-        <div className="flex items-center justify-between">
-          <div className="h-15 w-15 overflow-hidden rounded-full ring-1 ring-border">
-            {seller?.logo ? (
-              <img
-                src={seller.logo}
-                alt={seller?.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-primary text-sm font-semibold text-primary-foreground">
-                {getInitials(seller?.name)}
-              </div>
-            )}
-          </div>
-
-          <span
-            className={`rounded-full px-3 py-1 text-[11px] font-medium ${badgeTone}`}
-          >
-            {typeLabel}
-          </span>
-        </div>
-
-        {/* ROW 2: NAME */}
-        <h4 className="mt-2 text-sm font-semibold leading-snug text-foreground">
-          {name}
-        </h4>
-
-        <p className="text-sm text-muted-foreground">
-          {domainLabel} · {typeLabel}
-        </p>
-
-        {/* ROW 3: RATING + LISTINGS */}
-        <div className="border-t border-border pt-3">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            {ratingValue != null ? (
-              <span className="inline-flex items-center gap-1">
-                <Star size={14} className="text-warning" fill="currentColor" aria-hidden="true" />
-                <span className="font-semibold text-foreground">
-                  {ratingValue.toFixed(1)}
-                </span>
-              </span>
-            ) : null}
-            {ratingValue != null ? <span className="text-muted-foreground">•</span> : null}
-            <span>{t('seller.listings', { count: listingsCount })}</span>
-          </div>
-        </div>
-
-        {/* ROW 4: CITY */}
-        {locationLabel ? (
-          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin size={14} className="text-muted-foreground" aria-hidden="true" />
-            <span className="truncate">{locationLabel}</span>
-          </div>
-        ) : null}
-
-        {/* ROW 5: BUTTON */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick?.();
-          }}
-          className="mt-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-brand-foreground bg-brand hover:opacity-90 transition-opacity"
-        >
-          {t('seller.viewSeller')}
-        </button>
-      </article>
-    );
+    return <SellerGridCard seller={seller} onClick={onClick} className={className} />;
   }
 
   const canOpenPublicPage =

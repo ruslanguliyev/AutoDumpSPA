@@ -1,10 +1,13 @@
-import { ArrowRight, BadgeCheck, Clock, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Check, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+
 import type { SpecialistProfile } from '@/specialists/types/specialist.types';
+import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
-import { LocationBadge } from '@/shared/ui/LocationBadge';
-import { CardCTA } from '@/shared/ui/CardCTA';
+import { Chip } from '@/shared/ui/Chip';
+import Button from '@/shared/ui/button';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 
 type SpecialistCardProps = {
@@ -23,101 +26,100 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
     rating,
     reviewsCount,
     experienceYears,
+    yearsExperience,
     location,
     specializations,
     verified,
+    available,
+    priceFrom,
     promotionTier,
   } = specialist;
 
-  const displayRating = Number.isFinite(rating) ? rating : 0;
-  const displayReviews = Number.isFinite(reviewsCount) ? reviewsCount : 0;
-  const displayExperience = Number.isFinite(experienceYears) ? experienceYears : 0;
-  const safeSpecializations = specializations ?? [];
+  const displayRating = Number.isFinite(rating) ? rating! : 0;
+  const displayReviews = Number.isFinite(reviewsCount) ? reviewsCount! : 0;
+  const years = experienceYears ?? yearsExperience ?? null;
+  const chips = (specializations ?? []).slice(0, 3);
+  const isAvailable = available !== false;
 
   return (
-    <CardWrapper hover className={`flex flex-col p-6 ${className}`}>
-      {/* Header: Avatar + Verified Pill */}
-      <div className="flex items-start justify-between">
-        <div className="relative">
-          <div className="h-20 w-20 overflow-hidden rounded-full border-2 border-border bg-muted">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={name}
-                className="h-full w-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-xl font-semibold text-muted-foreground">
-                {(name ?? '').slice(0, 2).toUpperCase()}
-              </div>
-            )}
-          </div>
-          {verified && (
-            <span className="absolute bottom-0 left-0 flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-foreground">
-              <BadgeCheck size={14} aria-hidden="true" />
-            </span>
-          )}
-        </div>
-
-        <div className="flex flex-col items-end gap-1">
+    <CardWrapper
+      as="article"
+      hover
+      className={`relative flex h-full flex-col items-center p-4 text-center ${className}`.trim()}
+    >
+      {promotionTier ? (
+        <div className="absolute left-3 top-3">
           <PromotionBadge tier={promotionTier} />
-          {verified && (
-            <Badge variant="verified">{t('card.verified')}</Badge>
+        </div>
+      ) : null}
+
+      <div className="relative">
+        <div className="h-[72px] w-[72px] overflow-hidden rounded-full bg-card-muted">
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-[18px] font-semibold text-muted-foreground">
+              {(name ?? '').slice(0, 2).toUpperCase()}
+            </span>
           )}
         </div>
+        {verified ? (
+          <span
+            className="absolute bottom-0 right-0 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-success text-success-foreground ring-2 ring-card"
+            aria-label={t('card.verified')}
+          >
+            <Check size={12} strokeWidth={1.5} aria-hidden="true" />
+          </span>
+        ) : null}
       </div>
 
-      {/* Name */}
-      <h4 className="text-xl font-semibold text-foreground">{name}</h4>
+      <h3 className="mt-3 text-[17px] font-semibold leading-snug text-foreground">
+        <Link to={`/specialists/${slug || id}`} className="after:absolute after:inset-0 after:content-['']">
+          {name}
+        </Link>
+      </h3>
 
-      {/* Rating */}
-      <div className="flex items-center gap-1.5">
-        <Star size={16} className="fill-warning text-warning" aria-hidden="true" />
-        <span className="text-base font-semibold text-foreground">
-          {displayRating.toFixed(1)}
-        </span>
-        <span className="text-sm text-muted-foreground">
-          ({t('card.reviews', { count: displayReviews })})
-        </span>
+      <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+        <RatingStars value={displayRating} count={displayReviews} label={t('card.reviewsWord')} />
+        {years !== null ? (
+          <span className="text-[13px] text-muted-foreground">
+            · {t('card.experience', { count: years })}
+          </span>
+        ) : null}
       </div>
 
-      {/* Meta: Experience + Location */}
-      <div className="mt-3 space-y-2">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock size={16} aria-hidden="true" />
-          <span>{t('card.experience', { count: displayExperience })}</span>
-        </div>
-        {location && <LocationBadge location={location} size="md" className="flex" />}
-      </div>
+      {location ? (
+        <p className="mt-1 flex items-center gap-1.5 text-[13px] text-muted-foreground">
+          <MapPin size={14} strokeWidth={1.5} aria-hidden="true" />
+          {location}
+        </p>
+      ) : null}
 
-      {/* Specializations */}
-      {safeSpecializations.length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-2">
-          {safeSpecializations.slice(0, 3).map((spec) => (
-            <span
-              key={spec}
-              className="rounded-full border border-primary/30 bg-primary/10 px-1.5 py-1 text-xs font-medium text-primary"
-            >
-              {spec}
-            </span>
+      {chips.length > 0 ? (
+        <ul className="mt-3 flex list-none flex-wrap justify-center gap-1.5">
+          {chips.map((spec) => (
+            <li key={spec}>
+              <Chip>{spec}</Chip>
+            </li>
           ))}
-        </div>
-      )}
+        </ul>
+      ) : null}
 
-      {/* Spacer to push button to bottom */}
+      <p className="mt-3 text-[15px] font-semibold text-foreground">
+        {priceFrom != null
+          ? t('card.priceFrom', { price: `${priceFrom} AZN` })
+          : t('card.priceOnRequest')}
+      </p>
+
+      <Badge variant={isAvailable ? 'openNow' : 'closed'} className="mt-1">
+        {isAvailable ? t('card.available') : t('card.unavailable')}
+      </Badge>
+
       <div className="flex-1" />
 
-      {/* CTA Button */}
-      <CardCTA
-        to={`/specialists/${slug || id}`}
-        variant="primary"
-        fullWidth
-        className="mt-6 py-3.5 text-sm"
-      >
-        {t('card.viewProfile')}
-        <ArrowRight size={16} aria-hidden="true" />
-      </CardCTA>
+      <Button asChild variant="secondary" className="relative z-10 mt-4 w-full">
+        <Link to={`/specialists/${slug || id}`}>{t('card.viewProfile')}</Link>
+      </Button>
     </CardWrapper>
   );
 };

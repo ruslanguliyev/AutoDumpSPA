@@ -1,6 +1,9 @@
 {
   "title": "Vehicles",
-  "breadcrumbs": { "home": "Home", "cars": "Cars" },
+  "breadcrumbs": {
+    "home": "Home",
+    "cars": "Cars"
+  },
   "selector": {
     "title": "Vehicle Selector",
     "vin": "VIN",
@@ -132,9 +135,18 @@
     "removeFromFavorites": "Remove from favorites",
     "hot": "HOT",
     "addToFavoritesAria": "Add to favorites",
-    "removeFromFavoritesAria": "Remove from favorites"
+    "removeFromFavoritesAria": "Remove from favorites",
+    "perDay": "/ day",
+    "deposit": "Deposit {{amount}}",
+    "noDeposit": "No deposit",
+    "minDays": "Min {{count}} days",
+    "kmPerDay": "{{count}} km/day",
+    "unlimitedKm": "Unlimited km",
+    "checkAvailability": "Check availability"
   },
-  "badges": { "hot": "HOT" },
+  "badges": {
+    "hot": "HOT"
+  },
   "gallery": {
     "loadingImages": "Loading images…",
     "galleryAria": "{{name}} gallery"
@@ -154,5 +166,7 @@
     "priceUpTo": "Price up to (€)",
     "firstRegistrationFrom": "First registration from"
   },
-  "home": { "availableVehicles": "Available Vehicles" }
+  "home": {
+    "availableVehicles": "Available Vehicles"
+  }
 }

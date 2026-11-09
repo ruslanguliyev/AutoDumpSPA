@@ -1,6 +1,9 @@
 {
   "title": "Avtomobillər",
-  "breadcrumbs": { "home": "Ana səhifə", "cars": "Avtomobillər" },
+  "breadcrumbs": {
+    "home": "Ana səhifə",
+    "cars": "Avtomobillər"
+  },
   "selector": {
     "title": "Avtomobil seçimi",
     "vin": "VIN",
@@ -132,9 +135,18 @@
     "removeFromFavorites": "Seçilmişlərdən sil",
     "hot": "HİT",
     "addToFavoritesAria": "Seçilmişlərə əlavə et",
-    "removeFromFavoritesAria": "Seçilmişlərdən sil"
+    "removeFromFavoritesAria": "Seçilmişlərdən sil",
+    "perDay": "/ gün",
+    "deposit": "Girov {{amount}}",
+    "noDeposit": "Girovsuz",
+    "minDays": "Min {{count}} gün",
+    "kmPerDay": "{{count}} km/gün",
+    "unlimitedKm": "Limitsiz km",
+    "checkAvailability": "Tarixləri yoxla"
   },
-  "badges": { "hot": "HİT" },
+  "badges": {
+    "hot": "HİT"
+  },
   "gallery": {
     "loadingImages": "Şəkillər yüklənir…",
     "galleryAria": "{{name}} qalereyası"
@@ -154,5 +166,7 @@
     "priceUpTo": "Qiymət max (€)",
     "firstRegistrationFrom": "İlk qeydiyyat min"
   },
-  "home": { "availableVehicles": "Mövcud avtomobillər" }
+  "home": {
+    "availableVehicles": "Mövcud avtomobillər"
+  }
 }

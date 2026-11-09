@@ -43,7 +43,12 @@
     "experience_plural": "{{count}} yrs experience",
     "reviews": "{{count}} review",
     "reviews_plural": "{{count}} reviews",
-    "viewProfile": "View profile"
+    "viewProfile": "View profile",
+    "priceFrom": "From {{price}}",
+    "priceOnRequest": "Price on request",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "reviewsWord": "reviews"
   },
   "detail": {
     "loading": "Loading specialist profile…",

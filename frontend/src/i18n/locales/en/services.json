@@ -35,12 +35,12 @@
       "rating45": "4.5+"
     },
     "radiusOptions": {
-      "any": "Any distance",
       "5": "5 km",
       "10": "10 km",
       "25": "25 km",
       "50": "50 km",
-      "100": "100 km"
+      "100": "100 km",
+      "any": "Any distance"
     }
   },
   "list": {
@@ -54,7 +54,11 @@
     "avgCheck": "Avg. check",
     "priceRange": "Price range",
     "viewService": "View service →",
-    "fallbackType": "Service"
+    "fallbackType": "Service",
+    "bookVisit": "Book a visit",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "reviewsWord": "reviews"
   },
   "detail": {
     "loading": "Loading service details…",

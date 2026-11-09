@@ -189,7 +189,9 @@
     "domain": {
       "cars": "Cars",
       "parts": "Parts"
-    }
+    },
+    "reviewsWord": "reviews",
+    "viewSellerShort": "View seller"
   },
   "trust": {
     "buyerProtection": "Buyer protection",
