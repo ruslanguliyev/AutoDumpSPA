@@ -7,6 +7,7 @@ export default function MediaCarousel({
     ariaLabel = "Media carousel",
     showControls = true,
     showThumbnails = true,
+    showCounter = false,
     className,
     viewportClassName,
     mediaClassName,
@@ -93,9 +94,10 @@ export default function MediaCarousel({
                     onClick={() => setIsFullscreen(true)}
                 />
 
-                {showControls && (
+                {showControls && safeItems.length > 1 && (
                     <>
                         <button
+                            type="button"
                             className={styles.prev}
                             onClick={prev}
                             aria-label="Previous image"
@@ -103,6 +105,7 @@ export default function MediaCarousel({
                             ‹
                         </button>
                         <button
+                            type="button"
                             className={styles.next}
                             onClick={next}
                             aria-label="Next image"
@@ -111,6 +114,15 @@ export default function MediaCarousel({
                         </button>
                     </>
                 )}
+
+                {showCounter && safeItems.length > 0 ? (
+                    <span
+                        className="pointer-events-none absolute bottom-3 right-3 rounded-[var(--radius)] bg-background/85 px-2.5 py-1 text-[13px] font-semibold tabular-nums text-foreground backdrop-blur"
+                        aria-live="polite"
+                    >
+                        {index + 1} / {safeItems.length}
+                    </span>
+                ) : null}
             </div>
 
             {/* THUMBNAILS */}

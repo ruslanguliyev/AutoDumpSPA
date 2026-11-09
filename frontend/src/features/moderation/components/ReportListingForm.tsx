@@ -51,26 +51,32 @@ export function ReportListingForm({ listingId, className = '' }: Props) {
   }
 
   return (
-    <ReportDialog
-      className={className}
-      open={open}
-      onOpenChange={setOpen}
-      reasonOptions={reasonOptions}
-      reason={reason}
-      onReasonChange={(value) => setReason(value as ReportReason)}
-      details={details}
-      onDetailsChange={setDetails}
-      onSubmit={() => report.mutate()}
-      pending={report.isPending}
-      successMessage={report.isSuccess ? t('report.thanks') : null}
-      error={
-        report.isError
-          ? /already reported/i.test(report.error.message)
-            ? t('report.alreadyReported')
-            : report.error.message
-          : null
-      }
-    />
+    <div className={className}>
+      {report.isSuccess ? (
+        <p className="text-[13px] font-medium text-foreground" role="status">
+          {t('report.thanks')}
+        </p>
+      ) : (
+        <ReportDialog
+          open={open}
+          onOpenChange={setOpen}
+          reasonOptions={reasonOptions}
+          reason={reason}
+          onReasonChange={(value) => setReason(value as ReportReason)}
+          details={details}
+          onDetailsChange={setDetails}
+          onSubmit={() => report.mutate()}
+          pending={report.isPending}
+          error={
+            report.isError
+              ? /already reported/i.test(report.error.message)
+                ? t('report.alreadyReported')
+                : report.error.message
+              : null
+          }
+        />
+      )}
+    </div>
   );
 }
 

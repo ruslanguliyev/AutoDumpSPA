@@ -68,16 +68,17 @@ const mapVehicle = (row) => ({
   hasDamage: row.hasDamage ?? false,
   isRepainted: row.isRepainted ?? false,
   wasInAccident: row.wasInAccident ?? false,
-  ownersCount: row.ownersCount ?? 1,
-  owners: row.ownersCount ?? 1,
+  ownersCount: row.ownersCount ?? null,
+  owners: row.ownersCount ?? null,
   seatsCount: row.seatsCount ?? null,
   marketRegion: row.marketRegion ?? null,
   seller: row.seller ?? null,
   promotionTier: row.promotionTier ?? null,
   engine: `${row.engineVolume}L • ${row.power} HP`,
   status: 'available',
-  views: row.viewsCount ?? 0,
+  views: row.viewsCount ?? null,
   postedAt: null,
+  sellerNote: row.description ?? null,
 });
 
 const buildVehiclesFilterInput = (filters = {}) => ({

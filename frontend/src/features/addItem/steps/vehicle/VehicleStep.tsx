@@ -59,6 +59,12 @@ const VehicleStep = () => {
   const [gensLoading, setGensLoading] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const vehicle = draft?.vehicle;
+  // Primitives for effect dependencies: `vehicle` is a new object after every
+  // setVehicleField, so depending on it made the reset effect re-trigger itself.
+  const hasVehicle = Boolean(vehicle);
+  const vBrand = vehicle?.brand ?? '';
+  const vModel = vehicle?.model ?? '';
+  const vYear = vehicle?.year ?? '';
 
   const brandOptions = useMemo(
     () => CAR_BRANDS.map((b) => ({ value: b, label: b })),
@@ -106,7 +112,7 @@ const VehicleStep = () => {
   };
 
   useEffect(() => {
-    if (!vehicle) return;
+    if (!hasVehicle) return;
     setVehicleField('displacement', '');
     setVehicleField('horsepower', '');
     setVehicleField('fuel', '');
@@ -116,13 +122,13 @@ const VehicleStep = () => {
     setGenerations([]);
     setSelectedGen(null);
     setImgErrors(new Set());
-  }, [vehicle?.brand, vehicle?.model, setVehicleField, vehicle]);
+  }, [hasVehicle, vBrand, vModel, setVehicleField]);
 
   useEffect(() => {
-    if (!vehicle) return;
-    const brand = vehicle.brand?.trim();
-    const model = vehicle.model?.trim();
-    const year = vehicle.year?.trim();
+    if (!hasVehicle) return;
+    const brand = vBrand.trim();
+    const model = vModel.trim();
+    const year = vYear.trim();
     if (!brand || !model || !year) return;
 
     let cancelled = false;
@@ -168,12 +174,12 @@ const VehicleStep = () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [vehicle?.brand, vehicle?.model, vehicle?.year, setVehicleField, vehicle, t]);
+  }, [hasVehicle, vBrand, vModel, vYear, setVehicleField, t]);
 
   useEffect(() => {
-    if (!vehicle) return;
-    const brand = vehicle.brand?.trim();
-    const model = vehicle.model?.trim();
+    if (!hasVehicle) return;
+    const brand = vBrand.trim();
+    const model = vModel.trim();
     setImgErrors(new Set());
     if (!brand || !model) {
       setGenerations([]);
@@ -189,7 +195,7 @@ const VehicleStep = () => {
         setGenerations(gens);
         setGensLoading(false);
 
-        const currentYear = parseInt(vehicle.year, 10);
+        const currentYear = parseInt(vYear, 10);
         if (Number.isFinite(currentYear) && gens.length) {
           const match = gens.find(
             (g) => g.yearFrom <= currentYear && (g.yearTo === null || g.yearTo >= currentYear)
@@ -209,7 +215,7 @@ const VehicleStep = () => {
       cancelled = true;
       setImgErrors(new Set());
     };
-  }, [vehicle?.brand, vehicle?.model, vehicle?.year, vehicle]);
+  }, [hasVehicle, vBrand, vModel, vYear]);
 
   if (!vehicle) return null;
 

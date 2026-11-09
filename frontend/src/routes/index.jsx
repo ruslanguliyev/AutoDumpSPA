@@ -11,9 +11,7 @@ const About = lazy(() => import('@/app/pages/about/About'));
 const AutoSearchResults = lazy(
   () => import('@/vehicles/pages/AutoSearchResults/AutoSearchResults')
 );
-const VehicleDetail = lazy(
-  () => import('@/vehicles/pages/vehicleDetail/VehicleDetail')
-);
+const VehicleDetail = lazy(() => import('@/vehicles/pages/vehicleDetail/VehicleDetail'));
 const PartsPage = lazy(() => import('@/parts/pages/PartsPage'));
 const PartDetailsPage = lazy(() => import('@/parts/pages/PartDetailsPage'));
 const SellersPage = lazy(() => import('@/sellers/pages/SellersPage'));
