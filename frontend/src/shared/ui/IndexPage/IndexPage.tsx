@@ -46,6 +46,9 @@ type IndexPageProps = {
     pageCount: number;
     onPageChange: (page: number) => void;
     labels: PaginationLabels;
+    /** Under 640px: a button that appends the next page instead of jumping. */
+    onLoadMore?: () => void;
+    hasMore?: boolean;
   };
 };
 
@@ -153,6 +156,8 @@ export function IndexPage({
             page={pagination.page}
             pageCount={pagination.pageCount}
             onPageChange={pagination.onPageChange}
+            onLoadMore={pagination.onLoadMore}
+            hasMore={pagination.hasMore}
             labels={pagination.labels}
           />
         </div>

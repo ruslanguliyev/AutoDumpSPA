@@ -240,7 +240,7 @@ export const useAddItemStore = create<AddItemStoreState>((set) => ({
   syncDraft: (draft) => set(() => ({ draft })),
 
   setStepIndex: (index) =>
-    set((state) => ({
+    set(() => ({
       stepIndex: Math.max(0, index),
     })),
 

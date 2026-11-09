@@ -26,6 +26,7 @@
   --color-card-muted: rgb(var(--card-muted));
   --color-border: rgb(var(--border));
   --color-border-strong: rgb(var(--border-strong));
+  --color-scrim: var(--scrim);
 
   /* text */
   --color-foreground: rgb(var(--foreground));
@@ -122,6 +123,7 @@
 
   --shadow-card: 0 10px 25px rgb(0 0 0 / 0.08);
   --shadow-soft: 0 10px 25px rgb(0 0 0 / 0.04);
+  --scrim: rgb(2 6 23 / 0.72);
 
   /* --- LEGACY (values unchanged from the previous palette) ---------------
      Not in the design system. Kept so existing pages render as before; delete
@@ -184,6 +186,7 @@
 
   --shadow-card: 0 10px 25px rgb(0 0 0 / 0.35);
   --shadow-soft: 0 10px 25px rgb(0 0 0 / 0.25);
+  --scrim: rgb(2 6 23 / 0.72);
 
   /* --- LEGACY (values unchanged from the previous palette) --------------- */
   --popover: 30 41 59;

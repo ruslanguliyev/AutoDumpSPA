@@ -4,7 +4,6 @@ import type { SpecialistDetail } from '@/specialists/types/specialist.types';
 
 const btnBase =
   'inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-base font-medium no-underline transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60';
-const btnPrimary = 'bg-primary text-primary-foreground hover:bg-primary/90';
 const btnOutline = 'border border-border bg-card text-foreground hover:bg-muted hover:bg-muted/80';
 import type { ServiceProfile } from '@/services/types/service.types';
 import { AppointmentRequestCard } from '@/features/appointments/components/AppointmentRequestCard';

@@ -105,21 +105,8 @@ const VehicleStep = () => {
     });
   };
 
-  if (!draft?.vehicle) return null;
-
-  const v = draft.vehicle;
-
-  const modelError =
-    v.model && !isModelAllowedForBrand(v.brand, v.model)
-      ? t('validation.invalidVehicleModel')
-      : undefined;
-
-  const trimError =
-    v.trim && !isTrimAllowedForVehicle(v.brand, v.model, v.trim)
-      ? t('validation.invalidVehicleTrim')
-      : undefined;
-
   useEffect(() => {
+    if (!vehicle) return;
     setVehicleField('displacement', '');
     setVehicleField('horsepower', '');
     setVehicleField('fuel', '');
@@ -129,12 +116,13 @@ const VehicleStep = () => {
     setGenerations([]);
     setSelectedGen(null);
     setImgErrors(new Set());
-  }, [v.brand, v.model, setVehicleField]);
+  }, [vehicle?.brand, vehicle?.model, setVehicleField, vehicle]);
 
   useEffect(() => {
-    const brand = v.brand?.trim();
-    const model = v.model?.trim();
-    const year = v.year?.trim();
+    if (!vehicle) return;
+    const brand = vehicle.brand?.trim();
+    const model = vehicle.model?.trim();
+    const year = vehicle.year?.trim();
     if (!brand || !model || !year) return;
 
     let cancelled = false;
@@ -180,11 +168,12 @@ const VehicleStep = () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [v.brand, v.model, v.year, setVehicleField]);
+  }, [vehicle?.brand, vehicle?.model, vehicle?.year, setVehicleField, vehicle, t]);
 
   useEffect(() => {
-    const brand = v.brand?.trim();
-    const model = v.model?.trim();
+    if (!vehicle) return;
+    const brand = vehicle.brand?.trim();
+    const model = vehicle.model?.trim();
     setImgErrors(new Set());
     if (!brand || !model) {
       setGenerations([]);
@@ -200,7 +189,7 @@ const VehicleStep = () => {
         setGenerations(gens);
         setGensLoading(false);
 
-        const currentYear = parseInt(v.year, 10);
+        const currentYear = parseInt(vehicle.year, 10);
         if (Number.isFinite(currentYear) && gens.length) {
           const match = gens.find(
             (g) => g.yearFrom <= currentYear && (g.yearTo === null || g.yearTo >= currentYear)
@@ -220,7 +209,21 @@ const VehicleStep = () => {
       cancelled = true;
       setImgErrors(new Set());
     };
-  }, [v.brand, v.model, v.year]);
+  }, [vehicle?.brand, vehicle?.model, vehicle?.year, vehicle]);
+
+  if (!vehicle) return null;
+
+  const v = vehicle;
+
+  const modelError =
+    v.model && !isModelAllowedForBrand(v.brand, v.model)
+      ? t('validation.invalidVehicleModel')
+      : undefined;
+
+  const trimError =
+    v.trim && !isTrimAllowedForVehicle(v.brand, v.model, v.trim)
+      ? t('validation.invalidVehicleTrim')
+      : undefined;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">

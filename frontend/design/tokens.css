@@ -51,6 +51,9 @@
 
   --shadow-card: 0 10px 25px rgb(0 0 0 / 0.08);
   --shadow-soft: 0 10px 25px rgb(0 0 0 / 0.04);
+
+  /* Modal and drawer backdrops — same in both themes so the page darkens, never whitens. */
+  --scrim: rgb(2 6 23 / 0.72);
 }
 
 /* --- Dark --------------------------------------------------------------- */
@@ -89,6 +92,8 @@
 
   --shadow-card: 0 10px 25px rgb(0 0 0 / 0.35);
   --shadow-soft: 0 10px 25px rgb(0 0 0 / 0.25);
+
+  --scrim: rgb(2 6 23 / 0.72);
 }
 
 /* --- Tailwind mapping ---------------------------------------------------- */
@@ -99,6 +104,7 @@
   --color-card-muted:            rgb(var(--card-muted));
   --color-border:                rgb(var(--border));
   --color-border-strong:         rgb(var(--border-strong));
+  --color-scrim:                 var(--scrim);
 
   --color-foreground:            rgb(var(--foreground));
   --color-muted-foreground:      rgb(var(--muted-foreground));

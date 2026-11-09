@@ -19,7 +19,7 @@ const formatPrice = (price: number | null, currency: string) => {
       currency: currency || 'USD',
       maximumFractionDigits: 0,
     }).format(price);
-  } catch (_error) {
+  } catch {
     return `${currency} ${formatNumber(price, 'en-US')}`;
   }
 };

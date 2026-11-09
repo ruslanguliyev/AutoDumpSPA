@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SearchX } from 'lucide-react';
@@ -73,7 +75,11 @@ export default function AutoSearchResults() {
   const [pageState, setPageState] = useState({ key: viewKey, page: 1 });
   const page = pageState.key === viewKey ? pageState.page : 1;
   const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-  const visible = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const isMobilePagination = useMediaQuery('(max-width: 639px)');
+  const visible = isMobilePagination
+    ? sorted.slice(0, page * PAGE_SIZE)
+    : sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const hasMore = page < pageCount;
 
   const clearAll = () => resetFilters('cars', getDefaultFilters('cars'));
 
@@ -187,11 +193,15 @@ export default function AutoSearchResults() {
         page,
         pageCount,
         onPageChange: (next) => setPageState({ key: viewKey, page: Math.min(Math.max(1, next), pageCount) }),
+        onLoadMore: () =>
+          setPageState({ key: viewKey, page: Math.min(page + 1, pageCount) }),
+        hasMore,
         labels: {
           prev: t('common:indexPage.pagination.prev'),
           next: t('common:indexPage.pagination.next'),
           page: (n) => t('common:indexPage.pagination.page', { page: n }),
           pageOf: (current, total) => t('common:indexPage.pagination.pageOf', { page: current, pageCount: total }),
+          loadMore: t('common:buttons.loadMore'),
         },
       }}
     >

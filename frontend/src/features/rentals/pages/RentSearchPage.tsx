@@ -25,9 +25,6 @@ type RentalVehicle = {
 const inputClass =
   'w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
-const price = (value: number | null, currency: string) =>
-  value == null ? '—' : `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)} ${currency}`;
-
 /**
  * The rent catalogue shows the same car card as everywhere else, in its rent variant.
  * A page-local copy would drift from the one the rest of the site uses.

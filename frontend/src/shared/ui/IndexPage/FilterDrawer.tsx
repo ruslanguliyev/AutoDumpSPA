@@ -52,7 +52,7 @@ export function FilterDrawer({ open, onClose, onReset, labels, children }: Filte
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
       <div
-        className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-scrim backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
