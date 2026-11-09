@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { formatPrice, formatMileage, formatYear } from '@/lib/format';
+import { splitEngineSummary, translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
@@ -28,9 +29,9 @@ export default function AutoCard({ car, variant = 'sale' }) {
     const title = [car.brand, car.model].filter(Boolean).join(' ');
     const meta = [
         formatYear(car.year),
-        car.engine,
+        ...splitEngineSummary(car.engine),
         formatMileage(car.mileage),
-        car.transmission,
+        translateVehicleEnum(t, 'transmission', car.transmission),
     ].filter(Boolean);
 
     const rental = car.rental ?? null;

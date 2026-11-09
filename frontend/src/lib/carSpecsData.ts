@@ -8,6 +8,25 @@ export type StaticSpecEntry = {
 
 export const STATIC_SPECS: Record<string, StaticSpecEntry[]> = {};
 
+const modelsByBrandFromSpecs = new Map<string, string[]>();
+
+/** Models implied by STATIC_SPECS keys (`Make|Model|Year`). Empty when the brand is not in the table. */
+export function getModelsForBrandFromSpecs(make: string): string[] {
+  const brand = String(make ?? '').trim();
+  if (!brand) return [];
+  const cached = modelsByBrandFromSpecs.get(brand);
+  if (cached) return cached;
+
+  const models = new Set<string>();
+  for (const key of Object.keys(STATIC_SPECS)) {
+    const [keyBrand, model] = key.split('|');
+    if (keyBrand === brand && model) models.add(model);
+  }
+  const list = [...models].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+  modelsByBrandFromSpecs.set(brand, list);
+  return list;
+}
+
 const addRange = (
   make: string,
   model: string,

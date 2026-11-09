@@ -14,6 +14,7 @@ import type { ActiveFilterChip } from '@/shared/ui/IndexPage';
 import Button from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/EmptyState';
 import Skeleton from '@/shared/ui/Skeleton/Skeleton';
+import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import CarsFilters from './CarsFilters';
 
 const PAGE_SIZE = 9;
@@ -108,18 +109,17 @@ export default function AutoSearchResults() {
       onRemove: () => setFilters('cars', { yearFrom: null, yearTo: null }),
     });
   }
-  const valueLabel = (key: string, value: string) => t(`filter.${key}${value}`, { defaultValue: value });
   asList(filters.transmission).forEach((value) =>
     chips.push({
       key: `transmission-${value}`,
-      label: valueLabel('transmission', value),
+      label: translateVehicleEnum(t, 'transmission', value) ?? value,
       onRemove: () => toggleFilterValue('cars', 'transmission', value),
     })
   );
   asList(filters.fuel).forEach((value) =>
     chips.push({
       key: `fuel-${value}`,
-      label: valueLabel('fuel', value),
+      label: translateVehicleEnum(t, 'fuel', value) ?? value,
       onRemove: () => toggleFilterValue('cars', 'fuel', value),
     })
   );

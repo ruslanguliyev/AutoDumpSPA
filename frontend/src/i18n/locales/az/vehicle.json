@@ -199,5 +199,17 @@
       "chipTo": "{{label}} {{value}}-dək",
       "chipRange": "{{label}} {{from}}–{{to}}"
     }
+  },
+  "enums": {
+    "transmission": {
+      "Automatic": "Avtomat",
+      "Manual": "Mexaniki"
+    },
+    "fuel": {
+      "Petrol": "Benzin",
+      "Diesel": "Dizel",
+      "Hybrid": "Hibrid",
+      "Electric": "Elektrik"
+    }
   }
 }

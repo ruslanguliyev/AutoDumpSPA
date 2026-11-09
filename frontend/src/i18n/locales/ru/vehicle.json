@@ -208,5 +208,17 @@
       "chipTo": "{{label}} до {{value}}",
       "chipRange": "{{label}} {{from}}–{{to}}"
     }
+  },
+  "enums": {
+    "transmission": {
+      "Automatic": "Автомат",
+      "Manual": "Механика"
+    },
+    "fuel": {
+      "Petrol": "Бензин",
+      "Diesel": "Дизель",
+      "Hybrid": "Гибрид",
+      "Electric": "Электро"
+    }
   }
 }

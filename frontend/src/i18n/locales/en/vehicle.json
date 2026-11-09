@@ -201,5 +201,17 @@
       "chipTo": "{{label}} to {{value}}",
       "chipRange": "{{label}} {{from}}–{{to}}"
     }
+  },
+  "enums": {
+    "transmission": {
+      "Automatic": "Automatic",
+      "Manual": "Manual"
+    },
+    "fuel": {
+      "Petrol": "Petrol",
+      "Diesel": "Diesel",
+      "Hybrid": "Hybrid",
+      "Electric": "Electric"
+    }
   }
 }

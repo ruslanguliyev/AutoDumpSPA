@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFilters, useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import type { FilterValue } from '@/features/filters/types/filters.types';
-import { makesByCategory } from '@/vehicles/components/AutoSearchFilter/options';
+import { getModelsForBrandFromSpecs } from '@/lib/carSpecsData';
+import { makesByCategory, modelsByMake } from '@/vehicles/components/AutoSearchFilter/options';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import { Chip } from '@/shared/ui/Chip';
 import Input from '@/shared/ui/Input/Input';
@@ -27,6 +29,15 @@ export default function CarsFilters({ size = 'md' }: { size?: 'md' | 'drawer' })
   const setFilter = useFiltersStore((state) => state.setFilter);
   const setFilters = useFiltersStore((state) => state.setFilters);
   const toggleFilterValue = useFiltersStore((state) => state.toggleFilterValue);
+
+  const brand = String(filters.brand ?? '').trim();
+  const modelOptions = useMemo(() => {
+    if (!brand) return [];
+    const merged = [
+      ...new Set([...getModelsForBrandFromSpecs(brand), ...(modelsByMake[brand] ?? [])]),
+    ].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    return merged.map((model) => ({ value: model, label: model }));
+  }, [brand]);
 
   const transmission = asList(filters.transmission);
   const fuel = asList(filters.fuel);
@@ -53,15 +64,19 @@ export default function CarsFilters({ size = 'md' }: { size?: 'md' | 'drawer' })
         // A model belongs to a brand, so changing the brand clears it.
         onChange={(event) => setFilters('cars', { brand: event.target.value, model: '' })}
       />
-      <Input
+      <Select
         size={size}
         label={t('index.filters.model')}
+        placeholder={brand ? t('filter.allModels') : t('filter.selectMakeFirst')}
+        options={modelOptions}
         value={String(filters.model ?? '')}
+        disabled={!brand}
         onChange={(event) => setFilter('cars', 'model', event.target.value)}
       />
       <Input
         size={size}
         label={t('index.filters.city')}
+        placeholder={t('filter.cityPlaceholder')}
         value={String(filters.city ?? '')}
         onChange={(event) => setFilter('cars', 'city', event.target.value)}
       />
