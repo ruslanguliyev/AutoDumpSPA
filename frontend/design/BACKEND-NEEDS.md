@@ -17,3 +17,6 @@ One line per missing capability. “Blocks” = public page or filter called out
 - **`SpecialistsFilterInput` → wire `available` for “Available now”** — optional: field exists on filter input but specialists index still applies availability client-side after fetch.
 - **Service centre list filters** (`serviceTypes`, `brands`, `ratingFrom`, `verifiedOnly` on query)** — blocks server-side services sidebar filters on `/services` (only `city` is passed to GraphQL today).
 - **Private sellers (`SellerType.PRIVATE`) in public directory** — product decision pending: `pages.md` lists “private” seller type; `/sellers` deliberately excludes private profiles until policy is set.
+- **`SellerObject.phone` on public vehicle/part listing queries (respecting `showPhone`)** — blocks sidebar “Show phone number” on car and part detail (`MiniSellerCard` / full seller card); pages must not invent a number.
+- **`SellerObject.memberSince` on listing-detail seller embed** — blocks sidebar “Member since” on car detail (`DetailLayout` sidebar); mock data fills gaps today.
+- **`SellerObject.responseTime` (or derived SLA)** — blocks sidebar “Responds within” on car detail; not in current public seller/listing GraphQL shape.

@@ -207,6 +207,7 @@
     "basedOn_other": "based on {{count}} reviews",
     "title": "Reviews",
     "empty": "No reviews yet. Be the first to leave one.",
+    "emptyHeading": "No reviews yet",
     "write": "Leave a review",
     "yourRating": "Your rating",
     "commentPlaceholder": "Tell others about your experience (optional)",

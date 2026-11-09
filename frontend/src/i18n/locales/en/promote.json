@@ -5,6 +5,7 @@
   "subtitle": "Paid placement lifts your advert in the catalogue. It is always marked as an advert, and you can buy it without an account.",
   "openTarget": "Open the page",
   "fromPrice": "from {{price}}",
+  "shortcutsCaption": "Anyone can promote — no account needed.",
   "chooseDuration": "Choose how long",
   "chooseCount": "Choose how many",
   "dayCount_one": "{{count}} day",

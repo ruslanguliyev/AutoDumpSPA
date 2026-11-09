@@ -1,0 +1,1 @@
+export { SafetyTips } from './SafetyTips';

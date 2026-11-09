@@ -207,6 +207,7 @@
     "basedOn_other": "{{count}} rəy əsasında",
     "title": "Rəylər",
     "empty": "Hələ rəy yoxdur. İlk rəyi siz yazın.",
+    "emptyHeading": "Hələ rəy yoxdur",
     "write": "Rəy yaz",
     "yourRating": "Sizin qiymətiniz",
     "commentPlaceholder": "Təcrübənizi bölüşün (məcburi deyil)",

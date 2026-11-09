@@ -1,0 +1,1 @@
+export { PromoteShortcuts } from './PromoteShortcuts';

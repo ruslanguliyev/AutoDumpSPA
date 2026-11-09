@@ -1,0 +1,1 @@
+export { MiniSellerCard } from './MiniSellerCard';

@@ -5,6 +5,7 @@
   "subtitle": "Ödənişli yerləşdirmə elanı kataloqda yuxarı qaldırır. O, həmişə reklam kimi işarələnir və qeydiyyatsız da alına bilər.",
   "openTarget": "Səhifəni aç",
   "fromPrice": "{{price}}-dən",
+  "shortcutsCaption": "Hər kəs reklam edə bilər — hesab lazım deyil.",
   "chooseDuration": "Müddəti seçin",
   "chooseCount": "Sayı seçin",
   "dayCount_one": "{{count}} gün",
