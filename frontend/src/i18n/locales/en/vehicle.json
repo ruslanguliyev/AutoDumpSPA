@@ -170,5 +170,36 @@
   },
   "home": {
     "availableVehicles": "Available Vehicles"
+  },
+  "index": {
+    "title": "Cars for sale",
+    "count_one": "{{count, number}} listing",
+    "count_other": "{{count, number}} listings",
+    "showCars_one": "Show {{count, number}} car",
+    "showCars_other": "Show {{count, number}} cars",
+    "empty": "No cars match these filters.",
+    "emptyAction": "Clear all filters",
+    "sort": {
+      "default": "Recommended",
+      "priceAsc": "Price: low to high",
+      "priceDesc": "Price: high to low",
+      "yearDesc": "Year: newest first",
+      "mileageAsc": "Mileage: lowest first"
+    },
+    "filters": {
+      "brand": "Brand",
+      "anyBrand": "Any brand",
+      "model": "Model",
+      "city": "City",
+      "price": "Price, AZN",
+      "year": "Year",
+      "from": "From",
+      "to": "To",
+      "transmission": "Transmission",
+      "fuel": "Fuel",
+      "chipFrom": "{{label}} from {{value}}",
+      "chipTo": "{{label}} to {{value}}",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   }
 }

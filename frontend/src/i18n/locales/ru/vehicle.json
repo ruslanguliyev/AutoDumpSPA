@@ -173,5 +173,40 @@
   },
   "home": {
     "availableVehicles": "Доступные автомобили"
+  },
+  "index": {
+    "title": "Автомобили на продажу",
+    "count_one": "{{count, number}} объявление",
+    "count_few": "{{count, number}} объявления",
+    "count_many": "{{count, number}} объявлений",
+    "count_other": "{{count, number}} объявления",
+    "showCars_one": "Показать {{count, number}} автомобиль",
+    "showCars_few": "Показать {{count, number}} автомобиля",
+    "showCars_many": "Показать {{count, number}} автомобилей",
+    "showCars_other": "Показать {{count, number}} автомобиля",
+    "empty": "Нет автомобилей, подходящих под эти фильтры.",
+    "emptyAction": "Сбросить все фильтры",
+    "sort": {
+      "default": "Рекомендуемые",
+      "priceAsc": "Цена: по возрастанию",
+      "priceDesc": "Цена: по убыванию",
+      "yearDesc": "Год: сначала новые",
+      "mileageAsc": "Пробег: сначала меньший"
+    },
+    "filters": {
+      "brand": "Марка",
+      "anyBrand": "Любая марка",
+      "model": "Модель",
+      "city": "Город",
+      "price": "Цена, AZN",
+      "year": "Год",
+      "from": "От",
+      "to": "До",
+      "transmission": "Коробка передач",
+      "fuel": "Топливо",
+      "chipFrom": "{{label}} от {{value}}",
+      "chipTo": "{{label}} до {{value}}",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   }
 }

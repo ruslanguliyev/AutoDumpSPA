@@ -225,5 +225,19 @@
     "edit": "Изменить",
     "delete": "Удалить",
     "showMore": "Показать ещё ({{count}})"
+  },
+  "indexPage": {
+    "filters": "Фильтры",
+    "reset": "Сбросить",
+    "close": "Закрыть",
+    "clearAll": "Очистить всё",
+    "removeFilter": "Убрать фильтр",
+    "sortBy": "Сортировка",
+    "pagination": {
+      "prev": "Предыдущая страница",
+      "next": "Следующая страница",
+      "page": "Страница {{page}}",
+      "pageOf": "Страница {{page}} из {{pageCount}}"
+    }
   }
 }

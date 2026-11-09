@@ -217,5 +217,19 @@
     "edit": "Edit",
     "delete": "Delete",
     "showMore": "Show more ({{count}})"
+  },
+  "indexPage": {
+    "filters": "Filters",
+    "reset": "Reset",
+    "close": "Close",
+    "clearAll": "Clear all",
+    "removeFilter": "Remove filter",
+    "sortBy": "Sort by",
+    "pagination": {
+      "prev": "Previous page",
+      "next": "Next page",
+      "page": "Page {{page}}",
+      "pageOf": "Page {{page}} of {{pageCount}}"
+    }
   }
 }

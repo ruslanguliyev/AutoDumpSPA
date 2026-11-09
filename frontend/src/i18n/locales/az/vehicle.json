@@ -168,5 +168,36 @@
   },
   "home": {
     "availableVehicles": "Mövcud avtomobillər"
+  },
+  "index": {
+    "title": "Satılan avtomobillər",
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "showCars_one": "{{count, number}} avtomobili göstər",
+    "showCars_other": "{{count, number}} avtomobili göstər",
+    "empty": "Bu filtrlərə uyğun avtomobil yoxdur.",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "sort": {
+      "default": "Tövsiyə olunan",
+      "priceAsc": "Qiymət: ucuzdan bahaya",
+      "priceDesc": "Qiymət: bahadan ucuza",
+      "yearDesc": "İl: əvvəl yenilər",
+      "mileageAsc": "Yürüş: əvvəl azı"
+    },
+    "filters": {
+      "brand": "Marka",
+      "anyBrand": "İstənilən marka",
+      "model": "Model",
+      "city": "Şəhər",
+      "price": "Qiymət, AZN",
+      "year": "İl",
+      "from": "Dən",
+      "to": "Dək",
+      "transmission": "Sürətlər qutusu",
+      "fuel": "Yanacaq",
+      "chipFrom": "{{label}} {{value}}-dən",
+      "chipTo": "{{label}} {{value}}-dək",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   }
 }

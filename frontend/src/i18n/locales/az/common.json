@@ -217,5 +217,19 @@
     "edit": "Dəyiş",
     "delete": "Sil",
     "showMore": "Daha çox göstər ({{count}})"
+  },
+  "indexPage": {
+    "filters": "Filtrlər",
+    "reset": "Sıfırla",
+    "close": "Bağla",
+    "clearAll": "Hamısını təmizlə",
+    "removeFilter": "Filtri sil",
+    "sortBy": "Sıralama",
+    "pagination": {
+      "prev": "Əvvəlki səhifə",
+      "next": "Növbəti səhifə",
+      "page": "Səhifə {{page}}",
+      "pageOf": "Səhifə {{page}} / {{pageCount}}"
+    }
   }
 }
