@@ -38,6 +38,15 @@ export const FILTER_DEFAULTS: FiltersByDomain = {
     isAccidentedOnly: false,
     status: 'all',
   },
+  rent: {
+    availableFrom: '',
+    availableTo: '',
+    priceFrom: null,
+    priceTo: null,
+    vehicleClass: '',
+    depositTo: null,
+    city: '',
+  },
   parts: {
     search: '',
     category: '',
@@ -47,6 +56,7 @@ export const FILTER_DEFAULTS: FiltersByDomain = {
     priceFrom: '',
     priceTo: '',
     location: '',
+    inStockOnly: false,
     sort: '',
   },
   sellers: {

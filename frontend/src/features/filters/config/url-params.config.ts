@@ -26,6 +26,18 @@ const serializeCategory = (value: FilterValue): string | null => {
 };
 
 export const URL_PARAMS_CONFIG: Record<FilterDomain, FiltersUrlSyncConfig> = {
+  rent: {
+    paramMap: [
+      { param: 'from', key: 'availableFrom' },
+      { param: 'to', key: 'availableTo' },
+      { param: 'priceFrom', key: 'priceFrom' },
+      { param: 'priceTo', key: 'priceTo' },
+      { param: 'class', key: 'vehicleClass' },
+      { param: 'depositTo', key: 'depositTo' },
+      { param: 'city', key: 'city' },
+    ],
+  },
+
   cars: {
     paramMap: [
       { param: 'type', key: 'vehicleType' },

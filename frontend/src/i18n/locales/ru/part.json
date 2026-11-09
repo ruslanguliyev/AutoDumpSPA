@@ -26,7 +26,8 @@
     "relevance": "Релевантность",
     "priceLowToHigh": "Цена: от низкой к высокой",
     "priceHighToLow": "Цена: от высокой к низкой",
-    "newestFirst": "Сначала новые"
+    "newestFirst": "Сначала новые",
+    "inStockOnly": "Только в наличии"
   },
   "categories": {
     "engine": "Двигатель",
@@ -101,6 +102,31 @@
     "resultsCount_few": "Найдено {{count, number}} запчасти",
     "resultsCount_many": "Найдено {{count, number}} запчастей",
     "resultsCount_other": "Найдено {{count, number}} запчасти"
+  },
+  "index": {
+    "title": "Автозапчасти",
+    "breadcrumbs": {
+      "home": "Главная",
+      "parts": "Запчасти"
+    },
+    "count_one": "{{count, number}} объявление",
+    "count_few": "{{count, number}} объявления",
+    "count_many": "{{count, number}} объявлений",
+    "count_other": "{{count, number}} объявления",
+    "show_one": "Показать {{count, number}} запчасть",
+    "show_few": "Показать {{count, number}} запчасти",
+    "show_many": "Показать {{count, number}} запчастей",
+    "show_other": "Показать {{count, number}} запчасти",
+    "empty": "Нет запчастей по этим фильтрам.",
+    "emptyAction": "Сбросить все фильтры",
+    "filters": {
+      "price": "Цена, AZN",
+      "city": "Город",
+      "inStockOnly": "Только в наличии",
+      "chipFrom": "{{label}} от {{value}}",
+      "chipTo": "{{label}} до {{value}}",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   },
   "list": {
     "loadingInventory": "Загрузка каталога…",

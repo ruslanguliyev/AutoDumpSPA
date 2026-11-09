@@ -2,7 +2,8 @@
   "title": "Avtomobillər",
   "breadcrumbs": {
     "home": "Ana səhifə",
-    "cars": "Avtomobillər"
+    "cars": "Avtomobillər",
+    "rent": "İcarə"
   },
   "selector": {
     "title": "Avtomobil seçimi",
@@ -168,6 +169,28 @@
   },
   "home": {
     "availableVehicles": "Mövcud avtomobillər"
+  },
+  "rentIndex": {
+    "title": "Avtomobil icarəsi",
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "show_one": "{{count, number}} avtomobili göstər",
+    "show_other": "{{count, number}} avtomobili göstər",
+    "empty": "Bu filtrlərə uyğun icarə avtomobili yoxdur.",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "sort": {
+      "default": "Tövsiyə olunan",
+      "priceAsc": "Günlük qiymət: ucuzdan bahaya",
+      "priceDesc": "Günlük qiymət: bahadan ucuza"
+    },
+    "filters": {
+      "availability": "Mövcudluq",
+      "pricePerDay": "Günlük qiymət, AZN",
+      "class": "Sinif",
+      "anyClass": "İstənilən sinif",
+      "depositUpTo": "Depozitə qədər, AZN",
+      "chipDepositTo": "Depozitə qədər {{value}}"
+    }
   },
   "index": {
     "title": "Satılan avtomobillər",

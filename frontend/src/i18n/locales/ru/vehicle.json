@@ -2,7 +2,8 @@
   "title": "Автомобили",
   "breadcrumbs": {
     "home": "Главная",
-    "cars": "Автомобили"
+    "cars": "Автомобили",
+    "rent": "Аренда"
   },
   "selector": {
     "title": "Выбор автомобиля",
@@ -173,6 +174,32 @@
   },
   "home": {
     "availableVehicles": "Доступные автомобили"
+  },
+  "rentIndex": {
+    "title": "Аренда автомобилей",
+    "count_one": "{{count, number}} объявление",
+    "count_few": "{{count, number}} объявления",
+    "count_many": "{{count, number}} объявлений",
+    "count_other": "{{count, number}} объявления",
+    "show_one": "Показать {{count, number}} автомобиль",
+    "show_few": "Показать {{count, number}} автомобиля",
+    "show_many": "Показать {{count, number}} автомобилей",
+    "show_other": "Показать {{count, number}} автомобиля",
+    "empty": "Нет авто в аренду по этим фильтрам.",
+    "emptyAction": "Сбросить все фильтры",
+    "sort": {
+      "default": "Рекомендуемые",
+      "priceAsc": "Цена за день: по возрастанию",
+      "priceDesc": "Цена за день: по убыванию"
+    },
+    "filters": {
+      "availability": "Доступность",
+      "pricePerDay": "Цена за день, AZN",
+      "class": "Класс",
+      "anyClass": "Любой класс",
+      "depositUpTo": "Депозит до, AZN",
+      "chipDepositTo": "Депозит до {{value}}"
+    }
   },
   "index": {
     "title": "Автомобили на продажу",

@@ -295,6 +295,11 @@ const applyMockFiltering = (payload, filters) => {
     if (Number.isFinite(priceFrom) && priceFrom !== null && price < priceFrom) return false;
     if (Number.isFinite(priceTo) && priceTo !== null && price > priceTo) return false;
 
+    if (filters.inStockOnly) {
+      const stock = Number(item.stock ?? 0);
+      if (!Number.isFinite(stock) || stock <= 0) return false;
+    }
+
     return true;
   });
 

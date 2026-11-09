@@ -26,7 +26,8 @@
     "relevance": "Uyğunluq",
     "priceLowToHigh": "Qiymət: Aşağıdan yuxarıya",
     "priceHighToLow": "Qiymət: Yuxarıdan aşağıya",
-    "newestFirst": "Ən yenilər"
+    "newestFirst": "Ən yenilər",
+    "inStockOnly": "Yalnız stokda"
   },
   "categories": {
     "engine": "Mühərrik",
@@ -93,6 +94,27 @@
     "noResults": "Ehtiyat hissəsi tapılmadı",
     "resultsCount_one": "{{count, number}} ehtiyat hissəsi tapıldı",
     "resultsCount_other": "{{count, number}} ehtiyat hissəsi tapıldı"
+  },
+  "index": {
+    "title": "Ehtiyat hissələri",
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "parts": "Ehtiyat hissələri"
+    },
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "show_one": "{{count, number}} hissəni göstər",
+    "show_other": "{{count, number}} hissəni göstər",
+    "empty": "Bu filtrlərə uyğun hissə yoxdur.",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "filters": {
+      "price": "Qiymət, AZN",
+      "city": "Şəhər",
+      "inStockOnly": "Yalnız stokda",
+      "chipFrom": "{{label}} {{value}}-dən",
+      "chipTo": "{{label}} {{value}}-dək",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   },
   "list": {
     "loadingInventory": "Kataloq yüklənir…",

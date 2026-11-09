@@ -54,7 +54,8 @@ export const PARTS_DEFAULT_FILTER = {
   priceFrom: '',
   priceTo: '',
   location: '',
+  inStockOnly: false,
   sort: '',
-  limit: 20,
+  limit: 10_000,
   offset: 0,
 };

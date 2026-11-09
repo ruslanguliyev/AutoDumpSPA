@@ -26,7 +26,8 @@
     "relevance": "Relevance",
     "priceLowToHigh": "Price: Low to High",
     "priceHighToLow": "Price: High to Low",
-    "newestFirst": "Newest first"
+    "newestFirst": "Newest first",
+    "inStockOnly": "In stock only"
   },
   "categories": {
     "engine": "Engine",
@@ -93,6 +94,27 @@
     "noResults": "No parts found",
     "resultsCount_one": "{{count, number}} part found",
     "resultsCount_other": "{{count, number}} parts found"
+  },
+  "index": {
+    "title": "Auto parts",
+    "breadcrumbs": {
+      "home": "Home",
+      "parts": "Parts"
+    },
+    "count_one": "{{count, number}} listing",
+    "count_other": "{{count, number}} listings",
+    "show_one": "Show {{count, number}} part",
+    "show_other": "Show {{count, number}} parts",
+    "empty": "No parts match these filters.",
+    "emptyAction": "Clear all filters",
+    "filters": {
+      "price": "Price, AZN",
+      "city": "City",
+      "inStockOnly": "In stock only",
+      "chipFrom": "{{label}} from {{value}}",
+      "chipTo": "{{label}} up to {{value}}",
+      "chipRange": "{{label}} {{from}}–{{to}}"
+    }
   },
   "list": {
     "loadingInventory": "Loading inventory…",

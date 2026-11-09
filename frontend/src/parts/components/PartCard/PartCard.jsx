@@ -6,6 +6,7 @@ import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { formatPrice } from '@/lib/format';
+import { getPartCategoryI18nKey } from '@/parts/utils/partCategoryLabel';
 
 /** The part card, used by the parts catalogue, the home page and a seller's parts tab. */
 export default function PartCard({ part }) {
@@ -23,6 +24,13 @@ export default function PartCard({ part }) {
     const stock = Number.isFinite(part.stock) ? part.stock : null;
     const inStock = stock === null ? Boolean(part.inStock) : stock > 0;
     const price = Number.isFinite(part.price) ? part.price : null;
+    const categoryKey = part.category ? getPartCategoryI18nKey(part.category) : null;
+    const categoryLabel =
+        part.category && categoryKey
+            ? t(`categories.${categoryKey}`, { defaultValue: part.category })
+            : part.category
+              ? t(`categories.${String(part.category).trim().toLowerCase()}`, { defaultValue: part.category })
+              : null;
 
     return (
         <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
@@ -35,7 +43,7 @@ export default function PartCard({ part }) {
             <div className="flex flex-1 flex-col gap-2 p-4">
                 <div className="flex flex-wrap items-center gap-1.5">
                     {part.promotionTier ? <PromotionBadge tier={part.promotionTier} /> : null}
-                    {part.category ? <Badge variant="category">{part.category}</Badge> : null}
+                    {categoryLabel ? <Badge variant="category">{categoryLabel}</Badge> : null}
                 </div>
 
                 <h3 className="text-[16px] font-semibold leading-snug text-foreground">

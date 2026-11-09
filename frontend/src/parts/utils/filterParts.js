@@ -26,6 +26,7 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
     location: merged.location?.trim() || '',
     sellerId: merged.sellerId?.trim?.() || '',
     sort: merged.sort || 'RELEVANCE',
+    inStockOnly: Boolean(merged.inStockOnly),
     limit: merged.limit ?? PARTS_DEFAULT_FILTER.limit,
     offset: merged.offset ?? PARTS_DEFAULT_FILTER.offset,
   };

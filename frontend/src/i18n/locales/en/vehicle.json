@@ -2,7 +2,8 @@
   "title": "Vehicles",
   "breadcrumbs": {
     "home": "Home",
-    "cars": "Cars"
+    "cars": "Cars",
+    "rent": "Rent"
   },
   "selector": {
     "title": "Vehicle Selector",
@@ -170,6 +171,28 @@
   },
   "home": {
     "availableVehicles": "Available Vehicles"
+  },
+  "rentIndex": {
+    "title": "Car rental",
+    "count_one": "{{count, number}} listing",
+    "count_other": "{{count, number}} listings",
+    "show_one": "Show {{count, number}} car",
+    "show_other": "Show {{count, number}} cars",
+    "empty": "No rental cars match these filters.",
+    "emptyAction": "Clear all filters",
+    "sort": {
+      "default": "Recommended",
+      "priceAsc": "Price per day: low to high",
+      "priceDesc": "Price per day: high to low"
+    },
+    "filters": {
+      "availability": "Availability",
+      "pricePerDay": "Price per day, AZN",
+      "class": "Class",
+      "anyClass": "Any class",
+      "depositUpTo": "Deposit up to, AZN",
+      "chipDepositTo": "Deposit up to {{value}}"
+    }
   },
   "index": {
     "title": "Cars for sale",

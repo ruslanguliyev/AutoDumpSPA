@@ -1,12 +1,24 @@
 import { useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { SearchX } from 'lucide-react';
 
-import { todayString } from '@/features/rentals/api/rentals.api';
+import { useRentFiltersUrlSync } from '@/features/filters/hooks/useRentFiltersUrlSync';
+import { getDefaultFilters } from '@/features/filters/store/filters.defaults';
+import { useFilters, useFiltersStore } from '@/features/filters/store/useFiltersStore';
+import RentFilters from '@/features/rentals/pages/RentFilters';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
+import { IndexPage } from '@/shared/ui/IndexPage';
+import type { ActiveFilterChip } from '@/shared/ui/IndexPage';
+import Button from '@/shared/ui/button';
+import { EmptyState } from '@/shared/ui/EmptyState';
+import Skeleton from '@/shared/ui/Skeleton/Skeleton';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
-import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { getVehicles } from '@/vehicles/api/vehicles.api';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard.jsx';
+
+const PAGE_SIZE = 9;
 
 type RentalVehicle = {
   id: string;
@@ -16,97 +28,243 @@ type RentalVehicle = {
   price: number | null;
   currency: string;
   location: string | null;
+  bodyType: string | null;
   image: string[];
-  transmission?: string;
-  fuel?: string;
   rental: { deposit: number | null; minDays: number; maxDays: number | null; kmPerDay: number | null } | null;
 };
 
-const inputClass =
-  'w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+type SortKey = 'default' | 'priceAsc' | 'priceDesc';
 
-/**
- * The rent catalogue shows the same car card as everywhere else, in its rent variant.
- * A page-local copy would drift from the one the rest of the site uses.
- */
+const byPrice =
+  (direction: 1 | -1) => (a: RentalVehicle, b: RentalVehicle) => {
+    const left = a.price;
+    const right = b.price;
+    if (left == null && right == null) return 0;
+    if (left == null) return 1;
+    if (right == null) return -1;
+    return (left - right) * direction;
+  };
+
+const SORTERS: Record<Exclude<SortKey, 'default'>, (a: RentalVehicle, b: RentalVehicle) => number> = {
+  priceAsc: byPrice(1),
+  priceDesc: byPrice(-1),
+};
+
+const text = (value: unknown) => (value === null || value === undefined ? '' : String(value).trim());
+
 function RentalCard({ car }: { car: RentalVehicle }) {
   return <AutoCard car={{ ...car, image: resolveMediaUrl(car.image?.[0]) }} variant="rent" />;
 }
 
-/** Public catalogue of cars for rent with simple filters, including "free on these dates". */
+/** Public catalogue of cars for rent on the shared index skeleton. */
 export default function RentSearchPage() {
-  const { t } = useTranslation('dashboard');
-  useDocumentTitle(t('rentSearch.title'));
-  const today = todayString();
+  const { t } = useTranslation(['vehicle', 'common', 'addItem', 'dashboard']);
+  useRentFiltersUrlSync();
 
-  const [brand, setBrand] = useState('');
-  const [city, setCity] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const filters = useFilters('rent');
+  const setFilter = useFiltersStore((state) => state.setFilter);
+  const setFilters = useFiltersStore((state) => state.setFilters);
+  const resetFilters = useFiltersStore((state) => state.resetFilters);
 
-  // The two dates only count together; a half-filled period is ignored.
+  const [sort, setSort] = useState<SortKey>('default');
+
+  const from = text(filters.availableFrom);
+  const to = text(filters.availableTo);
+  const city = text(filters.city);
+  const vehicleClass = text(filters.vehicleClass);
   const period = from && to && to >= from ? { availableFrom: from, availableTo: to } : {};
 
   const query = useQuery({
-    queryKey: ['rent-search', brand.trim(), city.trim(), period],
-    queryFn: () => getVehicles({ purpose: 'RENT', brand: brand.trim(), city: city.trim(), limit: 200, ...period }) as Promise<RentalVehicle[]>,
+    queryKey: ['rent-search', city, period, vehicleClass],
+    queryFn: () =>
+      getVehicles({ purpose: 'RENT', city, limit: 500, ...period }) as Promise<RentalVehicle[]>,
     placeholderData: keepPreviousData,
   });
 
   const cars = useMemo(() => {
-    const limit = Number(maxPrice);
-    const list = query.data ?? [];
-    return Number.isFinite(limit) && limit > 0 ? list.filter((c) => c.price != null && c.price <= limit) : list;
-  }, [query.data, maxPrice]);
+    let list = query.data ?? [];
+    const priceFrom = filters.priceFrom != null ? Number(filters.priceFrom) : null;
+    const priceTo = filters.priceTo != null ? Number(filters.priceTo) : null;
+    const depositTo = filters.depositTo != null ? Number(filters.depositTo) : null;
 
-  const periodInvalid = Boolean(from && to && to < from);
+    if (vehicleClass) {
+      list = list.filter((car) => String(car.bodyType ?? '').toLowerCase() === vehicleClass);
+    }
+    if (Number.isFinite(priceFrom) && priceFrom != null) {
+      list = list.filter((car) => car.price != null && car.price >= priceFrom);
+    }
+    if (Number.isFinite(priceTo) && priceTo != null) {
+      list = list.filter((car) => car.price != null && car.price <= priceTo);
+    }
+    if (Number.isFinite(depositTo) && depositTo != null) {
+      list = list.filter((car) => {
+        const deposit = car.rental?.deposit;
+        if (deposit == null || deposit === 0) return true;
+        return deposit <= depositTo;
+      });
+    }
+    return list;
+  }, [query.data, filters.depositTo, filters.priceFrom, filters.priceTo, vehicleClass]);
+
+  const sorted = useMemo(
+    () => (sort === 'default' ? cars : [...cars].sort(SORTERS[sort])),
+    [cars, sort]
+  );
+
+  const viewKey = `${sort}|${JSON.stringify(filters)}`;
+  const [pageState, setPageState] = useState({ key: viewKey, page: 1 });
+  const page = pageState.key === viewKey ? pageState.page : 1;
+  const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const isMobilePagination = useMediaQuery('(max-width: 639px)');
+  const visible = isMobilePagination
+    ? sorted.slice(0, page * PAGE_SIZE)
+    : sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const hasMore = page < pageCount;
+
+  const clearAll = () => resetFilters('rent', getDefaultFilters('rent'));
+
+  const chips: ActiveFilterChip[] = [];
+  const range = (label: string, fromValue: unknown, toValue: unknown) => {
+    const a = text(fromValue);
+    const b = text(toValue);
+    if (a && b) return t('index.filters.chipRange', { label, from: a, to: b });
+    if (a) return t('index.filters.chipFrom', { label, value: a });
+    if (b) return t('index.filters.chipTo', { label, value: b });
+    return '';
+  };
+
+  if (from || to) {
+    const label =
+      from && to
+        ? t('index.filters.chipRange', {
+            label: t('rentIndex.filters.availability'),
+            from,
+            to,
+          })
+        : from
+          ? t('index.filters.chipFrom', { label: t('rentIndex.filters.availability'), value: from })
+          : t('index.filters.chipTo', { label: t('rentIndex.filters.availability'), value: to });
+    chips.push({
+      key: 'dates',
+      label,
+      onRemove: () => setFilters('rent', { availableFrom: '', availableTo: '' }),
+    });
+  }
+
+  const priceLabel = range(t('rentIndex.filters.pricePerDay'), filters.priceFrom, filters.priceTo);
+  if (priceLabel) {
+    chips.push({
+      key: 'price',
+      label: priceLabel,
+      onRemove: () => setFilters('rent', { priceFrom: null, priceTo: null }),
+    });
+  }
+
+  if (vehicleClass) {
+    chips.push({
+      key: 'class',
+      label: t(`form.vehicleCategories.${vehicleClass}`, {
+        ns: 'addItem',
+        defaultValue: vehicleClass,
+      }),
+      onRemove: () => setFilter('rent', 'vehicleClass', ''),
+    });
+  }
+
+  if (filters.depositTo != null && filters.depositTo !== '') {
+    chips.push({
+      key: 'deposit',
+      label: t('rentIndex.filters.chipDepositTo', { value: String(filters.depositTo) }),
+      onRemove: () => setFilter('rent', 'depositTo', null),
+    });
+  }
+
+  if (city) {
+    chips.push({
+      key: 'city',
+      label: city,
+      onRemove: () => setFilter('rent', 'city', ''),
+    });
+  }
+
+  let gridState: ReactNode = null;
+  if (query.isLoading && cars.length === 0) {
+    gridState = (
+      <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true">
+        {Array.from({ length: 6 }, (_, index) => (
+          <li key={index}>
+            <Skeleton className="aspect-[4/5] w-full rounded-2xl" />
+          </li>
+        ))}
+      </ul>
+    );
+  } else if (!query.isLoading && sorted.length === 0) {
+    gridState = (
+      <EmptyState
+        icon={<SearchX size={32} />}
+        action={
+          <Button variant="secondary" onClick={clearAll}>
+            {t('rentIndex.emptyAction')}
+          </Button>
+        }
+      >
+        {t('rentIndex.empty')}
+      </EmptyState>
+    );
+  }
 
   return (
-    <div className="w-full px-4 py-10">
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6">
-        <header>
-          <h1 className="text-2xl font-semibold text-foreground">{t('rentSearch.title')}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{t('rentSearch.subtitle')}</p>
-        </header>
-
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="grid gap-3 rounded-2xl border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5"
-        >
-          <input className={inputClass} placeholder={t('rentSearch.brand')} value={brand} onChange={(e) => setBrand(e.target.value)} aria-label={t('rentSearch.brand')} />
-          <input className={inputClass} placeholder={t('rentSearch.city')} value={city} onChange={(e) => setCity(e.target.value)} aria-label={t('rentSearch.city')} />
-          <input
-            className={inputClass}
-            type="number"
-            min={0}
-            placeholder={t('rentSearch.maxPrice')}
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            aria-label={t('rentSearch.maxPrice')}
-          />
-          <input className={inputClass} type="date" min={today} value={from} onChange={(e) => setFrom(e.target.value)} aria-label={t('rental.from')} />
-          <input className={inputClass} type="date" min={from || today} value={to} onChange={(e) => setTo(e.target.value)} aria-label={t('rental.to')} />
-          {periodInvalid ? <p role="alert" className="text-xs text-destructive sm:col-span-2 lg:col-span-5">{t('rental.errors.order')}</p> : null}
-        </form>
-
-        {query.isLoading ? (
-          <div className="rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">{t('listings.loading')}</div>
-        ) : cars.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card px-4 py-10 text-center text-sm text-muted-foreground">{t('rentSearch.empty')}</div>
-        ) : (
-          <>
-            <p className="text-sm text-muted-foreground">{t('rentSearch.count', { count: cars.length })}</p>
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {cars.map((car) => (
-                <li key={car.id}>
-                  <RentalCard car={car} />
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-    </div>
+    <IndexPage
+      breadcrumbs={[
+        { label: t('breadcrumbs.home'), to: '/' },
+        { label: t('breadcrumbs.rent') },
+      ]}
+      title={t('rentIndex.title')}
+      count={t('rentIndex.count', { count: sorted.length })}
+      sort={{
+        label: t('common:indexPage.sortBy'),
+        value: sort,
+        onChange: (value) => setSort(value as SortKey),
+        options: (['default', 'priceAsc', 'priceDesc'] as SortKey[]).map((key) => ({
+          value: key,
+          label: t(`rentIndex.sort.${key}`),
+        })),
+      }}
+      filters={<RentFilters />}
+      filtersLabel={t('common:indexPage.filters')}
+      activeFilterCount={chips.length}
+      onResetFilters={clearAll}
+      activeChips={chips}
+      removeChipLabel={t('common:indexPage.removeFilter')}
+      drawerLabels={{
+        title: t('common:indexPage.filters'),
+        reset: t('common:indexPage.reset'),
+        close: t('common:indexPage.close'),
+        clearAll: t('common:indexPage.clearAll'),
+        show: t('rentIndex.show', { count: sorted.length }),
+      }}
+      gridState={gridState}
+      pagination={{
+        page,
+        pageCount,
+        onPageChange: (next) => setPageState({ key: viewKey, page: Math.min(Math.max(1, next), pageCount) }),
+        onLoadMore: () => setPageState({ key: viewKey, page: Math.min(page + 1, pageCount) }),
+        hasMore,
+        labels: {
+          prev: t('common:indexPage.pagination.prev'),
+          next: t('common:indexPage.pagination.next'),
+          page: (n) => t('common:indexPage.pagination.page', { page: n }),
+          pageOf: (current, total) =>
+            t('common:indexPage.pagination.pageOf', { page: current, pageCount: total }),
+          loadMore: t('common:buttons.loadMore'),
+        },
+      }}
+    >
+      {visible.map((car) => (
+        <li key={car.id}>
+          <RentalCard car={car} />
+        </li>
+      ))}
+    </IndexPage>
   );
 }
