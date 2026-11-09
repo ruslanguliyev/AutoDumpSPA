@@ -82,9 +82,10 @@
     "stockInStock": "In stock. Ready for dispatch in 1–2 working days.",
     "stockOutOfStock": "Out of stock",
     "openPart": "Open {{name}}",
-    "inStockCount": "In stock: {{count}}",
-    "reviewsWord": "reviews",
-    "stockInStockShort": "In stock"
+    "inStockCount": "In stock: {{count, number}}",
+    "stockInStockShort": "In stock",
+    "reviews_one": "{{count, number}} review",
+    "reviews_other": "{{count, number}} reviews"
   },
   "search": {
     "title": "Search Parts",

@@ -5,8 +5,8 @@ import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import Button from '@/shared/ui/button';
+import { normalizeSellerType } from '@/shared/utils/sellerType';
 
-const KNOWN_SELLER_TYPES = new Set(['dealer', 'reseller', 'private']);
 
 const getInitials = (name) => {
   const safe = String(name ?? '').trim();
@@ -15,9 +15,8 @@ const getInitials = (name) => {
 };
 
 const getTypeLabel = (type, t) => {
-  const key = String(type ?? '').trim().toLowerCase();
-  if (!key) return null;
-  return KNOWN_SELLER_TYPES.has(key) ? t(`seller.type.${key}`) : type;
+  const key = normalizeSellerType(type);
+  return key ? t(`seller.type.${key}`) : null;
 };
 
 const getCity = (seller) => {
@@ -43,7 +42,7 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
   const avatar = seller.logo || seller.avatarUrl || null;
 
   return (
-    <CardWrapper as="article" hover className={`relative flex h-full flex-col overflow-hidden ${className}`.trim()}>
+    <CardWrapper as="article" hover className={`relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere] ${className}`.trim()}>
       {/* The seller record has no cover image yet, so the strip is the design's placeholder. */}
       <div className="h-[76px] w-full bg-card-muted" />
 
@@ -74,7 +73,7 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
           {seller.verified ? <Badge variant="verified">{t('seller.verified')}</Badge> : null}
         </div>
 
-        <RatingStars value={rating ?? 0} count={votes} label={t('seller.reviewsWord')} />
+        <RatingStars value={rating ?? 0} countLabel={t('seller.reviews', { count: votes })} />
 
         <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
           {city ? (

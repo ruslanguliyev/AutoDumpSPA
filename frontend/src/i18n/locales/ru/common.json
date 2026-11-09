@@ -175,23 +175,26 @@
     "verifiedSeller": "Проверенный продавец",
     "sellerRating": "Рейтинг продавца",
     "sellerCard": "Карточка продавца",
-    "listings": "{{count}} объявление",
-    "listings_plural": "{{count}} объявлений",
-    "reviews": "{{count}} отзыв",
-    "reviews_plural": "{{count}} отзывов",
     "viewSeller": "Смотреть продавца →",
     "notAvailable": "н/д",
     "type": {
       "dealer": "Дилер",
-      "reseller": "Реселлер",
+      "parts": "Продавец запчастей",
       "private": "Частный"
     },
     "domain": {
       "cars": "Автомобили",
       "parts": "Запчасти"
     },
-    "reviewsWord": "отзывов",
-    "viewSellerShort": "Смотреть продавца"
+    "viewSellerShort": "Смотреть продавца",
+    "listings_one": "{{count, number}} объявление",
+    "listings_few": "{{count, number}} объявления",
+    "listings_many": "{{count, number}} объявлений",
+    "listings_other": "{{count, number}} объявления",
+    "reviews_one": "{{count, number}} отзыв",
+    "reviews_few": "{{count, number}} отзыва",
+    "reviews_many": "{{count, number}} отзывов",
+    "reviews_other": "{{count, number}} отзыва"
   },
   "trust": {
     "buyerProtection": "Защита покупателя",

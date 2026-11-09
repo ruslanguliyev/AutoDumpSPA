@@ -28,7 +28,7 @@ export const useSellers = () => {
     () => [
       { value: '', label: t('filters.sellerTypeOptions.any') },
       { value: 'dealer', label: t('filters.sellerTypeOptions.dealer') },
-      { value: 'reseller', label: t('filters.sellerTypeOptions.reseller') },
+      { value: 'parts', label: t('filters.sellerTypeOptions.parts') },
     ],
     [t]
   );

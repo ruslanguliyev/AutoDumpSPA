@@ -58,7 +58,10 @@
     "bookVisit": "Записаться",
     "openNow": "Открыто",
     "closed": "Закрыто",
-    "reviewsWord": "отзывов"
+    "reviews_one": "{{count, number}} отзыв",
+    "reviews_few": "{{count, number}} отзыва",
+    "reviews_many": "{{count, number}} отзывов",
+    "reviews_other": "{{count, number}} отзыва"
   },
   "detail": {
     "loading": "Загрузка деталей…",

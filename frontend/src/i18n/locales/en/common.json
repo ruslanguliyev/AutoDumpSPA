@@ -175,23 +175,22 @@
     "verifiedSeller": "Verified seller",
     "sellerRating": "Seller rating",
     "sellerCard": "Seller card",
-    "listings": "{{count}} listing",
-    "listings_plural": "{{count}} listings",
-    "reviews": "{{count}} review",
-    "reviews_plural": "{{count}} reviews",
     "viewSeller": "View seller →",
     "notAvailable": "n/a",
     "type": {
       "dealer": "Dealer",
-      "reseller": "Reseller",
+      "parts": "Parts seller",
       "private": "Private"
     },
     "domain": {
       "cars": "Cars",
       "parts": "Parts"
     },
-    "reviewsWord": "reviews",
-    "viewSellerShort": "View seller"
+    "viewSellerShort": "View seller",
+    "listings_one": "{{count, number}} listing",
+    "listings_other": "{{count, number}} listings",
+    "reviews_one": "{{count, number}} review",
+    "reviews_other": "{{count, number}} reviews"
   },
   "trust": {
     "buyerProtection": "Buyer protection",

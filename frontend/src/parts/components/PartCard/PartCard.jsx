@@ -5,6 +5,7 @@ import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
+import { formatPrice } from '@/lib/format';
 
 /** The part card, used by the parts catalogue, the home page and a seller's parts tab. */
 export default function PartCard({ part }) {
@@ -24,7 +25,7 @@ export default function PartCard({ part }) {
     const price = Number.isFinite(part.price) ? part.price : null;
 
     return (
-        <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden">
+        <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
             <div className="aspect-square w-full overflow-hidden bg-card-muted">
                 {imageSrc ? (
                     <img src={imageSrc} alt="" loading="lazy" className="h-full w-full object-cover" />
@@ -48,7 +49,7 @@ export default function PartCard({ part }) {
                 </h3>
 
                 {hasRating ? (
-                    <RatingStars value={part.rating} count={reviewsCount} label={t('card.reviewsWord')} />
+                    <RatingStars value={part.rating} countLabel={t('card.reviews', { count: reviewsCount })} />
                 ) : null}
 
                 {inStock ? (
@@ -63,7 +64,7 @@ export default function PartCard({ part }) {
 
                 {price !== null ? (
                     <p className="text-[20px] font-bold leading-none text-foreground">
-                        {price.toFixed(2)} {part.currency || 'AZN'}
+                        {formatPrice(price, part.currency || 'AZN')}
                     </p>
                 ) : null}
             </div>

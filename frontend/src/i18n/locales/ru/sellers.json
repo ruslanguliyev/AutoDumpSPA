@@ -25,7 +25,7 @@
     "sellerTypeOptions": {
       "any": "Любой",
       "dealer": "Дилер",
-      "reseller": "Реселлер"
+      "parts": "Продавец запчастей"
     },
     "ratingOptions": {
       "any": "Любой",

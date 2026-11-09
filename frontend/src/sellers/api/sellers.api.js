@@ -1,3 +1,4 @@
+import { normalizeSellerType } from '@/shared/utils/sellerType';
 import { gqlRequest } from '@/lib/graphql';
 const GET_SELLERS_QUERY = `
 query GetSellers {
@@ -23,14 +24,7 @@ const mapSeller = (row) => ({
   phone: row.phone ?? null,
   rating: row.rating,
   verified: row.verified,
-  type:
-    row.type === 'DEALER'
-      ? 'dealer'
-      : row.type === 'PARTS_DEALER'
-        ? 'reseller'
-        : row.type === 'PRIVATE'
-          ? 'reseller'
-          : 'reseller',
+  type: normalizeSellerType(row.type),
   domain: row.type === 'PARTS_DEALER' ? 'parts' : 'cars',
   hasPublicPage: true,
   listingsCount: row.listingsCount ?? 0,

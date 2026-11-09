@@ -40,16 +40,19 @@
   "card": {
     "verified": "Проверен",
     "mobileService": "Выездной сервис",
-    "experience": "{{count}} год опыта",
-    "experience_plural": "{{count}} лет опыта",
-    "reviews": "{{count}} отзыв",
-    "reviews_plural": "{{count}} отзывов",
     "viewProfile": "Смотреть профиль",
     "priceFrom": "от {{price}}",
     "priceOnRequest": "Цена по запросу",
     "available": "Свободен",
     "unavailable": "Занят",
-    "reviewsWord": "отзывов"
+    "experience_one": "{{count}} год опыта",
+    "experience_few": "{{count}} года опыта",
+    "experience_many": "{{count}} лет опыта",
+    "experience_other": "{{count}} года опыта",
+    "reviews_one": "{{count, number}} отзыв",
+    "reviews_few": "{{count, number}} отзыва",
+    "reviews_many": "{{count, number}} отзывов",
+    "reviews_other": "{{count, number}} отзыва"
   },
   "detail": {
     "loading": "Загрузка профиля мастера…",

@@ -28,7 +28,7 @@ const MOCK_SELLERS = [
   {
     id: 'parts_reseller_01',
     name: 'Xirdalan Parts Reseller',
-    type: 'reseller',
+    type: 'parts',
     domain: 'parts',
     hasPublicPage: true,
     verified: true,
@@ -48,7 +48,7 @@ const MOCK_SELLERS = [
   {
     id: 'parts_reseller_02',
     name: 'Babek Prospekti Parts Reseller',
-    type: 'reseller',
+    type: 'parts',
     domain: 'parts',
     hasPublicPage: true,
     verified: true,

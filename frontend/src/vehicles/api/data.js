@@ -105,7 +105,7 @@ export const autos = [
     seller: {
       id: "reseller_01",
       name: "Auto Broker Alex",
-      type: "reseller",
+      type: "dealer",
       domain: "cars",
       hasPublicPage: true,
       verified: true,

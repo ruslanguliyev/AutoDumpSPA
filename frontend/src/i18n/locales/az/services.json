@@ -58,7 +58,8 @@
     "bookVisit": "Görüş təyin et",
     "openNow": "Açıqdır",
     "closed": "Bağlıdır",
-    "reviewsWord": "rəy"
+    "reviews_one": "{{count, number}} rəy",
+    "reviews_other": "{{count, number}} rəy"
   },
   "detail": {
     "loading": "Xidmət məlumatları yüklənir…",

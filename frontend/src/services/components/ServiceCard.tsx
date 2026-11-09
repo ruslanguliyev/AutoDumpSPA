@@ -47,7 +47,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const open = service.schedule ? isServiceOpen(service.schedule) : null;
 
   return (
-    <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden">
+    <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
       <div className="relative aspect-video w-full overflow-hidden bg-card-muted">
         {cover ? <img src={cover} alt="" loading="lazy" className="h-full w-full object-cover" /> : null}
 
@@ -78,7 +78,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
 
         <p className="text-[13px] text-muted-foreground">{typeLabel}</p>
 
-        <RatingStars value={ratingValue} count={reviewsCount} label={t('card.reviewsWord')} />
+        <RatingStars value={ratingValue} countLabel={t('card.reviews', { count: reviewsCount })} />
 
         {city ? (
           <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">

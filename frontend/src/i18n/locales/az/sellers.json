@@ -25,7 +25,7 @@
     "sellerTypeOptions": {
       "any": "İstənilən",
       "dealer": "Diler",
-      "reseller": "Reseller"
+      "parts": "Ehtiyat hissəsi satıcısı"
     },
     "ratingOptions": {
       "any": "İstənilən",

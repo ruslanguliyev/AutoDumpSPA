@@ -9,6 +9,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { Chip } from '@/shared/ui/Chip';
 import Button from '@/shared/ui/button';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
+import { formatPrice } from '@/lib/format';
 
 type SpecialistCardProps = {
   specialist: SpecialistProfile;
@@ -45,7 +46,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
     <CardWrapper
       as="article"
       hover
-      className={`relative flex h-full flex-col items-center p-4 text-center ${className}`.trim()}
+      className={`relative flex h-full flex-col items-center p-4 text-center [overflow-wrap:anywhere] ${className}`.trim()}
     >
       {promotionTier ? (
         <div className="absolute left-3 top-3">
@@ -80,7 +81,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
       </h3>
 
       <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-        <RatingStars value={displayRating} count={displayReviews} label={t('card.reviewsWord')} />
+        <RatingStars value={displayRating} countLabel={t('card.reviews', { count: displayReviews })} />
         {years !== null ? (
           <span className="text-[13px] text-muted-foreground">
             · {t('card.experience', { count: years })}
@@ -107,7 +108,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
 
       <p className="mt-3 text-[15px] font-semibold text-foreground">
         {priceFrom != null
-          ? t('card.priceFrom', { price: `${priceFrom} AZN` })
+          ? t('card.priceFrom', { price: formatPrice(priceFrom, 'AZN') })
           : t('card.priceOnRequest')}
       </p>
 

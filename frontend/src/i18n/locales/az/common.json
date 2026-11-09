@@ -175,23 +175,22 @@
     "verifiedSeller": "Təsdiqlənmiş satıcı",
     "sellerRating": "Satıcı reytinqi",
     "sellerCard": "Satıcı kartı",
-    "listings": "{{count}} elan",
-    "listings_plural": "{{count}} elan",
-    "reviews": "{{count}} rəy",
-    "reviews_plural": "{{count}} rəy",
     "viewSeller": "Satıcıya bax →",
     "notAvailable": "yoxdur",
     "type": {
       "dealer": "Diler",
-      "reseller": "Reseller",
+      "parts": "Ehtiyat hissəsi satıcısı",
       "private": "Şəxsi"
     },
     "domain": {
       "cars": "Avtomobillər",
       "parts": "Ehtiyat hissələri"
     },
-    "reviewsWord": "rəy",
-    "viewSellerShort": "Satıcıya bax"
+    "viewSellerShort": "Satıcıya bax",
+    "listings_one": "{{count, number}} elan",
+    "listings_other": "{{count, number}} elan",
+    "reviews_one": "{{count, number}} rəy",
+    "reviews_other": "{{count, number}} rəy"
   },
   "trust": {
     "buyerProtection": "Alıcı müdafiəsi",

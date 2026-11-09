@@ -39,16 +39,15 @@
   "card": {
     "verified": "Təsdiqlənmiş",
     "mobileService": "Mobil servis",
-    "experience": "{{count}} il təcrübə",
-    "experience_plural": "{{count}} il təcrübə",
-    "reviews": "{{count}} rəy",
-    "reviews_plural": "{{count}} rəy",
     "viewProfile": "Profilə bax",
     "priceFrom": "{{price}}-dən",
     "priceOnRequest": "Qiymət sorğu ilə",
     "available": "Boşdur",
     "unavailable": "Məşğuldur",
-    "reviewsWord": "rəy"
+    "experience_one": "{{count}} il təcrübə",
+    "experience_other": "{{count}} il təcrübə",
+    "reviews_one": "{{count, number}} rəy",
+    "reviews_other": "{{count, number}} rəy"
   },
   "detail": {
     "loading": "Ustanın profili yüklənir…",

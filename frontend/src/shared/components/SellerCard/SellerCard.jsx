@@ -3,9 +3,7 @@ import { BadgeCheck, MapPin, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import SellerGridCard from './SellerGridCard';
-
-const PUBLIC_SELLER_TYPES = new Set(['dealer', 'reseller']);
-const KNOWN_SELLER_TYPES = new Set(['dealer', 'reseller', 'private']);
+import { hasPublicSellerPage, normalizeSellerType } from '@/shared/utils/sellerType';
 
 const getInitials = (name) => {
   const safe = String(name ?? '').trim();
@@ -13,13 +11,9 @@ const getInitials = (name) => {
   return safe.slice(0, 2).toUpperCase();
 };
 
-const normalizeKey = (value) => String(value ?? '').trim().toLowerCase();
-
 const getTypeLabel = (type, t) => {
-  const key = normalizeKey(type);
-  if (!key) return '—';
-  if (KNOWN_SELLER_TYPES.has(key)) return t(`seller.type.${key}`);
-  return type;
+  const key = normalizeSellerType(type);
+  return key ? t(`seller.type.${key}`) : '—';
 };
 
 
@@ -56,7 +50,7 @@ export const SellerCard = ({
   }
 
   const canOpenPublicPage =
-    PUBLIC_SELLER_TYPES.has(seller?.type) && seller?.hasPublicPage === true;
+    hasPublicSellerPage(seller?.type) && seller?.hasPublicPage === true;
 
   const openDealerPage = () => {
     if (!canOpenPublicPage || !seller?.id) return;

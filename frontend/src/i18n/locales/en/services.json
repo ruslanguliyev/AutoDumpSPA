@@ -58,7 +58,8 @@
     "bookVisit": "Book a visit",
     "openNow": "Open now",
     "closed": "Closed",
-    "reviewsWord": "reviews"
+    "reviews_one": "{{count, number}} review",
+    "reviews_other": "{{count, number}} reviews"
   },
   "detail": {
     "loading": "Loading service details…",

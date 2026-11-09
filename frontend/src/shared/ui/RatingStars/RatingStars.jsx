@@ -31,8 +31,10 @@ const HalfStar = ({ size }) => (
 export default function RatingStars({
   value = 0,
   count = undefined,
-  /** The word after the count, e.g. "reviews". Translated by the caller. */
+  /** The word after the count, e.g. "reviews". Only right for languages with one plural form. */
   label = undefined,
+  /** The whole pluralised phrase, e.g. "87 отзывов". Translated by the caller; wins over count + label. */
+  countLabel = undefined,
   size = 14,
   className = '',
 }) {
@@ -77,7 +79,11 @@ export default function RatingStars({
       })}
       <span className="rating-stars__value ml-1.5 whitespace-nowrap text-[13px] text-muted-foreground">
         {safeValue.toFixed(1)}
-        {count === undefined || count === null ? null : ` (${count}${label ? ` ${label}` : ''})`}
+        {countLabel
+          ? ` (${countLabel})`
+          : count === undefined || count === null
+            ? null
+            : ` (${count}${label ? ` ${label}` : ''})`}
       </span>
     </div>
   );

@@ -25,7 +25,7 @@
     "sellerTypeOptions": {
       "any": "Any",
       "dealer": "Dealer",
-      "reseller": "Reseller"
+      "parts": "Parts seller"
     },
     "ratingOptions": {
       "any": "Any",

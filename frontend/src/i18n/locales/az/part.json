@@ -82,9 +82,10 @@
     "stockInStock": "Stokda var. 1–2 iş günü ərzində göndərməyə hazırdır.",
     "stockOutOfStock": "Stokda yoxdur",
     "openPart": "{{name}} aç",
-    "inStockCount": "Stokda: {{count}}",
-    "reviewsWord": "rəy",
-    "stockInStockShort": "Stokda"
+    "inStockCount": "Stokda: {{count, number}}",
+    "stockInStockShort": "Stokda",
+    "reviews_one": "{{count, number}} rəy",
+    "reviews_other": "{{count, number}} rəy"
   },
   "search": {
     "title": "Ehtiyat hissələri axtar",

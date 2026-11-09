@@ -45,7 +45,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
         : [];
 
     return (
-        <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden">
+        <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-card-muted">
                 {mainImage ? (
                     <img
@@ -56,7 +56,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
                     />
                 ) : null}
 
-                <div className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+                <div className="absolute left-3 right-14 top-3 flex flex-wrap items-center gap-1.5">
                     {car.promotionTier ? <PromotionBadge tier={car.promotionTier} /> : null}
                     {car.isHot ? <Badge variant="hot">{t('card.hot')}</Badge> : null}
                 </div>

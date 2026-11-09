@@ -82,9 +82,12 @@
     "stockInStock": "В наличии. Готово к отправке в течение 1–2 рабочих дней.",
     "stockOutOfStock": "Нет в наличии",
     "openPart": "Открыть {{name}}",
-    "inStockCount": "В наличии: {{count}}",
-    "reviewsWord": "отзывов",
-    "stockInStockShort": "В наличии"
+    "inStockCount": "В наличии: {{count, number}}",
+    "stockInStockShort": "В наличии",
+    "reviews_one": "{{count, number}} отзыв",
+    "reviews_few": "{{count, number}} отзыва",
+    "reviews_many": "{{count, number}} отзывов",
+    "reviews_other": "{{count, number}} отзыва"
   },
   "search": {
     "title": "Поиск запчастей",

@@ -1,7 +1,7 @@
-const PUBLIC_SELLER_TYPES = new Set(["dealer", "reseller"]);
+import { hasPublicSellerPage, normalizeSellerType } from "@/shared/utils/sellerType";
 
 export const isPublicSeller = (seller) =>
-  PUBLIC_SELLER_TYPES.has(seller?.type) && seller?.hasPublicPage === true;
+  hasPublicSellerPage(seller?.type) && seller?.hasPublicPage === true;
 
 export const isValidDomain = (domain) => domain === "cars" || domain === "parts";
 
@@ -27,7 +27,7 @@ export const addSellerListing = (sellersById, seller, expectedDomain) => {
     votes: seller.votes,
     listingsCount: 1,
     domain: seller.domain,
-    type: seller.type,
+    type: normalizeSellerType(seller.type),
     city: typeof seller.city === "string" ? seller.city.trim() : undefined,
   });
 };

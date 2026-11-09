@@ -39,16 +39,15 @@
   "card": {
     "verified": "Verified",
     "mobileService": "Mobile service",
-    "experience": "{{count}} yrs experience",
-    "experience_plural": "{{count}} yrs experience",
-    "reviews": "{{count}} review",
-    "reviews_plural": "{{count}} reviews",
     "viewProfile": "View profile",
     "priceFrom": "From {{price}}",
     "priceOnRequest": "Price on request",
     "available": "Available",
     "unavailable": "Unavailable",
-    "reviewsWord": "reviews"
+    "experience_one": "{{count}} yr experience",
+    "experience_other": "{{count}} yrs experience",
+    "reviews_one": "{{count, number}} review",
+    "reviews_other": "{{count, number}} reviews"
   },
   "detail": {
     "loading": "Loading specialist profile…",
