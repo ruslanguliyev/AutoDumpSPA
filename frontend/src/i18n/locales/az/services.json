@@ -43,6 +43,31 @@
       "any": "İstənilən məsafə"
     }
   },
+  "index": {
+    "title": "Avtomobil xidmətləri",
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "services": "Xidmətlər"
+    },
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "show_one": "{{count, number}} xidməti göstər",
+    "show_other": "{{count, number}} xidməti göstər",
+    "empty": "Bu filtrlərə uyğun xidmət yoxdur.",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "sort": {
+      "default": "Tövsiyə olunan",
+      "ratingDesc": "Reytinq: əvvəl yüksək"
+    },
+    "filters": {
+      "city": "Şəhər",
+      "serviceType": "Xidmət növü",
+      "brandsServiced": "Xidmət göstərilən brendlər",
+      "rating": "Minimum reytinq",
+      "verifiedOnly": "Yalnız təsdiqlənmişlər",
+      "chipRatingFrom": "Reytinq {{value}}+"
+    }
+  },
   "list": {
     "loading": "Xidmətlər yüklənir…",
     "empty": "Seçilmiş filtrlərə uyğun xidmət tapılmadı. Axtarış parametrlərini dəyişin.",
@@ -50,7 +75,11 @@
     "errorCheckEndpoint": "Yoxlayın"
   },
   "card": {
-    "verified": "✓ Təsdiqlənmiş",
+    "verified": "Təsdiqlənmiş",
+    "legacyPromoted": {
+      "boosted": "İrəli çəkilmiş",
+      "premium": "Premium"
+    },
     "avgCheck": "Orta çek",
     "priceRange": "Qiymət aralığı",
     "viewService": "Ətraflı →",

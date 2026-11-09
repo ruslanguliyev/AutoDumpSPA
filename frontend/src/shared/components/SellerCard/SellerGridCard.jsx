@@ -33,7 +33,8 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
   const { t } = useTranslation('common');
   if (!seller?.id) return null;
 
-  const name = seller.name || t('seller.fallbackName');
+  const name = String(seller.name ?? '').trim();
+  if (!name) return null;
   const typeLabel = getTypeLabel(seller.type, t);
   const city = getCity(seller);
   const rating = Number.isFinite(Number(seller.rating)) ? Number(seller.rating) : null;
@@ -73,17 +74,23 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
           {seller.verified ? <Badge variant="verified">{t('seller.verified')}</Badge> : null}
         </div>
 
-        <RatingStars value={rating ?? 0} countLabel={t('seller.reviews', { count: votes })} />
+        {rating !== null && votes > 0 ? (
+          <RatingStars value={rating} countLabel={t('seller.reviews', { count: votes })} />
+        ) : null}
 
         <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
           {city ? (
             <>
               <MapPin size={14} strokeWidth={1.5} aria-hidden="true" />
               {city}
-              <span aria-hidden="true">·</span>
             </>
           ) : null}
-          {t('seller.listings', { count: listingsCount })}
+          {Number.isFinite(seller.listingsCount) ? (
+            <>
+              {city ? <span aria-hidden="true">·</span> : null}
+              {t('seller.listings', { count: listingsCount })}
+            </>
+          ) : null}
         </p>
 
         <div className="flex-1" />

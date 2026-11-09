@@ -52,15 +52,17 @@ export default function PartsPage() {
   const { parts, total, isLoading, error, selectOptions } = useParts();
 
   const toolbarSort = String(filters.sort || 'RELEVANCE') as SortKey;
+  const inStockSupported = !isLoading && parts.length >= total;
+  const showResultCount = !(filters.inStockOnly && !inStockSupported);
 
   const filteredParts = useMemo(() => {
-    if (!filters.inStockOnly) return parts;
+    if (!filters.inStockOnly || !inStockSupported) return parts;
     return parts.filter((part: PartRow) => {
       const stock = Number.isFinite(part.stock) ? part.stock : null;
       if (stock !== null) return stock > 0;
       return Boolean(part.inStock);
     });
-  }, [filters.inStockOnly, parts]);
+  }, [filters.inStockOnly, inStockSupported, parts]);
 
   const viewKey = `${toolbarSort}|${JSON.stringify(filters)}`;
   const [pageState, setPageState] = useState({ key: viewKey, page: 1 });
@@ -127,7 +129,7 @@ export default function PartsPage() {
     chips.push({ key: 'city', label: location, onRemove: () => setFilter('parts', 'location', '') });
   }
 
-  if (filters.inStockOnly) {
+  if (inStockSupported && filters.inStockOnly) {
     chips.push({
       key: 'inStock',
       label: t('index.filters.inStockOnly'),
@@ -178,7 +180,11 @@ export default function PartsPage() {
         { label: t('index.breadcrumbs.parts') },
       ]}
       title={t('index.title')}
-      count={t('index.count', { count: filters.inStockOnly ? filteredParts.length : total })}
+      count={
+        showResultCount
+          ? t('index.count', { count: filters.inStockOnly ? filteredParts.length : total })
+          : null
+      }
       sort={{
         label: t('common:indexPage.sortBy'),
         value: toolbarSort,
@@ -194,6 +200,7 @@ export default function PartsPage() {
       }}
       filters={
         <PartsFilters
+          inStockSupported={inStockSupported}
           options={{
             brands: [{ value: '', label: t('filter.allBrands') }, ...selectOptions.brands],
             locations: [{ value: '', label: t('filter.anyLocation') }, ...selectOptions.locations],

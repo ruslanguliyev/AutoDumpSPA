@@ -48,6 +48,7 @@ export type SpecialistProfile = {
   banner?: string | null;
   location?: string | null;
   specializations?: string[];
+  supportedVehicles?: SupportedVehicle[];
 };
 
 export type SpecialistReview = {

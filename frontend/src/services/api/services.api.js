@@ -109,7 +109,7 @@ const shouldUseMocks = () => {
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 
-const applyMockFiltering = (services, filters) => {
+export const filterServiceCenters = (services, filters) => {
   const city = normalize(filters.city);
   const serviceTypes = Array.isArray(filters.serviceTypes) ? filters.serviceTypes : [];
   const serviceCodes = Array.isArray(filters.serviceCodes) ? filters.serviceCodes : [];
@@ -185,22 +185,24 @@ const applyMockFiltering = (services, filters) => {
  * In DEV returns mocked data for UI development.
  */
 export const getServices = async (filters = {}) => {
+  let list = [];
   if (shouldUseMocks()) {
-    const filtered = applyMockFiltering(MOCK_SERVICES, filters);
-    return filtered;
+    list = MOCK_SERVICES;
+  } else {
+    try {
+      const city =
+        filters.city === '' || filters.city == null
+          ? null
+          : String(filters.city).trim() || null;
+      const data = await gqlRequest(GET_SERVICE_CENTERS_QUERY, { city });
+      const rows = data?.serviceCenters ?? [];
+      list = rows.map((row) => mapServiceCenterRow({ ...row, services: [] }));
+    } catch {
+      list = [];
+    }
   }
 
-  try {
-    const city =
-      filters.city === '' || filters.city == null
-        ? null
-        : String(filters.city).trim() || null;
-    const data = await gqlRequest(GET_SERVICE_CENTERS_QUERY, { city });
-    const rows = data?.serviceCenters ?? [];
-    return rows.map((row) => mapServiceCenterRow({ ...row, services: [] }));
-  } catch {
-    return [];
-  }
+  return filterServiceCenters(list, filters);
 };
 
 /**

@@ -180,6 +180,7 @@
     "show_other": "Show {{count, number}} cars",
     "empty": "No rental cars match these filters.",
     "emptyAction": "Clear all filters",
+    "invalidDateRange": "End date must be on or after the start date.",
     "sort": {
       "default": "Recommended",
       "priceAsc": "Price per day: low to high",

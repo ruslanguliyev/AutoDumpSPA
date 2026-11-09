@@ -1,5 +1,6 @@
 import { gqlRequest } from '@/lib/graphql';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
+import { VEHICLE_CATALOG_LIMIT } from '@/shared/constants/catalogLimits';
 
 const VEHICLES_QUERY = `
 query Vehicles($filter: VehiclesFilterInput) {
@@ -157,6 +158,6 @@ export async function getPromotedVehicles(tier = 'VIP', limit = 6) {
 }
 
 export const getAutos = () =>
-  getVehicles({ limit: 2000, offset: 0 });
+  getVehicles({ limit: VEHICLE_CATALOG_LIMIT, offset: 0 });
 
 export const getAutoById = (id) => getVehicleById(id);

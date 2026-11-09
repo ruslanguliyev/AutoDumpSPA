@@ -10,6 +10,7 @@ import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
 import logoUrl from "@/assets/images/avtobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
 import { PARTS_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
+import { SUPPORTED_LANGUAGES } from "@/i18n/config";
 import Button from "@/shared/ui/button";
 
 /** Below this the drawer carries the whole navigation. */
@@ -41,8 +42,37 @@ const useMediaQuery = (query) => {
     return matches;
 };
 
-const navLinkClass =
-    "inline-flex h-11 items-center rounded-[var(--radius)] px-2.5 text-[15px] font-semibold text-foreground no-underline transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const navLinkBase =
+    "inline-flex h-11 items-center rounded-[var(--radius)] px-2.5 text-[15px] font-semibold no-underline transition bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+/** Strip `/:lang` so `/az/rent` matches nav target `/rent`. */
+const normalizeNavPath = (pathname) => {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length > 0 && SUPPORTED_LANGUAGES.includes(segments[0])) {
+        const rest = segments.slice(1).join("/");
+        return rest ? `/${rest}` : "/";
+    }
+    return pathname;
+};
+
+const isNavItemActive = (pathname, to) => {
+    const path = normalizeNavPath(pathname);
+
+    if (to === "/autosearch") {
+        if (path === "/rent" || path.startsWith("/rent/")) return false;
+        return path === "/autosearch" || path.startsWith("/vehicles/");
+    }
+    if (to === "/parts") {
+        return path === "/parts" || path.startsWith("/parts/");
+    }
+    if (to === "/rent") {
+        return path === "/rent" || path.startsWith("/rent/");
+    }
+    return path === to || path.startsWith(`${to}/`);
+};
+
+const navLinkClass = (active) =>
+    `${navLinkBase} ${active ? "text-primary-text" : "text-foreground hover:bg-foreground/5"}`;
 
 const popoverClass =
     "absolute right-0 top-full z-50 mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-border bg-card py-1 shadow-[var(--shadow-card)]";
@@ -190,14 +220,26 @@ export default function Header() {
     const closePopover = useCallback(() => setOpenPopover(null), []);
     const togglePopover = (key) => setOpenPopover((cur) => (cur === key ? null : key));
 
-    const renderNavItem = (item) =>
-        item.megaMenu ? (
-            <MegaMenu key={item.key} config={item.megaMenu} labelKey="nav.parts" />
+    const renderNavItem = (item) => {
+        const active = isNavItemActive(location.pathname, item.to);
+        return item.megaMenu ? (
+            <MegaMenu
+                key={item.key}
+                config={item.megaMenu}
+                labelKey="nav.parts"
+                active={active}
+            />
         ) : (
-            <Link key={item.key} to={item.to} className={navLinkClass}>
+            <Link
+                key={item.key}
+                to={item.to}
+                className={navLinkClass(active)}
+                aria-current={active ? "page" : undefined}
+            >
                 {item.label}
             </Link>
         );
+    };
 
     return (
         <>
@@ -225,7 +267,7 @@ export default function Header() {
                                         <div className="relative">
                                             <button
                                                 type="button"
-                                                className={`${navLinkClass} gap-1`}
+                                                className={`${navLinkClass(false)} gap-1`}
                                                 aria-haspopup="menu"
                                                 aria-expanded={openPopover === 'more'}
                                                 aria-controls="popover-more"
@@ -270,11 +312,11 @@ export default function Header() {
                                     className="pointer-events-none invisible absolute left-0 top-0 flex items-center gap-1 whitespace-nowrap"
                                 >
                                     {navItems.map((item) => (
-                                        <span key={item.key} className={`${navLinkClass} ${item.megaMenu ? 'pr-7' : ''}`}>
+                                        <span key={item.key} className={`${navLinkClass(false)} ${item.megaMenu ? 'pr-7' : ''}`}>
                                             {item.label}
                                         </span>
                                     ))}
-                                    <span className={`${navLinkClass} pr-7`}>{t('nav.more')}</span>
+                                    <span className={`${navLinkClass(false)} pr-7`}>{t('nav.more')}</span>
                                 </div>
                             </nav>
 
@@ -493,6 +535,7 @@ export default function Header() {
                                         key={item.key}
                                         config={item.megaMenu}
                                         labelKey="nav.parts"
+                                        active={isNavItemActive(location.pathname, item.to)}
                                         isMobile
                                         isExpanded={expandedMobileMenu === item.megaMenu.id}
                                         onToggle={() =>
@@ -505,7 +548,10 @@ export default function Header() {
                                         key={item.key}
                                         to={item.to}
                                         onClick={closeDrawer}
-                                        className={`${navLinkClass} w-full justify-start px-4`}
+                                        className={`${navLinkClass(isNavItemActive(location.pathname, item.to))} w-full justify-start px-4`}
+                                        aria-current={
+                                            isNavItemActive(location.pathname, item.to) ? "page" : undefined
+                                        }
                                     >
                                         {item.label}
                                     </Link>
@@ -514,7 +560,7 @@ export default function Header() {
 
                             <span className="my-2 h-px bg-border" aria-hidden="true" />
 
-                            <Link to="/favorites" onClick={closeDrawer} className={`${navLinkClass} w-full justify-start gap-2 px-4`}>
+                            <Link to="/favorites" onClick={closeDrawer} className={`${navLinkClass(false)} w-full justify-start gap-2 px-4`}>
                                 <Heart size={18} aria-hidden="true" />
                                 {t('nav.favorites')}
                                 {favoritesCount > 0 ? (
@@ -526,7 +572,7 @@ export default function Header() {
                             <Link
                                 to={isAuthenticated ? '/dashboard' : '/login'}
                                 onClick={closeDrawer}
-                                className={`${navLinkClass} w-full justify-start gap-2 px-4`}
+                                className={`${navLinkClass(false)} w-full justify-start gap-2 px-4`}
                             >
                                 <User size={18} aria-hidden="true" />
                                 {isAuthenticated ? t('nav.dashboard') : t('nav.account')}

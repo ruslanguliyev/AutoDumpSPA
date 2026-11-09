@@ -18,8 +18,8 @@ export type ActiveFilterChip = { key: string; label: string; onRemove: () => voi
 type IndexPageProps = {
   breadcrumbs: BreadcrumbItem[];
   title: string;
-  /** "1 248 listings in Baku". Shown beside the H1, never inside it, so the title stays a title. */
-  count: ReactNode;
+  /** "1 248 listings in Baku". Omitted when a client-only filter would misstate the total (pass null). */
+  count?: ReactNode;
   sort: {
     label: string;
     value: string;
@@ -97,7 +97,9 @@ export function IndexPage({
           <h1 className="text-[22px] font-semibold tracking-tight text-foreground [overflow-wrap:anywhere] md:text-[30px]">
             {title}
           </h1>
-          <p className="mt-1 text-[14px] text-muted-foreground">{count}</p>
+          {count != null && count !== '' ? (
+            <p className="mt-1 text-[14px] text-muted-foreground">{count}</p>
+          ) : null}
         </div>
 
         <div className="flex w-full items-center gap-3 md:w-auto">

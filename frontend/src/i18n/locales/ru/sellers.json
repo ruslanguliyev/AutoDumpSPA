@@ -51,6 +51,26 @@
     "available_many": "{{count}} продавцов",
     "available_other": "{{count}} продавца"
   },
+  "index": {
+    "title": "Продавцы",
+    "breadcrumbs": {
+      "home": "Главная",
+      "sellers": "Продавцы"
+    },
+    "count_one": "{{count, number}} объявление",
+    "count_few": "{{count, number}} объявления",
+    "count_many": "{{count, number}} объявлений",
+    "count_other": "{{count, number}} объявления",
+    "show_one": "Показать {{count, number}} продавца",
+    "show_few": "Показать {{count, number}} продавца",
+    "show_many": "Показать {{count, number}} продавцов",
+    "show_other": "Показать {{count, number}} продавца",
+    "emptyAction": "Сбросить все фильтры",
+    "filters": {
+      "search": "Поиск по имени",
+      "city": "Город"
+    }
+  },
   "list": {
     "loading": "Загрузка продавцов…",
     "empty": "Нет продавцов по выбранным фильтрам.",

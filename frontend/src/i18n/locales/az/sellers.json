@@ -49,6 +49,22 @@
       "any": "İstənilən şəhər"
     }
   },
+  "index": {
+    "title": "Satıcılar",
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "sellers": "Satıcılar"
+    },
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "show_one": "{{count, number}} satıcını göstər",
+    "show_other": "{{count, number}} satıcını göstər",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "filters": {
+      "search": "Ada görə axtar",
+      "city": "Şəhər"
+    }
+  },
   "list": {
     "loading": "Satıcılar yüklənir…",
     "empty": "Seçilmiş filtrlərə uyğun satıcı tapılmadı.",

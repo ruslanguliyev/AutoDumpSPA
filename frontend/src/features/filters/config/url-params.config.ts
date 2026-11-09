@@ -53,8 +53,6 @@ export const URL_PARAMS_CONFIG: Record<FilterDomain, FiltersUrlSyncConfig> = {
   specialists: {
     paramMap: [
       { param: 'brand', key: 'brand' },
-      { param: 'model', key: 'model' },
-      { param: 'year', key: 'year' },
       { param: 'specialization', key: 'specialization', parse: parseSpecialization },
       { param: 'city', key: 'city' },
       { param: 'minRating', key: 'minRating' },

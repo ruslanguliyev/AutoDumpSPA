@@ -15,6 +15,7 @@ import Button from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/EmptyState';
 import Skeleton from '@/shared/ui/Skeleton/Skeleton';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
+import { RENT_CATALOG_LIMIT } from '@/shared/constants/catalogLimits';
 import { getVehicles } from '@/vehicles/api/vehicles.api';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard.jsx';
 
@@ -71,40 +72,38 @@ export default function RentSearchPage() {
   const from = text(filters.availableFrom);
   const to = text(filters.availableTo);
   const city = text(filters.city);
-  const vehicleClass = text(filters.vehicleClass);
+  const periodInvalid = Boolean(from && to && to < from);
   const period = from && to && to >= from ? { availableFrom: from, availableTo: to } : {};
 
   const query = useQuery({
-    queryKey: ['rent-search', city, period, vehicleClass],
+    queryKey: ['rent-search', city, period],
     queryFn: () =>
-      getVehicles({ purpose: 'RENT', city, limit: 500, ...period }) as Promise<RentalVehicle[]>,
+      getVehicles({ purpose: 'RENT', city, limit: RENT_CATALOG_LIMIT, ...period }) as Promise<
+        RentalVehicle[]
+      >,
+    enabled: !periodInvalid,
     placeholderData: keepPreviousData,
   });
 
+  const fetched = query.data ?? [];
+  const pricePerDaySupported = !query.isLoading && fetched.length < RENT_CATALOG_LIMIT;
+
   const cars = useMemo(() => {
-    let list = query.data ?? [];
+    let list = fetched;
+    if (!pricePerDaySupported) return list;
     const priceFrom = filters.priceFrom != null ? Number(filters.priceFrom) : null;
     const priceTo = filters.priceTo != null ? Number(filters.priceTo) : null;
-    const depositTo = filters.depositTo != null ? Number(filters.depositTo) : null;
-
-    if (vehicleClass) {
-      list = list.filter((car) => String(car.bodyType ?? '').toLowerCase() === vehicleClass);
-    }
     if (Number.isFinite(priceFrom) && priceFrom != null) {
       list = list.filter((car) => car.price != null && car.price >= priceFrom);
     }
     if (Number.isFinite(priceTo) && priceTo != null) {
       list = list.filter((car) => car.price != null && car.price <= priceTo);
     }
-    if (Number.isFinite(depositTo) && depositTo != null) {
-      list = list.filter((car) => {
-        const deposit = car.rental?.deposit;
-        if (deposit == null || deposit === 0) return true;
-        return deposit <= depositTo;
-      });
-    }
     return list;
-  }, [query.data, filters.depositTo, filters.priceFrom, filters.priceTo, vehicleClass]);
+  }, [fetched, filters.priceFrom, filters.priceTo, pricePerDaySupported]);
+
+  const hasPriceDayFilter = Boolean(text(filters.priceFrom) || text(filters.priceTo));
+  const showResultCount = !(hasPriceDayFilter && !pricePerDaySupported);
 
   const sorted = useMemo(
     () => (sort === 'default' ? cars : [...cars].sort(SORTERS[sort])),
@@ -133,7 +132,13 @@ export default function RentSearchPage() {
     return '';
   };
 
-  if (from || to) {
+  if (periodInvalid) {
+    chips.push({
+      key: 'dates-invalid',
+      label: t('rentIndex.invalidDateRange'),
+      onRemove: () => setFilters('rent', { availableFrom: '', availableTo: '' }),
+    });
+  } else if (from || to) {
     const label =
       from && to
         ? t('index.filters.chipRange', {
@@ -151,31 +156,14 @@ export default function RentSearchPage() {
     });
   }
 
-  const priceLabel = range(t('rentIndex.filters.pricePerDay'), filters.priceFrom, filters.priceTo);
+  const priceLabel = pricePerDaySupported
+    ? range(t('rentIndex.filters.pricePerDay'), filters.priceFrom, filters.priceTo)
+    : '';
   if (priceLabel) {
     chips.push({
       key: 'price',
       label: priceLabel,
       onRemove: () => setFilters('rent', { priceFrom: null, priceTo: null }),
-    });
-  }
-
-  if (vehicleClass) {
-    chips.push({
-      key: 'class',
-      label: t(`form.vehicleCategories.${vehicleClass}`, {
-        ns: 'addItem',
-        defaultValue: vehicleClass,
-      }),
-      onRemove: () => setFilter('rent', 'vehicleClass', ''),
-    });
-  }
-
-  if (filters.depositTo != null && filters.depositTo !== '') {
-    chips.push({
-      key: 'deposit',
-      label: t('rentIndex.filters.chipDepositTo', { value: String(filters.depositTo) }),
-      onRemove: () => setFilter('rent', 'depositTo', null),
     });
   }
 
@@ -188,7 +176,13 @@ export default function RentSearchPage() {
   }
 
   let gridState: ReactNode = null;
-  if (query.isLoading && cars.length === 0) {
+  if (periodInvalid) {
+    gridState = (
+      <EmptyState icon={<SearchX size={32} />}>
+        {t('rentIndex.invalidDateRange')}
+      </EmptyState>
+    );
+  } else if (query.isLoading && cars.length === 0) {
     gridState = (
       <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true">
         {Array.from({ length: 6 }, (_, index) => (
@@ -220,7 +214,7 @@ export default function RentSearchPage() {
         { label: t('breadcrumbs.rent') },
       ]}
       title={t('rentIndex.title')}
-      count={t('rentIndex.count', { count: sorted.length })}
+      count={showResultCount ? t('rentIndex.count', { count: sorted.length }) : null}
       sort={{
         label: t('common:indexPage.sortBy'),
         value: sort,
@@ -230,12 +224,19 @@ export default function RentSearchPage() {
           label: t(`rentIndex.sort.${key}`),
         })),
       }}
-      filters={<RentFilters />}
+      filters={<RentFilters pricePerDaySupported={pricePerDaySupported} />}
       filtersLabel={t('common:indexPage.filters')}
       activeFilterCount={chips.length}
       onResetFilters={clearAll}
       activeChips={chips}
       removeChipLabel={t('common:indexPage.removeFilter')}
+      above={
+        periodInvalid ? (
+          <p role="alert" className="mb-6 text-[14px] text-destructive">
+            {t('rentIndex.invalidDateRange')}
+          </p>
+        ) : null
+      }
       drawerLabels={{
         title: t('common:indexPage.filters'),
         reset: t('common:indexPage.reset'),

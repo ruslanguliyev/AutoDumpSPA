@@ -15,7 +15,7 @@
     "modelPlaceholder": "Model",
     "year": "İl",
     "yearPlaceholder": "İl",
-    "specialization": "Xidmət növü",
+    "specialization": "İxtisas",
     "specializationAny": "İstənilən ixtisas",
     "city": "Şəhər",
     "cityPlaceholder": "Şəhər",
@@ -29,6 +29,30 @@
       "rating45": "4.5+"
     },
     "clear": "Filtrləri təmizlə"
+  },
+  "index": {
+    "title": "Ustalar",
+    "breadcrumbs": {
+      "home": "Ana səhifə",
+      "specialists": "Ustalar"
+    },
+    "count_one": "{{count, number}} elan",
+    "count_other": "{{count, number}} elan",
+    "show_one": "{{count, number}} ustanı göstər",
+    "show_other": "{{count, number}} ustanı göstər",
+    "empty": "Bu filtrlərə uyğun usta yoxdur.",
+    "emptyAction": "Bütün filtrləri təmizlə",
+    "sort": {
+      "default": "Tövsiyə olunan",
+      "ratingDesc": "Reytinq: əvvəl yüksək",
+      "priceAsc": "Qiymət: əvvəl aşağı"
+    },
+    "filters": {
+      "city": "Şəhər",
+      "vehiclesServiced": "Xidmət göstərilən avtomobillər",
+      "availableNow": "İndi məşğul deyil",
+      "chipRatingFrom": "Reytinq {{value}}+"
+    }
   },
   "list": {
     "loading": "Ustalar yüklənir…",

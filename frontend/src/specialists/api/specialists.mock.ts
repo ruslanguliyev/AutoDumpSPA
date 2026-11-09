@@ -375,6 +375,7 @@ const toProfile = (specialist: SpecialistDetail): SpecialistProfile => ({
   coverImage: specialist.coverImage,
   location: specialist.location,
   specializations: specialist.specializations,
+  supportedVehicles: specialist.supportedVehicles,
 });
 
 export const specialistsMockApi: SpecialistsDataProvider = {

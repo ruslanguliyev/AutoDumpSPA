@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
+import { VEHICLE_CATALOG_LIMIT } from '@/shared/constants/catalogLimits';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
-import { getAutosByFilters } from '@/vehicles/api/autos';
+import { filterAutosCatalog, getAutos } from '@/vehicles/api/autos';
 
 const CARS_QUERY_KEY = 'cars';
 
@@ -64,19 +65,26 @@ export const useAutos = () => {
     [filters]
   );
 
-  const query = useQuery({
-    queryKey: [CARS_QUERY_KEY, normalizedFilters],
-    queryFn: () => getAutosByFilters(normalizedFilters),
+  const catalogQuery = useQuery({
+    queryKey: [CARS_QUERY_KEY, 'catalog'],
+    queryFn: getAutos,
     staleTime: 30_000,
     placeholderData: keepPreviousData,
   });
 
-  const autos = query.data ?? [];
+  const autos = useMemo(() => {
+    if (!catalogQuery.data) return [];
+    return filterAutosCatalog(catalogQuery.data, normalizedFilters);
+  }, [catalogQuery.data, normalizedFilters]);
+
+  const catalogComplete =
+    !catalogQuery.isLoading && (catalogQuery.data?.length ?? 0) < VEHICLE_CATALOG_LIMIT;
 
   return {
     autos,
     total: autos.length,
-    isLoading: query.isLoading || query.isFetching,
-    error: query.error,
+    catalogComplete,
+    isLoading: catalogQuery.isLoading || catalogQuery.isFetching,
+    error: catalogQuery.error,
   };
 };

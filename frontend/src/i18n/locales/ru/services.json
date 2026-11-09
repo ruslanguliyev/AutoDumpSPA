@@ -45,6 +45,35 @@
     "available_many": "{{count}} автосервисов",
     "available_other": "{{count}} автосервиса"
   },
+  "index": {
+    "title": "Автоуслуги",
+    "breadcrumbs": {
+      "home": "Главная",
+      "services": "Услуги"
+    },
+    "count_one": "{{count, number}} объявление",
+    "count_few": "{{count, number}} объявления",
+    "count_many": "{{count, number}} объявлений",
+    "count_other": "{{count, number}} объявления",
+    "show_one": "Показать {{count, number}} сервис",
+    "show_few": "Показать {{count, number}} сервиса",
+    "show_many": "Показать {{count, number}} сервисов",
+    "show_other": "Показать {{count, number}} сервиса",
+    "empty": "Нет автосервисов по выбранным фильтрам.",
+    "emptyAction": "Сбросить все фильтры",
+    "sort": {
+      "default": "Рекомендуемые",
+      "ratingDesc": "Рейтинг: сначала высокий"
+    },
+    "filters": {
+      "city": "Город",
+      "serviceType": "Тип услуги",
+      "brandsServiced": "Обслуживаемые марки",
+      "rating": "Минимальный рейтинг",
+      "verifiedOnly": "Только проверенные",
+      "chipRatingFrom": "Рейтинг {{value}}+"
+    }
+  },
   "list": {
     "loading": "Загрузка услуг…",
     "empty": "Нет автосервисов по выбранным фильтрам. Измените параметры поиска.",
@@ -52,7 +81,11 @@
     "errorCheckEndpoint": "Проверьте"
   },
   "card": {
-    "verified": "✓ Проверен",
+    "verified": "Проверен",
+    "legacyPromoted": {
+      "boosted": "Поднято",
+      "premium": "Премиум"
+    },
     "avgCheck": "Средний чек",
     "priceRange": "Ценовой диапазон",
     "viewService": "Подробнее →",

@@ -8,5 +8,8 @@ export const useSellersData = () => {
     queryFn: getSellers,
     staleTime: 30_000,
   });
-  return query.data ?? [];
+  return {
+    sellers: query.data ?? [],
+    isLoading: query.isLoading || query.isFetching,
+  };
 };

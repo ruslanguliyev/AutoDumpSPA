@@ -23,7 +23,16 @@ const toNumberOrNull = (text: string) => (text.trim() === '' ? null : Number(tex
  * The cars filters, written once and rendered in the sidebar and in the drawer. The
  * `size` follows where it sits: 48px controls in the drawer, 44px in the sidebar.
  */
-export default function CarsFilters({ size = 'md' }: { size?: 'md' | 'drawer' }) {
+type CarsFiltersProps = {
+  size?: 'md' | 'drawer';
+  /** Price/year ranges are client-only on the loaded catalogue chunk. */
+  clientRangeFiltersSupported?: boolean;
+};
+
+export default function CarsFilters({
+  size = 'md',
+  clientRangeFiltersSupported = true,
+}: CarsFiltersProps) {
   const { t } = useTranslation('vehicle');
   const filters = useFilters('cars');
   const setFilter = useFiltersStore((state) => state.setFilter);
@@ -81,61 +90,65 @@ export default function CarsFilters({ size = 'md' }: { size?: 'md' | 'drawer' })
         onChange={(event) => setFilter('cars', 'city', event.target.value)}
       />
 
-      <fieldset className="m-0 min-w-0 border-0 p-0">
-        <legend className={`${labelClass} mb-1.5`}>{t('index.filters.price')}</legend>
-        <div className="grid grid-cols-2 gap-2">
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            label={t('index.filters.from')}
-            labelHidden
-            placeholder={t('index.filters.from')}
-            value={asNumberText(filters.priceFrom)}
-            onChange={(event) => setFilter('cars', 'priceFrom', toNumberOrNull(event.target.value))}
-          />
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            label={t('index.filters.to')}
-            labelHidden
-            placeholder={t('index.filters.to')}
-            value={asNumberText(filters.priceTo)}
-            onChange={(event) => setFilter('cars', 'priceTo', toNumberOrNull(event.target.value))}
-          />
-        </div>
-      </fieldset>
+      {clientRangeFiltersSupported ? (
+        <>
+          <fieldset className="m-0 min-w-0 border-0 p-0">
+            <legend className={`${labelClass} mb-1.5`}>{t('index.filters.price')}</legend>
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                size={size}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                label={t('index.filters.from')}
+                labelHidden
+                placeholder={t('index.filters.from')}
+                value={asNumberText(filters.priceFrom)}
+                onChange={(event) => setFilter('cars', 'priceFrom', toNumberOrNull(event.target.value))}
+              />
+              <Input
+                size={size}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                label={t('index.filters.to')}
+                labelHidden
+                placeholder={t('index.filters.to')}
+                value={asNumberText(filters.priceTo)}
+                onChange={(event) => setFilter('cars', 'priceTo', toNumberOrNull(event.target.value))}
+              />
+            </div>
+          </fieldset>
 
-      <fieldset className="m-0 min-w-0 border-0 p-0">
-        <legend className={`${labelClass} mb-1.5`}>{t('index.filters.year')}</legend>
-        <div className="grid grid-cols-2 gap-2">
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={1900}
-            label={t('index.filters.from')}
-            labelHidden
-            placeholder={t('index.filters.from')}
-            value={asNumberText(filters.yearFrom)}
-            onChange={(event) => setFilter('cars', 'yearFrom', toNumberOrNull(event.target.value))}
-          />
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={1900}
-            label={t('index.filters.to')}
-            labelHidden
-            placeholder={t('index.filters.to')}
-            value={asNumberText(filters.yearTo)}
-            onChange={(event) => setFilter('cars', 'yearTo', toNumberOrNull(event.target.value))}
-          />
-        </div>
-      </fieldset>
+          <fieldset className="m-0 min-w-0 border-0 p-0">
+            <legend className={`${labelClass} mb-1.5`}>{t('index.filters.year')}</legend>
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                size={size}
+                type="number"
+                inputMode="numeric"
+                min={1900}
+                label={t('index.filters.from')}
+                labelHidden
+                placeholder={t('index.filters.from')}
+                value={asNumberText(filters.yearFrom)}
+                onChange={(event) => setFilter('cars', 'yearFrom', toNumberOrNull(event.target.value))}
+              />
+              <Input
+                size={size}
+                type="number"
+                inputMode="numeric"
+                min={1900}
+                label={t('index.filters.to')}
+                labelHidden
+                placeholder={t('index.filters.to')}
+                value={asNumberText(filters.yearTo)}
+                onChange={(event) => setFilter('cars', 'yearTo', toNumberOrNull(event.target.value))}
+              />
+            </div>
+          </fieldset>
+        </>
+      ) : null}
 
       <fieldset className="m-0 min-w-0 border-0 p-0">
         <legend className={`${labelClass} mb-2`}>{t('index.filters.transmission')}</legend>

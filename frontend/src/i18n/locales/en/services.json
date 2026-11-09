@@ -43,6 +43,31 @@
       "any": "Any distance"
     }
   },
+  "index": {
+    "title": "Auto services",
+    "breadcrumbs": {
+      "home": "Home",
+      "services": "Services"
+    },
+    "count_one": "{{count, number}} listing",
+    "count_other": "{{count, number}} listings",
+    "show_one": "Show {{count, number}} service",
+    "show_other": "Show {{count, number}} services",
+    "empty": "No services match these filters.",
+    "emptyAction": "Clear all filters",
+    "sort": {
+      "default": "Recommended",
+      "ratingDesc": "Rating: highest first"
+    },
+    "filters": {
+      "city": "City",
+      "serviceType": "Service type",
+      "brandsServiced": "Brands serviced",
+      "rating": "Minimum rating",
+      "verifiedOnly": "Verified only",
+      "chipRatingFrom": "Rating {{value}}+"
+    }
+  },
   "list": {
     "loading": "Loading services…",
     "empty": "No services match these filters. Adjust search and try again.",
@@ -50,7 +75,7 @@
     "errorCheckEndpoint": "Check"
   },
   "card": {
-    "verified": "✓ Verified",
+    "verified": "Verified",
     "avgCheck": "Avg. check",
     "priceRange": "Price range",
     "viewService": "View service →",
@@ -59,7 +84,11 @@
     "openNow": "Open now",
     "closed": "Closed",
     "reviews_one": "{{count, number}} review",
-    "reviews_other": "{{count, number}} reviews"
+    "reviews_other": "{{count, number}} reviews",
+    "legacyPromoted": {
+      "boosted": "Boosted",
+      "premium": "Premium"
+    }
   },
   "detail": {
     "loading": "Loading service details…",

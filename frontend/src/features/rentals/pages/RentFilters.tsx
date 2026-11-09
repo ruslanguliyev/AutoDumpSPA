@@ -4,30 +4,18 @@ import { useFilters, useFiltersStore } from '@/features/filters/store/useFilters
 import type { FilterValue } from '@/features/filters/types/filters.types';
 import { todayString } from '@/features/rentals/api/rentals.api';
 import Input from '@/shared/ui/Input/Input';
-import Select from '@/shared/ui/Select/Select';
 import { labelClass } from '@/shared/ui/field';
-
-const VEHICLE_CLASS_OPTIONS = [
-  'sedan',
-  'hatchback',
-  'liftback',
-  'wagon',
-  'suv',
-  'crossover',
-  'coupe',
-  'convertible',
-  'minivan',
-  'van',
-  'pickup',
-  'sport',
-  'other',
-] as const;
 
 const asNumberText = (value: FilterValue) => (value === null || value === undefined ? '' : String(value));
 const toNumberOrNull = (text: string) => (text.trim() === '' ? null : Number(text));
 
-/** Rent catalogue filters — date range first, then price/day, class, deposit cap, city. */
-export default function RentFilters({ size = 'md' }: { size?: 'md' | 'drawer' }) {
+type RentFiltersProps = {
+  size?: 'md' | 'drawer';
+  pricePerDaySupported?: boolean;
+};
+
+/** Rent catalogue filters — dates, optional price/day (only when fetch is not cap-truncated), city. */
+export default function RentFilters({ size = 'md', pricePerDaySupported = false }: RentFiltersProps) {
   const { t } = useTranslation(['vehicle', 'dashboard']);
   const filters = useFilters('rent');
   const setFilter = useFiltersStore((state) => state.setFilter);
@@ -36,14 +24,6 @@ export default function RentFilters({ size = 'md' }: { size?: 'md' | 'drawer' })
   const from = String(filters.availableFrom ?? '');
   const to = String(filters.availableTo ?? '');
   const periodInvalid = Boolean(from && to && to < from);
-
-  const classOptions = [
-    { value: '', label: t('rentIndex.filters.anyClass') },
-    ...VEHICLE_CLASS_OPTIONS.map((value) => ({
-      value,
-      label: t(`form.vehicleCategories.${value}`, { ns: 'addItem', defaultValue: value }),
-    })),
-  ];
 
   return (
     <div className="flex flex-col gap-4">
@@ -76,52 +56,35 @@ export default function RentFilters({ size = 'md' }: { size?: 'md' | 'drawer' })
         ) : null}
       </fieldset>
 
-      <fieldset className="m-0 min-w-0 border-0 p-0">
-        <legend className={`${labelClass} mb-1.5`}>{t('rentIndex.filters.pricePerDay')}</legend>
-        <div className="grid grid-cols-2 gap-2">
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            label={t('index.filters.from')}
-            labelHidden
-            placeholder={t('index.filters.from')}
-            value={asNumberText(filters.priceFrom)}
-            onChange={(event) => setFilter('rent', 'priceFrom', toNumberOrNull(event.target.value))}
-          />
-          <Input
-            size={size}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            label={t('index.filters.to')}
-            labelHidden
-            placeholder={t('index.filters.to')}
-            value={asNumberText(filters.priceTo)}
-            onChange={(event) => setFilter('rent', 'priceTo', toNumberOrNull(event.target.value))}
-          />
-        </div>
-      </fieldset>
-
-      <Select
-        size={size}
-        label={t('rentIndex.filters.class')}
-        options={classOptions}
-        value={String(filters.vehicleClass ?? '')}
-        onChange={(event) => setFilter('rent', 'vehicleClass', event.target.value)}
-      />
-
-      <Input
-        size={size}
-        type="number"
-        inputMode="numeric"
-        min={0}
-        label={t('rentIndex.filters.depositUpTo')}
-        placeholder={t('rentIndex.filters.depositUpTo')}
-        value={asNumberText(filters.depositTo)}
-        onChange={(event) => setFilter('rent', 'depositTo', toNumberOrNull(event.target.value))}
-      />
+      {pricePerDaySupported ? (
+        <fieldset className="m-0 min-w-0 border-0 p-0">
+          <legend className={`${labelClass} mb-1.5`}>{t('rentIndex.filters.pricePerDay')}</legend>
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              size={size}
+              type="number"
+              inputMode="numeric"
+              min={0}
+              label={t('index.filters.from')}
+              labelHidden
+              placeholder={t('index.filters.from')}
+              value={asNumberText(filters.priceFrom)}
+              onChange={(event) => setFilter('rent', 'priceFrom', toNumberOrNull(event.target.value))}
+            />
+            <Input
+              size={size}
+              type="number"
+              inputMode="numeric"
+              min={0}
+              label={t('index.filters.to')}
+              labelHidden
+              placeholder={t('index.filters.to')}
+              value={asNumberText(filters.priceTo)}
+              onChange={(event) => setFilter('rent', 'priceTo', toNumberOrNull(event.target.value))}
+            />
+          </div>
+        </fieldset>
+      ) : null}
 
       <Input
         size={size}

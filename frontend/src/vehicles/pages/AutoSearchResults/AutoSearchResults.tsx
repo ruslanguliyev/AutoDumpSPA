@@ -53,7 +53,7 @@ const text = (value: unknown) => (value === null || value === undefined ? '' : S
 
 export default function AutoSearchResults() {
   const { t } = useTranslation(['vehicle', 'common']);
-  const { autos, isLoading } = useAutos();
+  const { autos, isLoading, catalogComplete } = useAutos();
   useCarsFiltersUrlSync();
 
   const filters = useFilters('cars');
@@ -65,6 +65,13 @@ export default function AutoSearchResults() {
   const [sort, setSort] = useState<SortKey>('default');
 
   const cars = autos as Car[];
+  const hasClientRangeFilter = Boolean(
+    text(filters.priceFrom) ||
+      text(filters.priceTo) ||
+      text(filters.yearFrom) ||
+      text(filters.yearTo)
+  );
+  const showResultCount = !(hasClientRangeFilter && !catalogComplete);
   const sorted = useMemo(
     () => (sort === 'default' ? cars : [...cars].sort(SORTERS[sort])),
     [cars, sort]
@@ -163,7 +170,7 @@ export default function AutoSearchResults() {
         { label: t('breadcrumbs.cars') },
       ]}
       title={t('index.title')}
-      count={t('index.count', { count: cars.length })}
+      count={showResultCount ? t('index.count', { count: cars.length }) : null}
       sort={{
         label: t('common:indexPage.sortBy'),
         value: sort,
@@ -173,7 +180,7 @@ export default function AutoSearchResults() {
           label: t(`index.sort.${key}`),
         })),
       }}
-      filters={<CarsFilters />}
+      filters={<CarsFilters clientRangeFiltersSupported={catalogComplete} />}
       filtersLabel={t('common:indexPage.filters')}
       activeFilterCount={chips.length}
       onResetFilters={clearAll}

@@ -63,7 +63,7 @@ export const FILTER_DEFAULTS: FiltersByDomain = {
     search: '',
     domain: 'all',
     sellerType: '',
-    rating: '4.5',
+    rating: '',
     listings: 'any',
     city: '',
     verifiedOnly: false,
@@ -88,6 +88,7 @@ export const FILTER_DEFAULTS: FiltersByDomain = {
     specialization: '',
     city: '',
     minRating: '',
+    availableNow: false,
   },
 };
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { useSellersData } from '@/sellers/hooks/useSellersData';
 
-const DEFAULT_RATING = '4.5';
+const DEFAULT_RATING = '';
 const DEFAULT_LISTINGS = 'any';
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
@@ -12,8 +12,8 @@ const normalize = (value) => String(value ?? '').trim().toLowerCase();
 export const useSellers = () => {
   const { t } = useTranslation('sellers');
   const filters = useFiltersStore((state) => state.filters.sellers);
-  const sellers = useSellersData();
-  const safeSellers = Array.isArray(sellers) ? sellers : [];
+  const { sellers: sellersData, isLoading } = useSellersData();
+  const safeSellers = Array.isArray(sellersData) ? sellersData : [];
 
   const DOMAIN_OPTIONS = useMemo(
     () => [
@@ -156,5 +156,6 @@ export const useSellers = () => {
     filteredSellers,
     filterOptions,
     isFiltering,
+    isLoading,
   };
 };

@@ -28,6 +28,12 @@ export type GqlSpecialistListRow = {
   verified: boolean;
   available: boolean;
   promotionTier?: 'BUMP' | 'VIP' | 'PREMIUM' | null;
+  supportedVehicles?: Array<{
+    brand: string;
+    model: string;
+    yearFrom: number | null;
+    yearTo: number | null;
+  }>;
 };
 
 /** Row returned by `specialistBySlug`. */

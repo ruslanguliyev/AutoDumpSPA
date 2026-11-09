@@ -92,7 +92,10 @@ export default function AutoCard({ car, variant = 'sale' }) {
                     <Link to={`/vehicles/${car.id}`} className="after:absolute after:inset-0 after:content-['']">
                         {title}
                         {car.version ? (
-                            <span className="text-muted-foreground"> — {car.version}</span>
+                            <span className="inline-block max-w-full text-muted-foreground">
+                                {' '}
+                                — {car.version}
+                            </span>
                         ) : null}
                     </Link>
                 </h3>

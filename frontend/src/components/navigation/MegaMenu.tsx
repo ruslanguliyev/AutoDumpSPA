@@ -9,18 +9,20 @@ import type { MegaMenuConfig } from '@/domain/navigation/megaMenu.config';
 interface MegaMenuProps {
   config: MegaMenuConfig;
   labelKey: string;
+  active?: boolean;
   isMobile?: boolean;
   isExpanded?: boolean;
   onToggle?: () => void;
   onClose?: () => void;
 }
 
-const triggerClass =
-  'inline-flex h-11 cursor-pointer items-center gap-1 rounded-[var(--radius)] px-2.5 text-[15px] font-semibold text-foreground transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+const triggerBase =
+  'inline-flex h-11 cursor-pointer items-center gap-1 rounded-[var(--radius)] px-2.5 text-[15px] font-semibold transition bg-transparent focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
 
 export function MegaMenu({
   config,
   labelKey,
+  active = false,
   isMobile = false,
   isExpanded = false,
   onToggle,
@@ -84,7 +86,10 @@ export function MegaMenu({
         aria-haspopup="true"
         aria-controls={`mega-${config.id}`}
         id={`mega-trigger-${config.id}`}
-        className={isMobile ? `${triggerClass} w-full justify-between px-4` : triggerClass}
+        className={`${triggerBase} ${active ? 'text-primary-text' : 'text-foreground hover:bg-foreground/5'} ${
+          isMobile ? 'w-full justify-between px-4' : ''
+        }`}
+        aria-current={active ? 'page' : undefined}
         onClick={isMobile ? handleOpen : undefined}
         onMouseEnter={!isMobile ? handleOpen : undefined}
         onMouseLeave={!isMobile ? handleClose : undefined}

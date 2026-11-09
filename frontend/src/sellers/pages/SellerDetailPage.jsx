@@ -61,7 +61,7 @@ export default function SellerDetailPage({
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 350);
 
-  const sellers = useSellersData({ vehicles, parts });
+  const { sellers } = useSellersData();
 
   // Get full seller data from original vehicles/parts
   const fullSellerData = useMemo(() => {

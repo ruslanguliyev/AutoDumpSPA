@@ -32,8 +32,7 @@ const shouldMatchRegion = (location, region) => {
   return normalize(location).includes(regionLabel);
 };
 
-export async function getAutosByFilters(filters) {
-  const vehicles = await getAutos();
+export function filterAutosCatalog(vehicles, filters) {
 
   const brand = normalize(filters.brand);
   const model = normalize(filters.model);
@@ -155,4 +154,9 @@ export async function getAutosByFilters(filters) {
 
     return true;
   });
+}
+
+export async function getAutosByFilters(filters) {
+  const vehicles = await getAutos();
+  return filterAutosCatalog(vehicles, filters);
 }

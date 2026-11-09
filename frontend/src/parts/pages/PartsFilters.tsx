@@ -20,10 +20,16 @@ type PartsFilterOptions = {
 type PartsFiltersProps = {
   size?: 'md' | 'drawer';
   options?: PartsFilterOptions;
+  /** Off when the catalogue is paginated and in-stock would lie. */
+  inStockSupported?: boolean;
 };
 
 /** Parts catalogue filters for the index sidebar and mobile drawer. */
-export default function PartsFilters({ size = 'md', options = {} }: PartsFiltersProps) {
+export default function PartsFilters({
+  size = 'md',
+  options = {},
+  inStockSupported = true,
+}: PartsFiltersProps) {
   const { t } = useTranslation('part');
   const filters = useFilters('parts');
   const setFilter = useFiltersStore((state) => state.setFilter);
@@ -125,11 +131,13 @@ export default function PartsFilters({ size = 'md', options = {} }: PartsFilters
         onChange={(event) => setFilter('parts', 'location', event.target.value)}
       />
 
-      <Checkbox
-        label={t('index.filters.inStockOnly')}
-        checked={Boolean(filters.inStockOnly)}
-        onChange={(event) => setFilter('parts', 'inStockOnly', event.target.checked)}
-      />
+      {inStockSupported ? (
+        <Checkbox
+          label={t('index.filters.inStockOnly')}
+          checked={Boolean(filters.inStockOnly)}
+          onChange={(event) => setFilter('parts', 'inStockOnly', event.target.checked)}
+        />
+      ) : null}
     </div>
   );
 }

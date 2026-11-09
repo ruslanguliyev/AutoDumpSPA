@@ -21,6 +21,7 @@ query GetSpecialists($filter: SpecialistsFilterInput) {
     specializations skills
     experience rating reviewsCount
     priceFrom mobileService verified available promotionTier
+    supportedVehicles { brand model yearFrom yearTo }
   }
 }
 `;
@@ -80,6 +81,12 @@ const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
   avatarUrl: s.avatarUrl ?? null,
   coverImage: s.coverImage ?? null,
   specializations: s.specializations ?? [],
+  supportedVehicles: (s.supportedVehicles ?? []).map((v) => ({
+    brand: v.brand,
+    model: v.model,
+    yearFrom: v.yearFrom ?? null,
+    yearTo: v.yearTo ?? null,
+  })),
 });
 
 const mapDetailRowToDetail = (s: GqlSpecialistDetailRow): SpecialistDetail => {

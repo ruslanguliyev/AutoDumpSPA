@@ -22,14 +22,36 @@ const toString = (value: unknown): string => {
   return String(value).trim();
 };
 
+const normalizeText = (value: unknown) => toString(value).toLowerCase();
+
 const normalizeFilters = (filters: DomainFilters): SpecialistsFiltersInput => ({
   brand: toString(filters.brand) || null,
-  model: toString(filters.model) || null,
-  year: toNumberOrNull(filters.year),
+  model: null,
+  year: null,
   specialization: (toString(filters.specialization) || null) as SpecialistsFiltersInput['specialization'],
   city: toString(filters.city) || null,
   minRating: toNumberOrNull(filters.minRating),
 });
+
+const applyListFilters = (
+  list: SpecialistProfile[],
+  filters: DomainFilters,
+  vehiclesFilterSupported: boolean
+): SpecialistProfile[] => {
+  let result = list;
+  const brand = normalizeText(filters.brand);
+  if (vehiclesFilterSupported && brand) {
+    result = result.filter((specialist) =>
+      specialist.supportedVehicles?.some((vehicle) =>
+        normalizeText(vehicle.brand).includes(brand)
+      )
+    );
+  }
+  if (filters.availableNow) {
+    result = result.filter((specialist) => specialist.available === true);
+  }
+  return result;
+};
 
 const createStableQueryKey = (filters: SpecialistsFiltersInput) => {
   const entries = Object.entries(filters)
@@ -53,21 +75,34 @@ export const useSpecialistsQuery = (
     ...options,
   });
 
+  const base = (query.data ?? []) as SpecialistProfile[];
+
   return {
-    specialists: (query.data ?? []) as SpecialistProfile[],
+    specialists: base,
     isLoading: query.isLoading || query.isFetching,
     error: query.error,
     refetch: query.refetch,
   };
 };
 
-export const useSpecialists = () => {
+type UseSpecialistsOptions = {
+  vehiclesFilterSupported?: boolean;
+};
+
+export const useSpecialists = (options: UseSpecialistsOptions = {}) => {
+  const { vehiclesFilterSupported = false } = options;
   const filters = useFilters('specialists');
   const normalizedFilters = useMemo(() => normalizeFilters(filters), [filters]);
   const query = useSpecialistsQuery(normalizedFilters);
 
+  const specialists = useMemo(
+    () => applyListFilters(query.specialists, filters, vehiclesFilterSupported),
+    [query.specialists, filters, vehiclesFilterSupported]
+  );
+
   return {
     ...query,
+    specialists,
     filters,
   };
 };

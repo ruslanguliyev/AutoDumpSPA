@@ -19,13 +19,13 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const { t } = useTranslation('services');
   if (!service) return null;
 
-  const ratingValue = Number.isFinite(service.rating) ? service.rating! : 0;
+  const hasRating = Number.isFinite(service.rating);
   const reviewsCount = Number.isFinite(service.reviewsCount) ? service.reviewsCount! : 0;
   const typeKey =
     service.type && ['garage', 'official', 'detailing', 'tire', 'electric', 'body'].includes(service.type)
       ? `filters.serviceTypes.${service.type}`
       : null;
-  const typeLabel = typeKey ? t(typeKey) : service.type || t('card.fallbackType');
+  const typeLabel = typeKey ? t(typeKey) : null;
   const city = service.location?.city || '';
   const cover = service.media?.cover;
   const brands = service.supportedBrands?.slice(0, 3) ?? [];
@@ -54,7 +54,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
         <div className="absolute right-3 top-3 flex flex-wrap items-center justify-end gap-1.5">
           <PromotionBadge tier={service.promotionTier} />
           {legacyPromoted ? (
-            <Badge variant={legacyPromoted}>{service.promotedLevel}</Badge>
+            <Badge variant={legacyPromoted}>{t(`card.legacyPromoted.${legacyPromoted}`)}</Badge>
           ) : null}
           {service.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
         </div>
@@ -76,9 +76,11 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           </Link>
         </h3>
 
-        <p className="text-[13px] text-muted-foreground">{typeLabel}</p>
+        {typeLabel ? <p className="text-[13px] text-muted-foreground">{typeLabel}</p> : null}
 
-        <RatingStars value={ratingValue} countLabel={t('card.reviews', { count: reviewsCount })} />
+        {hasRating ? (
+          <RatingStars value={service.rating!} countLabel={t('card.reviews', { count: reviewsCount })} />
+        ) : null}
 
         {city ? (
           <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">

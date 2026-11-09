@@ -36,11 +36,10 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
     promotionTier,
   } = specialist;
 
-  const displayRating = Number.isFinite(rating) ? rating! : 0;
+  const hasRating = Number.isFinite(rating);
   const displayReviews = Number.isFinite(reviewsCount) ? reviewsCount! : 0;
   const years = experienceYears ?? yearsExperience ?? null;
   const chips = (specializations ?? []).slice(0, 3);
-  const isAvailable = available !== false;
 
   return (
     <CardWrapper
@@ -80,14 +79,19 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         </Link>
       </h3>
 
-      <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-        <RatingStars value={displayRating} countLabel={t('card.reviews', { count: displayReviews })} />
-        {years !== null ? (
-          <span className="text-[13px] text-muted-foreground">
-            · {t('card.experience', { count: years })}
-          </span>
-        ) : null}
-      </div>
+      {(hasRating || years !== null) ? (
+        <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          {hasRating ? (
+            <RatingStars value={rating!} countLabel={t('card.reviews', { count: displayReviews })} />
+          ) : null}
+          {years !== null ? (
+            <span className="text-[13px] text-muted-foreground">
+              {hasRating ? <span aria-hidden="true">· </span> : null}
+              {t('card.experience', { count: years })}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
 
       {location ? (
         <p className="mt-1 flex items-center gap-1.5 text-[13px] text-muted-foreground">
@@ -100,21 +104,25 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         <ul className="mt-3 flex list-none flex-wrap justify-center gap-1.5">
           {chips.map((spec) => (
             <li key={spec}>
-              <Chip>{spec}</Chip>
+              <Chip>{t(`specializations.${spec}`, { defaultValue: spec })}</Chip>
             </li>
           ))}
         </ul>
       ) : null}
 
-      <p className="mt-3 text-[15px] font-semibold text-foreground">
-        {priceFrom != null
-          ? t('card.priceFrom', { price: formatPrice(priceFrom, 'AZN') })
-          : t('card.priceOnRequest')}
-      </p>
+      {priceFrom != null ? (
+        <p className="mt-3 text-[15px] font-semibold text-foreground">
+          {t('card.priceFrom', { price: formatPrice(priceFrom, 'AZN') })}
+        </p>
+      ) : (
+        <p className="mt-3 text-[15px] font-semibold text-muted-foreground">{t('card.priceOnRequest')}</p>
+      )}
 
-      <Badge variant={isAvailable ? 'openNow' : 'closed'} className="mt-1">
-        {isAvailable ? t('card.available') : t('card.unavailable')}
-      </Badge>
+      {typeof available === 'boolean' ? (
+        <Badge variant={available ? 'openNow' : 'closed'} className="mt-1">
+          {available ? t('card.available') : t('card.unavailable')}
+        </Badge>
+      ) : null}
 
       <div className="flex-1" />
 

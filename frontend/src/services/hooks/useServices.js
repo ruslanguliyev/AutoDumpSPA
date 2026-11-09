@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getServices } from '@/services/api/services.query';
+import { getDefaultFilters } from '@/features/filters/store/filters.defaults';
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
-import { isServiceOpen } from '@/services/utils/serviceSchedule.utils';
-
 const SERVICES_QUERY_KEY = 'services';
 
 export const useServices = () => {
@@ -18,35 +17,32 @@ export const useServices = () => {
 
   const services = query.data ?? [];
 
-  // Filter by openNow if enabled
-  const filteredServices = useMemo(() => {
-    if (!filters.openNow) return services;
-    return services.filter((service) => {
-      if (!service.schedule) return false;
-      return isServiceOpen(service.schedule);
-    });
-  }, [filters.openNow, services]);
+  /** Brand chips must reflect the city-scoped catalogue, not the current brand selection. */
+  const brandCatalogFilters = useMemo(() => {
+    const defaults = getDefaultFilters('services');
+    return {
+      ...defaults,
+      city: filters.city ?? '',
+    };
+  }, [filters.city]);
 
-  // Sort: promotedLevel (premium > boosted > none) → rating
-  const sortedServices = useMemo(() => {
-    return [...filteredServices].sort((a, b) => {
-      const promotedOrder = { premium: 3, boosted: 2, none: 1 };
-      const aPromoted = promotedOrder[a.promotedLevel] || 1;
-      const bPromoted = promotedOrder[b.promotedLevel] || 1;
-
-      if (aPromoted !== bPromoted) {
-        return bPromoted - aPromoted;
-      }
-
-      return (b.rating || 0) - (a.rating || 0);
-    });
-  }, [filteredServices]);
+  const brandCatalogQuery = useQuery({
+    queryKey: [SERVICES_QUERY_KEY, 'brand-catalog', brandCatalogFilters.city],
+    queryFn: () => getServices(brandCatalogFilters),
+    staleTime: 30_000,
+    placeholderData: keepPreviousData,
+  });
 
   const options = useMemo(() => {
     const serviceCodes = [];
     const brands = new Set();
+    const catalog = brandCatalogQuery.data ?? services;
 
-    sortedServices.forEach((service) => {
+    catalog.forEach((service) => {
+      service.supportedBrands?.forEach((brand) => {
+        if (brand) brands.add(brand);
+      });
+
       if (service.services) {
         service.services.forEach((item) => {
           if (item.code) {
@@ -54,9 +50,6 @@ export const useServices = () => {
               value: item.code,
               label: item.title || item.code,
             });
-          }
-          if (item.applicableBrands) {
-            item.applicableBrands.forEach((brand) => brands.add(brand));
           }
         });
       }
@@ -70,10 +63,10 @@ export const useServices = () => {
         .sort()
         .map((brand) => ({ value: brand, label: brand })),
     };
-  }, [sortedServices]);
+  }, [brandCatalogQuery.data, services]);
 
   return {
-    services: sortedServices,
+    services,
     options,
     isLoading: query.isLoading || query.isFetching,
     error: query.error,

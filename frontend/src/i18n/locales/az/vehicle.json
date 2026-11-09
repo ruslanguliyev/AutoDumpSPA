@@ -178,6 +178,7 @@
     "show_other": "{{count, number}} avtomobili göstər",
     "empty": "Bu filtrlərə uyğun icarə avtomobili yoxdur.",
     "emptyAction": "Bütün filtrləri təmizlə",
+    "invalidDateRange": "Bitmə tarixi başlanğıc tarixindən əvvəl ola bilməz.",
     "sort": {
       "default": "Tövsiyə olunan",
       "priceAsc": "Günlük qiymət: ucuzdan bahaya",

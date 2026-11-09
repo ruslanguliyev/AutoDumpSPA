@@ -15,7 +15,7 @@
     "modelPlaceholder": "Model",
     "year": "Year",
     "yearPlaceholder": "Year",
-    "specialization": "Service type",
+    "specialization": "Specialization",
     "specializationAny": "Any specialization",
     "city": "City",
     "cityPlaceholder": "City",
@@ -29,6 +29,30 @@
       "rating45": "4.5+"
     },
     "clear": "Clear filters"
+  },
+  "index": {
+    "title": "Specialists",
+    "breadcrumbs": {
+      "home": "Home",
+      "specialists": "Specialists"
+    },
+    "count_one": "{{count, number}} listing",
+    "count_other": "{{count, number}} listings",
+    "show_one": "Show {{count, number}} specialist",
+    "show_other": "Show {{count, number}} specialists",
+    "empty": "No specialists match these filters.",
+    "emptyAction": "Clear all filters",
+    "sort": {
+      "default": "Recommended",
+      "ratingDesc": "Rating: highest first",
+      "priceAsc": "Price: lowest first"
+    },
+    "filters": {
+      "city": "City",
+      "vehiclesServiced": "Vehicles serviced",
+      "availableNow": "Available now",
+      "chipRatingFrom": "Rating {{value}}+"
+    }
   },
   "list": {
     "loading": "Loading specialists…",
