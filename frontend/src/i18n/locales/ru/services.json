@@ -8,8 +8,6 @@
     "filters": "Фильтры",
     "resetLabel": "Сбросить фильтры",
     "updating": "Обновление списка…",
-    "available_one": "{{count}} автосервис",
-    "available_other": "{{count}} автосервисов",
     "cityPlaceholder": "Город",
     "openNow": "Открыто сейчас",
     "verified": "Проверенные",
@@ -41,7 +39,11 @@
       "50": "50 км",
       "100": "100 км",
       "any": "Любое расстояние"
-    }
+    },
+    "available_one": "{{count}} автосервис",
+    "available_few": "{{count}} автосервиса",
+    "available_many": "{{count}} автосервисов",
+    "available_other": "{{count}} автосервиса"
   },
   "list": {
     "loading": "Загрузка услуг…",
@@ -80,9 +82,12 @@
   },
   "header": {
     "verified": "ПРОВЕРЕН",
-    "reviews": "{{count}} отзывов",
     "share": "Поделиться",
-    "shareAria": "Поделиться сервисом"
+    "shareAria": "Поделиться сервисом",
+    "reviews_one": "{{count, number}} отзыв",
+    "reviews_few": "{{count, number}} отзыва",
+    "reviews_many": "{{count, number}} отзывов",
+    "reviews_other": "{{count, number}} отзыва"
   },
   "priceList": {
     "title": "Услуги и цены",
@@ -104,20 +109,28 @@
   },
   "duration": {
     "mins": "{{count}} мин",
+    "hoursDecimal": "{{hours}},{{mins}} ч",
     "hour_one": "{{count}} ч",
-    "hour_other": "{{count}} ч",
-    "hoursDecimal": "{{hours}},{{mins}} ч"
+    "hour_few": "{{count}} ч",
+    "hour_many": "{{count}} ч",
+    "hour_other": "{{count}} ч"
   },
   "brands": {
     "title": "Обслуживаемые бренды"
   },
   "reviews": {
-    "basedOn": "На основе {{count}} отзывов",
-    "showAll": "Все {{count}} отзывов",
     "agoWeeks": "{{count}} нед. назад",
     "agoMonths": "{{count}} мес. назад",
     "sampleReview1": "Отличный сервис. Быстро нашли причину неисправности X5 и отремонтировали в срок. Цена адекватная по сравнению с официальными дилерами.",
-    "sampleReview2": "Качественная работа, вежливый персонал. Зона ожидания чистая, хороший кофе."
+    "sampleReview2": "Качественная работа, вежливый персонал. Зона ожидания чистая, хороший кофе.",
+    "basedOn_one": "На основе {{count, number}} отзыва",
+    "basedOn_few": "На основе {{count, number}} отзывов",
+    "basedOn_many": "На основе {{count, number}} отзывов",
+    "basedOn_other": "На основе {{count, number}} отзывов",
+    "showAll_one": "Все {{count, number}} отзыв",
+    "showAll_few": "Все {{count, number}} отзыва",
+    "showAll_many": "Все {{count, number}} отзывов",
+    "showAll_other": "Все {{count, number}} отзыва"
   },
   "sidebar": {
     "status": "Статус",

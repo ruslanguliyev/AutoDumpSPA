@@ -91,7 +91,6 @@
     "showPhoneOnListing": "Show phone number on public listing",
     "photosTitle": "Photos",
     "photosHint": "Add at least one image. Choose a main photo for preview.",
-    "imagesCount": "{{count}} images",
     "pasteImageUrl": "Paste image URL",
     "noImagesYet": "No images added yet.",
     "mainImage": "Main image",
@@ -151,7 +150,9 @@
     "completeMissingMessage": "Complete the missing sections to enable publishing.",
     "publicImageHint": "Make sure the image URL is publicly accessible.",
     "pricePerDay": "Price per day",
-    "perDay": "/ day"
+    "perDay": "/ day",
+    "imagesCount_one": "{{count}} image",
+    "imagesCount_other": "{{count}} images"
   },
   "preview": {
     "livePreview": "Live Preview",

@@ -96,8 +96,6 @@
   "labels": {
     "favorites": "Seçilmişlər",
     "favoritesEmpty": "Seçilmişlər (boş)",
-    "favoritesCount": "Seçilmişlər ({{count}} element)",
-    "favoritesCount_plural": "Seçilmişlər ({{count}} element)",
     "noFavorites": "Hələ seçilmiş yoxdur",
     "removeFromFavorites": "Seçilmişlərdən sil",
     "account": "Hesab",
@@ -117,7 +115,9 @@
     "headerActions": "Başlıq hərəkətləri",
     "mobileNavigation": "Mobil naviqasiya",
     "moreNavigation": "Digər bölmələr",
-    "languageSwitcher": "Dil seçimi"
+    "languageSwitcher": "Dil seçimi",
+    "favoritesCount_one": "Seçilmişlər ({{count}} element)",
+    "favoritesCount_other": "Seçilmişlər ({{count}} element)"
   },
   "common": {
     "loading": "Yüklənir...",

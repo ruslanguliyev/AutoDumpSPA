@@ -96,8 +96,6 @@
   "labels": {
     "favorites": "Избранное",
     "favoritesEmpty": "Избранное (пусто)",
-    "favoritesCount": "Избранное ({{count}} элемент)",
-    "favoritesCount_plural": "Избранное ({{count}} элементов)",
     "noFavorites": "Пока нет избранного",
     "removeFromFavorites": "Удалить из избранного",
     "account": "Аккаунт",
@@ -117,7 +115,11 @@
     "headerActions": "Действия в шапке",
     "mobileNavigation": "Мобильная навигация",
     "moreNavigation": "Другие разделы",
-    "languageSwitcher": "Выбор языка"
+    "languageSwitcher": "Выбор языка",
+    "favoritesCount_one": "Избранное ({{count}} элемент)",
+    "favoritesCount_few": "Избранное ({{count}} элемента)",
+    "favoritesCount_many": "Избранное ({{count}} элементов)",
+    "favoritesCount_other": "Избранное ({{count}} элемента)"
   },
   "common": {
     "loading": "Загрузка...",

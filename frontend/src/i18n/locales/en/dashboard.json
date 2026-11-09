@@ -198,7 +198,6 @@
     "subtitle": "Reports about listings",
     "seller": "Seller",
     "reportedBy": "Reported by {{email}}",
-    "moreReports": "{{count}} more report(s)",
     "dismiss": "Dismiss report",
     "block": "Block listing",
     "unblock": "Unblock",
@@ -233,7 +232,9 @@
       "verified": "Verified",
       "grant": "Verify",
       "revoke": "Remove badge"
-    }
+    },
+    "moreReports_one": "{{count}} more report",
+    "moreReports_other": "{{count}} more reports"
   },
   "rentSearch": {
     "title": "Car rental",
@@ -242,7 +243,8 @@
     "city": "City",
     "maxPrice": "Max price per day",
     "empty": "No cars found.",
-    "count": "{{count}} car(s) found"
+    "count_one": "{{count}} car found",
+    "count_other": "{{count}} cars found"
   },
   "rental": {
     "perDay": "/ day",
@@ -258,20 +260,24 @@
     "unavailableDays": "Unavailable days",
     "messagePlaceholder": "Message to the owner (optional)",
     "term": {
-      "minDays": "Minimum rental: {{count}} day(s)",
-      "maxDays": "Maximum rental: {{count}} day(s)",
       "deposit": "Deposit: {{amount}}",
       "noDeposit": "No deposit",
       "kmPerDay": "Mileage: {{count}} km per day",
       "unlimitedKm": "Unlimited mileage",
-      "minDriverAge": "Driver age from {{count}}"
+      "minDriverAge": "Driver age from {{count}}",
+      "minDays_one": "Minimum rental: {{count}} day",
+      "minDays_other": "Minimum rental: {{count}} days",
+      "maxDays_one": "Maximum rental: {{count}} day",
+      "maxDays_other": "Maximum rental: {{count}} days"
     },
     "errors": {
       "past": "The start date cannot be in the past",
       "order": "The end date cannot be before the start date",
-      "tooShort": "Minimum rental: {{count}} day(s)",
-      "tooLong": "Maximum rental: {{count}} day(s)",
-      "unavailable": "The car is not available on these dates"
+      "unavailable": "The car is not available on these dates",
+      "tooShort_one": "Minimum rental: {{count}} day",
+      "tooShort_other": "Minimum rental: {{count}} days",
+      "tooLong_one": "Maximum rental: {{count}} day",
+      "tooLong_other": "Maximum rental: {{count}} days"
     },
     "status": {
       "PENDING": "Awaiting answer",

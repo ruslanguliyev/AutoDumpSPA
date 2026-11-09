@@ -78,9 +78,10 @@
   },
   "header": {
     "verified": "VERIFIED",
-    "reviews": "{{count}} reviews",
     "share": "Share",
-    "shareAria": "Share service"
+    "shareAria": "Share service",
+    "reviews_one": "{{count, number}} review",
+    "reviews_other": "{{count, number}} reviews"
   },
   "priceList": {
     "title": "Services & Prices",
@@ -110,12 +111,16 @@
     "title": "Brands Serviced"
   },
   "reviews": {
-    "basedOn": "Based on {{count}} reviews",
-    "showAll": "Show all {{count}} reviews",
-    "agoWeeks": "{{count}} weeks ago",
-    "agoMonths": "{{count}} months ago",
     "sampleReview1": "Excellent service. They diagnosed the issue with my X5 quickly and the repair was done within the estimated timeframe. Price was fair compared to other official dealers.",
-    "sampleReview2": "Good work, friendly staff. Waiting area is clean and has good coffee."
+    "sampleReview2": "Good work, friendly staff. Waiting area is clean and has good coffee.",
+    "basedOn_one": "Based on {{count, number}} review",
+    "basedOn_other": "Based on {{count, number}} reviews",
+    "showAll_one": "Show all {{count, number}} review",
+    "showAll_other": "Show all {{count, number}} reviews",
+    "agoWeeks_one": "{{count}} week ago",
+    "agoWeeks_other": "{{count}} weeks ago",
+    "agoMonths_one": "{{count}} month ago",
+    "agoMonths_other": "{{count}} months ago"
   },
   "sidebar": {
     "status": "Status",

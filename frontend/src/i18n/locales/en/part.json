@@ -60,19 +60,19 @@
     "failedToLoad": "Failed to load part.",
     "brandLabel": "Brand",
     "oemLabel": "OEM",
-    "reviewsCount": "{{count}} review",
-    "reviewsCount_plural": "{{count}} reviews",
     "noReviewsYet": "No reviews yet",
     "compatibilityTitle": "Compatibility",
     "make": "Make",
     "model": "Model",
     "fits": "Fits",
-    "variantsCount": "{{count}} variant",
-    "variantsCount_plural": "{{count}} variants",
     "browseParts": "Browse parts",
     "compatibilityNotAvailable": "Compatibility list is not available.",
     "reviewsNotAvailableTitle": "Reviews",
-    "reviewsNotAvailableBody": "Reviews are not available yet. (This section is ready for backend data.)"
+    "reviewsNotAvailableBody": "Reviews are not available yet. (This section is ready for backend data.)",
+    "reviewsCount_one": "{{count, number}} review",
+    "reviewsCount_other": "{{count, number}} reviews",
+    "variantsCount_one": "{{count}} variant",
+    "variantsCount_other": "{{count}} variants"
   },
   "card": {
     "viewDetails": "View details",
@@ -91,17 +91,17 @@
     "title": "Search Parts",
     "results": "Search Results",
     "noResults": "No parts found",
-    "resultsCount": "{{count}} part found",
-    "resultsCount_plural": "{{count}} parts found"
+    "resultsCount_one": "{{count, number}} part found",
+    "resultsCount_other": "{{count, number}} parts found"
   },
   "list": {
     "loadingInventory": "Loading inventory…",
     "failedToLoad": "Failed to load parts.",
     "errorMessage": "Check VITE_API_URL or enable mocks with VITE_USE_PARTS_MOCKS=true.",
     "noResultsMatch": "No parts match these filters. Adjust search and try again.",
-    "partsAvailable": "{{count}} part available",
-    "partsAvailable_plural": "{{count}} parts available",
-    "updatingInventory": "Updating inventory…"
+    "updatingInventory": "Updating inventory…",
+    "partsAvailable_one": "{{count, number}} part available",
+    "partsAvailable_other": "{{count, number}} parts available"
   },
   "purchase": {
     "inStockCount": "In stock: {{count}}",

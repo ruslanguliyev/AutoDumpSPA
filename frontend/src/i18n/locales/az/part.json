@@ -60,19 +60,19 @@
     "failedToLoad": "Ehtiyat hissəsini yükləmək alınmadı.",
     "brandLabel": "Marka",
     "oemLabel": "OEM",
-    "reviewsCount": "{{count}} rəy",
-    "reviewsCount_plural": "{{count}} rəy",
     "noReviewsYet": "Hələ rəy yoxdur",
     "compatibilityTitle": "Uyğunluq",
     "make": "Marka",
     "model": "Model",
     "fits": "Uyğundur",
-    "variantsCount": "{{count}} variant",
-    "variantsCount_plural": "{{count}} variant",
     "browseParts": "Hissələrə bax",
     "compatibilityNotAvailable": "Uyğunluq siyahısı mövcud deyil.",
     "reviewsNotAvailableTitle": "Rəylər",
-    "reviewsNotAvailableBody": "Rəylər hələ mövcud deyil. (Bu bölmə backend datası üçün hazırdır.)"
+    "reviewsNotAvailableBody": "Rəylər hələ mövcud deyil. (Bu bölmə backend datası üçün hazırdır.)",
+    "reviewsCount_one": "{{count, number}} rəy",
+    "reviewsCount_other": "{{count, number}} rəy",
+    "variantsCount_one": "{{count}} variant",
+    "variantsCount_other": "{{count}} variant"
   },
   "card": {
     "viewDetails": "Detallara bax",
@@ -91,17 +91,17 @@
     "title": "Ehtiyat hissələri axtar",
     "results": "Axtarış nəticələri",
     "noResults": "Ehtiyat hissəsi tapılmadı",
-    "resultsCount": "{{count}} ehtiyat hissəsi tapıldı",
-    "resultsCount_plural": "{{count}} ehtiyat hissəsi tapıldı"
+    "resultsCount_one": "{{count, number}} ehtiyat hissəsi tapıldı",
+    "resultsCount_other": "{{count, number}} ehtiyat hissəsi tapıldı"
   },
   "list": {
     "loadingInventory": "Kataloq yüklənir…",
     "failedToLoad": "Ehtiyat hissələrini yükləmək alınmadı.",
     "errorMessage": "VITE_API_URL-i yoxlayın və ya VITE_USE_PARTS_MOCKS=true ilə mokları aktivləşdirin.",
     "noResultsMatch": "Bu filtrlərə uyğun ehtiyat hissəsi yoxdur. Axtarışı dəyişdirin və yenidən cəhd edin.",
-    "partsAvailable": "{{count}} ehtiyat hissəsi mövcuddur",
-    "partsAvailable_plural": "{{count}} ehtiyat hissəsi mövcuddur",
-    "updatingInventory": "Kataloq yenilənir…"
+    "updatingInventory": "Kataloq yenilənir…",
+    "partsAvailable_one": "{{count, number}} ehtiyat hissəsi mövcuddur",
+    "partsAvailable_other": "{{count, number}} ehtiyat hissəsi mövcuddur"
   },
   "purchase": {
     "inStockCount": "Stokda: {{count}}",

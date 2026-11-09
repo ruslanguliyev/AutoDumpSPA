@@ -27,9 +27,10 @@
     },
     "clear": "Сбросить",
     "updating": "Обновление...",
-    "available": "Найдено: {{count}} мастеров",
     "available_one": "Найден: {{count}} мастер",
-    "available_few": "Найдено: {{count}} мастера"
+    "available_few": "Найдено: {{count}} мастера",
+    "available_many": "Найдено: {{count}} мастеров",
+    "available_other": "Найдено: {{count}} мастера"
   },
   "list": {
     "loading": "Загрузка мастеров…",

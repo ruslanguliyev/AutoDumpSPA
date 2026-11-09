@@ -156,8 +156,8 @@
     "results": "Axtarış nəticələri",
     "resultsWithCount": "Axtarış nəticələri {{count}}",
     "noResults": "Avtomobil tapılmadı",
-    "resultsCount": "{{count}} avtomobil tapıldı",
-    "resultsCount_plural": "{{count}} avtomobil tapıldı"
+    "resultsCount_one": "{{count, number}} avtomobil tapıldı",
+    "resultsCount_other": "{{count, number}} avtomobil tapıldı"
   },
   "searchBox": {
     "title": "Yeni və işlənmiş avtomobilləri tapın",

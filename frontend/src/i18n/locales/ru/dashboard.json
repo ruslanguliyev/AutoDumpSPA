@@ -264,7 +264,10 @@
       "noDeposit": "Без залога",
       "kmPerDay": "Пробег: {{count}} км в сутки",
       "unlimitedKm": "Пробег без ограничений",
-      "minDriverAge": "Возраст водителя от {{count}} лет"
+      "minDriverAge_one": "Возраст водителя от {{count}} года",
+      "minDriverAge_few": "Возраст водителя от {{count}} лет",
+      "minDriverAge_many": "Возраст водителя от {{count}} лет",
+      "minDriverAge_other": "Возраст водителя от {{count}} лет"
     },
     "errors": {
       "past": "Нельзя выбрать прошедшую дату",

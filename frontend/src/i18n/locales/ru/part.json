@@ -60,19 +60,23 @@
     "failedToLoad": "Не удалось загрузить запчасть.",
     "brandLabel": "Марка",
     "oemLabel": "OEM",
-    "reviewsCount": "{{count}} отзыв",
-    "reviewsCount_plural": "{{count}} отзывов",
     "noReviewsYet": "Пока нет отзывов",
     "compatibilityTitle": "Совместимость",
     "make": "Марка",
     "model": "Модель",
     "fits": "Подходит",
-    "variantsCount": "{{count}} вариант",
-    "variantsCount_plural": "{{count}} вариантов",
     "browseParts": "Смотреть запчасти",
     "compatibilityNotAvailable": "Список совместимости недоступен.",
     "reviewsNotAvailableTitle": "Отзывы",
-    "reviewsNotAvailableBody": "Отзывы пока недоступны. (Секция готова для данных с бэкенда.)"
+    "reviewsNotAvailableBody": "Отзывы пока недоступны. (Секция готова для данных с бэкенда.)",
+    "reviewsCount_one": "{{count, number}} отзыв",
+    "reviewsCount_few": "{{count, number}} отзыва",
+    "reviewsCount_many": "{{count, number}} отзывов",
+    "reviewsCount_other": "{{count, number}} отзыва",
+    "variantsCount_one": "{{count}} вариант",
+    "variantsCount_few": "{{count}} варианта",
+    "variantsCount_many": "{{count}} вариантов",
+    "variantsCount_other": "{{count}} варианта"
   },
   "card": {
     "viewDetails": "Посмотреть детали",
@@ -93,17 +97,21 @@
     "title": "Поиск запчастей",
     "results": "Результаты поиска",
     "noResults": "Запчасти не найдены",
-    "resultsCount": "Найдена {{count}} запчасть",
-    "resultsCount_plural": "Найдено {{count}} запчастей"
+    "resultsCount_one": "Найдена {{count, number}} запчасть",
+    "resultsCount_few": "Найдено {{count, number}} запчасти",
+    "resultsCount_many": "Найдено {{count, number}} запчастей",
+    "resultsCount_other": "Найдено {{count, number}} запчасти"
   },
   "list": {
     "loadingInventory": "Загрузка каталога…",
     "failedToLoad": "Не удалось загрузить запчасти.",
     "errorMessage": "Проверьте VITE_API_URL или включите моки с VITE_USE_PARTS_MOCKS=true.",
     "noResultsMatch": "Нет запчастей, соответствующих этим фильтрам. Измените поиск и попробуйте снова.",
-    "partsAvailable": "Доступна {{count}} запчасть",
-    "partsAvailable_plural": "Доступно {{count}} запчастей",
-    "updatingInventory": "Обновление каталога…"
+    "updatingInventory": "Обновление каталога…",
+    "partsAvailable_one": "Доступна {{count, number}} запчасть",
+    "partsAvailable_few": "Доступно {{count, number}} запчасти",
+    "partsAvailable_many": "Доступно {{count, number}} запчастей",
+    "partsAvailable_other": "Доступно {{count, number}} запчасти"
   },
   "purchase": {
     "inStockCount": "В наличии: {{count}}",

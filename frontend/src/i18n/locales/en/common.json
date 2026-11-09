@@ -96,8 +96,6 @@
   "labels": {
     "favorites": "Favorites",
     "favoritesEmpty": "Favorites (empty)",
-    "favoritesCount": "Favorites ({{count}} item)",
-    "favoritesCount_plural": "Favorites ({{count}} items)",
     "noFavorites": "No favorites yet",
     "removeFromFavorites": "Remove from favorites",
     "account": "Account",
@@ -117,7 +115,9 @@
     "headerActions": "Header actions",
     "mobileNavigation": "Mobile navigation",
     "moreNavigation": "More sections",
-    "languageSwitcher": "Language"
+    "languageSwitcher": "Language",
+    "favoritesCount_one": "Favorites ({{count}} item)",
+    "favoritesCount_other": "Favorites ({{count}} items)"
   },
   "common": {
     "loading": "Loading...",

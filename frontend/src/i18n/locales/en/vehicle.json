@@ -139,10 +139,11 @@
     "perDay": "/ day",
     "deposit": "Deposit {{amount}}",
     "noDeposit": "No deposit",
-    "minDays": "Min {{count}} days",
     "kmPerDay": "{{count}} km/day",
     "unlimitedKm": "Unlimited km",
-    "checkAvailability": "Check availability"
+    "checkAvailability": "Check availability",
+    "minDays_one": "Min {{count}} day",
+    "minDays_other": "Min {{count}} days"
   },
   "badges": {
     "hot": "HOT"
@@ -156,15 +157,16 @@
     "results": "Search Results",
     "resultsWithCount": "Search Results {{count}}",
     "noResults": "No vehicles found",
-    "resultsCount": "{{count}} vehicle found",
-    "resultsCount_plural": "{{count}} vehicles found"
+    "resultsCount_one": "{{count, number}} vehicle found",
+    "resultsCount_other": "{{count, number}} vehicles found"
   },
   "searchBox": {
     "title": "Find used vehicles and new vehicles",
     "refine": "Refine search",
-    "results": "{{count}} results",
     "priceUpTo": "Price up to (€)",
-    "firstRegistrationFrom": "First registration from"
+    "firstRegistrationFrom": "First registration from",
+    "results_one": "{{count, number}} result",
+    "results_other": "{{count, number}} results"
   },
   "home": {
     "availableVehicles": "Available Vehicles"

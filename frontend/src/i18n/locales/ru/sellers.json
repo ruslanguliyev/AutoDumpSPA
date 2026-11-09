@@ -15,8 +15,6 @@
     "sortBy": "Сортировка",
     "verifiedOnly": "Только проверенные",
     "updating": "Обновление списка…",
-    "available_one": "{{count}} продавец",
-    "available_other": "{{count}} продавцов",
     "domain": {
       "all": "Все",
       "cars": "Автомобили",
@@ -47,21 +45,24 @@
     },
     "cityOptions": {
       "any": "Любой город"
-    }
+    },
+    "available_one": "{{count}} продавец",
+    "available_few": "{{count}} продавца",
+    "available_many": "{{count}} продавцов",
+    "available_other": "{{count}} продавца"
   },
   "list": {
     "loading": "Загрузка продавцов…",
     "empty": "Нет продавцов по выбранным фильтрам.",
     "countFiltered": "{{total}} из {{totalAll}} продавцов",
     "countAll_one": "{{count}} продавец",
-    "countAll_other": "{{count}} продавцов"
+    "countAll_few": "{{count}} продавца",
+    "countAll_many": "{{count}} продавцов",
+    "countAll_other": "{{count}} продавца"
   },
   "card": {
     "verifiedDealer": "Проверенный дилер",
     "verifiedPartsSeller": "Проверенный продавец запчастей",
-    "reviews_one": "{{count}} отзыв",
-    "reviews_few": "{{count}} отзыва",
-    "reviews_many": "{{count}} отзывов",
     "location": "Расположение",
     "activeSeller": "Активный продавец",
     "yrs": "лет",
@@ -70,7 +71,11 @@
     "addToFavorites": "Добавить в избранное",
     "removeFromFavorites": "Удалить из избранного",
     "share": "Поделиться",
-    "instagram": "Instagram"
+    "instagram": "Instagram",
+    "reviews_one": "{{count}} отзыв",
+    "reviews_few": "{{count}} отзыва",
+    "reviews_many": "{{count}} отзывов",
+    "reviews_other": "{{count}} отзыва"
   },
   "detail": {
     "loading": "Загрузка продавца…",
