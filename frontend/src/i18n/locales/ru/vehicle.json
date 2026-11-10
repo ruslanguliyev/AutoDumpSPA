@@ -137,6 +137,7 @@
     "hot": "ХИТ",
     "addToFavoritesAria": "Добавить в избранное",
     "removeFromFavoritesAria": "Удалить из избранного",
+    "rent": "Аренда",
     "perDay": "/ сутки",
     "deposit": "Залог {{amount}}",
     "noDeposit": "Без залога",

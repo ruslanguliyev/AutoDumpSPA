@@ -37,8 +37,9 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
     promotionTier,
   } = specialist;
 
-  const hasRating = Number.isFinite(rating);
-  const displayReviews = Number.isFinite(reviewsCount) ? reviewsCount! : 0;
+  const ratingValue = Number.isFinite(rating) ? Number(rating) : null;
+  const displayReviews = Number.isFinite(reviewsCount) ? Number(reviewsCount) : 0;
+  const showRating = displayReviews > 0 && ratingValue !== null;
   const years = experienceYears ?? yearsExperience ?? null;
   const chips = (specializations ?? []).slice(0, 3);
 
@@ -80,19 +81,16 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
         </Link>
       </h3>
 
-      {(hasRating || years !== null) ? (
-        <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-          {hasRating ? (
-            <RatingStars value={rating!} countLabel={t('card.reviews', { count: displayReviews })} />
-          ) : null}
-          {years !== null ? (
-            <span className="text-[13px] text-muted-foreground">
-              {hasRating ? <span aria-hidden="true">· </span> : null}
-              {t('card.experience', { count: years })}
-            </span>
-          ) : null}
-        </div>
-      ) : null}
+      <div className="mt-1 flex flex-col items-center gap-1">
+        {showRating ? (
+          <RatingStars value={ratingValue} countLabel={t('card.reviews', { count: displayReviews })} />
+        ) : (
+          <p className="text-[13px] text-muted-foreground">{t('detail.noReviewsYet')}</p>
+        )}
+        {years !== null ? (
+          <span className="text-[13px] text-muted-foreground">{t('card.experience', { count: years })}</span>
+        ) : null}
+      </div>
 
       {location ? (
         <p className="mt-1 flex items-center gap-1.5 text-[13px] text-muted-foreground">

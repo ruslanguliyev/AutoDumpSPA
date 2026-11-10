@@ -59,6 +59,69 @@ type Tx = Omit<
 
 const seedPromotedUntil = () => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
 
+const QA_ZERO_REVIEW_SELLER_EMAILS = [
+  'dealer-zero-reviews@test.com',
+  'private-seller-qa@test.com',
+] as const;
+
+const QA_SERVICE_SLUGS = ['seed-qa-service-with-hours', 'seed-qa-service-no-hours'] as const;
+
+async function syncReviewAggregates(
+  tx: Tx,
+  kind: 'seller' | 'specialist' | 'serviceCenter',
+  id: string,
+) {
+  const where =
+    kind === 'seller'
+      ? { sellerId: id }
+      : kind === 'specialist'
+        ? { specialistId: id }
+        : { serviceCenterId: id };
+  const agg = await tx.review.aggregate({
+    where,
+    _avg: { rating: true },
+    _count: { _all: true },
+  });
+  const data = {
+    rating: agg._avg.rating ? Math.round(agg._avg.rating * 10) / 10 : 0,
+    reviewsCount: agg._count._all,
+  };
+  if (kind === 'seller') await tx.seller.update({ where: { id }, data });
+  else if (kind === 'specialist') await tx.specialist.update({ where: { id }, data });
+  else await tx.serviceCenter.update({ where: { id }, data });
+}
+
+/**
+ * Drops leftover reviews on 0-review fixtures and rewrites cached rating/reviewsCount
+ * from the Review table so catalogue/detail cannot show “4.9 (89)” over an empty list.
+ * The 10k-reviews dealer is left as a layout fixture.
+ */
+async function resetQaReviewFixtures(tx: Tx) {
+  const [qaSpecialist, qaZeroSellers, qaServices, allCenters, allSpecialists] = await Promise.all([
+    tx.specialist.findUnique({ where: { slug: SEED_SPECIALIST_SLUG }, select: { id: true } }),
+    tx.seller.findMany({
+      where: { user: { email: { in: [...QA_ZERO_REVIEW_SELLER_EMAILS] } } },
+      select: { id: true },
+    }),
+    tx.serviceCenter.findMany({
+      where: { slug: { in: [...QA_SERVICE_SLUGS] } },
+      select: { id: true },
+    }),
+    tx.serviceCenter.findMany({ select: { id: true } }),
+    tx.specialist.findMany({ select: { id: true } }),
+  ]);
+
+  const reviewOr: Prisma.ReviewWhereInput[] = [];
+  if (qaSpecialist) reviewOr.push({ specialistId: qaSpecialist.id });
+  if (qaZeroSellers.length) reviewOr.push({ sellerId: { in: qaZeroSellers.map((s) => s.id) } });
+  if (qaServices.length) reviewOr.push({ serviceCenterId: { in: qaServices.map((s) => s.id) } });
+  if (reviewOr.length) await tx.review.deleteMany({ where: { OR: reviewOr } });
+
+  for (const row of qaZeroSellers) await syncReviewAggregates(tx, 'seller', row.id);
+  for (const row of allSpecialists) await syncReviewAggregates(tx, 'specialist', row.id);
+  for (const row of allCenters) await syncReviewAggregates(tx, 'serviceCenter', row.id);
+}
+
 const baseVehicle = {
   year: 2021,
   mileage: 25_000,
@@ -512,8 +575,8 @@ async function main() {
         slug: 'seed-qa-service-with-hours',
         city: 'Baku',
         gallery: [],
-        rating: 4.5,
-        reviewsCount: 12,
+        rating: 0,
+        reviewsCount: 0,
         verified: true,
         schedule: bakuSchedule,
         supportedBrands: ['Toyota', 'BMW'],
@@ -524,6 +587,8 @@ async function main() {
         slug: 'seed-qa-service-with-hours',
         gallery: [],
         schedule: bakuSchedule,
+        rating: 0,
+        reviewsCount: 0,
       },
     });
 
@@ -545,8 +610,8 @@ async function main() {
         slug: 'seed-qa-service-no-hours',
         city: 'Baku',
         gallery: [],
-        rating: 4.2,
-        reviewsCount: 3,
+        rating: 0,
+        reviewsCount: 0,
         verified: false,
         schedule: Prisma.DbNull,
         supportedBrands: ['Mercedes-Benz'],
@@ -557,6 +622,8 @@ async function main() {
         slug: 'seed-qa-service-no-hours',
         gallery: [],
         schedule: Prisma.DbNull,
+        rating: 0,
+        reviewsCount: 0,
       },
     });
 
@@ -649,6 +716,8 @@ async function main() {
         isHot: false,
       },
     });
+
+    await resetQaReviewFixtures(tx);
   });
 
   const qaRentTitles = Object.values(SEED_RENT);

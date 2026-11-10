@@ -36,8 +36,8 @@
       "home": "Ana səhifə",
       "specialists": "Ustalar"
     },
-    "count_one": "{{count, number}} elan",
-    "count_other": "{{count, number}} elan",
+    "count_one": "{{count, number}} usta",
+    "count_other": "{{count, number}} usta",
     "show_one": "{{count, number}} ustanı göstər",
     "show_other": "{{count, number}} ustanı göstər",
     "empty": "Bu filtrlərə uyğun usta yoxdur.",

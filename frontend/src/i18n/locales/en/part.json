@@ -87,6 +87,7 @@
     "openPart": "Open {{name}}",
     "inStockCount": "In stock: {{count, number}}",
     "stockInStockShort": "In stock",
+    "noReviewsYet": "No reviews yet",
     "reviews_one": "{{count, number}} review",
     "reviews_other": "{{count, number}} reviews"
   },

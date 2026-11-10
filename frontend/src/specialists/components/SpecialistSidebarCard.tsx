@@ -37,20 +37,18 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
       <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
         {/* Price + availability */}
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-normal text-muted-foreground">
-              {t('detail.startingAt')}
-            </p>
-            {priceFrom !== null ? (
+          {priceFrom !== null ? (
+            <div>
+              <p className="text-xs font-normal text-muted-foreground">
+                {t('detail.startingAt')}
+              </p>
               <p className="mt-0.5 text-[28px] font-bold leading-none text-primary-text">
                 {formatPrice(priceFrom, 'AZN', locale)}
               </p>
-            ) : (
-              <p className="mt-0.5 text-base font-medium text-muted-foreground">
-                {t('detail.priceOnRequest')}
-              </p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div />
+          )}
 
           {specialist.available === false ? (
             <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -107,6 +105,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
       />
 
       {/* Contact info card */}
+      {city || address || phone ? (
       <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
         <h2 className="text-sm font-semibold text-foreground">{t('detail.contactInfo')}</h2>
 
@@ -147,6 +146,7 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
 
         </div>
       </div>
+      ) : null}
     </div>
   );
 };

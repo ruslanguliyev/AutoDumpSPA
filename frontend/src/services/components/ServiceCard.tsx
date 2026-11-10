@@ -8,7 +8,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { Chip } from '@/shared/ui/Chip';
 import Button from '@/shared/ui/button';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
-import { isServiceOpen } from '@/services/utils/serviceSchedule.utils';
+import { isServiceOpen, normalizeServiceSchedule } from '@/services/utils/serviceSchedule.utils';
 import type { ServiceProfile } from '@/services/types/service.types';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
@@ -20,8 +20,9 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const { t } = useTranslation('services');
   if (!service) return null;
 
-  const hasRating = Number.isFinite(service.rating);
-  const reviewsCount = Number.isFinite(service.reviewsCount) ? service.reviewsCount! : 0;
+  const reviewsCount = Number.isFinite(service.reviewsCount) ? Number(service.reviewsCount) : 0;
+  const ratingValue = Number.isFinite(service.rating) ? Number(service.rating) : null;
+  const showRating = reviewsCount > 0 && ratingValue !== null;
   const typeKey =
     service.type && ['garage', 'official', 'detailing', 'tire', 'electric', 'body'].includes(service.type)
       ? `filters.serviceTypes.${service.type}`
@@ -45,7 +46,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
           : null;
 
   // Open or closed can only be told from the opening hours; the list does not always carry them.
-  const open = service.schedule ? isServiceOpen(service.schedule) : null;
+  const open = normalizeServiceSchedule(service.schedule) ? isServiceOpen(service.schedule) : null;
 
   return (
     <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
@@ -79,9 +80,11 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
 
         {typeLabel ? <p className="text-[13px] text-muted-foreground">{typeLabel}</p> : null}
 
-        {hasRating ? (
-          <RatingStars value={service.rating!} countLabel={t('card.reviews', { count: reviewsCount })} />
-        ) : null}
+        {showRating ? (
+          <RatingStars value={ratingValue} countLabel={t('card.reviews', { count: reviewsCount })} />
+        ) : (
+          <p className="text-[13px] text-muted-foreground">{t('header.noReviewsYet')}</p>
+        )}
 
         {city ? (
           <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">

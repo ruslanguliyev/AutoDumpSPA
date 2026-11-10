@@ -49,8 +49,8 @@
       "home": "Ana səhifə",
       "services": "Xidmətlər"
     },
-    "count_one": "{{count, number}} elan",
-    "count_other": "{{count, number}} elan",
+    "count_one": "{{count, number}} xidmət",
+    "count_other": "{{count, number}} xidmət",
     "show_one": "{{count, number}} xidməti göstər",
     "show_other": "{{count, number}} xidməti göstər",
     "empty": "Bu filtrlərə uyğun xidmət yoxdur.",

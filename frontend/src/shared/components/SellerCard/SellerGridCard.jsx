@@ -76,7 +76,9 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
 
         {rating !== null && votes > 0 ? (
           <RatingStars value={rating} countLabel={t('seller.reviews', { count: votes })} />
-        ) : null}
+        ) : (
+          <p className="text-[13px] text-muted-foreground">{t('seller.noReviewsYet')}</p>
+        )}
 
         <p className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
           {city ? (
@@ -95,7 +97,7 @@ export default function SellerGridCard({ seller, onClick, className = '' }) {
 
         <div className="flex-1" />
 
-        <Button variant="secondary" onClick={onClick} className="relative z-10 mt-2 w-full">
+        <Button variant="secondary" onClick={onClick} className="relative z-10 mt-auto w-full">
           {t('seller.viewSellerShort')}
         </Button>
       </div>

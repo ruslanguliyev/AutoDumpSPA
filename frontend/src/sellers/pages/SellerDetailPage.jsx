@@ -248,7 +248,11 @@ export default function SellerDetailPage({
                 {allListingsCount > 0 ? (
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {sellerListings.vehicles.map((vehicle) => (
-                      <AutoCard key={vehicle.id} car={vehicle} />
+                      <AutoCard
+                        key={vehicle.id}
+                        car={vehicle}
+                        variant={vehicle.purpose === 'RENT' ? 'rent' : 'sale'}
+                      />
                     ))}
                     {sellerListings.parts.map((part) => (
                       <PartCard key={part.id} part={part} />

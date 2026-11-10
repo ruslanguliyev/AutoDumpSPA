@@ -137,6 +137,7 @@
     "hot": "HOT",
     "addToFavoritesAria": "Add to favorites",
     "removeFromFavoritesAria": "Remove from favorites",
+    "rent": "Rent",
     "perDay": "/ day",
     "deposit": "Deposit {{amount}}",
     "noDeposit": "No deposit",

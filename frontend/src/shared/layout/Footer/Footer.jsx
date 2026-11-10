@@ -72,7 +72,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-12 border-t border-border bg-background">
+    <footer className="mt-12 border-t border-border bg-background pb-[calc(var(--scroll-top-bottom)+3.5rem)]">
       <div className="mx-auto w-full max-w-[1280px] px-4 py-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))] lg:gap-6">
           {/* Brand, tagline, and the legal links that sit under them in the design. */}

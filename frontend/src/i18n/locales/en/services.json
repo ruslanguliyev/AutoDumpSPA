@@ -49,8 +49,8 @@
       "home": "Home",
       "services": "Services"
     },
-    "count_one": "{{count, number}} listing",
-    "count_other": "{{count, number}} listings",
+    "count_one": "{{count, number}} service",
+    "count_other": "{{count, number}} services",
     "show_one": "Show {{count, number}} service",
     "show_other": "Show {{count, number}} services",
     "empty": "No services match these filters.",

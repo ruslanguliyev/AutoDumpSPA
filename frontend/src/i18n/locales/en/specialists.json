@@ -36,8 +36,8 @@
       "home": "Home",
       "specialists": "Specialists"
     },
-    "count_one": "{{count, number}} listing",
-    "count_other": "{{count, number}} listings",
+    "count_one": "{{count, number}} specialist",
+    "count_other": "{{count, number}} specialists",
     "show_one": "Show {{count, number}} specialist",
     "show_other": "Show {{count, number}} specialists",
     "empty": "No specialists match these filters.",

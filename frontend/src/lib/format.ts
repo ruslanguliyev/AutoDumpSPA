@@ -33,15 +33,38 @@ export const formatDecimalPrice = (
   return `${formatted} ${currency}`;
 };
 
+/** RU uses Cyrillic units; AZ and EN use Latin km / HP / L. */
+const unitLabels = (locale = 'ru-RU') =>
+  String(locale).startsWith('ru')
+    ? { km: 'км', hp: 'л.с.', liter: 'л' }
+    : { km: 'km', hp: 'HP', liter: 'L' };
+
 export const formatKm = (
   value: number | null | undefined,
   locale = 'ru-RU',
 ): string => {
   if (value == null || !Number.isFinite(Number(value))) return '—';
-  return `${formatNumber(Number(value), locale)} km`;
+  return `${formatNumber(Number(value), locale)} ${unitLabels(locale).km}`;
 };
 
 export const formatMileage = formatKm;
+
+export const formatEngineDisplacement = (
+  value: number | null | undefined,
+  locale = 'ru-RU',
+): string => {
+  if (value == null || !Number.isFinite(Number(value))) return '';
+  const formatted = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(Number(value));
+  return `${formatted} ${unitLabels(locale).liter}`;
+};
+
+export const formatHorsepower = (
+  value: number | null | undefined,
+  locale = 'ru-RU',
+): string => {
+  if (value == null || !Number.isFinite(Number(value))) return '';
+  return `${formatNumber(Number(value), locale)} ${unitLabels(locale).hp}`;
+};
 
 export const formatYear = (value: number | string | null | undefined): string =>
   value != null && String(value).trim() ? String(value) : '—';

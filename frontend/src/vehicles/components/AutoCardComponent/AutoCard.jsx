@@ -3,7 +3,14 @@ import { MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
-import { formatPrice, formatMileage, formatYear, intlLocale } from '@/lib/format';
+import {
+    formatEngineDisplacement,
+    formatHorsepower,
+    formatPrice,
+    formatMileage,
+    formatYear,
+    intlLocale,
+} from '@/lib/format';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import { splitEngineSummary, translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
@@ -29,9 +36,13 @@ export default function AutoCard({ car, variant = 'sale' }) {
     const isRent = variant === 'rent';
     const mainImage = Array.isArray(car.image) ? car.image[0] : car.image;
     const title = [car.brand, car.model].filter(Boolean).join(' ');
+    const engineBits = [
+        formatEngineDisplacement(car.engineVolume, locale),
+        formatHorsepower(car.power, locale),
+    ].filter(Boolean);
     const meta = [
         formatYear(car.year),
-        ...splitEngineSummary(car.engine),
+        ...(engineBits.length ? engineBits : splitEngineSummary(car.engine)),
         formatMileage(car.mileage, locale),
         translateVehicleEnum(t, 'transmission', car.transmission),
     ].filter(Boolean);
@@ -54,6 +65,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
 
                 <div className="absolute left-3 right-14 top-3 flex flex-wrap items-center gap-1.5">
                     {car.promotionTier ? <PromotionBadge tier={car.promotionTier} /> : null}
+                    {isRent ? <Badge variant="ad">{t('card.rent')}</Badge> : null}
                     {car.isHot ? <Badge variant="hot">{t('card.hot')}</Badge> : null}
                 </div>
 

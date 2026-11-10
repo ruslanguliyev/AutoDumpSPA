@@ -1,6 +1,12 @@
 import type { TFunction } from 'i18next';
 
-import { formatDate, formatMileage, formatNumber } from '@/lib/format';
+import {
+  formatDate,
+  formatEngineDisplacement,
+  formatHorsepower,
+  formatMileage,
+  formatNumber,
+} from '@/lib/format';
 import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 
 export type VehicleDetailCar = {
@@ -11,6 +17,8 @@ export type VehicleDetailCar = {
   bodyType?: string | null;
   year?: number | string | null;
   engine?: string | null;
+  engineVolume?: number | null;
+  power?: number | null;
   transmission?: string | null;
   drive?: string | null;
   mileage?: number | null;
@@ -51,7 +59,13 @@ export function buildVehicleSpecRows(
     { key: 'code', label: t('specs.code'), value: car.code },
     { key: 'bodyType', label: t('specs.bodyType'), value: bodyType },
     { key: 'year', label: t('specs.year'), value: car.year != null ? String(car.year) : null },
-    { key: 'engine', label: t('specs.engine'), value: car.engine },
+    {
+      key: 'engine',
+      label: t('specs.engine'),
+      value: [formatEngineDisplacement(car.engineVolume, locale), formatHorsepower(car.power, locale)]
+        .filter(Boolean)
+        .join(' · ') || car.engine,
+    },
     {
       key: 'transmission',
       label: t('specs.transmission'),

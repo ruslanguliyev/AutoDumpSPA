@@ -23,6 +23,7 @@ export default function PartCard({ part }) {
     // would be an invented number, so the stars appear only when a rating was supplied.
     const hasRating = Number.isFinite(part.rating);
     const reviewsCount = Number.isFinite(part.reviewsCount) ? part.reviewsCount : 0;
+    const showRating = hasRating && reviewsCount > 0;
     const stock = Number.isFinite(part.stock) ? part.stock : null;
     const inStock = stock === null ? Boolean(part.inStock) : stock > 0;
     const price = Number.isFinite(part.price) ? part.price : null;
@@ -50,8 +51,10 @@ export default function PartCard({ part }) {
                     )}
                 </h3>
 
-                {hasRating ? (
+                {showRating ? (
                     <RatingStars value={part.rating} countLabel={t('card.reviews', { count: reviewsCount })} />
+                ) : hasRating ? (
+                    <p className="text-[13px] text-muted-foreground">{t('card.noReviewsYet')}</p>
                 ) : null}
 
                 {inStock ? (

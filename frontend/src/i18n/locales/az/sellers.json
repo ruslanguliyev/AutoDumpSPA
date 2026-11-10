@@ -55,8 +55,8 @@
       "home": "Ana səhifə",
       "sellers": "Satıcılar"
     },
-    "count_one": "{{count, number}} elan",
-    "count_other": "{{count, number}} elan",
+    "count_one": "{{count, number}} satıcı",
+    "count_other": "{{count, number}} satıcı",
     "show_one": "{{count, number}} satıcını göstər",
     "show_other": "{{count, number}} satıcını göstər",
     "emptyAction": "Bütün filtrləri təmizlə",
@@ -97,7 +97,7 @@
     "profileUnavailable": "Profil əlçatan deyil",
     "notAvailable": "Satıcı {{id}} mövcud deyil.",
     "tabs": {
-      "stock": "Anbar",
+      "stock": "Elanlar",
       "parts": "Ehtiyat hissələri",
       "reviews": "Rəylər",
       "about": "Haqqında"

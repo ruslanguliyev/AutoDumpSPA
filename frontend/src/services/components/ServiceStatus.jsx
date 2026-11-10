@@ -3,14 +3,17 @@ import { useTranslation } from 'react-i18next';
 
 import Button from '@/shared/ui/button';
 
-export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
+export default function ServiceStatus({ isOpen, todaySchedule, contacts, hasSchedule = false }) {
   const { t } = useTranslation('services');
   const phone = contacts?.phone?.trim() || null;
   const whatsapp = contacts?.whatsapp?.trim() || null;
   const website = contacts?.website?.trim() || null;
+  const hasContacts = Boolean(phone || whatsapp || website);
+  if (!hasSchedule && !hasContacts) return null;
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+      {hasSchedule ? (
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
@@ -31,8 +34,9 @@ export default function ServiceStatus({ isOpen, todaySchedule, contacts }) {
           </div>
         ) : null}
       </div>
+      ) : null}
 
-      <div className="mt-4 flex flex-col gap-2">
+      <div className={`flex flex-col gap-2 ${hasSchedule ? 'mt-4' : ''}`}>
         {phone ? (
           <Button asChild variant="primary" className="min-h-11 w-full justify-center gap-2">
             <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>

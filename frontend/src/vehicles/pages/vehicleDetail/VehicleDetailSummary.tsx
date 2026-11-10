@@ -1,6 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { formatMileage, formatPrice, formatYear, intlLocale } from '@/lib/format';
+import {
+  formatEngineDisplacement,
+  formatHorsepower,
+  formatMileage,
+  formatPrice,
+  formatYear,
+  intlLocale,
+} from '@/lib/format';
 import { splitEngineSummary, translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 
 type Props = {
@@ -10,6 +17,8 @@ type Props = {
   fuel?: string | null;
   transmission?: string | null;
   engine?: string | null;
+  engineVolume?: number | null;
+  power?: number | null;
   price?: number | null;
   currency?: string;
   priceSuffix?: string;
@@ -22,6 +31,8 @@ export function VehicleDetailSummary({
   fuel,
   transmission,
   engine,
+  engineVolume,
+  power,
   price,
   currency = 'AZN',
   priceSuffix,
@@ -31,7 +42,16 @@ export function VehicleDetailSummary({
 
   const fuelLabel = translateVehicleEnum(t, 'fuel', fuel);
   const transmissionLabel = translateVehicleEnum(t, 'transmission', transmission);
-  const subtitle = [...splitEngineSummary(engine), transmissionLabel].filter(Boolean).join(' · ');
+  const engineBits = [
+    formatEngineDisplacement(engineVolume, locale),
+    formatHorsepower(power, locale),
+  ].filter(Boolean);
+  const subtitle = [
+    ...(engineBits.length ? engineBits : splitEngineSummary(engine)),
+    transmissionLabel,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   const tiles = [
     { label: t('summary.year'), value: formatYear(year) },

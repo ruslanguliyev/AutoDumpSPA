@@ -87,6 +87,7 @@
     "openPart": "{{name}} aç",
     "inStockCount": "Stokda: {{count, number}}",
     "stockInStockShort": "Stokda",
+    "noReviewsYet": "Hələ rəy yoxdur",
     "reviews_one": "{{count, number}} rəy",
     "reviews_other": "{{count, number}} rəy"
   },

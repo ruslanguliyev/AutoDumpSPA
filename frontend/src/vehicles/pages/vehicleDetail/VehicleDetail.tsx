@@ -131,6 +131,8 @@ export default function VehicleDetail() {
               fuel={car.fuel}
               transmission={car.transmission}
               engine={car.engine}
+              engineVolume={car.engineVolume}
+              power={car.power}
               price={car.price}
               currency={car.currency ?? 'AZN'}
               priceSuffix={isRent ? t('card.perDay') : undefined}
