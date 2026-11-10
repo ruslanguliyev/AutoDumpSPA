@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart, MessageSquare, Plus } from 'lucide-react';
 
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 type QuickAction = {
   key: string;
@@ -22,6 +23,8 @@ type QuickActionsProps = {
 
 export function QuickActions({ actions = baseActions }: QuickActionsProps) {
   const { t } = useTranslation('dashboard');
+  const profile = useActiveProfile();
+  const visible = actions.filter((a) => (a.key === 'quickActions.openFavorites' ? profile.type !== 'service' : true));
 
   return (
     <CardWrapper className="p-6">
@@ -29,7 +32,7 @@ export function QuickActions({ actions = baseActions }: QuickActionsProps) {
         {t('quickActions.title')}
       </h3>
       <div className="flex flex-wrap gap-3">
-        {actions.map((a) => {
+        {visible.map((a) => {
           const Icon = a.icon;
           return (
             <Link

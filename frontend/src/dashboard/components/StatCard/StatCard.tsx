@@ -17,6 +17,7 @@ import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 import type { DashboardStat, DashboardStatId } from '@/dashboard/types/dashboard.types';
 import { formatNumber, intlLocale } from '@/lib/format';
 import { ROUTES } from '@/shared/constants/routes';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 const iconMap: Record<string, ComponentType<{ size?: number; className?: string }>> = {
   car: Car,
@@ -27,12 +28,13 @@ const iconMap: Record<string, ComponentType<{ size?: number; className?: string 
   dollar: DollarSign,
 };
 
-const STAT_HREF: Record<DashboardStatId, string> = {
-  activeListings: `${ROUTES.dashboardVehicles}?status=ACTIVE`,
-  drafts: `${ROUTES.dashboardVehicles}?status=DRAFT`,
-  favorites: ROUTES.dashboardFavorites,
-  unreadInquiries: `${ROUTES.dashboardInquiries}?status=NEW`,
-};
+function statHref(id: DashboardStatId, listingsPath: string): string {
+  if (id === 'activeListings') return `${listingsPath}?status=ACTIVE`;
+  if (id === 'drafts') return `${listingsPath}?status=DRAFT`;
+  if (id === 'favorites') return ROUTES.dashboardFavorites;
+  if (id === 'unreadInquiries') return `${ROUTES.dashboardInquiries}?status=NEW`;
+  return ROUTES.dashboard;
+}
 
 type StatCardProps = {
   stat: DashboardStat;
@@ -55,13 +57,15 @@ function StatCardSkeleton() {
 export function StatCard({ stat, isLoading }: StatCardProps) {
   const { t, i18n } = useTranslation('dashboard');
   const locale = intlLocale(i18n.language);
+  const profile = useActiveProfile();
   const Icon = iconMap[stat.icon] ?? Car;
 
   if (isLoading) return <StatCardSkeleton />;
 
   const valueFormatted = formatNumber(stat.value, locale);
   const label = t(stat.labelKey);
-  const href = STAT_HREF[stat.id] ?? ROUTES.dashboard;
+  const listingsPath = profile.type === 'service' ? ROUTES.dashboardServices : ROUTES.dashboardVehicles;
+  const href = statHref(stat.id, listingsPath);
 
   const changePositive = (stat.change ?? 0) > 0;
   const changeNeutral = (stat.change ?? 0) === 0;

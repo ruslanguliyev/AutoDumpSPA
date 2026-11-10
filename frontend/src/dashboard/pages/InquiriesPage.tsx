@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 import {
   useMarkInquiryRead,
@@ -60,17 +61,19 @@ function InquiryCard({ inquiry, mode }: { inquiry: Inquiry; mode: Tab }) {
 
 export function InquiriesPage() {
   const { t } = useTranslation('dashboard');
+  const profile = useActiveProfile();
   const [searchParams, setSearchParams] = useSearchParams();
   const newOnly = searchParams.get('status') === 'NEW';
   const [tab, setTab] = useState<Tab>('received');
+  const canSend = profile.type === 'user';
   const received = useReceivedInquiries();
   const sent = useSentInquiries();
   const active = tab === 'received' ? received : sent;
   const items = (active.data ?? []).filter((item) => (newOnly && tab === 'received' ? item.status === 'NEW' : true));
 
   useEffect(() => {
-    if (newOnly) setTab('received');
-  }, [newOnly]);
+    if (newOnly || !canSend) setTab('received');
+  }, [newOnly, canSend]);
 
   const setNewOnly = (on: boolean) => {
     const next = new URLSearchParams(searchParams);
@@ -84,7 +87,7 @@ export function InquiriesPage() {
       <DashboardHeader title={t('inquiries.title')} subtitle={t('inquiries.subtitle')} />
 
       <div className="flex flex-wrap gap-2" role="tablist">
-        {(['received', 'sent'] as const).map((key) => (
+        {(['received', 'sent'] as const).filter((key) => key === 'received' || canSend).map((key) => (
           <button
             key={key}
             type="button"

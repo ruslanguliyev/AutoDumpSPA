@@ -2,10 +2,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { rentalsApi } from '@/features/rentals/api/rentals.api';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 export const useIncomingRentals = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  return useQuery({ queryKey: ['rentals', 'incoming'], queryFn: rentalsApi.incoming, enabled: isAuthenticated });
+  const activeProfile = useActiveProfile();
+  return useQuery({
+    queryKey: ['rentals', 'incoming', activeProfile],
+    queryFn: rentalsApi.incoming,
+    enabled: isAuthenticated,
+  });
 };
 
 export const useMyRentals = () => {

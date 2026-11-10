@@ -1,15 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useMyListings } from '@/dashboard/hooks/useMyListings';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { inquiriesApi } from '@/features/inquiries/api/inquiries.api';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 export const useReceivedInquiries = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  return useQuery({
-    queryKey: ['inquiries', 'received'],
+  const activeProfile = useActiveProfile();
+  const listings = useMyListings();
+  const query = useQuery({
+    queryKey: ['inquiries', 'received', activeProfile],
     queryFn: inquiriesApi.received,
     enabled: isAuthenticated,
   });
+  const listingIds = new Set(listings.items.map((l) => l.id));
+  const data = (query.data ?? []).filter((inquiry) => listingIds.has(inquiry.listingId));
+  return { ...query, data, isLoading: query.isLoading || listings.isLoading };
 };
 
 export const useSentInquiries = () => {

@@ -2,10 +2,23 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { appointmentsApi } from '@/features/appointments/api/appointments.api';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 export const useIncomingAppointments = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  return useQuery({ queryKey: ['appointments', 'incoming'], queryFn: appointmentsApi.incoming, enabled: isAuthenticated });
+  const activeProfile = useActiveProfile();
+  const query = useQuery({
+    queryKey: ['appointments', 'incoming', activeProfile],
+    queryFn: appointmentsApi.incoming,
+    enabled: isAuthenticated,
+  });
+  const data =
+    activeProfile.type === 'service'
+      ? (query.data ?? []).filter(
+          (a) => a.targetType === 'SERVICE_CENTER' && a.targetId === activeProfile.id,
+        )
+      : query.data;
+  return { ...query, data };
 };
 
 export const useMyAppointments = () => {

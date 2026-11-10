@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { DashboardSidebar } from '@/dashboard/components/DashboardSidebar/DashboardSidebar';
 import { DashboardTopbar } from '@/dashboard/components/DashboardTopbar/DashboardTopbar';
 import { DashboardBottomNav } from '@/dashboard/components/DashboardBottomNav/DashboardBottomNav';
+import { useDashboardProfileGuard } from '@/dashboard/hooks/useDashboardProfileGuard';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import ErrorBoundary from '@/shared/ui/ErrorBoundary';
 
@@ -20,6 +21,7 @@ function DashboardContentFallback() {
 }
 
 export function DashboardLayout() {
+  useDashboardProfileGuard();
   const sidebarCollapsed = useDashboardUIStore((s) => s.sidebarCollapsed);
 
   return (

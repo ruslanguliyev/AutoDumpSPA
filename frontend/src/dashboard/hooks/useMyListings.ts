@@ -2,18 +2,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { listingsApi } from '@/dashboard/api/listings.api';
 import type { ListingKind } from '@/dashboard/api/listings.api';
+import { listingMatchesProfile } from '@/dashboard/config/profileScope';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
+import { useActiveProfile } from '@/store/useActiveProfileStore';
 
 const KEY = ['my-listings'] as const;
 
 export const useMyListings = (kind?: ListingKind) => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const activeProfile = useActiveProfile();
   const query = useQuery({
-    queryKey: KEY,
+    queryKey: [...KEY, activeProfile],
     queryFn: listingsApi.mine,
     enabled: isAuthenticated,
   });
-  const items = kind ? (query.data ?? []).filter((l) => l.kind === kind) : (query.data ?? []);
+  const items = (query.data ?? []).filter((l) => {
+    if (!listingMatchesProfile(l.kind, activeProfile)) return false;
+    return kind ? l.kind === kind : true;
+  });
   return { ...query, items };
 };
 

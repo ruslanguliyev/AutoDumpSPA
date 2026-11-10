@@ -1,76 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, User, Store, Wrench } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
+import { profileMatches, profileToKey } from '@/dashboard/config/profileScope';
+import { useAvailableProfiles, type ProfileOption } from '@/dashboard/hooks/useAvailableProfiles';
 import { useActiveProfileStore } from '@/store/useActiveProfileStore';
-import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { useAnchoredPosition } from '@/shared/hooks/useAnchoredPosition';
-import { settingsApi } from '@/dashboard/api/settings.api';
-import { professionalApi } from '@/features/professional/api/professional.api';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
-
-type ProfileOption = {
-  value: ActiveProfile;
-  name: string | null;
-  icon: typeof User;
-};
-
-function profileToKey(p: ActiveProfile): string {
-  if (p.type === 'user') return 'user';
-  return `${p.type}-${p.id}`;
-}
-
-function profileMatches(a: ActiveProfile, b: ActiveProfile): boolean {
-  if (a.type !== b.type) return false;
-  if (a.type === 'user' && b.type === 'user') return true;
-  return (a as { id: string }).id === (b as { id: string }).id;
-}
-
-function useAvailableProfiles(): { options: ProfileOption[]; isLoading: boolean } {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const userName = useAuthStore((s) => s.user?.fullName?.trim() || null);
-
-  const sellerQuery = useQuery({
-    queryKey: ['settings', 'seller'],
-    queryFn: settingsApi.mySeller,
-    enabled: isAuthenticated,
-    staleTime: 60_000,
-  });
-  const serviceQuery = useQuery({
-    queryKey: ['professional', 'service-center'],
-    queryFn: professionalApi.myServiceCenter,
-    enabled: isAuthenticated,
-    staleTime: 60_000,
-  });
-
-  const options = useMemo<ProfileOption[]>(() => {
-    const list: ProfileOption[] = [{ value: { type: 'user' }, name: userName, icon: User }];
-    const seller = sellerQuery.data;
-    if (seller?.id) {
-      list.push({
-        value: { type: 'seller', id: seller.id },
-        name: seller.name?.trim() || null,
-        icon: Store,
-      });
-    }
-    const service = serviceQuery.data;
-    if (service?.id) {
-      list.push({
-        value: { type: 'service', id: service.id },
-        name: service.name?.trim() || null,
-        icon: Wrench,
-      });
-    }
-    return list;
-  }, [userName, sellerQuery.data, serviceQuery.data]);
-
-  return {
-    options,
-    isLoading: sellerQuery.isLoading || serviceQuery.isLoading,
-  };
-}
 
 export function ProfileSwitcher() {
   const { t } = useTranslation('dashboard');
@@ -119,12 +56,6 @@ export function ProfileSwitcher() {
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [open, close]);
-
-  useEffect(() => {
-    if (isLoading) return;
-    const stillValid = options.some((o) => profileMatches(o.value, activeProfile));
-    if (!stillValid) setActiveProfile({ type: 'user' });
-  }, [isLoading, options, activeProfile, setActiveProfile]);
 
   const typeLabel = (profile: ActiveProfile) => t(`profileSwitcher.types.${profile.type}`);
 
