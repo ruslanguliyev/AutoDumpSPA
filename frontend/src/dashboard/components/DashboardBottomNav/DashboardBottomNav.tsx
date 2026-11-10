@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, Car, Package, Wrench, Heart, Settings } from 'lucide-react';
 
 import { useActiveProfile } from '@/store/useActiveProfileStore';
+import { useAvailableProfiles } from '@/dashboard/hooks/useAvailableProfiles';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
 import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
@@ -13,7 +14,8 @@ export function DashboardBottomNav() {
   const { t } = useTranslation('dashboard');
   const activeProfile = useActiveProfile();
   const isAdmin = useAuthStore((s) => s.user?.role === 'ADMIN');
-  const items = getSidebarNavItems(activeProfile, isAdmin);
+  const { hasSeller } = useAvailableProfiles();
+  const items = getSidebarNavItems(activeProfile, { isAdmin, hasSeller });
 
   return (
     <nav

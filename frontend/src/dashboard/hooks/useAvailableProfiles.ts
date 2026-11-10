@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { User, Store, Wrench } from 'lucide-react';
+import { User, Wrench } from 'lucide-react';
 
 import { settingsApi } from '@/dashboard/api/settings.api';
 import { professionalApi } from '@/features/professional/api/professional.api';
@@ -13,7 +13,11 @@ export type ProfileOption = {
   icon: typeof User;
 };
 
-export function useAvailableProfiles(): { options: ProfileOption[]; isLoading: boolean } {
+export function useAvailableProfiles(): {
+  options: ProfileOption[];
+  hasSeller: boolean;
+  isLoading: boolean;
+} {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const userName = useAuthStore((s) => s.user?.fullName?.trim() || null);
 
@@ -30,17 +34,13 @@ export function useAvailableProfiles(): { options: ProfileOption[]; isLoading: b
     staleTime: 60_000,
   });
 
+  const seller = sellerQuery.data;
+  const service = serviceQuery.data;
+  const hasSeller = Boolean(seller?.id);
+
   const options = useMemo<ProfileOption[]>(() => {
     const list: ProfileOption[] = [{ value: { type: 'user' }, name: userName, icon: User }];
-    const seller = sellerQuery.data;
-    if (seller?.id) {
-      list.push({
-        value: { type: 'seller', id: seller.id },
-        name: seller.name?.trim() || null,
-        icon: Store,
-      });
-    }
-    const service = serviceQuery.data;
+    // Dealer is omitted until mine-queries accept sellerId: listings are the same Seller as personal.
     if (service?.id) {
       list.push({
         value: { type: 'service', id: service.id },
@@ -49,10 +49,11 @@ export function useAvailableProfiles(): { options: ProfileOption[]; isLoading: b
       });
     }
     return list;
-  }, [userName, sellerQuery.data, serviceQuery.data]);
+  }, [userName, service]);
 
   return {
     options,
+    hasSeller,
     isLoading: Boolean(isAuthenticated) && (sellerQuery.isLoading || serviceQuery.isLoading),
   };
 }

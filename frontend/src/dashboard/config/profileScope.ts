@@ -28,16 +28,12 @@ export function profileToKey(p: ActiveProfile): string {
   return `${p.type}-${p.id}`;
 }
 
-/** If the stored profile is gone, prefer another of the same type, else personal. */
+/** If the stored seller/service card is gone (or the id is stale), fall back to personal. */
 export function resolveActiveProfile(
   active: ActiveProfile,
   available: ActiveProfile[],
 ): ActiveProfile {
   if (available.some((p) => profileMatches(p, active))) return active;
-  if (active.type !== 'user') {
-    const sameType = available.find((p) => p.type === active.type);
-    if (sameType) return sameType;
-  }
   return { type: 'user' };
 }
 

@@ -4,6 +4,7 @@ import { PanelLeftClose, PanelLeft } from 'lucide-react';
 import clsx from 'clsx';
 
 import { useActiveProfile } from '@/store/useActiveProfileStore';
+import { useAvailableProfiles } from '@/dashboard/hooks/useAvailableProfiles';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
@@ -17,7 +18,8 @@ export function DashboardSidebar() {
   const activeProfile = useActiveProfile();
   const { sidebarCollapsed, toggleSidebar } = useDashboardUIStore();
   const isAdmin = useAuthStore((s) => s.user?.role === 'ADMIN');
-  const items = getSidebarNavItems(activeProfile, isAdmin);
+  const { hasSeller } = useAvailableProfiles();
+  const items = getSidebarNavItems(activeProfile, { isAdmin, hasSeller });
 
   return (
     <aside

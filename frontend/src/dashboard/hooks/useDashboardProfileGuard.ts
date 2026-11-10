@@ -11,7 +11,7 @@ import { useActiveProfileStore } from '@/store/useActiveProfileStore';
 
 /** Drop a missing seller/service card back to personal, then leave pages the new profile cannot open. */
 export function useDashboardProfileGuard() {
-  const { options, isLoading } = useAvailableProfiles();
+  const { options, isLoading, hasSeller } = useAvailableProfiles();
   const { activeProfile, setActiveProfile } = useActiveProfileStore();
   const isAdmin = useAuthStore((s) => s.user?.role === 'ADMIN');
   const location = useLocation();
@@ -29,9 +29,9 @@ export function useDashboardProfileGuard() {
 
   useEffect(() => {
     if (isLoading) return;
-    const nav = getSidebarNavItems(activeProfile, isAdmin);
+    const nav = getSidebarNavItems(activeProfile, { isAdmin, hasSeller });
     if (!isDashboardPathAllowed(location.pathname, nav)) {
       navigate(withLang(ROUTES.dashboard, language), { replace: true });
     }
-  }, [isLoading, activeProfile, isAdmin, language, location.pathname, navigate]);
+  }, [isLoading, activeProfile, isAdmin, hasSeller, language, location.pathname, navigate]);
 }

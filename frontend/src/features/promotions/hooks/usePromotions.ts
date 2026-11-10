@@ -45,10 +45,8 @@ export const useMyPromotions = () => {
     if (activeProfile.type === 'service') {
       return targetType === 'SERVICE_CENTER' && targetId === activeProfile.id;
     }
-    if (activeProfile.type === 'seller') {
-      return targetType === 'LISTING' && listingIds.has(targetId);
-    }
-    return true;
+    // Personal (and hidden dealer) share listing promotions; centre promotions stay on service.
+    return targetType === 'LISTING' && listingIds.has(targetId);
   });
   return { ...query, data, isLoading: query.isLoading || listings.isLoading };
 };

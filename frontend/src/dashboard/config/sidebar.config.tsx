@@ -74,8 +74,24 @@ const KEYS_BY_TYPE: Record<ActiveProfile['type'], readonly string[]> = {
 
 const byKey = new Map(allItems.map((item) => [item.key, item]));
 
-export function getSidebarNavItems(profile: ActiveProfile, isAdmin = false): NavItem[] {
-  const items = KEYS_BY_TYPE[profile.type]
+export type SidebarNavContext = {
+  isAdmin?: boolean;
+  /** Listing promotions live on personal while «Дилер» is hidden from the switcher. */
+  hasSeller?: boolean;
+};
+
+export function getSidebarNavItems(
+  profile: ActiveProfile,
+  { isAdmin = false, hasSeller = false }: SidebarNavContext = {},
+): NavItem[] {
+  const keys = [...KEYS_BY_TYPE[profile.type]];
+  if (profile.type === 'user' && hasSeller && !keys.includes('nav.promotions')) {
+    const rentalsAt = keys.indexOf('nav.rentals');
+    const insertAt = rentalsAt >= 0 ? rentalsAt + 1 : keys.indexOf('nav.settings');
+    keys.splice(insertAt >= 0 ? insertAt : keys.length, 0, 'nav.promotions');
+  }
+
+  const items = keys
     .map((key) => byKey.get(key))
     .filter((item): item is NavItem => Boolean(item));
 
