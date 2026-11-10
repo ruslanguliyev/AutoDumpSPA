@@ -34,7 +34,17 @@ export const formatDate = (
   locale = 'ru-RU'
 ): string => {
   const date = toDate(value);
-  return date ? date.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+  // "2026-11-10" has no time of day: read it as that calendar day everywhere, not as
+  // midnight UTC shifted into the viewer's zone.
+  const dateOnly = typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
+  return date
+    ? date.toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        ...(dateOnly ? { timeZone: 'UTC' } : {}),
+      })
+    : '';
 };
 
 /** "Nov 2026" — for "member since", where the day is noise. */
