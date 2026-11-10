@@ -5,6 +5,8 @@ import LayoutRoute from '@/routes/layout.route';
 import LanguageRoute from '@/routes/LanguageRoute';
 import RouteErrorBoundary from '@/routes/route-error-boundary';
 import ProtectedRoute from '@/features/auth/components/ProtectedRoute';
+import NotFound from '@/app/pages/notFound/NotFound';
+import { ROUTES, routePath } from '@/shared/constants/routes';
 
 const Home = lazy(() => import('@/pages/home'));
 const About = lazy(() => import('@/app/pages/about/About'));
@@ -34,7 +36,6 @@ const MockPayPage = lazy(() => import('@/features/promotions/pages/MockPayPage')
 const PromotionStatusPage = lazy(
   () => import('@/features/promotions/pages/PromotionStatusPage')
 );
-const NotFound = lazy(() => import('@/app/pages/notFound/NotFound'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 
@@ -113,22 +114,22 @@ const dashboardRoutes = [
 
 const createAppRoutes = () => [
   { index: true, element: <Home /> },
-  { path: 'about', element: <About /> },
-  { path: 'autosearch', element: <AutoSearchResults /> },
-  { path: 'rent', element: <RentSearchPage /> },
-  { path: 'parts', element: <PartsPage /> },
-  { path: 'parts/:id', element: <PartDetailsPage /> },
-  { path: 'vehicles/:id', element: <VehicleDetail /> },
-  { path: 'sellers', element: <SellersPageRoute /> },
-  { path: 'sellers/:sellerId', element: <SellerDetailPageRoute /> },
-  { path: 'dealers', element: <SellersPageRoute /> },
-  { path: 'dealers/:sellerId', element: <SellerDetailPageRoute /> },
-  { path: 'services', element: <ServicesListPage /> },
-  { path: 'services/:idOrSlug', element: <ServiceDetailPage /> },
-  { path: 'specialists', element: <SpecialistsListPage /> },
-  { path: 'specialists/:slug', element: <SpecialistDetailPage /> },
+  { path: routePath(ROUTES.about), element: <About /> },
+  { path: routePath(ROUTES.cars), element: <AutoSearchResults /> },
+  { path: routePath(ROUTES.rent), element: <RentSearchPage /> },
+  { path: routePath(ROUTES.parts), element: <PartsPage /> },
+  { path: `${routePath(ROUTES.parts)}/:id`, element: <PartDetailsPage /> },
+  { path: `${routePath(ROUTES.vehicles)}/:id`, element: <VehicleDetail /> },
+  { path: routePath(ROUTES.sellers), element: <SellersPageRoute /> },
+  { path: `${routePath(ROUTES.sellers)}/:sellerId`, element: <SellerDetailPageRoute /> },
+  { path: routePath(ROUTES.dealers), element: <SellersPageRoute /> },
+  { path: `${routePath(ROUTES.dealers)}/:sellerId`, element: <SellerDetailPageRoute /> },
+  { path: routePath(ROUTES.services), element: <ServicesListPage /> },
+  { path: `${routePath(ROUTES.services)}/:idOrSlug`, element: <ServiceDetailPage /> },
+  { path: routePath(ROUTES.specialists), element: <SpecialistsListPage /> },
+  { path: `${routePath(ROUTES.specialists)}/:slug`, element: <SpecialistDetailPage /> },
   {
-    path: 'add',
+    path: routePath(ROUTES.add),
     element: (
       <ProtectedRoute>
         <AddEntryPage />
@@ -136,7 +137,7 @@ const createAppRoutes = () => [
     ),
   },
   {
-    path: 'add/:draftId',
+    path: `${routePath(ROUTES.add)}/:draftId`,
     element: (
       <ProtectedRoute>
         <AddWizardPage />
@@ -148,8 +149,8 @@ const createAppRoutes = () => [
   { path: 'promote/:targetType/:targetId', element: <PromotePage /> },
   { path: 'promote/pay/:token', element: <MockPayPage /> },
   { path: 'promote/order/:token', element: <PromotionStatusPage /> },
-  { path: 'login', element: <LoginPage /> },
-  { path: 'register', element: <RegisterPage /> },
+  { path: routePath(ROUTES.login), element: <LoginPage /> },
+  { path: routePath(ROUTES.register), element: <RegisterPage /> },
   { path: '*', element: <NotFound /> },
 ];
 

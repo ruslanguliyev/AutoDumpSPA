@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 
+import { ROUTES, withLang } from '@/shared/constants/routes';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
+import { usePageHead } from '@/shared/hooks/usePageHead';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SearchX } from 'lucide-react';
@@ -53,8 +56,13 @@ const text = (value: unknown) => (value === null || value === undefined ? '' : S
 
 export default function AutoSearchResults() {
   const { t } = useTranslation(['vehicle', 'common']);
+  const { language } = useLanguageSync();
   const { autos, isLoading, catalogComplete } = useAutos();
   useCarsFiltersUrlSync();
+  usePageHead({
+    title: t('nav.cars', { ns: 'common' }),
+    canonicalPath: withLang(ROUTES.cars, language),
+  });
 
   const filters = useFilters('cars');
   const setFilter = useFiltersStore((state) => state.setFilter);

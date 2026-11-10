@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES, withLang } from '@/shared/constants/routes';
 import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { HeaderLanguageSelector } from '@/shared/layout/Header/HeaderUtilities';
 import Button from '@/shared/ui/button';
@@ -36,38 +37,38 @@ const Footer = () => {
     {
       title: t('footer.company'),
       links: [
-        { label: t('footer.about'), to: '/about' },
-        { label: t('footer.press'), to: '/about' },
+        { label: t('footer.about'), to: ROUTES.about },
+        { label: t('footer.press'), to: ROUTES.about },
       ],
     },
     {
       title: t('footer.forBuyers'),
       links: [
-        { label: t('footer.browseCars'), to: '/autosearch' },
-        { label: t('footer.rentCar'), to: '/rent' },
-        { label: t('footer.findParts'), to: '/parts' },
+        { label: t('footer.browseCars'), to: withLang(ROUTES.cars, language) },
+        { label: t('footer.rentCar'), to: ROUTES.rent },
+        { label: t('footer.findParts'), to: ROUTES.parts },
       ],
     },
     {
       title: t('footer.forSellers'),
       links: [
-        { label: t('footer.postListing'), to: '/add' },
-        { label: t('footer.promoteListing'), to: '/add' },
+        { label: t('footer.postListing'), to: ROUTES.add },
+        { label: t('footer.promoteListing'), to: ROUTES.add },
       ],
     },
     {
       title: t('footer.forDealers'),
       links: [
-        { label: t('footer.dealerAccounts'), to: '/sellers' },
-        { label: t('footer.bulkUpload'), to: '/add' },
+        { label: t('footer.dealerAccounts'), to: ROUTES.sellers },
+        { label: t('footer.bulkUpload'), to: ROUTES.add },
       ],
     },
   ];
 
   const legalLinks = [
-    { label: t('footer.privacy'), to: '/about' },
-    { label: t('footer.imprint'), to: '/about' },
-    { label: t('footer.help'), to: '/about' },
+    { label: t('footer.privacy'), to: ROUTES.about },
+    { label: t('footer.imprint'), to: ROUTES.about },
+    { label: t('footer.help'), to: ROUTES.about },
   ];
 
   return (
@@ -76,7 +77,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))] lg:gap-6">
           {/* Brand, tagline, and the legal links that sit under them in the design. */}
           <div>
-            <Link to="/" className="inline-flex items-center" aria-label={t('common.goHome')}>
+            <Link to={ROUTES.home} className="inline-flex items-center" aria-label={t('common.goHome')}>
               <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
             </Link>
             <p className="mt-3 max-w-[280px] text-[14px] leading-relaxed text-muted-foreground">

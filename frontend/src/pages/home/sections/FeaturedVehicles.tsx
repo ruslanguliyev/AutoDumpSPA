@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { getAutos } from '@/vehicles/api/autos';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard';
+import { ROUTES, withLang } from '@/shared/constants/routes';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import SectionHeader from '@/shared/ui/SectionHeader';
 import Skeleton from '@/shared/ui/Skeleton';
 
@@ -18,6 +20,7 @@ const useFeaturedVehicles = () => {
 
 const FeaturedVehicles = () => {
   const { t } = useTranslation('home');
+  const { language } = useLanguageSync();
   const { data, isLoading } = useFeaturedVehicles();
 
   const featuredVehicles = useMemo(() => {
@@ -47,7 +50,7 @@ const FeaturedVehicles = () => {
       <SectionHeader
         title={t('sections.featuredVehicles', 'Featured Vehicles')}
         linkText={t('common.viewInventory', 'View Inventory')}
-        linkHref="/autosearch"
+        linkHref={withLang(ROUTES.cars, language)}
       />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {featuredVehicles.map((car) => (

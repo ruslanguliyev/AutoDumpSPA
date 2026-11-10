@@ -1,4 +1,4 @@
-/** Max rows `getAutos()` pulls before client-side filtering on `/autosearch`. */
+/** Max rows `getAutos()` pulls before client-side filtering on the cars catalogue. */
 export const VEHICLE_CATALOG_LIMIT = 2000;
 
 /** Max rows rent index fetches per query on `/rent`. */

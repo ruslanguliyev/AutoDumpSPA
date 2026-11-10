@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAutoDetails } from '@/vehicles/hooks/useAutoDetails';
+import { ROUTES, withLang } from '@/shared/constants/routes';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { useSpecialistsQuery } from '@/specialists/hooks/useSpecialists';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
@@ -26,6 +28,7 @@ import { buildVehicleMobileBar } from './VehicleDetailMobileBar';
 
 export default function VehicleDetail() {
   const { t } = useTranslation(['vehicle', 'sellers', 'dashboard']);
+  const { language } = useLanguageSync();
   const { id } = useParams();
   const { data: car, isLoading } = useAutoDetails(id);
   const title = car ? [car.brand, car.model, car.year].filter(Boolean).join(' ') : null;
@@ -82,8 +85,8 @@ export default function VehicleDetail() {
     }));
 
   const breadcrumbs = [
-    { label: t('breadcrumbs.home'), to: '/' },
-    { label: t('breadcrumbs.cars'), to: '/autosearch' },
+    { label: t('breadcrumbs.home'), to: withLang(ROUTES.home, language) },
+    { label: t('breadcrumbs.cars'), to: withLang(ROUTES.cars, language) },
     { label: [car.brand, car.model].filter(Boolean).join(' ') },
   ];
 

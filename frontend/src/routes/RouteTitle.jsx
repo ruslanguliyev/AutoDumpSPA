@@ -3,21 +3,22 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { SUPPORTED_LANGUAGES } from '@/i18n/config';
+import { ROUTES } from '@/shared/constants/routes';
 import { formatTitle } from '@/shared/hooks/useDocumentTitle';
 
 /** Section pages whose title is fixed. Detail pages set their own title from their data. */
 const SECTION_TITLES = {
-  '/autosearch': ['nav.cars', 'Cars'],
-  '/rent': ['nav.rent', 'Rent'],
-  '/parts': ['nav.parts', 'Parts'],
-  '/sellers': ['nav.sellers', 'Sellers'],
-  '/dealers': ['nav.sellers', 'Sellers'],
-  '/services': ['nav.auto_services', 'Auto Services'],
-  '/specialists': ['nav.specialists', 'Specialists'],
-  '/about': ['nav.about', 'About'],
-  '/add': ['nav.addListing', 'Add Listing'],
-  '/login': ['nav.account', 'Account'],
-  '/register': ['nav.account', 'Account'],
+  [ROUTES.cars]: ['nav.cars', 'Cars'],
+  [ROUTES.rent]: ['nav.rent', 'Rent'],
+  [ROUTES.parts]: ['nav.parts', 'Parts'],
+  [ROUTES.sellers]: ['nav.sellers', 'Sellers'],
+  [ROUTES.dealers]: ['nav.sellers', 'Sellers'],
+  [ROUTES.services]: ['nav.auto_services', 'Auto Services'],
+  [ROUTES.specialists]: ['nav.specialists', 'Specialists'],
+  [ROUTES.about]: ['nav.about', 'About'],
+  [ROUTES.add]: ['nav.addListing', 'Add Listing'],
+  [ROUTES.login]: ['nav.account', 'Account'],
+  [ROUTES.register]: ['nav.account', 'Account'],
 };
 
 const stripLanguage = (pathname) => {

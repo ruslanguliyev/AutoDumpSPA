@@ -11,6 +11,7 @@ import logoUrl from "@/assets/images/avtobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
 import { PARTS_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
 import { SUPPORTED_LANGUAGES } from "@/i18n/config";
+import { ROUTES, withLang } from "@/shared/constants/routes";
 import Button from "@/shared/ui/button";
 
 /** Below this the drawer carries the whole navigation. */
@@ -57,18 +58,19 @@ const normalizeNavPath = (pathname) => {
 
 const isNavItemActive = (pathname, to) => {
     const path = normalizeNavPath(pathname);
+    const target = normalizeNavPath(to);
 
-    if (to === "/autosearch") {
-        if (path === "/rent" || path.startsWith("/rent/")) return false;
-        return path === "/autosearch" || path.startsWith("/vehicles/");
+    if (target === ROUTES.cars) {
+        if (path === ROUTES.rent || path.startsWith(`${ROUTES.rent}/`)) return false;
+        return path === ROUTES.cars || path.startsWith(`${ROUTES.vehicles}/`);
     }
-    if (to === "/parts") {
-        return path === "/parts" || path.startsWith("/parts/");
+    if (target === ROUTES.parts) {
+        return path === ROUTES.parts || path.startsWith(`${ROUTES.parts}/`);
     }
-    if (to === "/rent") {
-        return path === "/rent" || path.startsWith("/rent/");
+    if (target === ROUTES.rent) {
+        return path === ROUTES.rent || path.startsWith(`${ROUTES.rent}/`);
     }
-    return path === to || path.startsWith(`${to}/`);
+    return path === target || path.startsWith(`${target}/`);
 };
 
 const navLinkClass = (active) =>
@@ -111,14 +113,14 @@ export default function Header() {
     /** Six destinations. Parts carries the mega-menu; the rest are plain links. */
     const navItems = useMemo(
         () => [
-            { key: 'cars', to: '/autosearch', label: t('nav.cars') },
-            { key: 'rent', to: '/rent', label: t('nav.rent') },
-            { key: 'parts', to: '/parts', label: t('nav.parts'), megaMenu: PARTS_MEGA_MENU },
-            { key: 'services', to: '/services', label: t('nav.auto_services') },
-            { key: 'specialists', to: '/specialists', label: t('nav.specialists') },
-            { key: 'sellers', to: '/sellers', label: t('nav.sellers') },
+            { key: 'cars', to: withLang(ROUTES.cars, language), label: t('nav.cars') },
+            { key: 'rent', to: withLang(ROUTES.rent, language), label: t('nav.rent') },
+            { key: 'parts', to: withLang(ROUTES.parts, language), label: t('nav.parts'), megaMenu: PARTS_MEGA_MENU },
+            { key: 'services', to: withLang(ROUTES.services, language), label: t('nav.auto_services') },
+            { key: 'specialists', to: withLang(ROUTES.specialists, language), label: t('nav.specialists') },
+            { key: 'sellers', to: withLang(ROUTES.sellers, language), label: t('nav.sellers') },
         ],
-        [t]
+        [t, language]
     );
 
     // ---- Priority-plus navigation -------------------------------------------------
@@ -249,7 +251,7 @@ export default function Header() {
                 }`}
             >
                 <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center gap-4 px-4">
-                    <Link to="/" className="flex shrink-0 items-center" aria-label={t('common.goHome')}>
+                    <Link to={ROUTES.home} className="flex shrink-0 items-center" aria-label={t('common.goHome')}>
                         <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
                     </Link>
 
@@ -446,10 +448,10 @@ export default function Header() {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Link to="/login" role="menuitem" className={popoverItemClass} onClick={closePopover}>
+                                                    <Link to={ROUTES.login} role="menuitem" className={popoverItemClass} onClick={closePopover}>
                                                         {t('buttons.login')}
                                                     </Link>
-                                                    <Link to="/register" role="menuitem" className={popoverItemClass} onClick={closePopover}>
+                                                    <Link to={ROUTES.register} role="menuitem" className={popoverItemClass} onClick={closePopover}>
                                                         {t('buttons.signup')}
                                                     </Link>
                                                 </>
@@ -459,7 +461,7 @@ export default function Header() {
                                 </div>
 
                                 <Button asChild>
-                                    <Link to="/add">
+                                    <Link to={ROUTES.add}>
                                         <Plus size={18} aria-hidden="true" />
                                         <span className="hidden xl:inline">{t('nav.addListing')}</span>
                                         <span className="xl:hidden">{t('nav.add')}</span>
@@ -579,7 +581,7 @@ export default function Header() {
                             </Link>
 
                             <Button asChild className="mx-2 mt-3" onClick={closeDrawer}>
-                                <Link to="/add">
+                                <Link to={ROUTES.add}>
                                     <Plus size={18} aria-hidden="true" />
                                     {t('nav.addListing')}
                                 </Link>
