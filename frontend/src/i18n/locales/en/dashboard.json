@@ -171,7 +171,12 @@
     "phonePlaceholder": "Phone number (optional)",
     "send": "Send",
     "sending": "Sending…",
-    "sent": "Message sent. The seller will see it in their Inquiries."
+    "sent": "Message sent. The seller will see it in their Inquiries.",
+    "errors": {
+      "loginToSend": "Log in to send.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "generic": "Something went wrong. Please try again later."
+    }
   },
   "report": {
     "open": "Report this listing",

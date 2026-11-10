@@ -3,7 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
+import { isValidPhone } from '@/features/addItem/utils/validateDraft';
 import { useCreateInquiry } from '@/features/inquiries/api/useInquiries';
+import { mapSubmitError } from '@/lib/formSubmitError';
 import Button from '@/shared/ui/button';
 import { ContactForm } from '@/shared/blocks/ContactForm';
 
@@ -21,8 +23,19 @@ export function ContactSellerForm({ listingId, className = '' }: Props) {
   const mutation = useCreateInquiry();
   const [message, setMessage] = useState('');
   const [phone, setPhone] = useState('');
+  const [touched, setTouched] = useState(false);
 
   if (!listingId) return null;
+
+  const phoneTrimmed = phone.trim();
+  const phoneInvalid = phoneTrimmed.length > 0 && !isValidPhone(phoneTrimmed);
+  const phoneError = touched && phoneInvalid ? t('settings.seller.phoneInvalid') : null;
+
+  const submitError = mapSubmitError(mutation.error, {
+    network: t('contact.errors.network'),
+    generic: t('contact.errors.generic'),
+    loginRequired: t('contact.errors.loginToSend'),
+  });
 
   if (!isAuthenticated) {
     return (
@@ -53,12 +66,23 @@ export function ContactSellerForm({ listingId, className = '' }: Props) {
       onMessageChange={setMessage}
       phone={phone}
       onPhoneChange={setPhone}
+      phoneError={phoneError}
       onSubmit={() => {
-        if (!message.trim()) return;
-        mutation.mutate({ listingId, message: message.trim(), phone: phone.trim() || undefined });
+        setTouched(true);
+        if (!message.trim() || phoneInvalid) return;
+        mutation.mutate({ listingId, message: message.trim(), phone: phoneTrimmed || undefined });
       }}
       pending={mutation.isPending}
-      error={mutation.isError ? mutation.error.message : null}
+      error={submitError?.message ?? null}
+      errorAction={
+        submitError?.showLoginLink ? (
+          <Button asChild variant="secondary" size="sm" className="w-full">
+            <Link to="/login" state={{ from: location }}>
+              {t('contact.login')}
+            </Link>
+          </Button>
+        ) : null
+      }
     />
   );
 }

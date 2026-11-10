@@ -226,7 +226,11 @@
     "you": "siz",
     "edit": "Dəyiş",
     "delete": "Sil",
-    "showMore": "Daha çox göstər ({{count}})"
+    "showMore": "Daha çox göstər ({{count}})",
+    "errors": {
+      "network": "Serverə çıxış alınmadı. Bağlantınızı yoxlayın və yenidən cəhd edin.",
+      "generic": "Xəta baş verdi. Bir az sonra yenidən cəhd edin."
+    }
   },
   "indexPage": {
     "filters": "Filtrlər",

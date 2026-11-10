@@ -115,9 +115,14 @@ export const validatePricing = (draft: ListingDraft) => {
   return typeof price === 'number' && Number.isFinite(price) && price > 0;
 };
 
-/** Same rule as the backend: optional +, then 6-20 digits, spaces, dashes or brackets. */
-export const isValidPhone = (value: string | undefined | null) =>
-  /^\+?[0-9\s\-()]{6,20}$/.test(trim(value));
+/** Optional +, spaces, brackets, dashes; 7–15 digits when not empty. */
+export const isValidPhone = (value: string | undefined | null) => {
+  const s = trim(value);
+  if (!s) return false;
+  if (!/^\+?[0-9\s\-()]+$/.test(s)) return false;
+  const digits = s.replace(/\D/g, '').length;
+  return digits >= 7 && digits <= 15;
+};
 
 /** Same rule as the backend. */
 export const isValidEmail = (value: string | undefined | null) =>

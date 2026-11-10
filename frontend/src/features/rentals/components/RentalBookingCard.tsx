@@ -7,6 +7,7 @@ import { daysInclusive, rangesOverlap, todayString } from '@/features/rentals/ap
 import { useRentalAvailability, useRequestRental } from '@/features/rentals/hooks/useRentals';
 import { isValidPhone } from '@/features/addItem/utils/validateDraft';
 import { formatDate, formatPrice, intlLocale } from '@/lib/format';
+import { mapSubmitError } from '@/lib/formSubmitError';
 import { ContactForm } from '@/shared/blocks/ContactForm';
 import Button from '@/shared/ui/button';
 import { controlClass, FieldError, FieldLabel } from '@/shared/ui/field';
@@ -71,15 +72,17 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
   if (!car.listingId || !terms) return null;
 
   const datesMissing = !start || !end;
-  const phoneInvalid = phone.trim().length > 0 && !isValidPhone(phone);
+  const phoneTrimmed = phone.trim();
+  const phoneInvalid = phoneTrimmed.length > 0 && !isValidPhone(phoneTrimmed);
+  const phoneError = submitted && phoneInvalid ? t('settings.seller.phoneInvalid') : null;
   const ready = days > 0 && !problem;
 
-  const requestError = request.isError
-    ? request.error instanceof TypeError
-      ? t('rental.errors.network')
-      : request.error.message
-    : null;
-  const formError = requestError ?? (submitted && phoneInvalid ? t('settings.seller.phoneInvalid') : null);
+  const submitError = mapSubmitError(request.error, {
+    network: t('rental.errors.network'),
+    generic: t('contact.errors.generic'),
+    loginRequired: t('contact.errors.loginToSend'),
+  });
+  const formError = submitError?.message ?? null;
 
   const submit = () => {
     setSubmitted(true);
@@ -164,6 +167,16 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
         onSubmit={submit}
         pending={request.isPending}
         error={formError}
+        phoneError={phoneError}
+        errorAction={
+          submitError?.showLoginLink ? (
+            <Button asChild variant="secondary" size="sm" className="w-full">
+              <Link to="/login" state={{ from: location }}>
+                {t('contact.login')}
+              </Link>
+            </Button>
+          ) : null
+        }
         sent={request.isSuccess}
         sentContent={
           <>

@@ -7,6 +7,7 @@ import { Flag } from 'lucide-react';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { moderationApi, REPORT_REASONS } from '@/features/moderation/api/moderation.api';
 import type { ReportReason } from '@/features/moderation/api/moderation.api';
+import { mapSubmitError } from '@/lib/formSubmitError';
 import { ReportDialog } from '@/shared/blocks/ReportDialog';
 
 type Props = {
@@ -31,6 +32,16 @@ export function ReportListingForm({ listingId, className = '' }: Props) {
   });
 
   if (!listingId) return null;
+
+  const reportError = report.isError
+    ? /already reported/i.test(report.error instanceof Error ? report.error.message : '')
+      ? { message: t('report.alreadyReported'), showLoginLink: false as const }
+      : mapSubmitError(report.error, {
+          network: t('contact.errors.network'),
+          generic: t('contact.errors.generic'),
+          loginRequired: t('contact.errors.loginToSend'),
+        })
+    : null;
 
   const reasonOptions = REPORT_REASONS.map((value) => ({
     value,
@@ -67,13 +78,7 @@ export function ReportListingForm({ listingId, className = '' }: Props) {
           onDetailsChange={setDetails}
           onSubmit={() => report.mutate()}
           pending={report.isPending}
-          error={
-            report.isError
-              ? /already reported/i.test(report.error.message)
-                ? t('report.alreadyReported')
-                : report.error.message
-              : null
-          }
+          error={reportError?.message ?? null}
         />
       )}
     </div>

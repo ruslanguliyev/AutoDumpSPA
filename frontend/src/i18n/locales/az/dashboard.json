@@ -171,7 +171,12 @@
     "phonePlaceholder": "Əlaqə nömrəsi (məcburi deyil)",
     "send": "Göndər",
     "sending": "Göndərilir…",
-    "sent": "Mesaj göndərildi. Satıcı onu \"Müraciətlər\" bölməsində görəcək."
+    "sent": "Mesaj göndərildi. Satıcı onu \"Müraciətlər\" bölməsində görəcək.",
+    "errors": {
+      "loginToSend": "Göndərmək üçün daxil olun.",
+      "network": "Serverə çıxış alınmadı. Bağlantınızı yoxlayın və yenidən cəhd edin.",
+      "generic": "Xəta baş verdi. Bir az sonra yenidən cəhd edin."
+    }
   },
   "report": {
     "open": "Elandan şikayət et",

@@ -226,7 +226,11 @@
     "you": "you",
     "edit": "Edit",
     "delete": "Delete",
-    "showMore": "Show more ({{count}})"
+    "showMore": "Show more ({{count}})",
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "generic": "Something went wrong. Please try again later."
+    }
   },
   "indexPage": {
     "filters": "Filters",

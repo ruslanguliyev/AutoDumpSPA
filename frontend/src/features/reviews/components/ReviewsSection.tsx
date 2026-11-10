@@ -6,6 +6,7 @@ import type { Review, ReviewTargetType } from '@/features/reviews/api/reviews.ap
 import { useMyProfessional } from '@/features/professional/hooks/useProfessional';
 import { useDeleteReview, useReviews, useSubmitReview } from '@/features/reviews/hooks/useReviews';
 import { ReviewsBlock, ReviewsWriteForm } from '@/shared/blocks/ReviewsBlock';
+import { mapSubmitError } from '@/lib/formSubmitError';
 import { appLoginUrl } from '@/shared/constants/appUrls';
 
 const PAGE = 5;
@@ -21,7 +22,7 @@ function ReviewForm({
   existing?: Review;
   onDone?: () => void;
 }) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'dashboard']);
   const submit = useSubmitReview();
   const [rating, setRating] = useState(existing?.rating ?? 0);
   const [comment, setComment] = useState(existing?.comment ?? '');
@@ -34,6 +35,12 @@ function ReviewForm({
     );
   };
 
+  const submitError = mapSubmitError(submit.error, {
+    network: t('reviews.errors.network', { ns: 'common' }),
+    generic: t('reviews.errors.generic', { ns: 'common' }),
+    loginRequired: t('contact.errors.loginToSend', { ns: 'dashboard' }),
+  });
+
   return (
     <ReviewsWriteForm
       rating={rating}
@@ -42,7 +49,7 @@ function ReviewForm({
       onCommentChange={setComment}
       onSubmit={onSubmit}
       pending={submit.isPending}
-      error={submit.isError ? submit.error.message : null}
+      error={submitError?.message ?? null}
       submitLabel={existing ? t('reviews.update') : t('reviews.submit')}
       heading={t('reviews.write')}
       ratingLabel={t('reviews.yourRating')}
