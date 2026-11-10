@@ -101,7 +101,7 @@ export function ContactForm({
             rows={4}
             required={messageRequired}
             placeholder={placeholder}
-            className={`${controlClass('md')} resize-y py-2.5`}
+            className={`${controlClass('md')} h-auto! min-h-24 resize-y py-2.5`}
           />
         </div>
         {showPhoneField && onPhoneChange ? (

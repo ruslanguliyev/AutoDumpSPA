@@ -225,10 +225,10 @@
   }
 }
 
-/* Sticky bottom bar of detail pages (DetailLayout): 44px control + 8px above and below,
-   plus the device's bottom inset. Only below `lg`, where the bar exists. */
+/* Sticky bottom bar of detail pages (DetailLayout): 44px control + 8px above and below
+   + 1px top border = 61px, plus the device's bottom inset. Only below `lg`, where the bar exists. */
 :root {
-  --mobile-bar-h: 3.75rem;
+  --mobile-bar-h: 3.8125rem;
   --mobile-bar-offset: 0px;
 }
 @media (max-width: 1023.98px) {

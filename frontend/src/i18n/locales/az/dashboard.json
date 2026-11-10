@@ -258,6 +258,7 @@
     "unavailableDays": "Məşğul günlər",
     "messagePlaceholder": "Sahibinə mesaj (məcburi deyil)",
     "title": "Avtomobili rezerv et",
+    "formTitle": "İcarə tarixləri",
     "hint": "İcarənin başlanğıc və son tarixini seçin — məbləğ avtomatik hesablanacaq.",
     "summary_one": "{{count}} gün × {{price}} = {{total}}",
     "summary_other": "{{count}} gün × {{price}} = {{total}}",

@@ -258,6 +258,7 @@
     "unavailableDays": "Занятые дни",
     "messagePlaceholder": "Сообщение владельцу (необязательно)",
     "title": "Забронировать автомобиль",
+    "formTitle": "Даты аренды",
     "hint": "Выберите даты начала и окончания аренды — сумма посчитается сама.",
     "summary_one": "{{count}} день × {{price}} = {{total}}",
     "summary_few": "{{count}} дня × {{price}} = {{total}}",

@@ -148,10 +148,12 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
             </ul>
           </div>
         ) : null}
+
+        <p className="mt-4 text-[13px] text-muted-foreground">{t('rental.requestNote')}</p>
       </section>
 
       <ContactForm
-        title={t('rental.request')}
+        title={t('rental.formTitle')}
         submitLabel={t('rental.request')}
         messagePlaceholder={t('rental.messagePlaceholder')}
         messageRequired={false}

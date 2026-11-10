@@ -89,7 +89,8 @@ export const HeaderLanguageSelector = ({ value, onChange, compact = false, class
     <div
       role="group"
       aria-label={t('labels.languageSwitcher')}
-      className={`inline-flex h-11 items-center overflow-hidden rounded-[var(--radius)] border border-border-strong dark:border-border ${className}`.trim()}
+      // An inset ring, not a border: a 1px border would leave the segments 42px tall inside the 44px box.
+      className={`inline-flex h-11 items-center overflow-hidden rounded-[var(--radius)] ring-1 ring-inset ring-border-strong dark:ring-border ${className}`.trim()}
     >
       {LANGUAGES.map((lang) => {
         const isActive = lang.code === value;
