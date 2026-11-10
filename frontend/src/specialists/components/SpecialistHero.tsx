@@ -31,7 +31,7 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
   const avatar = specialist.avatar ?? specialist.avatarUrl ?? null;
 
   const hasExp = yearsExperienceValue !== null;
-  const hasRating = ratingValue !== null;
+  const showRating = reviewsCount > 0 && ratingValue !== null;
   const hasLocation = Boolean(locationLabel);
 
   return (
@@ -91,16 +91,19 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
                   {yearsExperienceValue} {t('detail.yearsExp')}
                 </span>
               ) : null}
-              {hasRating ? (
+              {showRating ? (
                 <span className="specialist-hero__meta-item">
                   <Star size={16} className="specialist-hero__meta-star" aria-hidden="true" />
                   <span className="specialist-hero__meta-rating">{ratingValue?.toFixed(1)}</span>
                 </span>
               ) : null}
-              {hasRating ? (
+              {showRating ? (
                 <button type="button" className="specialist-hero__reviews-link">
                   {t('card.reviews', { count: reviewsCount })}
                 </button>
+              ) : null}
+              {!showRating ? (
+                <span className="specialist-hero__meta-item text-muted-foreground">{t('detail.noReviewsYet')}</span>
               ) : null}
               {hasLocation ? (
                 <span className="specialist-hero__meta-item specialist-hero__meta-item--location">

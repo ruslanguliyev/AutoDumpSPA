@@ -6,6 +6,7 @@ const btnBase =
   'inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-base font-medium no-underline transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60';
 const btnOutline = 'border border-border bg-card text-foreground hover:bg-muted hover:bg-muted/80';
 import type { ServiceProfile } from '@/services/types/service.types';
+import { formatPrice, intlLocale } from '@/lib/format';
 import { AppointmentRequestCard } from '@/features/appointments/components/AppointmentRequestCard';
 
 type SpecialistSidebarCardProps = {
@@ -17,7 +18,8 @@ const sanitizePhone = (value: string) => value.replace(/\s/g, '');
 const sanitizeWhatsApp = (value: string) => value.replace(/[^\d]/g, '');
 
 const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebarCardProps) => {
-  const { t } = useTranslation('specialists');
+  const { t, i18n } = useTranslation('specialists');
+  const locale = intlLocale(i18n.language);
 
   const priceFrom = Number.isFinite(specialist.priceFrom) ? Number(specialist.priceFrom) : null;
   const phone = specialist.phone?.trim() ?? null;
@@ -40,9 +42,8 @@ const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebar
               {t('detail.startingAt')}
             </p>
             {priceFrom !== null ? (
-              <p className="mt-0.5 text-3xl font-semibold text-foreground">
-                ₼{priceFrom.toFixed(0)}
-                <span className="ml-1 text-base font-medium text-muted-foreground"></span>
+              <p className="mt-0.5 text-[28px] font-bold leading-none text-primary-text">
+                {formatPrice(priceFrom, 'AZN', locale)}
               </p>
             ) : (
               <p className="mt-0.5 text-base font-medium text-muted-foreground">

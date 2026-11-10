@@ -36,8 +36,8 @@ const SpecialistHighlights = ({
       icon: <ShieldCheck size={16} aria-hidden="true" />,
       title: t('detail.highlightRatedTitle'),
       subtitle:
-        ratingValue !== null && reviewCount !== null
-          ? `${ratingValue.toFixed(1)} · ${reviewCount} ${t('card.reviews', { count: reviewCount })}`
+        ratingValue !== null && reviewCount != null && reviewCount > 0
+          ? `${ratingValue.toFixed(1)} · ${t('card.reviews', { count: reviewCount })}`
           : t('detail.highlightRatedDesc'),
     },
     {

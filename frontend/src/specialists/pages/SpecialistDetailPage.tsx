@@ -6,7 +6,7 @@ import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import Skeleton from '@/shared/ui/Skeleton';
 import SpecialistHero from '@/specialists/components/SpecialistHero';
 import SpecialistSidebarCard from '@/specialists/components/SpecialistSidebarCard';
-import { PromoteInline } from '@/features/promotions/components/PromoteInline';
+import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
 import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import SpecialistGallery from '@/specialists/components/SpecialistGallery';
 import SpecialistHighlights from '@/specialists/components/SpecialistHighlights';
@@ -14,39 +14,28 @@ import SpecialistCertifications from '@/specialists/components/SpecialistCertifi
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { useSpecialistBySlug } from '@/specialists/hooks/useSpecialists';
 import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices';
+import { buildSpecialistMobileBar } from '@/specialists/pages/specialistDetail/SpecialistDetailMobileBar';
 
 const SimilarSpecialistsSection = lazy(
-  () => import('@/specialists/components/SimilarSpecialistsSection')
+  () => import('@/specialists/components/SimilarSpecialistsSection'),
 );
 
 const DetailSkeleton = () => (
   <div className="space-y-6">
     <Skeleton className="h-56 w-full rounded-2xl" />
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_360px]">
-      <div className="space-y-6">
-        <Skeleton className="h-40 w-full rounded-2xl" />
-        <Skeleton className="h-32 w-full rounded-2xl" />
-        <Skeleton className="h-24 w-full rounded-2xl" />
-      </div>
-      <Skeleton className="h-72 w-full rounded-2xl" />
-    </div>
+    <Skeleton className="h-72 w-full rounded-2xl" />
   </div>
 );
 
 const SpecialistDetailPage = () => {
-  const { t } = useTranslation('specialists');
+  const { t } = useTranslation(['specialists', 'common']);
   const { slug } = useParams<{ slug: string }>();
 
   const { specialist, isLoading, error } = useSpecialistBySlug(slug);
-  // Counts an opened profile, so paid placement can be judged on results.
   useTrackView('SPECIALIST', specialist?.id);
   useDocumentTitle(specialist?.name);
 
-  const {
-    services: _services,
-    primaryService,
-    isLoading: servicesLoading,
-  } = useSpecialistServices(specialist?.id);
+  const { primaryService, isLoading: servicesLoading } = useSpecialistServices(specialist?.id);
 
   const isPageLoading = isLoading || servicesLoading;
 
@@ -58,81 +47,65 @@ const SpecialistDetailPage = () => {
     );
   }
 
-  if (error) {
-    const message = error instanceof Error ? error.message : String(error);
+  if (error || !specialist) {
     return (
-      <div className="mx-auto w-full max-w-[1280px] px-4 py-10">
-        <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
-          {t('detail.errorFailed')}
-          {message ? <span className="ml-1">{message}</span> : null}
-        </div>
-      </div>
-    );
-  }
-
-  if (!specialist) {
-    return (
-      <div className="mx-auto w-full max-w-[1280px] px-4 py-10">
-        <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-          {t('detail.notFound')}
-        </div>
+      <div className="mx-auto w-full max-w-[1280px] px-4 py-10 text-[15px] text-muted-foreground">
+        {t('detail.notFound')}
       </div>
     );
   }
 
   const breadcrumbItems = [
-    { label: 'Home', to: '/' },
+    { label: t('nav.home', { ns: 'common' }), to: '/' },
     { label: t('title'), to: '/specialists' },
     { label: specialist.name },
   ];
 
-  const primarySpecialization = specialist.specializations?.[0] ?? null;
   const certifications = specialist.certifications ?? [];
   const portfolio = specialist.portfolio ?? [];
 
+  const mobileBar = buildSpecialistMobileBar({
+    t,
+    phone: specialist.phone ?? null,
+    whatsapp: specialist.whatsapp ?? null,
+  });
+
   return (
-    <div className="w-full bg-background pb-16">
-      <div className="mx-auto w-full max-w-[1280px] px-4 pt-6">
-        <Breadcrumbs items={breadcrumbItems} />
-      </div>
+    <div className="mx-auto w-full max-w-[1280px] px-4 py-6">
+      <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="mx-auto w-full max-w-[1280px] space-y-8 px-4 pt-5">
-        {/* Two-column grid: main content left, sticky sidebar right */}
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_360px] lg:gap-8">
-          {/* ── LEFT COLUMN ── */}
-          <div className="space-y-5">
-            <SpecialistHero specialist={specialist} />
+      <div className="mt-4 flex flex-col gap-8">
+        <DetailLayout
+          mobileBar={mobileBar}
+          main={
+            <div className="flex flex-col gap-6 [overflow-wrap:anywhere]">
+              <SpecialistHero specialist={specialist} />
+              {portfolio.length > 0 ? (
+                <SpecialistGallery portfolio={portfolio} altPrefix={specialist.name} />
+              ) : null}
+              <SpecialistHighlights
+                description={specialist.description}
+                rating={specialist.rating}
+                reviewsCount={specialist.reviewsCount}
+              />
+              {certifications.length > 0 ? (
+                <SpecialistCertifications certifications={certifications} />
+              ) : null}
+              <ReviewsSection targetType="SPECIALIST" targetId={specialist.id} />
+            </div>
+          }
+          sidebar={
+            <div className="flex flex-col gap-4">
+              <div id="specialist-booking" className="scroll-mt-24">
+                <SpecialistSidebarCard specialist={specialist} primaryService={primaryService} />
+              </div>
+              <PromoteShortcuts targetType="SPECIALIST" targetId={specialist.id} />
+            </div>
+          }
+        />
 
-            {portfolio.length > 0 ? (
-              <SpecialistGallery portfolio={portfolio} altPrefix={specialist.name} />
-            ) : null}
-
-            <SpecialistHighlights
-              description={specialist.description}
-              rating={specialist.rating}
-              reviewsCount={specialist.reviewsCount}
-            />
-
-            {certifications.length > 0 ? (
-              <SpecialistCertifications certifications={certifications} />
-            ) : null}
-
-            <ReviewsSection targetType="SPECIALIST" targetId={specialist.id} />
-          </div>
-
-          {/* ── RIGHT COLUMN (sticky) ── */}
-          <aside className="lg:sticky lg:top-6 lg:self-start">
-            <SpecialistSidebarCard specialist={specialist} primaryService={primaryService} />
-            <PromoteInline targetType="SPECIALIST" targetId={specialist.id} className="mt-3" />
-          </aside>
-        </div>
-
-        {/* Similar specialists — lazy loaded */}
         <Suspense fallback={<Skeleton className="h-64 w-full rounded-2xl" />}>
-          <SimilarSpecialistsSection
-            currentId={specialist.id}
-            specialization={primarySpecialization}
-          />
+          <SimilarSpecialistsSection currentId={specialist.id} specialization={specialist.specializations?.[0] ?? null} />
         </Suspense>
       </div>
     </div>
