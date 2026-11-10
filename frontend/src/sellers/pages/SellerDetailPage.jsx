@@ -14,6 +14,7 @@ import {
 
 import { useSellersData } from "@/sellers/hooks/useSellersData";
 import { useSellerListings } from "@/sellers/hooks/useSellerListings";
+import { useSellerById } from "@/sellers/hooks/useSellerById";
 import { useDocumentTitle } from "@/shared/hooks/useDocumentTitle";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
@@ -45,7 +46,8 @@ export default function SellerDetailPage({
   isLoading: isLoadingProp = false,
   error: errorProp = null,
 } = {}) {
-  const { t } = useTranslation("sellers");
+  const { t, i18n } = useTranslation("sellers");
+  const locale = intlLocale(i18n.language);
   const params = useParams();
   const sellerId = String(params?.sellerId ?? "").trim();
 
@@ -54,7 +56,7 @@ export default function SellerDetailPage({
   const loaded = useSellerListings(sellerId, { enabled: !hasExternalData });
   const vehicles = vehiclesProp ?? loaded.vehicles;
   const parts = partsProp ?? loaded.parts;
-  const isLoading = isLoadingProp || loaded.isLoading;
+  const isLoading = isLoadingProp || loaded.isLoading || sellerProfileLoading;
   const error = errorProp ?? loaded.error;
 
   const [activeTab, setActiveTab] = useState("listings");
@@ -62,6 +64,7 @@ export default function SellerDetailPage({
   const debouncedSearchQuery = useDebounce(searchQuery, 350);
 
   const { sellers } = useSellersData();
+  const { data: sellerById, isLoading: sellerProfileLoading } = useSellerById(sellerId);
 
   // Get full seller data from original vehicles/parts
   const fullSellerData = useMemo(() => {
@@ -85,14 +88,24 @@ export default function SellerDetailPage({
   const seller = useMemo(() => {
     if (!sellerId) return null;
     const aggregated = sellers.find((s) => String(s.id) === sellerId) ?? null;
-    if (!aggregated || !fullSellerData) return aggregated;
-    // Merge: fullSellerData overwrites, but preserve aggregated.listingsCount (not in raw seller)
+    const base = sellerById
+      ? {
+          ...aggregated,
+          ...sellerById,
+          votes: sellerById.votes ?? sellerById.reviewsCount,
+          listingsCount: aggregated?.listingsCount ?? sellerById.listingsCount,
+          memberSince: sellerById.createdAt ?? aggregated?.memberSince,
+        }
+      : aggregated;
+    if (!base && !fullSellerData) return null;
+    if (!fullSellerData) return base;
     return {
-      ...aggregated,
+      ...base,
       ...fullSellerData,
-      listingsCount: aggregated.listingsCount,
+      listingsCount: base?.listingsCount ?? fullSellerData.listingsCount,
+      memberSince: base?.memberSince ?? fullSellerData.memberSince,
     };
-  }, [sellers, sellerId, fullSellerData]);
+  }, [sellers, sellerId, fullSellerData, sellerById]);
 
   useDocumentTitle(seller?.name);
 
@@ -209,13 +222,11 @@ export default function SellerDetailPage({
   }
 
   if (error) {
-    const message = error instanceof Error ? error.message : String(error);
     return (
       <div className="seller-detail">
         <div className="seller-detail__container">
-          <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-sm text-destructive">
+          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
             <div className="font-semibold">{t("errors.loadFailed")}</div>
-            <div className="mt-1">{message}</div>
           </div>
           <Link to="/sellers" className="mt-4 inline-block text-sm underline">
             {t("detail.backToSellers")}
@@ -315,7 +326,7 @@ export default function SellerDetailPage({
                 </div>
 
                 <div className="seller-card__meta-row">
-                  {ratingValue != null && (
+                  {ratingValue != null && votesValue != null && votesValue > 0 ? (
                     <div className="seller-card__meta-item seller-card__meta-item--rating">
                       <div className="seller-card__meta-icon">
                         <span className="seller-card__rating-star">★</span>
@@ -335,6 +346,10 @@ export default function SellerDetailPage({
                           </div>
                         )}
                       </div>
+                    </div>
+                  ) : (
+                    <div className="seller-card__meta-item text-sm text-muted-foreground">
+                      {t("detail.noReviewsYet")}
                     </div>
                   )}
 

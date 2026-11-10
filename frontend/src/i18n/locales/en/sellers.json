@@ -93,6 +93,7 @@
     "missingId": "Missing seller id.",
     "backToSellers": "← Back to sellers",
     "notFound": "Seller not found",
+    "noReviewsYet": "No reviews yet",
     "notAvailable": "Seller {{id}} is not available.",
     "tabs": {
       "stock": "Stock",

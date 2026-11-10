@@ -35,6 +35,18 @@ const SEED_SALE = {
   priceMin: '[SEED SALE] Lada Samara price 1 AZN',
 } as const;
 
+const SEED_PART = {
+  title60: 'Avtobaz seed part product name exactly sixty characters!!!!!',
+  price1: '[SEED PART] Boundary 1 AZN no photo',
+} as const;
+
+const SEED_SERVICE = {
+  noSchedule: '[SEED SERVICE] No opening hours QA',
+  withSchedule: '[SEED SERVICE] Baku schedule QA',
+} as const;
+
+const SEED_SPECIALIST_SLUG = 'seed-qa-zero-reviews-mechanic';
+
 const QA_SELLER_EMAILS = [
   'dealer-zero-reviews@test.com',
   'dealer-10k-reviews@test.com',
@@ -428,6 +440,171 @@ async function main() {
         price: 42_500,
         imageUrls: [],
         isHot: false,
+      },
+    });
+
+    const partsDealerSeller = await tx.seller.findFirst({
+      where: { user: { email: 'partsdealer1@test.com' } },
+    });
+    if (partsDealerSeller) {
+      let listing = await tx.listing.findFirst({
+        where: { sellerId: partsDealerSeller.id, title: SEED_PART.price1 },
+      });
+      if (!listing) {
+        listing = await tx.listing.create({
+          data: {
+            title: SEED_PART.price1,
+            description: 'QA part — 1 AZN, no image, long display name.',
+            price: 1,
+            status: ListingStatus.ACTIVE,
+            sellerId: partsDealerSeller.id,
+          },
+        });
+      }
+      const part = await tx.part.findFirst({ where: { listingId: listing.id } });
+      const partPayload = {
+        name: SEED_PART.title60,
+        category: 'Filters',
+        brand: 'Toyota',
+        model: 'Camry',
+        condition: 'New',
+        oemCode: 'SEED-60',
+        stock: 3,
+        description: 'Sixty-character part title overflow check.',
+        price: 1,
+        currency: 'AZN',
+        imageUrl: null,
+        compatibility: ['Camry XV70'],
+        location: 'Baku',
+      };
+      if (part) {
+        await tx.part.update({ where: { id: part.id }, data: partPayload });
+      } else {
+        await tx.part.create({ data: { listingId: listing.id, ...partPayload } });
+      }
+    }
+
+    const serviceUser = await tx.user.findUnique({ where: { email: 'service1@test.com' } });
+    if (serviceUser) {
+      const bakuSchedule = {
+        monday: { from: '09:00', to: '19:00', closed: false },
+        tuesday: { from: '09:00', to: '19:00', closed: false },
+        wednesday: { from: '09:00', to: '19:00', closed: false },
+        thursday: { from: '09:00', to: '19:00', closed: false },
+        friday: { from: '09:00', to: '19:00', closed: false },
+        saturday: { from: '10:00', to: '16:00', closed: false },
+        sunday: { closed: true },
+      };
+      await tx.serviceCenter.upsert({
+        where: { userId: serviceUser.id },
+        create: {
+          userId: serviceUser.id,
+          name: SEED_SERVICE.withSchedule,
+          slug: 'seed-qa-service-with-hours',
+          city: 'Baku',
+          rating: 4.5,
+          reviewsCount: 12,
+          verified: true,
+          schedule: bakuSchedule,
+          supportedBrands: ['Toyota', 'BMW'],
+          categories: ['garage'],
+        },
+        update: {
+          name: SEED_SERVICE.withSchedule,
+          schedule: bakuSchedule,
+        },
+      });
+    }
+
+    const serviceUser2 = await tx.user.findUnique({ where: { email: 'service2@test.com' } });
+    if (serviceUser2) {
+      await tx.serviceCenter.upsert({
+        where: { userId: serviceUser2.id },
+        create: {
+          userId: serviceUser2.id,
+          name: SEED_SERVICE.noSchedule,
+          slug: 'seed-qa-service-no-hours',
+          city: 'Baku',
+          rating: 4.2,
+          reviewsCount: 3,
+          verified: false,
+          schedule: Prisma.DbNull,
+          supportedBrands: ['Mercedes-Benz'],
+          categories: ['detailing'],
+        },
+        update: {
+          name: SEED_SERVICE.noSchedule,
+          schedule: Prisma.DbNull,
+        },
+      });
+    }
+
+    const specialistZeroUser = await tx.user.upsert({
+      where: { email: 'specialist-qa-zero@test.com' },
+      create: {
+        email: 'specialist-qa-zero@test.com',
+        passwordHash,
+        fullName: 'QA Zero Reviews Mechanic',
+        role: UserRole.SPECIALIST,
+      },
+      update: {
+        passwordHash,
+        fullName: 'QA Zero Reviews Mechanic',
+        role: UserRole.SPECIALIST,
+      },
+    });
+
+    await tx.specialist.upsert({
+      where: { slug: SEED_SPECIALIST_SLUG },
+      create: {
+        userId: specialistZeroUser.id,
+        name: 'QA Zero Reviews Mechanic',
+        slug: SEED_SPECIALIST_SLUG,
+        city: 'Baku',
+        bio: 'Specialist fixture with zero reviews for detail layout.',
+        experience: 5,
+        rating: 0,
+        reviewsCount: 0,
+        verified: true,
+        available: true,
+        skills: ['diagnostics'],
+        specializations: ['engine'],
+        portfolio: [],
+      },
+      update: {
+        rating: 0,
+        reviewsCount: 0,
+        bio: 'Specialist fixture with zero reviews for detail layout.',
+      },
+    });
+
+    const privateUser = await tx.user.upsert({
+      where: { email: 'private-seller-qa@test.com' },
+      create: {
+        email: 'private-seller-qa@test.com',
+        passwordHash,
+        fullName: 'Private QA Seller',
+        role: UserRole.DEALER,
+      },
+      update: { passwordHash, fullName: 'Private QA Seller' },
+    });
+    await tx.seller.upsert({
+      where: { userId: privateUser.id },
+      create: {
+        userId: privateUser.id,
+        type: SellerType.PRIVATE,
+        name: 'Private QA Seller',
+        city: 'Baku',
+        phone: '+994501112233',
+        rating: 0,
+        reviewsCount: 0,
+        verified: false,
+      },
+      update: {
+        type: SellerType.PRIVATE,
+        name: 'Private QA Seller',
+        reviewsCount: 0,
+        rating: 0,
       },
     });
 

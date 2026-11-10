@@ -3,7 +3,9 @@
 One line per missing capability. “Blocks” = public page or filter called out in `pages.md`.
 
 - **Part aggregate `rating` / `reviewsCount` on `PartObject`** — blocks part-level review stars on detail header and cards (detail uses seller `ReviewsSection` instead; `PartSellerObject` has `rating` but no `reviewsCount`, so sidebar stars stay hidden).
-- **`SellerObject.coverImage` and `SellerObject.logoUrl`** — blocks seller directory card cover strip and logo avatar on `/sellers`.
+- **`SellerObject.coverImage` and `SellerObject.logoUrl`** — blocks seller profile hero cover and directory card strip (`SellerDetailPage` still has no cover from API; uses initials avatar only).
+- **`PartSellerObject.reviewsCount`** — blocks seller review count beside rating on part detail `MiniSellerCard` (`rating` exists; count is not queried).
+- **`SpecialistObject.certifications` / `validUntil`** — blocks certifications block on specialist detail (`pages.md`; portfolio uses `portfolio[]` from schema).
 - **Listing `publishedAt` / `createdAt` on catalog rows (`PartObject`, `VehicleObject`, or joined listing)** — blocks trustworthy “Newest first” sort on `/parts` and `/cars` (sort is client-side without a date field).
 - **`PartsFilterInput.inStockOnly` (or stock > 0 predicate)** — blocks server-side “In stock only” on `/parts` (UI hides the checkbox until the full page is loaded).
 - **`PartsFilterInput.sort` / relevance ranking** — blocks server-side sort on `/parts` (toolbar sort is not sent to the API).
