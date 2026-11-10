@@ -1,14 +1,30 @@
-export default function ServiceGallery({ media, serviceName }) {
-  if (!media?.cover) return null;
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import MediaCarousel from '@/shared/ui/MediaCarousel/MediaCarousel';
+
+export default function ServiceGallery({ media, serviceName, serviceId }) {
+  const { t } = useTranslation('services');
+
+  const items = useMemo(() => {
+    const urls = [media?.cover, ...(media?.gallery ?? [])].filter(Boolean);
+    return urls.map((src, index) => ({
+      id: `${serviceId ?? 'service'}-${index}`,
+      src,
+      alt: '',
+      type: 'image',
+    }));
+  }, [media, serviceId]);
+
+  if (!items.length) return null;
 
   return (
-    <section className="service-detail-page__gallery">
-      <img src={media.cover} alt={serviceName} />
-      {media.gallery && media.gallery.length > 0 && (
-        <button type="button" className="gallery-button">
-          View Gallery ({media.gallery.length + 1})
-        </button>
-      )}
-    </section>
+    <MediaCarousel
+      items={items}
+      ariaLabel={t('detail.galleryAria', { name: serviceName })}
+      viewportClassName="aspect-video rounded-2xl bg-card-muted"
+      mediaClassName="object-cover"
+      showCounter={items.length > 1}
+    />
   );
 }

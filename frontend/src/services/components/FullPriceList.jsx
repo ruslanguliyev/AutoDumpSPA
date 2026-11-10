@@ -1,6 +1,9 @@
 import { Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { formatPrice, intlLocale } from '@/lib/format';
+import { Badge } from '@/shared/ui/Badge';
+
 const formatDuration = (minutes, t) => {
   if (!minutes) return null;
   if (minutes < 60) return t('duration.mins', { count: minutes });
@@ -18,50 +21,46 @@ const getServiceDescription = (code, category, t) => {
 };
 
 export default function FullPriceList({ services }) {
-  const { t } = useTranslation('services');
-  if (!services || services.length === 0) return null;
+  const { t, i18n } = useTranslation('services');
+  const locale = intlLocale(i18n.language);
+  if (!services?.length) return null;
 
   return (
-    <section className="price-list rounded-xl border border-border bg-card p-4 sm:rounded-2xl sm:p-6">
-      <h2 className="mb-3 text-base font-bold text-foreground sm:mb-4 sm:text-lg">{t('priceList.title')}</h2>
-      <div className="price-list__container">
+    <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
+      <h2 className="mb-4 text-[17px] font-semibold text-foreground">{t('priceList.title')}</h2>
+      <ul className="divide-y divide-dashed divide-border">
         {services.map((item) => (
-          <div key={item.id} className="price-list__item">
-            <div className="price-list__content">
-              <div className="price-list__header">
-                <h3 className="price-list__name">{item.title}</h3>
-                {item.popular && (
-                  <span className="price-list__badge price-list__badge--popular">{t('priceList.popularBadge')}</span>
-                )}
-                {item.code === 'diagnostics' && !item.popular && (
-                  <span className="price-list__badge price-list__badge--hot">{t('priceList.hotBadge')}</span>
-                )}
+          <li key={item.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-[15px] font-semibold text-foreground">{item.title}</h3>
+                {item.popular ? <Badge variant="hot">{t('priceList.popularBadge')}</Badge> : null}
+                {item.code === 'diagnostics' && !item.popular ? (
+                  <Badge variant="hot">{t('priceList.hotBadge')}</Badge>
+                ) : null}
               </div>
-              {item.category && (
-                <p className="price-list__description">
+              {item.category ? (
+                <p className="mt-1 text-[13px] text-muted-foreground">
                   {getServiceDescription(item.code, item.category, t)}
                 </p>
-              )}
-              {item.durationMin && (
-                <div className="price-list__duration-row">
-                  <Clock size={16} className="price-list__clock-icon" />
-                  <span className="price-list__duration">{formatDuration(item.durationMin, t)}</span>
-                </div>
-              )}
+              ) : null}
+              {item.durationMin ? (
+                <p className="mt-2 flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                  <Clock size={14} aria-hidden="true" />
+                  {formatDuration(item.durationMin, t)}
+                </p>
+              ) : null}
             </div>
-            <div className="price-list__price">
-              {item.priceFrom ? (
-                <>
-                  {t('priceList.from')} {item.priceFrom}
-                  {item.currency || '€'}
-                </>
-              ) : (
-                t('priceList.noPrice')
-              )}
-            </div>
-          </div>
+            <p className="shrink-0 text-[15px] font-bold text-primary-text">
+              {item.priceFrom != null
+                ? t('priceList.fromPrice', {
+                    price: formatPrice(item.priceFrom, item.currency || 'AZN', locale),
+                  })
+                : t('priceList.noPrice')}
+            </p>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

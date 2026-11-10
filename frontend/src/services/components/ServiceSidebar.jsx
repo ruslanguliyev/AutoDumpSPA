@@ -9,15 +9,13 @@ export default function ServiceSidebar({ serviceId, accepting = true, schedule, 
   const isOpen = schedule ? isServiceOpen(schedule) : false;
 
   return (
-    <div className="service-detail-page__sidebar space-y-6 lg:sticky lg:top-6 lg:self-start">
-      <AppointmentRequestCard targetType="SERVICE_CENTER" targetId={serviceId} accepting={accepting} />
-      <ServiceStatus
-        isOpen={isOpen}
-        todaySchedule={todaySchedule}
-        contacts={contacts}
-      />
+    <div className="flex flex-col gap-4">
+      <ServiceStatus isOpen={isOpen} todaySchedule={todaySchedule} contacts={contacts} />
       <OpeningHours schedule={schedule} />
       <ServiceContacts location={location} contacts={contacts} />
+      <div id="service-booking" className="scroll-mt-24">
+        <AppointmentRequestCard targetType="SERVICE_CENTER" targetId={serviceId} accepting={accepting} />
+      </div>
     </div>
   );
 }

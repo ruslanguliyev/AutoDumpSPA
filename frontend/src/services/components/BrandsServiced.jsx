@@ -5,13 +5,16 @@ export default function BrandsServiced({ brands }) {
   if (!brands || brands.length === 0) return null;
 
   return (
-    <section className="service-detail-page__brands rounded-xl border border-border bg-card p-4 sm:rounded-2xl sm:p-6">
-      <h2 className="mb-3 text-base font-bold text-foreground sm:mb-4 sm:text-lg">{t('brands.title')}</h2>
-      <div className="flex flex-wrap gap-3">
+    <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
+      <h2 className="mb-3 text-[17px] font-semibold text-foreground">{t('brands.title')}</h2>
+      <div className="flex flex-wrap gap-2">
         {brands.map((brand) => (
-          <div key={brand} className="brand-item">
+          <span
+            key={brand}
+            className="rounded-[var(--radius)] border border-border bg-card-muted px-3 py-1.5 text-[13px] font-semibold text-foreground"
+          >
             {brand}
-          </div>
+          </span>
         ))}
       </div>
     </section>

@@ -94,6 +94,7 @@
     "loading": "Loading service details…",
     "errorFailed": "Failed to load service.",
     "notFound": "Service not found.",
+    "galleryAria": "{{name}} gallery",
     "breadcrumbs": {
       "home": "Home",
       "services": "Services"
@@ -110,14 +111,16 @@
     "share": "Share",
     "shareAria": "Share service",
     "reviews_one": "{{count, number}} review",
-    "reviews_other": "{{count, number}} reviews"
+    "reviews_other": "{{count, number}} reviews",
+    "noReviewsYet": "No reviews yet"
   },
   "priceList": {
     "title": "Services & Prices",
     "popularBadge": "POPULAR",
     "hotBadge": "HOT",
     "from": "from",
-    "noPrice": "—"
+    "noPrice": "No price",
+    "fromPrice": "from {{price}}"
   },
   "popular": {
     "title": "Popular Services",
@@ -165,7 +168,8 @@
     "phone": "Phone",
     "email": "Email",
     "address": "Address",
-    "today": "(Today)"
+    "today": "(Today)",
+    "bookVisit": "Book a visit"
   },
   "days": {
     "monday": "Monday",
