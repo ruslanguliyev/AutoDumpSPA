@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { membershipsApi } from '@/memberships/api';
+import { membershipsEnabled } from '@/memberships/config';
 import type { SpecialistServiceMembership } from '@/memberships/types/membership.types';
 
 const MEMBERSHIPS_QUERY_KEY = 'memberships';
@@ -9,7 +10,7 @@ export const useMembershipsByServiceId = (serviceId?: string) => {
   const query = useQuery({
     queryKey: [MEMBERSHIPS_QUERY_KEY, { serviceId: safeId }],
     queryFn: () => membershipsApi.getMembershipsByServiceId(safeId),
-    enabled: Boolean(safeId),
+    enabled: membershipsEnabled() && Boolean(safeId),
     staleTime: 30_000,
   });
 
@@ -26,7 +27,7 @@ export const useMembershipsBySpecialistId = (specialistId?: string) => {
   const query = useQuery({
     queryKey: [MEMBERSHIPS_QUERY_KEY, { specialistId: safeId }],
     queryFn: () => membershipsApi.getMembershipsBySpecialistId(safeId),
-    enabled: Boolean(safeId),
+    enabled: membershipsEnabled() && Boolean(safeId),
     staleTime: 30_000,
   });
 

@@ -11,6 +11,7 @@ import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import SpecialistGallery from '@/specialists/components/SpecialistGallery';
 import SpecialistHighlights from '@/specialists/components/SpecialistHighlights';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
+import { membershipsEnabled } from '@/memberships/config';
 import { useSpecialistBySlug } from '@/specialists/hooks/useSpecialists';
 import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices';
 import { buildSpecialistMobileBar } from '@/specialists/pages/specialistDetail/SpecialistDetailMobileBar';
@@ -34,9 +35,10 @@ const SpecialistDetailPage = () => {
   useTrackView('SPECIALIST', specialist?.id);
   useDocumentTitle(specialist?.name);
 
+  const showMemberships = membershipsEnabled();
   const { primaryService, isLoading: servicesLoading } = useSpecialistServices(specialist?.id);
 
-  const isPageLoading = isLoading || servicesLoading;
+  const isPageLoading = isLoading || (showMemberships && servicesLoading);
 
   if (isPageLoading && !specialist) {
     return (
@@ -92,7 +94,10 @@ const SpecialistDetailPage = () => {
           sidebar={
             <div className="flex flex-col gap-4">
               <div id="specialist-booking" className="scroll-mt-24">
-                <SpecialistSidebarCard specialist={specialist} primaryService={primaryService} />
+                <SpecialistSidebarCard
+                  specialist={specialist}
+                  primaryService={showMemberships ? primaryService : null}
+                />
               </div>
               <PromoteShortcuts targetType="SPECIALIST" targetId={specialist.id} />
             </div>

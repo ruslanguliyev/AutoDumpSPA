@@ -1,17 +1,14 @@
-import { membershipsGraphqlApi } from '@/memberships/api/memberships.graphql';
 import { membershipsMockApi } from '@/memberships/api/memberships.mock';
+import { membershipsEnabled } from '@/memberships/config';
 import type { MembershipsDataProvider } from '@/shared/api/memberships.provider';
+import type { SpecialistServiceMembership } from '@/memberships/types/membership.types';
 
-const shouldUseMocks = (): boolean => {
-  const envFlag = import.meta.env.VITE_USE_MEMBERSHIPS_MOCKS;
-  if (envFlag !== undefined) {
-    return String(envFlag) !== 'false';
-  }
-  // The backend has no memberships resolver yet, so mocks stay the default
-  // (in every environment) until it is implemented.
-  return true;
+const emptyApi: MembershipsDataProvider = {
+  getMembershipsByServiceId: async () => [] as SpecialistServiceMembership[],
+  getMembershipsBySpecialistId: async () => [] as SpecialistServiceMembership[],
 };
 
-export const membershipsApi: MembershipsDataProvider = shouldUseMocks()
+/** GraphQL lives in `memberships.graphql.ts` for when the backend ships. Until then: mocks only if flagged. */
+export const membershipsApi: MembershipsDataProvider = membershipsEnabled()
   ? membershipsMockApi
-  : membershipsGraphqlApi;
+  : emptyApi;

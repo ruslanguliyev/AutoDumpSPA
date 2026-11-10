@@ -6,6 +6,7 @@ import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { useService } from '@/services/hooks/useService';
+import { membershipsEnabled } from '@/memberships/config';
 import { useServiceSpecialists } from '@/services/hooks/useServiceSpecialists';
 import ServiceHeader from '@/services/components/ServiceHeader';
 import ServiceGallery from '@/services/components/ServiceGallery';
@@ -75,26 +76,28 @@ export default function ServiceDetailPage() {
             <ServiceGallery media={service.media} serviceName={service.name} serviceId={service.id} />
             <FullPriceList services={service.services || []} />
             <BrandsServiced brands={service.supportedBrands} />
-            <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
-              <h2 className="text-[17px] font-semibold text-foreground">{t('detail.specialists.title')}</h2>
-              <div className="mt-4">
-                {specialistsLoading ? (
-                  <p className="text-[15px] text-muted-foreground">{t('detail.specialists.loading')}</p>
-                ) : specialistsError ? (
-                  <p className="text-[15px] text-muted-foreground">{t('detail.specialists.error')}</p>
-                ) : specialists.length ? (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {specialists.map((specialist) => (
-                      <SpecialistCard key={specialist.id} specialist={specialist} />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-[15px] text-muted-foreground">
-                    {t('detail.specialists.empty')}
-                  </p>
-                )}
-              </div>
-            </section>
+            {membershipsEnabled() ? (
+              <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
+                <h2 className="text-[17px] font-semibold text-foreground">{t('detail.specialists.title')}</h2>
+                <div className="mt-4">
+                  {specialistsLoading ? (
+                    <p className="text-[15px] text-muted-foreground">{t('detail.specialists.loading')}</p>
+                  ) : specialistsError ? (
+                    <p className="text-[15px] text-muted-foreground">{t('detail.specialists.error')}</p>
+                  ) : specialists.length ? (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      {specialists.map((specialist) => (
+                        <SpecialistCard key={specialist.id} specialist={specialist} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-[15px] text-muted-foreground">
+                      {t('detail.specialists.empty')}
+                    </p>
+                  )}
+                </div>
+              </section>
+            ) : null}
             <ReviewsSection targetType="SERVICE_CENTER" targetId={service.id} />
           </div>
         }
