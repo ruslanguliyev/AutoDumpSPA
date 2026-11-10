@@ -9,6 +9,11 @@ import { Specialization } from '@/specialists/types/specialist.types';
 const parseCommaSeparated = (value: string): FilterValue =>
   value.split(',').filter(Boolean);
 
+const parseNumberParam = (value: string): FilterValue => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 const VALID_SPECIALIZATIONS = new Set(
   Object.values<string>(Specialization as Record<string, string>)
 );
@@ -43,10 +48,14 @@ export const URL_PARAMS_CONFIG: Record<FilterDomain, FiltersUrlSyncConfig> = {
       { param: 'type', key: 'vehicleType' },
       { param: 'brand', key: 'brand' },
       { param: 'model', key: 'model' },
-      { param: 'priceTo', key: 'price' },
-      { param: 'yearFrom', key: 'registration' },
-      { param: 'region', key: 'region' },
+      { param: 'priceFrom', key: 'priceFrom', parse: parseNumberParam },
+      { param: 'priceTo', key: 'priceTo', parse: parseNumberParam },
+      { param: 'yearFrom', key: 'yearFrom', parse: parseNumberParam },
+      { param: 'yearTo', key: 'yearTo', parse: parseNumberParam },
       { param: 'city', key: 'city' },
+      { param: 'condition', key: 'condition' },
+      { param: 'fuel', key: 'fuel', parse: parseCommaSeparated },
+      { param: 'transmission', key: 'transmission', parse: parseCommaSeparated },
     ],
   },
 

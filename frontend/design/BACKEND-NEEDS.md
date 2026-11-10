@@ -15,6 +15,11 @@ One line per missing capability. “Blocks” = public page or filter called out
 - **`filterOptions` (or facet) query** — blocks replacing the parts index 10 000-row fetch used only to populate brand/location selects.
 - **Canonical **city list** query** — blocks shared city dropdowns on index pages (sellers cities are derived from the loaded seller array).
 - **`VehiclesFilterInput.bodyType`** — blocks cars index body-type filter (`VehicleObject.bodyType` exists; filter input does not).
+- **`VehiclesFilterInput.drive` / `engineVolumeFrom`+`engineVolumeTo` / `powerFrom`+`powerTo`** — blocks cars advanced “body and specs” ranges and drivetrain chips (`VehicleObject.drive`, `engineVolume`, `power` exist).
+- **`VehiclesFilterInput.mileageFrom`+`mileageTo` / `hasDamage` / `isRepainted` / `wasInAccident`** — blocks cars advanced condition group (`VehicleObject.mileage`, `hasDamage`, `isRepainted`, `wasInAccident` exist).
+- **`VehiclesFilterInput.sellerType` / `isCreditAvailable` / `isBarterAvailable`** — blocks cars “seller and terms” segment and credit/barter chips (`VehicleSellerObject.type`, `VehicleObject.isCreditAvailable`, `isBarterAvailable` exist).
+- **`VehiclesFilterInput.color` / `seatsCount` / `marketRegion`** — blocks cars “other” group (`VehicleObject.color`, `seatsCount`, `marketRegion` exist; no color/seats/market catalogs on the API).
+- **`VehiclesFilterInput.fuel` and `transmission` as `[String]`** — filter input is a single `String`; cars UI multi-selects are applied only on the client catalogue chunk.
 - **`SpecialistsFilterInput` brand / supported-vehicle match** — blocks server-side “vehicles serviced” on `/specialists` (`SpecialistObject.supportedVehicles` exists; filter input has no brand/vehicle fields; frontend shows the control only for the real API).
 - **`SpecialistsFilterInput` → wire `available` for “Available now”** — optional: field exists on filter input but specialists index still applies availability client-side after fetch.
 - **Service centre list filters** (`serviceTypes`, `brands`, `ratingFrom`, `verifiedOnly` on query)** — blocks server-side services sidebar filters on `/services` (only `city` is passed to GraphQL today).

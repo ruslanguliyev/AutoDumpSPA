@@ -235,7 +235,13 @@
       "fuel": "Топливо",
       "chipFrom": "{{label}} от {{value}}",
       "chipTo": "{{label}} до {{value}}",
-      "chipRange": "{{label}} {{from}}–{{to}}"
+      "chipRange": "{{label}} {{from}}–{{to}}",
+      "advanced": "Расширенные фильтры",
+      "groupBodyTech": "Кузов и техника",
+      "rangeInvalid": "Значение «от» не может быть больше «до».",
+      "searchBrand": "Поиск марки",
+      "searchModel": "Поиск модели",
+      "noMatches": "Нет совпадений"
     }
   },
   "enums": {

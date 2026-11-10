@@ -121,18 +121,6 @@ export function IndexPage({
         </div>
       </div>
 
-      {activeChips.length > 0 ? (
-        <ul className="-mt-3 mb-6 flex list-none flex-wrap gap-2 lg:hidden">
-          {activeChips.map((chip) => (
-            <li key={chip.key}>
-              <Chip onRemove={chip.onRemove} removeLabel={removeChipLabel}>
-                {chip.label}
-              </Chip>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
       {above}
 
       <div className="lg:grid lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start lg:gap-8">
@@ -150,6 +138,29 @@ export function IndexPage({
         </aside>
 
         <div className="min-w-0">
+          {activeChips.length > 0 ? (
+            <div className="mb-4 flex w-full min-w-0 flex-wrap items-center gap-2">
+              {activeFilterCount > 0 ? (
+                <span className="inline-flex min-h-8 min-w-[22px] items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[12px] font-semibold text-primary-foreground">
+                  {activeFilterCount}
+                </span>
+              ) : null}
+              <ul className="m-0 flex min-w-0 flex-1 list-none flex-wrap gap-2">
+                {activeChips.map((chip) => (
+                  <li key={chip.key}>
+                    <Chip onRemove={chip.onRemove} removeLabel={removeChipLabel}>
+                      {chip.label}
+                    </Chip>
+                  </li>
+                ))}
+                <li>
+                  <Chip onRemove={onResetFilters} removeLabel={drawerLabels.clearAll}>
+                    {drawerLabels.clearAll}
+                  </Chip>
+                </li>
+              </ul>
+            </div>
+          ) : null}
           {gridState ?? (
             <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">{children}</ul>
           )}

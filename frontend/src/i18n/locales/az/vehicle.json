@@ -222,7 +222,13 @@
       "fuel": "Yanacaq",
       "chipFrom": "{{label}} {{value}}-dən",
       "chipTo": "{{label}} {{value}}-dək",
-      "chipRange": "{{label}} {{from}}–{{to}}"
+      "chipRange": "{{label}} {{from}}–{{to}}",
+      "advanced": "Əlavə filtrlər",
+      "groupBodyTech": "Kuzov və texnika",
+      "rangeInvalid": "«Dən» dəyəri «dək» dəyərindən böyük ola bilməz.",
+      "searchBrand": "Marka axtar",
+      "searchModel": "Model axtar",
+      "noMatches": "Uyğunluq yoxdur"
     }
   },
   "enums": {

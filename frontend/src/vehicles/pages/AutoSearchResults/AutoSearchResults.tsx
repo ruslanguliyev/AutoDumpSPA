@@ -19,6 +19,7 @@ import type { ActiveFilterChip } from '@/shared/ui/IndexPage';
 import Button from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/EmptyState';
 import Skeleton from '@/shared/ui/Skeleton/Skeleton';
+import { formatNumber } from '@/lib/format';
 import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import CarsFilters from './CarsFilters';
 
@@ -102,13 +103,28 @@ export default function AutoSearchResults() {
   const brand = text(filters.brand);
   const model = text(filters.model);
   const city = text(filters.city);
+  const locale = language.startsWith('en') ? 'en-US' : language.startsWith('az') ? 'az-AZ' : 'ru-RU';
+  const formatChipNumber = (value: unknown) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? formatNumber(parsed, locale) : text(value);
+  };
   if (brand) chips.push({ key: 'brand', label: brand, onRemove: () => setFilters('cars', { brand: '', model: '' }) });
   if (model) chips.push({ key: 'model', label: model, onRemove: () => setFilter('cars', 'model', '') });
   if (city) chips.push({ key: 'city', label: city, onRemove: () => setFilter('cars', 'city', '') });
 
+  const condition = text(filters.condition);
+  if (condition && condition !== 'all') {
+    chips.push({
+      key: 'condition',
+      label:
+        condition === 'new' ? t('filter.conditionNew') : t('filter.conditionUsed'),
+      onRemove: () => setFilter('cars', 'condition', 'all'),
+    });
+  }
+
   const range = (label: string, from: unknown, to: unknown) => {
-    const a = text(from);
-    const b = text(to);
+    const a = text(from) ? formatChipNumber(from) : '';
+    const b = text(to) ? formatChipNumber(to) : '';
     if (a && b) return t('index.filters.chipRange', { label, from: a, to: b });
     if (a) return t('index.filters.chipFrom', { label, value: a });
     if (b) return t('index.filters.chipTo', { label, value: b });
@@ -122,7 +138,15 @@ export default function AutoSearchResults() {
       onRemove: () => setFilters('cars', { priceFrom: null, priceTo: null }),
     });
   }
-  const yearLabel = range(t('index.filters.year'), filters.yearFrom, filters.yearTo);
+  const yearRange = (label: string, from: unknown, to: unknown) => {
+    const a = text(from);
+    const b = text(to);
+    if (a && b) return t('index.filters.chipRange', { label, from: a, to: b });
+    if (a) return t('index.filters.chipFrom', { label, value: a });
+    if (b) return t('index.filters.chipTo', { label, value: b });
+    return '';
+  };
+  const yearLabel = yearRange(t('index.filters.year'), filters.yearFrom, filters.yearTo);
   if (yearLabel) {
     chips.push({
       key: 'year',

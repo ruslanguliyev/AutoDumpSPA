@@ -18,7 +18,7 @@ export type ComboboxOption = {
 };
 
 const triggerBaseClass =
-  'flex w-full min-h-[42px] items-center justify-between gap-2 rounded-xl border border-border bg-background px-3 py-2 text-left text-sm text-foreground shadow-sm transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50';
+  'flex w-full min-h-11 items-center justify-between gap-2 rounded-xl border border-border bg-background px-3 py-2 text-left text-sm text-foreground shadow-sm transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50';
 
 const listboxClass =
   'max-h-72 overflow-y-auto overscroll-contain rounded-xl border border-border bg-popover py-1 text-sm text-popover-foreground shadow-lg';

@@ -95,6 +95,7 @@ export const useFiltersUrlSync = (
   const { paramMap } = config;
 
   const isHydrated = useRef(false);
+  const pendingHydration = useRef(false);
   const lastSyncedParams = useRef<string>('');
   const lastSyncedFilters = useRef<string>('');
 
@@ -122,6 +123,16 @@ export const useFiltersUrlSync = (
       lastSyncedFilters.current = filtersFromParamsKey;
 
       if (currentFiltersKey !== filtersFromParamsKey) {
+        pendingHydration.current = true;
+        setFilters(domain, filtersFromParams);
+      }
+      return;
+    }
+
+    if (pendingHydration.current) {
+      pendingHydration.current = false;
+      lastSyncedFilters.current = filtersFromParamsKey;
+      if (currentFiltersKey !== filtersFromParamsKey) {
         setFilters(domain, filtersFromParams);
       }
       return;
@@ -132,6 +143,7 @@ export const useFiltersUrlSync = (
       lastSyncedFilters.current = filtersFromParamsKey;
 
       if (currentFiltersKey !== filtersFromParamsKey) {
+        pendingHydration.current = true;
         setFilters(domain, filtersFromParams);
       }
       return;

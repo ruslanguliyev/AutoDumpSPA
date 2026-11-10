@@ -224,7 +224,13 @@
       "fuel": "Fuel",
       "chipFrom": "{{label}} from {{value}}",
       "chipTo": "{{label}} to {{value}}",
-      "chipRange": "{{label}} {{from}}–{{to}}"
+      "chipRange": "{{label}} {{from}}–{{to}}",
+      "advanced": "Advanced filters",
+      "groupBodyTech": "Body and specs",
+      "rangeInvalid": "The “from” value cannot be greater than “to”.",
+      "searchBrand": "Search brand",
+      "searchModel": "Search model",
+      "noMatches": "No matches"
     }
   },
   "enums": {

@@ -76,8 +76,12 @@ export function filterAutosCatalog(vehicles, filters) {
 
     if (model && !normalize(car.model).includes(model)) return false;
 
-    if (priceFrom !== null && Number(car.price ?? 0) < priceFrom) return false;
-    if (priceTo !== null && Number(car.price ?? 0) > priceTo) return false;
+    const priceRangeValid =
+      priceFrom === null || priceTo === null || priceFrom <= priceTo;
+    if (priceRangeValid) {
+      if (priceFrom !== null && Number(car.price ?? 0) < priceFrom) return false;
+      if (priceTo !== null && Number(car.price ?? 0) > priceTo) return false;
+    }
 
     if (condition && condition !== 'all') {
       if (normalize(car.condition) !== condition) return false;
@@ -140,8 +144,12 @@ export function filterAutosCatalog(vehicles, filters) {
     const hasYearRange = yearFrom !== null || yearTo !== null;
 
     if (hasYearRange) {
-      if (yearFrom !== null && carYear < yearFrom) return false;
-      if (yearTo !== null && carYear > yearTo) return false;
+      const yearRangeValid =
+        yearFrom === null || yearTo === null || yearFrom <= yearTo;
+      if (yearRangeValid) {
+        if (yearFrom !== null && carYear < yearFrom) return false;
+        if (yearTo !== null && carYear > yearTo) return false;
+      }
     } else if (filters.registration === 'Older') {
       if (carYear >= 2015) return false;
     } else if (hasRegistrationYear) {
