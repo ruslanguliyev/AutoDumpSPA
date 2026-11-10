@@ -12,6 +12,7 @@ type SellerLike = {
   type?: string | null;
   rating?: number | null;
   votes?: number | null;
+  reviewsCount?: number | null;
   logo?: string | null;
   avatarUrl?: string | null;
   verified?: boolean;
@@ -39,7 +40,9 @@ export function MiniSellerCard({ seller, className = '' }: Props) {
   const typeKey = normalizeSellerType(seller.type);
   const typeLabel = typeKey ? t(`seller.type.${typeKey}`) : null;
   const rating = Number.isFinite(Number(seller.rating)) ? Number(seller.rating) : null;
-  const votes = Number.isFinite(Number(seller.votes)) ? Number(seller.votes) : null;
+  const reviewsRaw = seller.votes ?? seller.reviewsCount;
+  const reviews = Number.isFinite(Number(reviewsRaw)) ? Number(reviewsRaw) : null;
+  const showRating = reviews != null && reviews > 0 && rating != null;
   const avatar = seller.logo || seller.avatarUrl || null;
   const canOpen = hasPublicSellerPage(seller.type) && seller.hasPublicPage === true;
 
@@ -70,15 +73,15 @@ export function MiniSellerCard({ seller, className = '' }: Props) {
             {seller.verified ? <Badge variant="verified">{t('seller.verified')}</Badge> : null}
           </div>
           {typeLabel ? <p className="mt-0.5 text-[13px] text-muted-foreground">{typeLabel}</p> : null}
-          {rating != null ? (
+          {showRating ? (
             <RatingStars
               value={rating}
-              count={votes ?? undefined}
-              countLabel={votes != null ? t('seller.reviews', { count: votes }) : undefined}
+              count={reviews}
+              countLabel={t('seller.reviews', { count: reviews })}
               className="mt-2"
             />
           ) : (
-            <p className="mt-2 text-[13px] text-muted-foreground">{t('seller.noRating')}</p>
+            <p className="mt-2 text-[13px] text-muted-foreground">{t('seller.noReviewsYet')}</p>
           )}
         </div>
       </div>

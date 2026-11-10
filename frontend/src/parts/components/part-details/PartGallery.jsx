@@ -22,16 +22,8 @@ export const PartGallery = ({ part }) => {
     }));
   }, [part, t]);
 
-  if (media.length === 0) {
-    return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-        {t('gallery.noImages')}
-      </div>
-    );
-  }
-
   return (
-    <section className="rounded-2xl border border-border bg-card p-4">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card-muted">
       <Suspense
         fallback={
           <div className="rounded-xl bg-secondary p-6 text-sm font-semibold text-muted-foreground">
@@ -42,9 +34,10 @@ export const PartGallery = ({ part }) => {
         <MediaCarousel
           items={media}
           ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? t('labels.part', { ns: 'common' }) })}
-          viewportClassName="!flex !items-center !justify-center !bg-background !h-[320px] md:!h-[420px]"
-          mediaClassName="!object-contain !max-h-full !max-w-full !w-auto !mx-auto"
-          thumbnailsClassName="!justify-start"
+          viewportClassName="aspect-video bg-card-muted"
+          mediaClassName="object-contain"
+          showCounter={media.length > 1}
+          thumbnailsClassName="px-2"
         />
       </Suspense>
     </section>

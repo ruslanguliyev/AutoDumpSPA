@@ -1,96 +1,80 @@
-import { Check, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { SellerCard } from '@/shared/components/SellerCard/SellerCard';
-import { TrustBlock } from '@/shared/blocks';
+
+import { formatPrice, intlLocale } from '@/lib/format';
+import Button from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/Badge';
 
 export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
-  const { t } = useTranslation('part');
+  const { t, i18n } = useTranslation('part');
+  const locale = intlLocale(i18n.language);
   const inStock = (part?.stock ?? 0) > 0;
-  const priceLabel =
-    part?.price != null ? `${Number(part.price).toFixed(2)} ${part?.currency ?? ''}` : '—';
 
-  // Translate condition value
   const getConditionLabel = (condition) => {
     if (!condition) return '—';
-    const lower = condition.toLowerCase();
+    const lower = String(condition).toLowerCase();
     if (lower === 'new') return t('filter.new');
     if (lower === 'used') return t('filter.used');
     if (lower === 'refurbished') return t('filter.refurbished');
-    return condition; // Fallback to original if unknown
+    return condition;
   };
 
   const onFav = () => {
-    if (!part) return;
+    if (!part?.id) return;
     onToggleFavorite?.();
   };
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] lg:sticky lg:top-[157px]">
+    <article className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] [overflow-wrap:anywhere]">
       <div className="space-y-4">
-        {/* 1) Price block */}
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="text-center text-2xl font-black tracking-tight text-foreground">
-              {priceLabel}
-            </div>
-            <div className="mt-1 text-center text-xs font-semibold text-success">
-              {inStock ? t('purchase.inStockCount', { count: part.stock }) : t('details.outOfStock')}
-            </div>
+          <div className="min-w-0 flex-1 text-center">
+            <p className="text-[28px] font-bold leading-none text-primary-text">
+              {formatPrice(part?.price, part?.currency ?? 'AZN', locale)}
+            </p>
+            <p className="mt-2">
+              {inStock ? (
+                <Badge variant="inStock">{t('purchase.inStockCount', { count: part.stock })}</Badge>
+              ) : (
+                <Badge variant="outOfStock">{t('details.outOfStock')}</Badge>
+              )}
+            </p>
           </div>
 
-          {/* 5) Favorites (secondary) */}
-          <button
+          <Button
             type="button"
-            className={[
-              'inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-accent hover:text-foreground disabled:opacity-50',
-              isFavorited
-                ? 'bg-primary/10 text-primary'
-                : 'bg-transparent',
-            ].join(' ')}
+            variant="icon"
+            size="icon"
+            className="shrink-0"
             aria-label={isFavorited ? t('card.removeFromFavorites') : t('card.addToFavorites')}
             aria-pressed={Boolean(isFavorited)}
             onClick={onFav}
             disabled={!part?.id}
           >
-            <Heart size={16} fill={isFavorited ? 'currentColor' : 'none'} />
-          </button>
+            <Heart size={20} strokeWidth={1.5} fill={isFavorited ? 'currentColor' : 'none'} aria-hidden="true" />
+          </Button>
         </div>
 
-        {/* 2) Listing info (classifieds-style) */}
-        <div className="rounded-xl border border-border/60 bg-secondary/20 p-3">
-          <div className="text-center text-[11px] font-extrabold tracking-wide text-muted-foreground">
+        <Button asChild variant="primary" className="w-full min-h-11 justify-center">
+          <a href="#contact-seller">{t('purchase.contactSeller')}</a>
+        </Button>
+
+        <div className="rounded-[var(--radius)] border border-dashed border-border-strong px-3 py-2 dark:border-border">
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             {t('purchase.listingInfo')}
-          </div>
-          <div className="mt-3 space-y-2 text-xs font-semibold text-muted-foreground">
+          </p>
+          <dl className="mt-3 space-y-2 text-[13px]">
             <div className="flex items-center justify-between gap-3">
-              <span>{t('details.condition')}</span>
-              <span className="text-foreground">{getConditionLabel(part?.condition)}</span>
+              <dt className="text-muted-foreground">{t('details.condition')}</dt>
+              <dd className="font-semibold text-foreground">{getConditionLabel(part?.condition)}</dd>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <span>{t('details.location')}</span>
-              <span className="text-foreground">{part?.location || '—'}</span>
+              <dt className="text-muted-foreground">{t('details.location')}</dt>
+              <dd className="font-semibold text-foreground">{part?.location?.trim() || '—'}</dd>
             </div>
-          </div>
+          </dl>
         </div>
-
-        {/* 4) Trust signals */}
-        <div className="flex items-center justify-center gap-6 border-b border-border pb-3 text-[11px] font-semibold text-muted-foreground">
-          <span className="inline-flex items-center gap-2">
-            <Check size={14} className="text-success" aria-hidden="true" />
-            {t('purchase.freeReturns')}
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <Check size={14} className="text-success" aria-hidden="true" />
-            {t('purchase.secureCheckout')}
-          </span>
-        </div>
-
-        {/* 5) Seller card */}
-        <SellerCard seller={part?.seller} variant="compact" />
-
-        {/* 6) Protection / guarantees */}
-        <TrustBlock variant="part" />
       </div>
-    </div>
+    </article>
   );
 };

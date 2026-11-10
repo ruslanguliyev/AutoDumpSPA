@@ -49,6 +49,7 @@
     "reviews": "Rəylər",
     "noDescription": "Təsvir verilməyib.",
     "mainInfo": "Əsas məlumat",
+    "extraInfo": "Ətraflı",
     "article": "Məqalə / OEM",
     "condition": "Vəziyyət",
     "availability": "Mövcudluq",
@@ -128,6 +129,7 @@
   "purchase": {
     "inStockCount": "Stokda: {{count}}",
     "listingInfo": "MƏLUMAT",
+    "contactSeller": "Satıcı ilə əlaqə",
     "freeReturns": "Pulsuz qaytarma",
     "secureCheckout": "Təhlükəsiz ödəniş"
   },

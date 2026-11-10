@@ -49,6 +49,7 @@
     "reviews": "Отзывы",
     "noDescription": "Описание не предоставлено.",
     "mainInfo": "Основная информация",
+    "extraInfo": "Подробности",
     "article": "Артикул / OEM",
     "condition": "Состояние",
     "availability": "Наличие",
@@ -142,6 +143,7 @@
   "purchase": {
     "inStockCount": "В наличии: {{count}}",
     "listingInfo": "ИНФОРМАЦИЯ О ТОВАРЕ",
+    "contactSeller": "Связаться с продавцом",
     "freeReturns": "Бесплатный возврат",
     "secureCheckout": "Безопасная оплата"
   },

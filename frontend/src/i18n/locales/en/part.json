@@ -49,6 +49,7 @@
     "reviews": "Reviews",
     "noDescription": "No description provided.",
     "mainInfo": "Main info",
+    "extraInfo": "Details",
     "article": "Article / OEM",
     "condition": "Condition",
     "availability": "Availability",
@@ -128,6 +129,7 @@
   "purchase": {
     "inStockCount": "In stock: {{count}}",
     "listingInfo": "LISTING INFO",
+    "contactSeller": "Contact seller",
     "freeReturns": "Free returns",
     "secureCheckout": "Secure checkout"
   },

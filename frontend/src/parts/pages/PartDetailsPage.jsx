@@ -1,39 +1,54 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import BackButton from '@/shared/ui/BackButton/BackButton';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
-import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
+import { Badge } from '@/shared/ui/Badge';
+import { Chip } from '@/shared/ui/Chip';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
+import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
 import { ContactSellerForm } from '@/features/inquiries/components/ContactSellerForm';
 import { ReportListingForm } from '@/features/moderation/components/ReportListingForm';
-import { PartDetailsTabs } from '@/parts/components/part-details/PartDetailsTabs';
+import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { getPartCategoryKey } from '@/parts/utils/parts.constants';
-import { useTranslation } from 'react-i18next';
+import {
+  DetailLayout,
+  MiniSellerCard,
+  PromoteShortcuts,
+} from '@/shared/blocks';
+import { TrustBlock } from '@/shared/blocks/TrustBlock/TrustBlock';
+import { useTrackView } from '@/features/promotions/hooks/usePromotions';
+import { buildPartMobileBar } from '@/parts/pages/partDetail/PartDetailMobileBar';
 
-const Row = ({ label, value }) => (
-  <div className="flex items-baseline justify-between gap-6 border-b border-dashed border-border pb-2">
-    <span className="text-xs font-semibold text-muted-foreground">{label}</span>
-    <span className="text-sm font-bold text-foreground">{value}</span>
+const SpecRow = ({ label, value }) => (
+  <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-2">
+    <span className="text-[13px] font-medium text-muted-foreground">{label}</span>
+    <span className="text-right text-[15px] font-semibold text-foreground">{value}</span>
   </div>
 );
+
+const conditionLabel = (t, condition) => {
+  if (!condition) return '—';
+  const lower = String(condition).toLowerCase();
+  if (lower === 'new') return t('filter.new');
+  if (lower === 'used') return t('filter.used');
+  if (lower === 'refurbished') return t('filter.refurbished');
+  return condition;
+};
 
 export default function PartDetailsPage() {
   const { t } = useTranslation(['part', 'common']);
   const { id } = useParams();
-  const { data: part, isLoading, error } = usePartDetails(id);
+  const { data: part, isLoading, isError } = usePartDetails(id);
   useDocumentTitle(part?.name);
+  useTrackView('LISTING', part?.listingId ?? undefined);
 
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
-  const isFavorited = useFavoritesStore((s) =>
-    part?.id ? s.isFavorited('part', part.id) : false
-  );
-
-  const ratingValue = Number.isFinite(part?.rating) ? part.rating : 0;
-  const reviewsCount = Number.isFinite(part?.reviewsCount) ? part.reviewsCount : 0;
+  const isFavorited = useFavoritesStore((s) => (part?.id ? s.isFavorited('part', part.id) : false));
 
   const compatibilityList = useMemo(() => {
     const list = Array.isArray(part?.compatibility) ? part.compatibility : [];
@@ -48,195 +63,128 @@ export default function PartDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="w-full px-4 py-10">
-        <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            {t('details.loadingDetails', { ns: 'part' })}
-          </div>
-        </div>
+      <div className="mx-auto max-w-[1280px] px-4 py-10 text-[15px] text-muted-foreground">
+        {t('details.loadingDetails')}
       </div>
     );
   }
 
-  if (error) {
-    const message = error instanceof Error ? error.message : String(error);
+  if (isError || !part) {
     return (
-      <div className="w-full px-4 py-10">
-        <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive">
-            {t('details.failedToLoad', { ns: 'part' })} {message ? <span>{message}</span> : null}
-          </div>
-          <BackButton fallback="/parts" />
-        </div>
-      </div>
-    );
-  }
-
-  if (!part) {
-    return (
-      <div className="w-full px-4 py-10">
-        <div className="mx-auto w-full max-w-[1280px] space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-            {t('details.notFound', { ns: 'part' })}
-          </div>
-          <BackButton fallback="/parts" />
-        </div>
+      <div className="mx-auto max-w-[1280px] px-4 py-10 text-[15px] text-muted-foreground">
+        {t('details.notFound')}
       </div>
     );
   }
 
   const categoryKey = getPartCategoryKey(part?.category);
   const categoryLabel = categoryKey
-    ? t(`categories.${categoryKey}`, { ns: 'part', defaultValue: part?.category ?? '' })
+    ? t(`categories.${categoryKey}`, { defaultValue: part?.category ?? '' })
     : part?.category?.trim() ?? '';
 
-  return (
-    <div className="w-full px-4 py-10">
-      <div className="mx-auto w-full max-w-[1280px]">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
-          {/* LEFT */}
-          <div className="space-y-6">
-            <Breadcrumbs items={breadcrumbs} />
-            <div className="flex items-center justify-between gap-3">
-            </div>
+  const inStock = (part.stock ?? 0) > 0;
+  const seller = part.seller ?? null;
+  const canReviewSeller = Boolean(seller?.id && seller?.hasPublicPage);
 
+  const mobileBar = buildPartMobileBar({
+    t,
+    hasContact: Boolean(part.listingId),
+    isFavorite: isFavorited,
+    onToggleFavorite: () =>
+      toggleFavorite({
+        type: 'part',
+        id: part.id,
+        title: part.name,
+        thumbnail: part.imageUrl,
+      }),
+  });
+
+  return (
+    <div className="mx-auto w-full max-w-[1280px] px-4 py-6">
+      <DetailLayout
+        mobileBar={mobileBar}
+        main={
+          <div className="flex flex-col gap-6">
+            <Breadcrumbs items={breadcrumbs} />
             <PartGallery part={part} />
 
-            <section className="rounded-2xl border border-border bg-card p-4">
-              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                <div className="min-w-0">
-                  <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
-                    {part.name}
-                  </h1>
-                  <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    {categoryLabel ? (
-                      <span className="rounded-full px-3 py-1 text-xs font-bold bg-primary text-primary-foreground">
-                        {categoryLabel}
+            <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
+              <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[30px]">{part.name}</h1>
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
+                    {categoryLabel ? <Badge variant="category">{categoryLabel}</Badge> : null}
+                    {part.brand ? (
+                      <span>
+                        {t('details.brandLabel')}: <span className="font-semibold text-foreground">{part.brand}</span>
                       </span>
                     ) : null}
-                    <span className="text-xs font-semibold">
-                      {t('details.brandLabel', { ns: 'part' })}: <span className="text-foreground">{part.brand}</span>
-                    </span>
                     {part.oemCode ? (
-                      <span className="text-xs font-semibold">
-                        {t('details.oemLabel', { ns: 'part' })}: <span className="font-mono text-foreground">{part.oemCode}</span>
+                      <span>
+                        {t('details.oemLabel')}:{' '}
+                        <span className="font-mono font-semibold text-foreground">{part.oemCode}</span>
                       </span>
                     ) : null}
                   </div>
                 </div>
-
-                <div className="shrink-0 text-right">
-                  <div className="inline-flex items-center gap-2">
-                    <RatingStars value={ratingValue} count={reviewsCount} />
-                  </div>
-                  {reviewsCount > 0 ? (
-                    <div className="mt-1 text-xs font-semibold text-muted-foreground">
-                      {t('details.reviewsCount', { ns: 'part', count: reviewsCount })}
-                    </div>
-                  ) : (
-                    <div className="mt-1 text-xs font-semibold text-muted-foreground">
-                      {t('details.noReviewsYet', { ns: 'part' })}
-                    </div>
-                  )}
-                </div>
-              </div>
+              </header>
 
               <div className="mt-6">
                 <PartDetailsTabs
                   initialTab="specs"
                   description={
                     part.description ? (
-                      <p className="whitespace-pre-line text-sm leading-6 text-foreground">
-                        {part.description}
-                      </p>
+                      <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground">{part.description}</p>
                     ) : (
-                      <p className="text-sm text-muted-foreground">{t('details.noDescription', { ns: 'part' })}</p>
+                      <p className="text-[15px] text-muted-foreground">{t('details.noDescription')}</p>
                     )
                   }
                   specifications={
-                    <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:divide-x md:divide-border">
-                      <div className="space-y-6 md:pr-10">
-                        <div className="text-center text-base font-extrabold">{t('details.mainInfo', { ns: 'part' })}</div>
-                        <div className="space-y-4">
-                          <Row label={t('details.article', { ns: 'part' })} value={part.oemCode || '—'} />
-                          <Row
-                            label={t('details.condition', { ns: 'part' })}
-                            value={
-                              part.condition
-                                ? (() => {
-                                    const lower = part.condition.toLowerCase();
-                                    if (lower === 'new') return t('filter.new', { ns: 'part' });
-                                    if (lower === 'used') return t('filter.used', { ns: 'part' });
-                                    if (lower === 'refurbished') return t('filter.refurbished', { ns: 'part' });
-                                    return part.condition;
-                                  })()
-                                : '—'
-                            }
-                          />
-                          <Row
-                            label={t('details.availability', { ns: 'part' })}
-                            value={part.stock > 0 ? t('details.inStock', { ns: 'part' }) : t('details.outOfStock', { ns: 'part' })}
-                          />
-                          <Row label={t('details.location', { ns: 'part' })} value={part.location || '—'} />
-                        </div>
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:divide-x md:divide-border">
+                      <div className="md:pr-8">
+                        <h3 className="mb-4 text-center text-[15px] font-semibold text-foreground">{t('details.mainInfo')}</h3>
+                        <SpecRow label={t('details.article')} value={part.oemCode || '—'} />
+                        <SpecRow label={t('details.condition')} value={conditionLabel(t, part.condition)} />
+                        <SpecRow label={t('details.location')} value={part.location?.trim() || '—'} />
                       </div>
-
-                      <div className="space-y-6 md:pl-10">
-                        <div className="text-center text-base font-extrabold">{t('details.compatibilityTitle', { ns: 'part' })}</div>
-                        <div className="space-y-4">
-                          <Row label={t('details.make', { ns: 'part' })} value={part.brand || '—'} />
-                          <Row label={t('details.model', { ns: 'part' })} value={part.model || '—'} />
-                          <Row
-                            label={t('details.fits', { ns: 'part' })}
-                            value={
-                              compatibilityList.length
-                                ? t('details.variantsCount', { ns: 'part', count: compatibilityList.length })
-                                : '—'
-                            }
-                          />
-                          <Row
-                            label={t('buttons.viewMore', { ns: 'common' })}
-                            value={
-                              <Link to="/parts" className="underline">
-                                {t('details.browseParts', { ns: 'part' })}
-                              </Link>
-                            }
-                          />
-                        </div>
+                      <div className="md:pl-8">
+                        <h3 className="mb-4 text-center text-[15px] font-semibold text-foreground">{t('details.extraInfo')}</h3>
+                        <SpecRow label={t('details.make')} value={part.brand || '—'} />
+                        <SpecRow label={t('filter.category')} value={categoryLabel || '—'} />
+                        <SpecRow
+                          label={t('details.availability')}
+                          value={inStock ? t('details.inStock') : t('details.outOfStock')}
+                        />
                       </div>
                     </div>
                   }
                   compatibility={
                     compatibilityList.length ? (
-                      <ul className="mx-auto grid w-full max-w-[520px] list-none grid-cols-1 gap-3 p-0 md:max-w-none md:grid-cols-2">
+                      <ul className="flex list-none flex-wrap gap-2 p-0">
                         {compatibilityList.map((item) => (
-                          <li
-                            key={item}
-                            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-center text-sm font-semibold"
-                          >
-                            {item}
+                          <li key={item}>
+                            <Chip>{item}</Chip>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-muted-foreground">{t('details.compatibilityNotAvailable', { ns: 'part' })}</p>
+                      <p className="text-[15px] text-muted-foreground">{t('details.compatibilityNotAvailable')}</p>
                     )
                   }
                   reviews={
-                    <div className="space-y-2">
-                      <div className="text-sm font-extrabold">{t('details.reviewsNotAvailableTitle', { ns: 'part' })}</div>
-                      <p className="text-muted-foreground">
-                        {t('details.reviewsNotAvailableBody', { ns: 'part' })}
-                      </p>
-                    </div>
+                    canReviewSeller ? (
+                      <ReviewsSection targetType="SELLER" targetId={seller.id} />
+                    ) : (
+                      <p className="text-[15px] text-muted-foreground">{t('details.reviewsNotAvailableBody')}</p>
+                    )
                   }
                 />
               </div>
             </section>
           </div>
-
-          {/* RIGHT */}
-          <div className="space-y-6">
+        }
+        sidebar={
+          <div className="flex flex-col gap-4">
             <PartPurchaseCard
               part={part}
               isFavorited={isFavorited}
@@ -249,11 +197,16 @@ export default function PartDetailsPage() {
                 })
               }
             />
-            <ContactSellerForm listingId={part.listingId} />
+            <MiniSellerCard seller={seller} />
+            <TrustBlock variant="part" />
+            <div id="contact-seller" className="scroll-mt-24">
+              <ContactSellerForm listingId={part.listingId} />
+            </div>
+            <PromoteShortcuts targetType="LISTING" targetId={part.listingId} />
             <ReportListingForm listingId={part.listingId} />
           </div>
-        </div>
-      </div>
+        }
+      />
     </div>
   );
 }
