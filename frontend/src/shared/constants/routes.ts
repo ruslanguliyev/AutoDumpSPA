@@ -13,6 +13,12 @@ export const ROUTES = {
   add: '/add',
   login: '/login',
   register: '/register',
+  dashboard: '/dashboard',
+  dashboardVehicles: '/dashboard/vehicles',
+  dashboardParts: '/dashboard/parts',
+  dashboardServices: '/dashboard/services',
+  dashboardInquiries: '/dashboard/inquiries',
+  dashboardFavorites: '/dashboard/favorites',
 } as const;
 
 /** react-router `path` without a leading slash. */

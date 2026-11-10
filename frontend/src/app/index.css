@@ -78,6 +78,10 @@
 
   /* Inter ships as the variable family "Inter Variable" (@fontsource-variable/inter) */
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --z-index-sidebar: 40;
+  --z-index-header: 50;
+  --z-index-dropdown: 70;
 }
 
 /* --- Light (default) ---------------------------------------------------- */
@@ -232,6 +236,10 @@
 /* Sticky bottom bar of detail pages (DetailLayout): 44px control + 8px above and below
    + 1px top border = 61px, plus the device's bottom inset. Only below `lg`, where the bar exists. */
 :root {
+  --header-height: 4rem;
+  --z-sidebar: 40;
+  --z-header: 50;
+  --z-dropdown: 70;
   --mobile-bar-h: 3.8125rem;
   --mobile-bar-offset: 0px;
   --scroll-top-bottom: 1.25rem;

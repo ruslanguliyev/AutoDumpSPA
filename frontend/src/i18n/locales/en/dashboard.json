@@ -11,7 +11,8 @@
     "activeListings": "Active Listings",
     "favorites": "Favorites",
     "drafts": "Drafts",
-    "unreadInquiries": "New inquiries"
+    "unreadInquiries": "New inquiries",
+    "cardAria": "{{label}}: {{count, number}}"
   },
   "activity": {
     "title": "Recent Activity",
@@ -34,7 +35,12 @@
     "ariaLabel": "Switch profile",
     "user": "Personal",
     "seller:s1": "Seller Account",
-    "service:sv1": "Service Account"
+    "service:sv1": "Service Account",
+    "types": {
+      "user": "Personal",
+      "seller": "Dealer",
+      "service": "Service"
+    }
   },
   "topbar": {
     "lightMode": "Switch to light mode",
@@ -127,6 +133,8 @@
     }
   },
   "listings": {
+    "filterAll": "All",
+    "filterAria": "Filter by status",
     "add": "Add listing",
     "loading": "Loading…",
     "error": "Failed to load",

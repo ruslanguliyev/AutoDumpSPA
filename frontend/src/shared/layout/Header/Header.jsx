@@ -10,6 +10,7 @@ import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
 import logoUrl from "@/assets/images/avtobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
 import { PARTS_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
+import { useNavStore } from "@/shared/store/navStore";
 import { SUPPORTED_LANGUAGES } from "@/i18n/config";
 import { ROUTES, withLang } from "@/shared/constants/routes";
 import Button from "@/shared/ui/button";
@@ -103,6 +104,7 @@ export default function Header() {
     const removeFromFavorites = useFavoritesStore((s) => s.removeFromFavorites);
 
     const popoverRootRef = useRef(null);
+    const closeMegaMenu = useNavStore((s) => s.closeMegaMenu);
 
     const favoritesCountLabel = useMemo(() => {
         const count = favoriteItems?.length ?? 0;
@@ -185,7 +187,8 @@ export default function Header() {
         setIsDrawerOpen(false);
         setOpenPopover(null);
         setExpandedMobileMenu(null);
-    }, [location.pathname, isMobile]);
+        closeMegaMenu();
+    }, [location.pathname, isMobile, closeMegaMenu]);
 
     useEffect(() => {
         const onKeyDown = (e) => {
@@ -246,7 +249,7 @@ export default function Header() {
     return (
         <>
             <header
-                className={`sticky top-0 z-50 bg-background transition-shadow ${
+                className={`sticky top-0 z-header bg-background transition-shadow ${
                     scrolled ? 'shadow-[var(--shadow-card)]' : ''
                 }`}
             >

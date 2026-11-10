@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
@@ -59,31 +60,59 @@ function InquiryCard({ inquiry, mode }: { inquiry: Inquiry; mode: Tab }) {
 
 export function InquiriesPage() {
   const { t } = useTranslation('dashboard');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const newOnly = searchParams.get('status') === 'NEW';
   const [tab, setTab] = useState<Tab>('received');
   const received = useReceivedInquiries();
   const sent = useSentInquiries();
   const active = tab === 'received' ? received : sent;
-  const items = active.data ?? [];
+  const items = (active.data ?? []).filter((item) => (newOnly && tab === 'received' ? item.status === 'NEW' : true));
+
+  useEffect(() => {
+    if (newOnly) setTab('received');
+  }, [newOnly]);
+
+  const setNewOnly = (on: boolean) => {
+    const next = new URLSearchParams(searchParams);
+    if (on) next.set('status', 'NEW');
+    else next.delete('status');
+    setSearchParams(next, { replace: true });
+  };
 
   return (
     <div className="space-y-8">
       <DashboardHeader title={t('inquiries.title')} subtitle={t('inquiries.subtitle')} />
 
-      <div className="flex gap-2" role="tablist">
+      <div className="flex flex-wrap gap-2" role="tablist">
         {(['received', 'sent'] as const).map((key) => (
           <button
             key={key}
             type="button"
             role="tab"
             aria-selected={tab === key}
-            onClick={() => setTab(key)}
-            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+            onClick={() => {
+              setTab(key);
+              if (key === 'sent') setNewOnly(false);
+            }}
+            className={`min-h-11 rounded-xl px-4 text-sm font-semibold transition ${
               tab === key ? 'bg-primary text-primary-foreground' : 'border border-border hover:bg-accent'
             }`}
           >
             {t(`inquiries.tabs.${key}`)}
           </button>
         ))}
+        {tab === 'received' ? (
+          <button
+            type="button"
+            aria-pressed={newOnly}
+            onClick={() => setNewOnly(!newOnly)}
+            className={`min-h-11 rounded-xl px-4 text-sm font-semibold transition ${
+              newOnly ? 'bg-primary text-primary-foreground' : 'border border-border hover:bg-accent'
+            }`}
+          >
+            {t('inquiries.new')}
+          </button>
+        ) : null}
       </div>
 
       {active.isLoading ? (

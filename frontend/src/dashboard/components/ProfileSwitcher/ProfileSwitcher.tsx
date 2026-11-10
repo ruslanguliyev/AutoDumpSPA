@@ -1,9 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, User, Store, Wrench } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 import { useActiveProfileStore } from '@/store/useActiveProfileStore';
+import { useAuthStore } from '@/features/auth/store/useAuthStore';
+import { useAnchoredPosition } from '@/shared/hooks/useAnchoredPosition';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
-import { useRef, useState, useCallback, useEffect } from 'react';
 
 const profileOptions: { value: ActiveProfile; icon: typeof User }[] = [
   { value: { type: 'user' }, icon: User },
@@ -25,69 +28,119 @@ function profileMatches(a: ActiveProfile, b: ActiveProfile): boolean {
 export function ProfileSwitcher() {
   const { t } = useTranslation('dashboard');
   const { activeProfile, setActiveProfile } = useActiveProfileStore();
+  const userName = useAuthStore((s) => s.user?.fullName?.trim() || null);
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLUListElement>(null);
+  const { style } = useAnchoredPosition({
+    open,
+    triggerRef,
+    panelRef,
+    align: 'end',
+  });
+
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
 
   const handleSelect = useCallback(
     (profile: ActiveProfile) => {
       setActiveProfile(profile);
-      setOpen(false);
+      close();
     },
-    [setActiveProfile]
+    [setActiveProfile, close],
   );
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    if (!open) return undefined;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target)) return;
+      if (panelRef.current?.contains(target)) return;
+      close();
     };
-    document.addEventListener('click', handler);
-    return () => document.removeEventListener('click', handler);
-  }, []);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      close();
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open, close]);
 
   const current = profileOptions.find((o) => profileMatches(o.value, activeProfile)) ?? profileOptions[0];
 
+  const optionLabel = (profile: ActiveProfile) => {
+    if (profile.type === 'user' && userName) return userName;
+    return t(`profileSwitcher.types.${profile.type}`);
+  };
+
+  const optionType = (profile: ActiveProfile) => {
+    if (profile.type === 'user' && userName) return t('profileSwitcher.types.user');
+    return null;
+  };
+
   return (
-    <div ref={ref} className="relative">
+    <div className="relative">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted/50"
+        className="flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls="profile-switcher-menu"
         aria-label={t('profileSwitcher.ariaLabel')}
       >
-        <current.icon size={18} className="text-muted-foreground" aria-hidden />
-        <span>{t(`profileSwitcher.${profileToKey(current.value)}`)}</span>
+        <current.icon size={18} className="shrink-0 text-muted-foreground" aria-hidden />
+        <span className="max-w-[40vw] truncate">{optionLabel(current.value)}</span>
         <ChevronDown
           size={16}
-          className={`text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`shrink-0 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
-      {open && (
-        <ul
-          role="listbox"
-          className="absolute right-0 top-full z-50 mt-2 min-w-[180px] rounded-xl border border-border bg-card py-1 shadow-lg"
-        >
-          {profileOptions.map((opt) => {
-            const isSelected = profileMatches(opt.value, activeProfile);
-            return (
-              <li key={profileToKey(opt.value)} role="option" aria-selected={isSelected}>
-                <button
-                  type="button"
-                  onClick={() => handleSelect(opt.value)}
-                  className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${
-                    isSelected ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/50'
-                  }`}
-                >
-                  <opt.icon size={18} aria-hidden />
-                  {t(`profileSwitcher.${profileToKey(opt.value)}`)}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      {open
+        ? createPortal(
+            <ul
+              ref={panelRef}
+              id="profile-switcher-menu"
+              role="listbox"
+              className="z-dropdown min-w-max max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-card py-1 shadow-lg"
+              style={style ?? { position: 'fixed', left: 0, top: 0, visibility: 'hidden' }}
+            >
+              {profileOptions.map((opt) => {
+                const isSelected = profileMatches(opt.value, activeProfile);
+                const typeLabel = optionType(opt.value);
+                return (
+                  <li key={profileToKey(opt.value)} role="option" aria-selected={isSelected}>
+                    <button
+                      type="button"
+                      onClick={() => handleSelect(opt.value)}
+                      className={`flex min-h-11 w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${
+                        isSelected ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted/50'
+                      }`}
+                    >
+                      <opt.icon size={18} className="shrink-0" aria-hidden />
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate">{optionLabel(opt.value)}</span>
+                        {typeLabel ? (
+                          <span className="text-xs font-normal text-muted-foreground">{typeLabel}</span>
+                        ) : null}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

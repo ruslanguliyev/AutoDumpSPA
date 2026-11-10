@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Eye, Heart, MessageSquare, Plus, TrendingUp } from 'lucide-react';
 
-import type { ListingKind, MyListing } from '@/dashboard/api/listings.api';
+import type { ListingKind, ListingStatus, MyListing } from '@/dashboard/api/listings.api';
 import { useListingActions, useMyListings } from '@/dashboard/hooks/useMyListings';
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
@@ -53,10 +53,25 @@ const ActionButton = ({ children, onClick, disabled, danger }: ActionButtonProps
   </button>
 );
 
+const STATUS_FILTERS: ListingStatus[] = ['ACTIVE', 'DRAFT'];
+
 export function MyListingsView({ kind, section }: Props) {
   const { t, i18n } = useTranslation('dashboard');
   const locale = intlLocale(i18n.language);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusParam = searchParams.get('status');
+  const statusFilter = STATUS_FILTERS.includes(statusParam as ListingStatus)
+    ? (statusParam as ListingStatus)
+    : null;
   const { items, isLoading, error } = useMyListings(kind);
+  const visibleItems = statusFilter ? items.filter((l) => l.status === statusFilter) : items;
+
+  const setStatusFilter = (next: ListingStatus | null) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (next) nextParams.set('status', next);
+    else nextParams.delete('status');
+    setSearchParams(nextParams, { replace: true });
+  };
   const actions = useListingActions();
   const editor = useStartEditListing();
   const busy = Object.values(actions).some((m) => m.isPending);
@@ -77,10 +92,33 @@ export function MyListingsView({ kind, section }: Props) {
     <div className="space-y-8">
       <DashboardHeader title={t(`${section}.title`)} subtitle={t(`${section}.subtitle`)} />
 
-      <div className="flex justify-end">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t('listings.filterAria')}>
+          <button
+            type="button"
+            onClick={() => setStatusFilter(null)}
+            className={`min-h-11 rounded-xl px-4 text-sm font-semibold transition ${
+              statusFilter === null ? 'bg-primary text-primary-foreground' : 'border border-border hover:bg-accent'
+            }`}
+          >
+            {t('listings.filterAll')}
+          </button>
+          {STATUS_FILTERS.map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => setStatusFilter(status)}
+              className={`min-h-11 rounded-xl px-4 text-sm font-semibold transition ${
+                statusFilter === status ? 'bg-primary text-primary-foreground' : 'border border-border hover:bg-accent'
+              }`}
+            >
+              {t(`listings.status.${status}`)}
+            </button>
+          ))}
+        </div>
         <Link
           to="/add"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:opacity-90"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:opacity-90"
         >
           <Plus size={16} aria-hidden="true" />
           {t('listings.add')}
@@ -95,13 +133,13 @@ export function MyListingsView({ kind, section }: Props) {
         <CardWrapper className="py-16 text-center text-destructive">
           {t('listings.error')}: {error.message}
         </CardWrapper>
-      ) : items.length === 0 ? (
+      ) : visibleItems.length === 0 ? (
         <CardWrapper className="flex flex-col items-center justify-center py-16">
           <p className="text-muted-foreground">{t(`${section}.empty`)}</p>
         </CardWrapper>
       ) : (
         <ul className="space-y-3">
-          {items.map((l) => {
+          {visibleItems.map((l) => {
             const href = publicPath(l);
             const thumb = resolveMediaUrl(l.thumbnail);
             return (

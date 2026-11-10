@@ -11,7 +11,8 @@
     "activeListings": "Активные объявления",
     "favorites": "Избранное",
     "drafts": "Черновики",
-    "unreadInquiries": "Новые обращения"
+    "unreadInquiries": "Новые обращения",
+    "cardAria": "{{label}}: {{count, number}}"
   },
   "activity": {
     "title": "Недавняя активность",
@@ -34,7 +35,12 @@
     "ariaLabel": "Переключить профиль",
     "user": "Личный",
     "seller:s1": "Продавец",
-    "service:sv1": "Сервис"
+    "service:sv1": "Сервис",
+    "types": {
+      "user": "Личный",
+      "seller": "Дилер",
+      "service": "Сервис"
+    }
   },
   "topbar": {
     "lightMode": "Светлая тема",
@@ -127,6 +133,8 @@
     }
   },
   "listings": {
+    "filterAll": "Все",
+    "filterAria": "Фильтр по статусу",
     "add": "Добавить объявление",
     "loading": "Загрузка…",
     "error": "Не удалось загрузить",

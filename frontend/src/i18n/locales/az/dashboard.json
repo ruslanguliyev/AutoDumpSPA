@@ -11,7 +11,8 @@
     "activeListings": "Aktiv elanlar",
     "favorites": "Seçilmişlər",
     "drafts": "Qaralamalar",
-    "unreadInquiries": "Yeni müraciətlər"
+    "unreadInquiries": "Yeni müraciətlər",
+    "cardAria": "{{label}}: {{count, number}}"
   },
   "activity": {
     "title": "Son fəaliyyət",
@@ -34,7 +35,12 @@
     "ariaLabel": "Profili dəyiş",
     "user": "Şəxsi",
     "seller:s1": "Satıcı hesabı",
-    "service:sv1": "Xidmət hesabı"
+    "service:sv1": "Xidmət hesabı",
+    "types": {
+      "user": "Şəxsi",
+      "seller": "Diler",
+      "service": "Servis"
+    }
   },
   "topbar": {
     "lightMode": "Açıq tema",
@@ -127,6 +133,8 @@
     }
   },
   "listings": {
+    "filterAll": "Hamısı",
+    "filterAria": "Statusa görə filtr",
     "add": "Elan əlavə et",
     "loading": "Yüklənir…",
     "error": "Yükləmək alınmadı",

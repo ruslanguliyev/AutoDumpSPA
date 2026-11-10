@@ -48,7 +48,7 @@ export const dashboardApi = {
     return {
       stats: [
         { id: 'activeListings', labelKey: 'stats.activeListings', value: activeListings, icon: 'car' },
-        { id: 'drafts', labelKey: 'stats.drafts', value: drafts, icon: 'clock' },
+        { id: 'drafts', labelKey: 'stats.drafts', value: drafts, icon: 'file-pen' },
         { id: 'favorites', labelKey: 'stats.favorites', value: favorites, icon: 'heart' },
         { id: 'unreadInquiries', labelKey: 'stats.unreadInquiries', value: unreadInquiries, icon: 'message' },
       ],

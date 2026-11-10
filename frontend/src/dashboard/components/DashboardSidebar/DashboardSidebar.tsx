@@ -22,7 +22,7 @@ export function DashboardSidebar() {
     <aside
       className={clsx(
         'flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300 ease-in-out',
-        'fixed left-0 top-0 z-40 h-screen',
+        'fixed left-0 top-0 z-sidebar h-screen',
         sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'
       )}
     >
