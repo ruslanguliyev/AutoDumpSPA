@@ -139,7 +139,7 @@ const SpecialistsListPage = () => {
       title={t('index.title')}
       count={t('index.count', { count: sorted.length })}
       sort={{
-        label: t('common:indexPage.sortBy'),
+        label: t('indexPage.sortBy', { ns: 'common' }),
         value: sort,
         onChange: (value) => setSort(value as SortKey),
         options: (['default', 'ratingDesc', 'priceAsc'] as SortKey[]).map((key) => ({
@@ -148,16 +148,16 @@ const SpecialistsListPage = () => {
         })),
       }}
       filters={<SpecialistsFilters vehiclesFilterSupported={vehiclesFilterSupported} />}
-      filtersLabel={t('common:indexPage.filters')}
+      filtersLabel={t('indexPage.filters', { ns: 'common' })}
       activeFilterCount={chips.length}
       onResetFilters={clearAll}
       activeChips={chips}
-      removeChipLabel={t('common:indexPage.removeFilter')}
+      removeChipLabel={t('indexPage.removeFilter', { ns: 'common' })}
       drawerLabels={{
-        title: t('common:indexPage.filters'),
-        reset: t('common:indexPage.reset'),
-        close: t('common:indexPage.close'),
-        clearAll: t('common:indexPage.clearAll'),
+        title: t('indexPage.filters', { ns: 'common' }),
+        reset: t('indexPage.reset', { ns: 'common' }),
+        close: t('indexPage.close', { ns: 'common' }),
+        clearAll: t('indexPage.clearAll', { ns: 'common' }),
         show: t('index.show', { count: sorted.length }),
       }}
       gridState={gridState}
@@ -168,12 +168,12 @@ const SpecialistsListPage = () => {
         onLoadMore: () => setPageState({ key: viewKey, page: Math.min(page + 1, pageCount) }),
         hasMore,
         labels: {
-          prev: t('common:indexPage.pagination.prev'),
-          next: t('common:indexPage.pagination.next'),
-          page: (n) => t('common:indexPage.pagination.page', { page: n }),
+          prev: t('indexPage.pagination.prev', { ns: 'common' }),
+          next: t('indexPage.pagination.next', { ns: 'common' }),
+          page: (n) => t('indexPage.pagination.page', { ns: 'common', page: n }),
           pageOf: (current, total) =>
-            t('common:indexPage.pagination.pageOf', { page: current, pageCount: total }),
-          loadMore: t('common:buttons.loadMore'),
+            t('indexPage.pagination.pageOf', { ns: 'common', page: current, pageCount: total }),
+          loadMore: t('buttons.loadMore', { ns: 'common' }),
         },
       }}
     >
