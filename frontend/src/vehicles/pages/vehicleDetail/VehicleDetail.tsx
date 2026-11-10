@@ -101,7 +101,7 @@ export default function VehicleDetail() {
   const hasBooking = isRent && Boolean(car.listingId && car.rental);
   const mobileBar = buildVehicleMobileBar({
     t,
-    hasContactForm: Boolean(car.listingId),
+    hasContactForm: Boolean(car.listingId && (hasBooking || !isRent)),
     hasBooking,
     phone: sellerPhone,
     phoneVisible,
@@ -154,9 +154,11 @@ export default function VehicleDetail() {
               barCarriesPhone={Boolean(mobileBar) && !hasBooking}
             />
             {isRent ? <RentalBookingCard car={car} /> : null}
-            <div id="contact-seller" className="scroll-mt-24">
-              <ContactSellerForm listingId={car.listingId} />
-            </div>
+            {!isRent ? (
+              <div id="contact-seller" className="scroll-mt-24">
+                <ContactSellerForm listingId={car.listingId} />
+              </div>
+            ) : null}
             <PromoteShortcuts targetType="LISTING" targetId={car.listingId} />
             <ReportListingForm listingId={car.listingId} />
             <SafetyTips />

@@ -60,10 +60,11 @@ export function buildVehicleMobileBar({
     </Button>
   );
 
+  const messageHref = hasBooking ? '#rental-booking' : '#contact-seller';
   const messageLabel = t('vehicle.writeMessage', { ns: 'sellers' });
   const messageButton = (variant: 'primary' | 'secondary') => (
     <Button asChild variant={variant} className={variant === 'primary' ? 'w-full' : compact}>
-      <a href="#contact-seller">
+      <a href={messageHref}>
         <MessageSquare size={18} aria-hidden="true" />
         <span className="truncate">{messageLabel}</span>
       </a>

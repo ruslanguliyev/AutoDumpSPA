@@ -230,10 +230,12 @@
 :root {
   --mobile-bar-h: 3.8125rem;
   --mobile-bar-offset: 0px;
+  --scroll-top-bottom: 1.25rem;
 }
 @media (max-width: 1023.98px) {
   body.has-mobile-bar {
     --mobile-bar-offset: calc(var(--mobile-bar-h) + env(safe-area-inset-bottom));
+    --scroll-top-bottom: calc(var(--mobile-bar-offset) + 1.25rem);
     padding-bottom: var(--mobile-bar-offset);
   }
 }
