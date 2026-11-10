@@ -260,7 +260,15 @@
   },
   "share": {
     "copied": "Ссылка скопирована",
-    "failed": "Не удалось скопировать ссылку"
+    "failed": "Не удалось скопировать ссылку",
+    "action": "Поделиться",
+    "aria": "Поделиться страницей"
+  },
+  "profileHeader": {
+    "reviews_one": "{{formatted}} отзыв",
+    "reviews_few": "{{formatted}} отзыва",
+    "reviews_many": "{{formatted}} отзывов",
+    "reviews_other": "{{formatted}} отзыва"
   },
   "indexPage": {
     "filters": "Фильтры",

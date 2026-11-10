@@ -87,6 +87,44 @@ const AZ_MONTHS = [
   'dekabr',
 ];
 
+/** Russian genitive months for “с ноября 2026 г.” — Intl month+year is nominative. */
+const RU_MONTHS_GENITIVE = [
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
+];
+
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Address line plus city, without repeating the city when it is already in the address
+ * (“Nizami küçəsi 45, Baku” + city “Baku” → one “Baku”).
+ */
+export const formatPlace = (
+  address?: string | null,
+  city?: string | null,
+): string => {
+  const line = String(address ?? '').trim();
+  const town = String(city ?? '').trim();
+  if (!line) return town;
+  if (!town) return line;
+  const haystack = line.toLowerCase();
+  const needle = town.toLowerCase();
+  if (haystack === needle) return line;
+  const cityAtEnd = new RegExp(`(^|[,\\s])${escapeRegExp(needle)}\\.?$`, 'i');
+  if (cityAtEnd.test(line) || haystack.includes(`, ${needle}`)) return line;
+  return `${line}, ${town}`;
+};
+
 /** Month + year for “member since” — long month name avoids broken short labels on az. */
 export const formatMonthYear = (
   value: string | number | Date | null | undefined,
@@ -95,14 +133,17 @@ export const formatMonthYear = (
   const date = toDate(value);
   if (!date) return '';
   const dateOnly = isDateOnlyString(value);
+  const monthIndex = dateOnly ? date.getUTCMonth() : date.getMonth();
+  const year = dateOnly ? date.getUTCFullYear() : date.getFullYear();
+  if (String(locale).startsWith('ru')) {
+    return `${RU_MONTHS_GENITIVE[monthIndex]} ${year} г.`;
+  }
   const formatted = new Intl.DateTimeFormat(locale, {
     month: 'long',
     year: 'numeric',
     ...(dateOnly ? { timeZone: 'UTC' } : {}),
   }).format(date);
   if (/M\d{1,2}/.test(formatted)) {
-    const monthIndex = dateOnly ? date.getUTCMonth() : date.getMonth();
-    const year = dateOnly ? date.getUTCFullYear() : date.getFullYear();
     return `${AZ_MONTHS[monthIndex]} ${year}`;
   }
   return formatted;

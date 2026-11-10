@@ -252,7 +252,13 @@
   },
   "share": {
     "copied": "Keçid kopyalandı",
-    "failed": "Keçidi kopyalamaq mümkün olmadı"
+    "failed": "Keçidi kopyalamaq mümkün olmadı",
+    "action": "Paylaş",
+    "aria": "Səhifəni paylaş"
+  },
+  "profileHeader": {
+    "reviews_one": "{{formatted}} rəy",
+    "reviews_other": "{{formatted}} rəy"
   },
   "indexPage": {
     "filters": "Filtrlər",

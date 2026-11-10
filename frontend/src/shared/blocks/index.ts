@@ -4,6 +4,9 @@ export type { DetailLayoutMobileBarProps } from './DetailLayout';
 export { ReviewsBlock, ReviewsWriteForm, ReviewStarPicker, formatReviewAuthorName } from './ReviewsBlock';
 export type { ReviewsBlockData, ReviewsBlockItem, ReviewsWriteFormProps } from './ReviewsBlock';
 
+export { ProfileHeader, ShareButton } from './ProfileHeader';
+export type { ProfileHeaderMetaItem, ProfileHeaderProps, ProfileHeaderRating } from './ProfileHeader';
+
 export { PromoteShortcuts } from './PromoteShortcuts';
 export { ReportDialog } from './ReportDialog';
 export type { ReportReasonOption } from './ReportDialog';

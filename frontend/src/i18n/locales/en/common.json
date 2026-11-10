@@ -252,7 +252,13 @@
   },
   "share": {
     "copied": "Link copied",
-    "failed": "Could not copy the link"
+    "failed": "Could not copy the link",
+    "action": "Share",
+    "aria": "Share this page"
+  },
+  "profileHeader": {
+    "reviews_one": "{{formatted}} review",
+    "reviews_other": "{{formatted}} reviews"
   },
   "indexPage": {
     "filters": "Filters",

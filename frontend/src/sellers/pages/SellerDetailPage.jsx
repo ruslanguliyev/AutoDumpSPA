@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CalendarDays, Heart, MapPin, Phone, Share2 } from 'lucide-react';
+import { CalendarDays, Heart, MapPin, Phone } from 'lucide-react';
 
 import { useSellerListings } from '@/sellers/hooks/useSellerListings';
 import { useSellerById } from '@/sellers/hooks/useSellerById';
@@ -14,11 +14,10 @@ import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { Badge } from '@/shared/ui/Badge';
 import Button from '@/shared/ui/button';
 import { Input } from '@/shared/ui/Input';
-import RatingStars from '@/shared/ui/RatingStars/RatingStars';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard';
 import PartCard from '@/parts/components/PartCard/PartCard';
-import { DetailLayout } from '@/shared/blocks';
-import { formatMonthYear, formatNumber, intlLocale } from '@/lib/format';
+import { DetailLayout, ProfileHeader, ShareButton } from '@/shared/blocks';
+import { formatMonthYear, formatNumber, formatPlace, intlLocale } from '@/lib/format';
 import { shareOrCopyUrl } from '@/lib/share';
 import { hasPublicSellerPage, normalizeSellerType } from '@/shared/utils/sellerType';
 import { buildSellerMobileBar } from '@/sellers/pages/sellerDetail/SellerDetailMobileBar';
@@ -55,7 +54,6 @@ export default function SellerDetailPage({
   const [activeTab, setActiveTab] = useState('listings');
   const [searchQuery, setSearchQuery] = useState('');
   const [phoneVisible, setPhoneVisible] = useState(false);
-  const [shareNotice, setShareNotice] = useState(null);
   const debouncedSearchQuery = useDebounce(searchQuery, 350);
 
   useDocumentTitle(
@@ -70,8 +68,9 @@ export default function SellerDetailPage({
   const reviewsCount = Number.isFinite(Number(seller?.votes ?? seller?.reviewsCount))
     ? Number(seller.votes ?? seller.reviewsCount)
     : null;
-  const showRating = reviewsCount != null && reviewsCount > 0 && ratingValue != null;
   const city = typeof seller?.city === 'string' && seller.city.trim() ? seller.city.trim() : null;
+  const address = typeof seller?.address === 'string' && seller.address.trim() ? seller.address.trim() : null;
+  const place = formatPlace(address, city) || null;
   const listingsCount = Number.isFinite(seller?.listingsCount) ? seller.listingsCount : null;
   const memberSince = formatMonthYear(seller?.createdAt ?? seller?.memberSince, locale) || null;
   const typeKey = normalizeSellerType(seller?.type);
@@ -104,13 +103,10 @@ export default function SellerDetailPage({
   }, [vehicles, parts, sellerId, debouncedSearchQuery]);
 
   const handleShare = useCallback(async () => {
-    const result = await shareOrCopyUrl({
+    await shareOrCopyUrl({
       title: seller?.name || t('detail.fallbackName'),
       url: window.location.href,
     });
-    if (result === 'copied') setShareNotice(t('share.copied', { ns: 'common' }));
-    else if (result === 'failed') setShareNotice(t('share.failed', { ns: 'common' }));
-    else setShareNotice(null);
   }, [seller?.name, t]);
 
   const handleFavoriteToggle = useCallback(() => {
@@ -202,49 +198,38 @@ export default function SellerDetailPage({
           <div className="flex flex-col gap-6">
             <Breadcrumbs items={breadcrumbs} />
 
-            <article className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
-              <div className="flex gap-3">
-                <span className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full border border-border bg-card-muted text-[13px] font-semibold text-muted-foreground">
+            <ProfileHeader
+              name={seller.name || t('detail.fallbackName')}
+              verified={seller.verified ? <Badge variant="verified">{verifiedLabel}</Badge> : null}
+              subtitle={typeLabel}
+              avatar={
+                <span className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-border bg-card-muted text-[13px] font-semibold text-muted-foreground">
                   {getInitials(seller.name)}
                 </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[26px]">
-                      {seller.name}
-                    </h1>
-                    {seller.verified ? <Badge variant="verified">{verifiedLabel}</Badge> : null}
-                  </div>
-                  {typeLabel ? <p className="mt-0.5 text-[13px] text-muted-foreground">{typeLabel}</p> : null}
-                  {showRating ? (
-                    <RatingStars
-                      value={ratingValue}
-                      count={reviewsCount}
-                      countLabel={t('card.reviews', { count: reviewsCount })}
-                      className="mt-2"
-                    />
-                  ) : (
-                    <p className="mt-2 text-[13px] text-muted-foreground">{t('detail.noReviewsYet')}</p>
-                  )}
-                  <ul className="mt-3 space-y-1.5 text-[13px] text-muted-foreground">
-                    {city ? (
-                      <li className="flex items-center gap-2">
-                        <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />
-                        <span>{city}</span>
-                      </li>
-                    ) : null}
-                    {memberSince ? (
-                      <li className="flex items-center gap-2">
-                        <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />
-                        <span>{t('vehicle.memberSince', { date: memberSince })}</span>
-                      </li>
-                    ) : null}
-                    {listingsCount != null ? (
-                      <li>{t('seller.listings', { ns: 'common', count: listingsCount })}</li>
-                    ) : null}
-                  </ul>
-                </div>
-              </div>
-            </article>
+              }
+              rating={{ rating: ratingValue, reviewsCount }}
+              meta={[
+                place
+                  ? {
+                      icon: <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />,
+                      text: place,
+                    }
+                  : null,
+                memberSince
+                  ? {
+                      icon: <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />,
+                      text: t('vehicle.memberSince', { date: memberSince }),
+                    }
+                  : null,
+                listingsCount != null
+                  ? {
+                      icon: null,
+                      text: t('seller.listings', { ns: 'common', count: listingsCount }),
+                    }
+                  : null,
+              ].filter(Boolean)}
+              actions={<ShareButton title={seller.name || t('detail.fallbackName')} />}
+            />
 
             <div className="flex gap-1 overflow-x-auto border-b border-border">
               <button type="button" className={tabClass('listings')} onClick={() => setActiveTab('listings')}>
@@ -357,15 +342,6 @@ export default function SellerDetailPage({
               />
               {isFavorite ? t('card.removeFromFavorites') : t('card.addToFavorites')}
             </Button>
-            <Button type="button" variant="ghost" className="min-h-11 w-full justify-center gap-2" onClick={handleShare}>
-              <Share2 size={18} aria-hidden="true" />
-              {t('card.share')}
-            </Button>
-            {shareNotice ? (
-              <p className="text-center text-[13px] text-muted-foreground" role="status">
-                {shareNotice}
-              </p>
-            ) : null}
           </div>
         }
       />
