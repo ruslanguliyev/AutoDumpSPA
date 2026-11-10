@@ -1,22 +1,25 @@
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, User, Store, Wrench } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { useActiveProfileStore } from '@/store/useActiveProfileStore';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { useAnchoredPosition } from '@/shared/hooks/useAnchoredPosition';
+import { settingsApi } from '@/dashboard/api/settings.api';
+import { professionalApi } from '@/features/professional/api/professional.api';
 import type { ActiveProfile } from '@/dashboard/types/dashboard.types';
 
-const profileOptions: { value: ActiveProfile; icon: typeof User }[] = [
-  { value: { type: 'user' }, icon: User },
-  { value: { type: 'seller', id: 's1' }, icon: Store },
-  { value: { type: 'service', id: 'sv1' }, icon: Wrench },
-];
+type ProfileOption = {
+  value: ActiveProfile;
+  name: string | null;
+  icon: typeof User;
+};
 
 function profileToKey(p: ActiveProfile): string {
   if (p.type === 'user') return 'user';
-  return `${p.type}:${p.id}`;
+  return `${p.type}-${p.id}`;
 }
 
 function profileMatches(a: ActiveProfile, b: ActiveProfile): boolean {
@@ -25,10 +28,54 @@ function profileMatches(a: ActiveProfile, b: ActiveProfile): boolean {
   return (a as { id: string }).id === (b as { id: string }).id;
 }
 
+function useAvailableProfiles(): { options: ProfileOption[]; isLoading: boolean } {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const userName = useAuthStore((s) => s.user?.fullName?.trim() || null);
+
+  const sellerQuery = useQuery({
+    queryKey: ['settings', 'seller'],
+    queryFn: settingsApi.mySeller,
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
+  const serviceQuery = useQuery({
+    queryKey: ['professional', 'service-center'],
+    queryFn: professionalApi.myServiceCenter,
+    enabled: isAuthenticated,
+    staleTime: 60_000,
+  });
+
+  const options = useMemo<ProfileOption[]>(() => {
+    const list: ProfileOption[] = [{ value: { type: 'user' }, name: userName, icon: User }];
+    const seller = sellerQuery.data;
+    if (seller?.id) {
+      list.push({
+        value: { type: 'seller', id: seller.id },
+        name: seller.name?.trim() || null,
+        icon: Store,
+      });
+    }
+    const service = serviceQuery.data;
+    if (service?.id) {
+      list.push({
+        value: { type: 'service', id: service.id },
+        name: service.name?.trim() || null,
+        icon: Wrench,
+      });
+    }
+    return list;
+  }, [userName, sellerQuery.data, serviceQuery.data]);
+
+  return {
+    options,
+    isLoading: sellerQuery.isLoading || serviceQuery.isLoading,
+  };
+}
+
 export function ProfileSwitcher() {
   const { t } = useTranslation('dashboard');
   const { activeProfile, setActiveProfile } = useActiveProfileStore();
-  const userName = useAuthStore((s) => s.user?.fullName?.trim() || null);
+  const { options, isLoading } = useAvailableProfiles();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLUListElement>(null);
@@ -73,17 +120,26 @@ export function ProfileSwitcher() {
     };
   }, [open, close]);
 
-  const current = profileOptions.find((o) => profileMatches(o.value, activeProfile)) ?? profileOptions[0];
+  useEffect(() => {
+    if (isLoading) return;
+    const stillValid = options.some((o) => profileMatches(o.value, activeProfile));
+    if (!stillValid) setActiveProfile({ type: 'user' });
+  }, [isLoading, options, activeProfile, setActiveProfile]);
 
-  const optionLabel = (profile: ActiveProfile) => {
-    if (profile.type === 'user' && userName) return userName;
-    return t(`profileSwitcher.types.${profile.type}`);
+  const typeLabel = (profile: ActiveProfile) => t(`profileSwitcher.types.${profile.type}`);
+
+  const optionTitle = (opt: ProfileOption) => opt.name || typeLabel(opt.value);
+
+  const optionSubtitle = (opt: ProfileOption) => (opt.name ? typeLabel(opt.value) : null);
+
+  const triggerText = (opt: ProfileOption) => {
+    const type = typeLabel(opt.value);
+    return opt.name ? `${opt.name} · ${type}` : type;
   };
 
-  const optionType = (profile: ActiveProfile) => {
-    if (profile.type === 'user' && userName) return t('profileSwitcher.types.user');
-    return null;
-  };
+  if (isLoading || options.length < 2) return null;
+
+  const current = options.find((o) => profileMatches(o.value, activeProfile)) ?? options[0];
 
   return (
     <div className="relative">
@@ -95,10 +151,10 @@ export function ProfileSwitcher() {
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-controls="profile-switcher-menu"
-        aria-label={t('profileSwitcher.ariaLabel')}
+        aria-label={triggerText(current)}
       >
         <current.icon size={18} className="shrink-0 text-muted-foreground" aria-hidden />
-        <span className="max-w-[40vw] truncate">{optionLabel(current.value)}</span>
+        <span className="max-w-[40vw] truncate">{triggerText(current)}</span>
         <ChevronDown
           size={16}
           className={`shrink-0 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
@@ -114,9 +170,9 @@ export function ProfileSwitcher() {
               className="z-dropdown min-w-max max-w-[calc(100vw-16px)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-card py-1 shadow-lg"
               style={style ?? { position: 'fixed', left: 0, top: 0, visibility: 'hidden' }}
             >
-              {profileOptions.map((opt) => {
+              {options.map((opt) => {
                 const isSelected = profileMatches(opt.value, activeProfile);
-                const typeLabel = optionType(opt.value);
+                const subtitle = optionSubtitle(opt);
                 return (
                   <li key={profileToKey(opt.value)} role="option" aria-selected={isSelected}>
                     <button
@@ -128,9 +184,9 @@ export function ProfileSwitcher() {
                     >
                       <opt.icon size={18} className="shrink-0" aria-hidden />
                       <span className="flex min-w-0 flex-col">
-                        <span className="truncate">{optionLabel(opt.value)}</span>
-                        {typeLabel ? (
-                          <span className="text-xs font-normal text-muted-foreground">{typeLabel}</span>
+                        <span className="truncate">{optionTitle(opt)}</span>
+                        {subtitle ? (
+                          <span className="text-xs font-normal text-muted-foreground">{subtitle}</span>
                         ) : null}
                       </span>
                     </button>

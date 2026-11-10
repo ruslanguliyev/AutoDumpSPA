@@ -42,6 +42,7 @@
       "service": "Servis"
     }
   },
+  "backToSite": "Sayta",
   "topbar": {
     "lightMode": "Açıq tema",
     "darkMode": "Qaranlıq tema"

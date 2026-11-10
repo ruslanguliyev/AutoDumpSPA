@@ -42,6 +42,7 @@
       "service": "Service"
     }
   },
+  "backToSite": "To the site",
   "topbar": {
     "lightMode": "Switch to light mode",
     "darkMode": "Switch to dark mode"

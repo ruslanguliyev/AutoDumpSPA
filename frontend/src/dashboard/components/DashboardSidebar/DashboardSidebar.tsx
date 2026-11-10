@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PanelLeftClose, PanelLeft } from 'lucide-react';
+import clsx from 'clsx';
 
 import { useActiveProfile } from '@/store/useActiveProfileStore';
 import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
@@ -8,8 +9,8 @@ import { getSidebarNavItems } from '@/dashboard/config/sidebar.config';
 import { InquiriesBadge } from '@/dashboard/components/InquiriesBadge';
 import { RentalsBadge } from '@/dashboard/components/RentalsBadge';
 import { AppointmentsBadge } from '@/dashboard/components/AppointmentsBadge';
+import { BackToSiteLink, BrandHomeLink } from '@/dashboard/components/BackToSiteLink/BackToSiteLink';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
-import clsx from 'clsx';
 
 export function DashboardSidebar() {
   const { t } = useTranslation('dashboard');
@@ -23,17 +24,17 @@ export function DashboardSidebar() {
       className={clsx(
         'flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300 ease-in-out',
         'fixed left-0 top-0 z-sidebar h-screen',
-        sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'
+        sidebarCollapsed ? 'w-[72px]' : 'w-[260px]',
       )}
     >
       <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-4">
-        {!sidebarCollapsed && (
-          <span className="text-sm font-semibold text-sidebar-foreground">AvtoBaz</span>
-        )}
+        {!sidebarCollapsed ? (
+          <BrandHomeLink className="px-1 text-sidebar-foreground" />
+        ) : null}
         <button
           type="button"
           onClick={toggleSidebar}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label={sidebarCollapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >
           {sidebarCollapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
@@ -52,10 +53,11 @@ export function DashboardSidebar() {
                   className={({ isActive }) =>
                     clsx(
                       'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                       isActive
                         ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                         : 'text-sidebar-foreground hover:bg-sidebar-accent/50',
-                      sidebarCollapsed && 'justify-center px-2'
+                      sidebarCollapsed && 'justify-center px-2',
                     )
                   }
                 >
@@ -70,6 +72,14 @@ export function DashboardSidebar() {
           })}
         </ul>
       </nav>
+
+      <div className="border-t border-sidebar-border p-3">
+        <BackToSiteLink
+          surface="sidebar"
+          iconOnly={sidebarCollapsed}
+          className={clsx('w-full', sidebarCollapsed ? 'px-0' : 'justify-start')}
+        />
+      </div>
     </aside>
   );
 }
