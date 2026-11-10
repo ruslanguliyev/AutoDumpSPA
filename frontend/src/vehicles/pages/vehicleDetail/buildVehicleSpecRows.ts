@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next';
 
-import { formatMileage } from '@/lib/format';
+import { formatDate, formatMileage } from '@/lib/format';
 import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 
 export type VehicleDetailCar = {
@@ -69,7 +69,7 @@ export function buildVehicleSpecRows(
       label: t('specs.owners'),
       value: owners != null ? String(owners) : null,
     },
-    { key: 'postedAt', label: t('specs.postedAt'), value: car.postedAt },
+    { key: 'postedAt', label: t('specs.postedAt'), value: formatDate(car.postedAt, locale) },
     {
       key: 'views',
       label: t('specs.views'),

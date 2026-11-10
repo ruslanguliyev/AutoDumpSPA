@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+import { intlLocale } from '@/lib/format';
+
 import { buildVehicleSpecRows, type VehicleDetailCar } from './buildVehicleSpecRows';
 
 type Props = {
@@ -8,7 +10,7 @@ type Props = {
 
 export function VehicleDetailSpecs({ car }: Props) {
   const { t, i18n } = useTranslation('vehicle');
-  const locale = i18n.language === 'az' ? 'az-Latn-AZ' : i18n.language === 'en' ? 'en-US' : 'ru-RU';
+  const locale = intlLocale(i18n.language);
   const { rows, ownerComment } = buildVehicleSpecRows(car, t, locale);
 
   if (rows.length === 0 && !ownerComment) return null;

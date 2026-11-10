@@ -117,6 +117,22 @@ export async function getVehicles(filters) {
   }
 }
 
+// `VehicleObject` carries no publication date and `VehicleSellerObject` no member-since or
+// review count, but the schema has them one hop away: `listing.createdAt` and
+// `sellerById.{createdAt, reviewsCount}`. They are read on top of the main query and are
+// optional — if either call fails the detail page simply does not draw that row.
+const LISTING_DATE_QUERY = `query ListingDate($id: String!) { listing(id: $id) { createdAt } }`;
+const SELLER_META_QUERY = `query SellerMeta($id: String!) { sellerById(id: $id) { createdAt reviewsCount } }`;
+
+async function readOptional(query, id, pick) {
+  try {
+    const data = await gqlRequest(query, { id });
+    return pick(data) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getVehicleById(id) {
   const safeId = String(id ?? '').trim();
   if (!safeId) return null;
@@ -124,7 +140,28 @@ export async function getVehicleById(id) {
     const data = await gqlRequest(VEHICLE_BY_ID_QUERY, { id: safeId });
     const row = data?.vehicleById;
     if (!row) return null;
-    return mapVehicle(row);
+    const vehicle = mapVehicle(row);
+
+    // A seller without a public page (private) keeps their profile details to themselves.
+    const sellerId = vehicle.seller?.hasPublicPage ? vehicle.seller.id : null;
+    const [listing, sellerMeta] = await Promise.all([
+      vehicle.listingId
+        ? readOptional(LISTING_DATE_QUERY, vehicle.listingId, (d) => d?.listing)
+        : null,
+      sellerId ? readOptional(SELLER_META_QUERY, sellerId, (d) => d?.sellerById) : null,
+    ]);
+
+    return {
+      ...vehicle,
+      postedAt: listing?.createdAt ?? null,
+      seller: vehicle.seller
+        ? {
+            ...vehicle.seller,
+            memberSince: sellerMeta?.createdAt ?? null,
+            votes: sellerMeta?.reviewsCount ?? null,
+          }
+        : null,
+    };
   } catch {
     return null;
   }

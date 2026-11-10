@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CalendarDays, Clock, Heart, MapPin, Phone } from 'lucide-react';
 
+import { formatMonthYear, intlLocale } from '@/lib/format';
 import { Badge } from '@/shared/ui/Badge';
 import Button from '@/shared/ui/button';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars';
@@ -52,7 +53,7 @@ export function VehicleDetailSellerSidebar({
   onToggleFavorite,
   hideActionsOnMobile = true,
 }: Props) {
-  const { t } = useTranslation(['common', 'sellers']);
+  const { t, i18n } = useTranslation(['common', 'sellers']);
   const navigate = useNavigate();
 
   if (!seller?.id) return null;
@@ -67,6 +68,7 @@ export function VehicleDetailSellerSidebar({
     : null;
   const canOpen = hasPublicSellerPage(seller.type) && seller.hasPublicPage === true;
   const phone = seller.phone?.trim() || null;
+  const memberSince = formatMonthYear(seller.memberSince, intlLocale(i18n.language)) || null;
   const actionWrap = hideActionsOnMobile ? 'hidden flex-col gap-2 lg:flex' : 'flex flex-col gap-2';
 
   const openSeller = () => {
@@ -130,10 +132,10 @@ export function VehicleDetailSellerSidebar({
             <span>{seller.city}</span>
           </li>
         ) : null}
-        {seller.memberSince ? (
+        {memberSince ? (
           <li className="flex items-center gap-2">
             <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />
-            <span>{t('vehicle.memberSince', { ns: 'sellers', date: seller.memberSince })}</span>
+            <span>{t('vehicle.memberSince', { ns: 'sellers', date: memberSince })}</span>
           </li>
         ) : null}
         {seller.responseTime ? (
