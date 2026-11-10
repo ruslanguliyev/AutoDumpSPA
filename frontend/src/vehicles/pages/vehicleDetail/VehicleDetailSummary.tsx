@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { formatMileage, formatPrice, formatYear } from '@/lib/format';
+import { formatMileage, formatPrice, formatYear, intlLocale } from '@/lib/format';
 import { splitEngineSummary, translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 
 type Props = {
@@ -27,7 +27,7 @@ export function VehicleDetailSummary({
   priceSuffix,
 }: Props) {
   const { t, i18n } = useTranslation('vehicle');
-  const locale = i18n.language === 'az' ? 'az-Latn-AZ' : i18n.language === 'en' ? 'en-US' : 'ru-RU';
+  const locale = intlLocale(i18n.language);
 
   const fuelLabel = translateVehicleEnum(t, 'fuel', fuel);
   const transmissionLabel = translateVehicleEnum(t, 'transmission', transmission);

@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next';
 
-import { formatDate, formatMileage } from '@/lib/format';
+import { formatDate, formatMileage, formatNumber } from '@/lib/format';
 import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 
 export type VehicleDetailCar = {
@@ -73,7 +73,7 @@ export function buildVehicleSpecRows(
     {
       key: 'views',
       label: t('specs.views'),
-      value: car.views != null ? String(car.views) : null,
+      value: car.views != null ? formatNumber(car.views, locale) : null,
     },
   ];
 

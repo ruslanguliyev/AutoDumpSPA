@@ -378,7 +378,7 @@ async function main() {
         ...baseVehicle,
         brand: 'Hyundai',
         model: 'Elantra',
-        version: 'Comfort',
+        version: 'Comfort Premium Long Trim Name For Layout Overflow QA Test 60ch',
         bodyType: 'sedan',
         year: 2020,
         mileage: 45_000,

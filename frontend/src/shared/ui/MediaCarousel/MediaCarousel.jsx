@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import Button from '@/shared/ui/button';
+import { ListingImagePlaceholder, ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import FullscreenMediaViewer from './FullscreenMediaViewer';
 
 const join = (...parts) => parts.filter(Boolean).join(' ');
@@ -69,7 +70,7 @@ export default function MediaCarousel({
             viewportClassName,
           )}
         >
-          <img src="/icons/sedan-car-model-svgrepo-com.svg" alt="" className="h-24 w-24 opacity-20" />
+          <ListingImagePlaceholder className="aspect-video rounded-xl" />
         </div>
       </section>
     );
@@ -86,12 +87,21 @@ export default function MediaCarousel({
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <img
-          src={current.src}
-          alt={current.alt}
-          className={join('block w-full cursor-zoom-in object-cover', mediaClassName)}
+        <div
+          className={join('block h-full w-full cursor-zoom-in', mediaClassName)}
           onClick={() => setIsFullscreen(true)}
-        />
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setIsFullscreen(true);
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <ListingPhoto
+            src={current.src}
+            className="block h-full w-full object-cover"
+            loading="eager"
+          />
+        </div>
 
         {showControls && safeItems.length > 1 && (
           <>
@@ -142,9 +152,8 @@ export default function MediaCarousel({
               aria-label={t('mediaViewer.showImage', { number: i + 1 })}
               aria-current={i === index ? 'true' : undefined}
             >
-              <img
+              <ListingPhoto
                 src={item.src}
-                alt={item.alt}
                 className={join('h-[60px] w-20 rounded-md object-cover', thumbImageClassName)}
               />
             </button>

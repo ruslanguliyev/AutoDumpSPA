@@ -10,6 +10,7 @@ import Button from '@/shared/ui/button';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { isServiceOpen } from '@/services/utils/serviceSchedule.utils';
 import type { ServiceProfile } from '@/services/types/service.types';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
 type ServiceCardProps = {
   service: ServiceProfile | null;
@@ -49,7 +50,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   return (
     <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
       <div className="relative aspect-video w-full overflow-hidden bg-card-muted">
-        {cover ? <img src={cover} alt="" loading="lazy" className="h-full w-full object-cover" /> : null}
+        <ListingPhoto src={cover} className="h-full w-full object-cover" />
 
         <div className="absolute right-3 top-3 flex flex-wrap items-center justify-end gap-1.5">
           <PromotionBadge tier={service.promotionTier} />

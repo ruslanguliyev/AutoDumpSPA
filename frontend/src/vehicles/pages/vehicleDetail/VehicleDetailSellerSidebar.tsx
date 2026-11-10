@@ -66,9 +66,9 @@ export function VehicleDetailSellerSidebar({
   const typeLabel = typeKey ? t(`seller.type.${typeKey}`, { ns: 'common' }) : null;
   const avatar = seller.logo || seller.avatarUrl || null;
   const rating = Number.isFinite(Number(seller.rating)) ? Number(seller.rating) : null;
-  const reviews = Number.isFinite(Number(seller.votes ?? seller.reviewsCount))
-    ? Number(seller.votes ?? seller.reviewsCount)
-    : null;
+  const reviewsRaw = seller.votes ?? seller.reviewsCount;
+  const reviews = Number.isFinite(Number(reviewsRaw)) ? Number(reviewsRaw) : null;
+  const showSellerRating = reviews != null && reviews > 0 && rating != null;
   const canOpen = hasPublicSellerPage(seller.type) && seller.hasPublicPage === true;
   const phone = seller.phone?.trim() || null;
   const memberSince = formatMonthYear(seller.memberSince, intlLocale(i18n.language)) || null;
@@ -113,14 +113,16 @@ export function VehicleDetailSellerSidebar({
             {seller.verified ? <Badge variant="verified">{t('seller.verified', { ns: 'common' })}</Badge> : null}
           </div>
           {typeLabel ? <p className="mt-0.5 text-[13px] text-muted-foreground">{typeLabel}</p> : null}
-          {rating != null ? (
+          {showSellerRating ? (
             <RatingStars
               value={rating}
-              count={reviews ?? undefined}
-              countLabel={reviews != null ? t('seller.reviews', { ns: 'common', count: reviews }) : undefined}
+              count={reviews}
+              countLabel={t('seller.reviews', { ns: 'common', count: reviews })}
               className="mt-2"
             />
-          ) : null}
+          ) : (
+            <p className="mt-2 text-[13px] text-muted-foreground">{t('seller.noReviewsYet', { ns: 'common' })}</p>
+          )}
         </div>
       </div>
 

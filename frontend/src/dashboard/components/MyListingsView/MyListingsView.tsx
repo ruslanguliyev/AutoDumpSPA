@@ -7,7 +7,8 @@ import type { ListingKind, MyListing } from '@/dashboard/api/listings.api';
 import { useListingActions, useMyListings } from '@/dashboard/hooks/useMyListings';
 import { DashboardHeader } from '@/dashboard/components/DashboardHeader/DashboardHeader';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
-import { formatPrice } from '@/lib/format';
+import { formatPrice, intlLocale } from '@/lib/format';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { useStartEditListing } from '@/features/addItem/api/editListing';
 import { promotePath } from '@/features/promotions/pages/PromotePage';
@@ -53,7 +54,8 @@ const ActionButton = ({ children, onClick, disabled, danger }: ActionButtonProps
 );
 
 export function MyListingsView({ kind, section }: Props) {
-  const { t } = useTranslation('dashboard');
+  const { t, i18n } = useTranslation('dashboard');
+  const locale = intlLocale(i18n.language);
   const { items, isLoading, error } = useMyListings(kind);
   const actions = useListingActions();
   const editor = useStartEditListing();
@@ -106,9 +108,7 @@ export function MyListingsView({ kind, section }: Props) {
               <li key={l.id}>
                 <CardWrapper className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
                   <div className="h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-muted">
-                    {thumb ? (
-                      <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
-                    ) : null}
+                    <ListingPhoto src={thumb} className="h-full w-full object-cover" />
                   </div>
 
                   <div className="min-w-0 flex-1">
@@ -126,7 +126,7 @@ export function MyListingsView({ kind, section }: Props) {
                       ) : null}
                     </div>
                     <p className="mt-1 text-sm font-medium text-foreground">
-                      {formatPrice(l.price, l.currency ?? 'AZN')}
+                      {formatPrice(l.price, l.currency ?? 'AZN', locale)}
                       {l.purpose === 'RENT' ? <span className="ml-1 text-xs font-normal text-muted-foreground">{t('rental.perDay')}</span> : null}
                     </p>
                     {l.status === 'BLOCKED' ? (

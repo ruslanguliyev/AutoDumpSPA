@@ -5,12 +5,14 @@ import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
 import { Badge } from '@/shared/ui/Badge';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
-import { formatPrice } from '@/lib/format';
+import { formatPrice, intlLocale } from '@/lib/format';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import { getPartCategoryI18nKey } from '@/parts/utils/partCategoryLabel';
 
 /** The part card, used by the parts catalogue, the home page and a seller's parts tab. */
 export default function PartCard({ part }) {
-    const { t } = useTranslation('part');
+    const { t, i18n } = useTranslation('part');
+    const locale = intlLocale(i18n.language);
 
     if (!part) return null;
 
@@ -35,9 +37,7 @@ export default function PartCard({ part }) {
     return (
         <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
             <div className="aspect-square w-full overflow-hidden bg-card-muted">
-                {imageSrc ? (
-                    <img src={imageSrc} alt="" loading="lazy" className="h-full w-full object-cover" />
-                ) : null}
+                <ListingPhoto src={imageSrc} className="h-full w-full object-cover" />
             </div>
 
             <div className="flex flex-1 flex-col gap-2 p-4">
@@ -72,7 +72,7 @@ export default function PartCard({ part }) {
 
                 {price !== null ? (
                     <p className="text-[20px] font-bold leading-none text-foreground">
-                        {formatPrice(price, part.currency || 'AZN')}
+                        {formatPrice(price, part.currency || 'AZN', locale)}
                     </p>
                 ) : null}
             </div>

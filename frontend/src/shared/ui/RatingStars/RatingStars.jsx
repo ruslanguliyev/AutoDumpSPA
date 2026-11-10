@@ -31,6 +31,8 @@ const HalfStar = ({ size }) => (
 export default function RatingStars({
   value = 0,
   count = undefined,
+  /** When false, only stars render (no "4.5 (12 reviews)" line). */
+  showCaption = true,
   /** The word after the count, e.g. "reviews". Only right for languages with one plural form. */
   label = undefined,
   /** The whole pluralised phrase, e.g. "87 отзывов". Translated by the caller; wins over count + label. */
@@ -77,14 +79,16 @@ export default function RatingStars({
           />
         );
       })}
-      <span className="rating-stars__value ml-1.5 whitespace-nowrap text-[13px] text-muted-foreground">
-        {safeValue.toFixed(1)}
-        {countLabel
-          ? ` (${countLabel})`
-          : count === undefined || count === null
-            ? null
-            : ` (${count}${label ? ` ${label}` : ''})`}
-      </span>
+      {showCaption ? (
+        <span className="rating-stars__value ml-1.5 text-[13px] text-muted-foreground">
+          {safeValue.toFixed(1)}
+          {countLabel
+            ? ` (${countLabel})`
+            : count === undefined || count === null
+              ? null
+              : ` (${count}${label ? ` ${label}` : ''})`}
+        </span>
+      ) : null}
     </div>
   );
 }

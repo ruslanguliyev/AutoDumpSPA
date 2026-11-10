@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 import Button from '@/shared/ui/button';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
 /** Round translucent control over a photo, 44×44. */
 const overPhoto = 'border-0! bg-scrim! px-0 text-primary-foreground hover:brightness-125';
@@ -70,7 +71,11 @@ export default function FullscreenMediaViewer({ items, index, onClose, onPrev, o
             </Button>
           ) : null}
 
-          <img src={current.src} alt={current.alt} className="max-h-full max-w-[90vw] object-contain" />
+          <ListingPhoto
+            src={current.src}
+            className="max-h-full max-w-[90vw] object-contain"
+            loading="eager"
+          />
 
           {items.length > 1 ? (
             <Button
@@ -97,7 +102,7 @@ export default function FullscreenMediaViewer({ items, index, onClose, onPrev, o
               aria-label={t('mediaViewer.showImage', { number: i + 1 })}
               aria-current={i === index ? 'true' : undefined}
             >
-              <img src={item.src} alt="" className="h-[70px] w-[90px] rounded-md object-cover" />
+              <ListingPhoto src={item.src} className="h-[70px] w-[90px] rounded-md object-cover" />
             </button>
           ))}
         </div>

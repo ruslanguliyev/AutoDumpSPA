@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { Chip } from '@/shared/ui/Chip';
 import Button from '@/shared/ui/button';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
-import { formatPrice } from '@/lib/format';
+import { formatPrice, intlLocale } from '@/lib/format';
 
 type SpecialistCardProps = {
   specialist: SpecialistProfile;
@@ -17,7 +17,8 @@ type SpecialistCardProps = {
 };
 
 const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => {
-  const { t } = useTranslation('specialists');
+  const { t, i18n } = useTranslation('specialists');
+  const locale = intlLocale(i18n.language);
 
   const {
     id,
@@ -112,7 +113,7 @@ const SpecialistCard = ({ specialist, className = '' }: SpecialistCardProps) => 
 
       {priceFrom != null ? (
         <p className="mt-3 text-[15px] font-semibold text-foreground">
-          {t('card.priceFrom', { price: formatPrice(priceFrom, 'AZN') })}
+          {t('card.priceFrom', { price: formatPrice(priceFrom, 'AZN', locale) })}
         </p>
       ) : (
         <p className="mt-3 text-[15px] font-semibold text-muted-foreground">{t('card.priceOnRequest')}</p>

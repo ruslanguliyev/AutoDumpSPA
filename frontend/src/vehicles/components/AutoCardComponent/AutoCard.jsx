@@ -3,7 +3,8 @@ import { MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
-import { formatPrice, formatMileage, formatYear } from '@/lib/format';
+import { formatPrice, formatMileage, formatYear, intlLocale } from '@/lib/format';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import { splitEngineSummary, translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { CardWrapper } from '@/shared/ui/CardWrapper';
@@ -18,7 +19,8 @@ import Button from '@/shared/ui/button';
  * one component, because a second one drifts.
  */
 export default function AutoCard({ car, variant = 'sale' }) {
-    const { t } = useTranslation('vehicle');
+    const { t, i18n } = useTranslation('vehicle');
+    const locale = intlLocale(i18n.language);
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
     const isFav = useFavoritesStore((s) => s.isFavorited('vehicle', car?.id));
 
@@ -30,7 +32,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
     const meta = [
         formatYear(car.year),
         ...splitEngineSummary(car.engine),
-        formatMileage(car.mileage),
+        formatMileage(car.mileage, locale),
         translateVehicleEnum(t, 'transmission', car.transmission),
     ].filter(Boolean);
 
@@ -39,7 +41,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
         ? [
               rental?.minDays ? t('card.minDays', { count: rental.minDays }) : null,
               rental?.deposit
-                  ? t('card.deposit', { amount: formatPrice(rental.deposit, car.currency || 'AZN') })
+                  ? t('card.deposit', { amount: formatPrice(rental.deposit, car.currency || 'AZN', locale) })
                   : t('card.noDeposit'),
               rental?.kmPerDay ? t('card.kmPerDay', { count: rental.kmPerDay }) : t('card.unlimitedKm'),
           ].filter(Boolean)
@@ -48,14 +50,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
     return (
         <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-card-muted">
-                {mainImage ? (
-                    <img
-                        src={mainImage}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover"
-                    />
-                ) : null}
+                <ListingPhoto src={mainImage} className="h-full w-full object-cover" />
 
                 <div className="absolute left-3 right-14 top-3 flex flex-wrap items-center gap-1.5">
                     {car.promotionTier ? <PromotionBadge tier={car.promotionTier} /> : null}
@@ -79,7 +74,7 @@ export default function AutoCard({ car, variant = 'sale' }) {
 
             <div className="flex flex-1 flex-col gap-2 p-4">
                 <p className="text-[20px] font-bold leading-none text-foreground">
-                    {formatPrice(car.price, car.currency || 'AZN')}
+                    {formatPrice(car.price, car.currency || 'AZN', locale)}
                     {isRent ? (
                         <span className="ml-1 text-[13px] font-medium text-muted-foreground">
                             {t('card.perDay')}

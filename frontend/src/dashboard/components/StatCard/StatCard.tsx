@@ -12,7 +12,7 @@ import {
 
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 import type { DashboardStat } from '@/dashboard/types/dashboard.types';
-import { formatNumber } from '@/lib/format';
+import { formatNumber, intlLocale } from '@/lib/format';
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
   car: Car,
@@ -42,12 +42,13 @@ function StatCardSkeleton() {
 }
 
 export function StatCard({ stat, isLoading }: StatCardProps) {
-  const { t } = useTranslation('dashboard');
+  const { t, i18n } = useTranslation('dashboard');
+  const locale = intlLocale(i18n.language);
   const Icon = iconMap[stat.icon] ?? Car;
 
   if (isLoading) return <StatCardSkeleton />;
 
-  const valueFormatted = formatNumber(stat.value);
+  const valueFormatted = formatNumber(stat.value, locale);
 
   const changePositive = (stat.change ?? 0) > 0;
   const changeNeutral = (stat.change ?? 0) === 0;

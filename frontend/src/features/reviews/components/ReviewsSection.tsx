@@ -6,6 +6,7 @@ import type { Review, ReviewTargetType } from '@/features/reviews/api/reviews.ap
 import { useMyProfessional } from '@/features/professional/hooks/useProfessional';
 import { useDeleteReview, useReviews, useSubmitReview } from '@/features/reviews/hooks/useReviews';
 import { ReviewsBlock, ReviewsWriteForm } from '@/shared/blocks/ReviewsBlock';
+import { formatDate, intlLocale } from '@/lib/format';
 import { mapSubmitError } from '@/lib/formSubmitError';
 import { appLoginUrl } from '@/shared/constants/appUrls';
 
@@ -101,7 +102,7 @@ export function ReviewsSection({
         }
       : null;
 
-  const formatDate = (value: string) => new Date(value).toLocaleDateString(i18n.language);
+  const formatReviewDate = (value: string) => formatDate(value, intlLocale(i18n.language));
 
   let writeForm = null;
   if (showWrite) {
@@ -128,7 +129,7 @@ export function ReviewsSection({
       showWriteSection={showWrite}
       writeForm={writeForm}
       loginHref={showWrite && !isAuthenticated ? appLoginUrl(window.location.pathname) : undefined}
-      formatDate={formatDate}
+      formatDate={formatReviewDate}
       renderReviewActions={(review) =>
         review.mine ? (
           <div className="mt-3 flex gap-3 text-[13px] font-semibold">
