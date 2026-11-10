@@ -233,6 +233,10 @@
       "generic": "Something went wrong. Please try again later."
     }
   },
+  "share": {
+    "copied": "Link copied",
+    "failed": "Could not copy the link"
+  },
   "indexPage": {
     "filters": "Filters",
     "reset": "Reset",

@@ -57,6 +57,22 @@ export const formatDate = (
   }).format(date);
 };
 
+/** ICU for az-Latn can emit skeleton tokens like "2026 M04"; use explicit AZ month names then. */
+const AZ_MONTHS = [
+  'yanvar',
+  'fevral',
+  'mart',
+  'aprel',
+  'may',
+  'iyun',
+  'iyul',
+  'avqust',
+  'sentyabr',
+  'oktyabr',
+  'noyabr',
+  'dekabr',
+];
+
 /** Month + year for “member since” — long month name avoids broken short labels on az. */
 export const formatMonthYear = (
   value: string | number | Date | null | undefined,
@@ -65,11 +81,17 @@ export const formatMonthYear = (
   const date = toDate(value);
   if (!date) return '';
   const dateOnly = isDateOnlyString(value);
-  return new Intl.DateTimeFormat(locale, {
+  const formatted = new Intl.DateTimeFormat(locale, {
     month: 'long',
     year: 'numeric',
     ...(dateOnly ? { timeZone: 'UTC' } : {}),
   }).format(date);
+  if (/M\d{1,2}/.test(formatted)) {
+    const monthIndex = dateOnly ? date.getUTCMonth() : date.getMonth();
+    const year = dateOnly ? date.getUTCFullYear() : date.getFullYear();
+    return `${AZ_MONTHS[monthIndex]} ${year}`;
+  }
+  return formatted;
 };
 
 /** BCP-47 tag for the active i18next language, for Intl and toLocaleString. */

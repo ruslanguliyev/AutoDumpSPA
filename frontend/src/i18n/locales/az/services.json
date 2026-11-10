@@ -94,6 +94,7 @@
     "loading": "Xidmət məlumatları yüklənir…",
     "errorFailed": "Xidmət yüklənərkən xəta baş verdi.",
     "notFound": "Xidmət tapılmadı.",
+    "galleryAria": "{{name}} qalereyası",
     "breadcrumbs": {
       "home": "Ana səhifə",
       "services": "Xidmətlər"
@@ -107,16 +108,19 @@
   },
   "header": {
     "verified": "TƏSDİQLƏNMİŞ",
-    "reviews": "{{count}} rəy",
+    "reviews_one": "{{count, number}} rəy",
+    "reviews_other": "{{count, number}} rəy",
     "share": "Paylaş",
-    "shareAria": "Xidməti paylaş"
+    "shareAria": "Xidməti paylaş",
+    "noReviewsYet": "Hələ rəy yoxdur"
   },
   "priceList": {
     "title": "Xidmətlər və qiymətlər",
     "popularBadge": "MƏŞHUR",
     "hotBadge": "HİT",
     "from": "dən",
-    "noPrice": "—"
+    "noPrice": "Qiymət yoxdur",
+    "fromPrice": "{{price}}-dən"
   },
   "popular": {
     "title": "Məşhur xidmətlər",
@@ -139,10 +143,14 @@
     "title": "Xidmət göstərilən brendlər"
   },
   "reviews": {
-    "basedOn": "{{count}} rəyə əsasən",
-    "showAll": "Bütün {{count}} rəy",
-    "agoWeeks": "{{count}} həftə əvvəl",
-    "agoMonths": "{{count}} ay əvvəl",
+    "basedOn_one": "{{count, number}} rəyə əsasən",
+    "basedOn_other": "{{count, number}} rəyə əsasən",
+    "showAll_one": "Bütün {{count, number}} rəy",
+    "showAll_other": "Bütün {{count, number}} rəy",
+    "agoWeeks_one": "{{count}} həftə əvvəl",
+    "agoWeeks_other": "{{count}} həftə əvvəl",
+    "agoMonths_one": "{{count}} ay əvvəl",
+    "agoMonths_other": "{{count}} ay əvvəl",
     "sampleReview1": "Əla xidmət. X5-dəki problem tez müəyyən edildi və təmir təxmini müddətdə tamamlandı. Qiymət rəsmi dilerlə müqayisədə ağlabatandır.",
     "sampleReview2": "Keyfiyyətli iş, mehriban personal. Gözləmə zonası təmizdir, yaxşı qəhvə var."
   },
@@ -160,7 +168,8 @@
     "phone": "Telefon",
     "email": "Email",
     "address": "Ünvan",
-    "today": "(bu gün)"
+    "today": "(bu gün)",
+    "bookVisit": "Görüş təyin et"
   },
   "days": {
     "monday": "Bazar ertəsi",

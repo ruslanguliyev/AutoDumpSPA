@@ -93,6 +93,8 @@
     "missingId": "Satıcı identifikatoru göstərilməyib.",
     "backToSellers": "← Siyahıya qayıt",
     "notFound": "Satıcı tapılmadı",
+    "noReviewsYet": "Hələ rəy yoxdur",
+    "profileUnavailable": "Profil əlçatan deyil",
     "notAvailable": "Satıcı {{id}} mövcud deyil.",
     "tabs": {
       "stock": "Anbar",

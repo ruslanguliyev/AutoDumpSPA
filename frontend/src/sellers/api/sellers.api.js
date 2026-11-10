@@ -1,4 +1,4 @@
-import { normalizeSellerType } from '@/shared/utils/sellerType';
+import { hasPublicSellerPage, normalizeSellerType } from '@/shared/utils/sellerType';
 import { gqlRequest } from '@/lib/graphql';
 const GET_SELLERS_QUERY = `
 query GetSellers {
@@ -26,7 +26,7 @@ const mapSeller = (row) => ({
   verified: row.verified,
   type: normalizeSellerType(row.type),
   domain: row.type === 'PARTS_DEALER' ? 'parts' : 'cars',
-  hasPublicPage: true,
+  hasPublicPage: hasPublicSellerPage(row.type),
   listingsCount: row.listingsCount ?? 0,
   logo: null,
   votes: row.reviewsCount ?? 0,

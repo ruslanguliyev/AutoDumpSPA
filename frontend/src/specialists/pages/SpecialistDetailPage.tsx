@@ -10,7 +10,6 @@ import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
 import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import SpecialistGallery from '@/specialists/components/SpecialistGallery';
 import SpecialistHighlights from '@/specialists/components/SpecialistHighlights';
-import SpecialistCertifications from '@/specialists/components/SpecialistCertifications';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { useSpecialistBySlug } from '@/specialists/hooks/useSpecialists';
 import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices';
@@ -61,7 +60,6 @@ const SpecialistDetailPage = () => {
     { label: specialist.name },
   ];
 
-  const certifications = specialist.certifications ?? [];
   const portfolio = specialist.portfolio ?? [];
 
   const mobileBar = buildSpecialistMobileBar({
@@ -88,9 +86,6 @@ const SpecialistDetailPage = () => {
                 rating={specialist.rating}
                 reviewsCount={specialist.reviewsCount}
               />
-              {certifications.length > 0 ? (
-                <SpecialistCertifications certifications={certifications} />
-              ) : null}
               <ReviewsSection targetType="SPECIALIST" targetId={specialist.id} />
             </div>
           }

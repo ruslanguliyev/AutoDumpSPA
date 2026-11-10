@@ -1,7 +1,9 @@
 import { BadgeCheck, MapPin, Star, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SpecialistDetail } from '@/specialists/types/specialist.types';
-import './SpecialistHero.scss';
+import { Badge } from '@/shared/ui/Badge';
+import { Chip } from '@/shared/ui/Chip';
+import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
 type SpecialistHeroProps = {
   specialist: SpecialistDetail;
@@ -17,9 +19,7 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
   const { t } = useTranslation('specialists');
 
   const ratingValue = Number.isFinite(specialist.rating) ? Number(specialist.rating) : null;
-  const reviewsCount = Number.isFinite(specialist.reviewsCount)
-    ? Number(specialist.reviewsCount)
-    : 0;
+  const reviewsCount = Number.isFinite(specialist.reviewsCount) ? Number(specialist.reviewsCount) : 0;
   const yearsExperienceValue = Number.isFinite(specialist.yearsExperience)
     ? Number(specialist.yearsExperience)
     : Number.isFinite(specialist.experienceYears)
@@ -35,91 +35,68 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
   const hasLocation = Boolean(locationLabel);
 
   return (
-    <section className="specialist-hero">
-      {/* Banner */}
-      <div className="specialist-hero__banner">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] [overflow-wrap:anywhere]">
+      <div className="h-32 w-full bg-card-muted sm:h-40 lg:h-48">
         {banner ? (
-          <img
-            src={banner}
-            alt=""
-            aria-hidden="true"
-            className="specialist-hero__banner-img"
-            loading="eager"
-          />
-        ) : (
-          <div className="specialist-hero__banner-placeholder" />
-        )}
+          <ListingPhoto src={banner} className="h-full w-full object-cover" loading="eager" />
+        ) : null}
       </div>
 
-      {/* Content — two columns: left avatar, right info */}
-      <div className="specialist-hero__content">
-        <div className="specialist-hero__row">
-          {/* Left column — avatar (overlaps banner) */}
-          <div className="specialist-hero__avatar-col">
-            <div className="specialist-hero__avatar-inner">
-              <div className="specialist-hero__avatar">
-                {avatar ? (
-                  <img src={avatar} alt={specialist.name} />
-                ) : (
-                  <div className="specialist-hero__avatar-initials">
-                    {getInitials(specialist.name)}
-                  </div>
-                )}
-              </div>
-              {specialist.verified ? (
-                <span className="specialist-hero__verified-badge">
-                  <BadgeCheck size={12} aria-hidden="true" />
+      <div className="relative px-4 pb-5 pt-16 sm:px-5 sm:pt-10">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+          <div className="relative mx-auto -mt-28 shrink-0 sm:mx-0 sm:-mt-24">
+            <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-card bg-card-muted sm:h-28 sm:w-28">
+              {avatar ? (
+                <ListingPhoto src={avatar} className="h-full w-full object-cover" />
+              ) : (
+                <span className="flex h-full w-full items-center justify-center text-[18px] font-semibold text-muted-foreground">
+                  {getInitials(specialist.name)}
                 </span>
-              ) : null}
+              )}
             </div>
+            {specialist.verified ? (
+              <span className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full border-2 border-card bg-success text-primary-foreground">
+                <BadgeCheck size={14} aria-hidden="true" />
+              </span>
+            ) : null}
           </div>
 
-          {/* Right column — name, meta, chips */}
-          <div className="specialist-hero__info-col">
-            <div className="specialist-hero__name-row">
-              <h1 className="specialist-hero__name">{specialist.name}</h1>
-              {specialist.verified ? (
-                <span className="specialist-hero__master-badge">Master Tech</span>
-              ) : null}
+          <div className="min-w-0 flex-1 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[26px]">
+                {specialist.name}
+              </h1>
+              {specialist.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
             </div>
 
-            {/* Meta row */}
-            <div className="specialist-hero__meta-row">
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground sm:justify-start">
               {hasExp ? (
-                <span className="specialist-hero__meta-item">
+                <span className="inline-flex items-center gap-1.5">
                   <User size={16} aria-hidden="true" />
                   {yearsExperienceValue} {t('detail.yearsExp')}
                 </span>
               ) : null}
               {showRating ? (
-                <span className="specialist-hero__meta-item">
-                  <Star size={16} className="specialist-hero__meta-star" aria-hidden="true" />
-                  <span className="specialist-hero__meta-rating">{ratingValue?.toFixed(1)}</span>
+                <span className="inline-flex items-center gap-1.5 text-foreground">
+                  <Star size={16} className="text-star" aria-hidden="true" />
+                  {ratingValue?.toFixed(1)}
+                  <span className="text-muted-foreground">{t('card.reviews', { count: reviewsCount })}</span>
                 </span>
-              ) : null}
-              {showRating ? (
-                <button type="button" className="specialist-hero__reviews-link">
-                  {t('card.reviews', { count: reviewsCount })}
-                </button>
-              ) : null}
-              {!showRating ? (
-                <span className="specialist-hero__meta-item text-muted-foreground">{t('detail.noReviewsYet')}</span>
-              ) : null}
+              ) : (
+                <span>{t('detail.noReviewsYet')}</span>
+              )}
               {hasLocation ? (
-                <span className="specialist-hero__meta-item specialist-hero__meta-item--location">
+                <span className="inline-flex items-center gap-1.5">
                   <MapPin size={16} aria-hidden="true" />
                   {locationLabel}
                 </span>
               ) : null}
             </div>
 
-            {/* Specialization chips */}
             {safeSpecializations.length > 0 ? (
-              <div className="specialist-hero__chips">
+              <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
                 {safeSpecializations.map((item) => (
-                  <span key={item} className="specialist-hero__chip">
-                    {t(`specializations.${item}`)}
-                  </span>
+                  <Chip key={item}>{t(`specializations.${item}`, { defaultValue: item })}</Chip>
                 ))}
               </div>
             ) : null}

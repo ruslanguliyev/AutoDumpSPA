@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { useSellersData } from '@/sellers/hooks/useSellersData';
+import { hasPublicSellerPage } from '@/shared/utils/sellerType';
 
 const DEFAULT_RATING = '';
 const DEFAULT_LISTINGS = 'any';
@@ -71,7 +72,7 @@ export const useSellers = () => {
     return safeSellers.filter((seller) => {
       if (filters.domain !== 'all' && seller.domain !== filters.domain) return false;
       if (filters.sellerType && seller.type !== filters.sellerType) return false;
-      if (seller?.type === 'private') return false;
+      if (!hasPublicSellerPage(seller?.type)) return false;
 
       if (filters.search?.trim()) {
         const query = normalize(filters.search);

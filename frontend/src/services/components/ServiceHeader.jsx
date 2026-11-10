@@ -1,21 +1,34 @@
+import { useState } from 'react';
 import { Share2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { shareOrCopyUrl } from '@/lib/share';
 import { Badge } from '@/shared/ui/Badge';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars.jsx';
 import Button from '@/shared/ui/button';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
 export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
-  const { t } = useTranslation('services');
+  const { t } = useTranslation(['services', 'common']);
   const location = service.location;
   const showRating = reviewsCount > 0 && Number.isFinite(ratingValue);
+  const [shareNotice, setShareNotice] = useState(null);
 
   const typeKey =
     service.type && ['garage', 'official', 'detailing', 'tire', 'electric', 'body'].includes(service.type)
       ? `filters.serviceTypes.${service.type}`
       : null;
   const typeLabel = typeKey ? t(typeKey) : service.type || null;
+
+  const onShare = async () => {
+    const result = await shareOrCopyUrl({
+      title: service.name,
+      url: window.location.href,
+    });
+    if (result === 'copied') setShareNotice(t('share.copied', { ns: 'common' }));
+    else if (result === 'failed') setShareNotice(t('share.failed', { ns: 'common' }));
+    else setShareNotice(null);
+  };
 
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] [overflow-wrap:anywhere]">
@@ -58,10 +71,23 @@ export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
           </div>
         </div>
 
-        <Button type="button" variant="secondary" className="min-h-11 shrink-0 gap-2 self-start" aria-label={t('header.shareAria')}>
-          <Share2 size={18} aria-hidden="true" />
-          <span className="hidden sm:inline">{t('header.share')}</span>
-        </Button>
+        <div className="flex shrink-0 flex-col items-end gap-2 self-start">
+          <Button
+            type="button"
+            variant="secondary"
+            className="min-h-11 gap-2"
+            aria-label={t('header.shareAria')}
+            onClick={onShare}
+          >
+            <Share2 size={18} aria-hidden="true" />
+            <span className="hidden sm:inline">{t('header.share')}</span>
+          </Button>
+          {shareNotice ? (
+            <p className="text-[13px] text-muted-foreground" role="status">
+              {shareNotice}
+            </p>
+          ) : null}
+        </div>
       </div>
     </section>
   );

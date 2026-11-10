@@ -94,6 +94,7 @@
     "backToSellers": "← Back to sellers",
     "notFound": "Seller not found",
     "noReviewsYet": "No reviews yet",
+    "profileUnavailable": "Profile unavailable",
     "notAvailable": "Seller {{id}} is not available.",
     "tabs": {
       "stock": "Stock",

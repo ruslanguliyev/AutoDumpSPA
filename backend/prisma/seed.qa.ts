@@ -484,60 +484,81 @@ async function main() {
       }
     }
 
-    const serviceUser = await tx.user.findUnique({ where: { email: 'service1@test.com' } });
-    if (serviceUser) {
-      const bakuSchedule = {
-        monday: { from: '09:00', to: '19:00', closed: false },
-        tuesday: { from: '09:00', to: '19:00', closed: false },
-        wednesday: { from: '09:00', to: '19:00', closed: false },
-        thursday: { from: '09:00', to: '19:00', closed: false },
-        friday: { from: '09:00', to: '19:00', closed: false },
-        saturday: { from: '10:00', to: '16:00', closed: false },
-        sunday: { closed: true },
-      };
-      await tx.serviceCenter.upsert({
-        where: { userId: serviceUser.id },
-        create: {
-          userId: serviceUser.id,
-          name: SEED_SERVICE.withSchedule,
-          slug: 'seed-qa-service-with-hours',
-          city: 'Baku',
-          rating: 4.5,
-          reviewsCount: 12,
-          verified: true,
-          schedule: bakuSchedule,
-          supportedBrands: ['Toyota', 'BMW'],
-          categories: ['garage'],
-        },
-        update: {
-          name: SEED_SERVICE.withSchedule,
-          schedule: bakuSchedule,
-        },
-      });
-    }
+    const bakuSchedule = {
+      monday: { from: '09:00', to: '19:00', closed: false },
+      tuesday: { from: '09:00', to: '19:00', closed: false },
+      wednesday: { from: '09:00', to: '19:00', closed: false },
+      thursday: { from: '09:00', to: '19:00', closed: false },
+      friday: { from: '09:00', to: '19:00', closed: false },
+      saturday: { from: '10:00', to: '16:00', closed: false },
+      sunday: { closed: true },
+    };
 
-    const serviceUser2 = await tx.user.findUnique({ where: { email: 'service2@test.com' } });
-    if (serviceUser2) {
-      await tx.serviceCenter.upsert({
-        where: { userId: serviceUser2.id },
-        create: {
-          userId: serviceUser2.id,
-          name: SEED_SERVICE.noSchedule,
-          slug: 'seed-qa-service-no-hours',
-          city: 'Baku',
-          rating: 4.2,
-          reviewsCount: 3,
-          verified: false,
-          schedule: Prisma.DbNull,
-          supportedBrands: ['Mercedes-Benz'],
-          categories: ['detailing'],
-        },
-        update: {
-          name: SEED_SERVICE.noSchedule,
-          schedule: Prisma.DbNull,
-        },
-      });
-    }
+    const serviceHoursUser = await tx.user.upsert({
+      where: { email: 'service-qa-hours@test.com' },
+      create: {
+        email: 'service-qa-hours@test.com',
+        passwordHash,
+        fullName: SEED_SERVICE.withSchedule,
+        role: UserRole.SERVICE,
+      },
+      update: { passwordHash, fullName: SEED_SERVICE.withSchedule, role: UserRole.SERVICE },
+    });
+    await tx.serviceCenter.upsert({
+      where: { userId: serviceHoursUser.id },
+      create: {
+        userId: serviceHoursUser.id,
+        name: SEED_SERVICE.withSchedule,
+        slug: 'seed-qa-service-with-hours',
+        city: 'Baku',
+        gallery: [],
+        rating: 4.5,
+        reviewsCount: 12,
+        verified: true,
+        schedule: bakuSchedule,
+        supportedBrands: ['Toyota', 'BMW'],
+        categories: ['garage'],
+      },
+      update: {
+        name: SEED_SERVICE.withSchedule,
+        slug: 'seed-qa-service-with-hours',
+        gallery: [],
+        schedule: bakuSchedule,
+      },
+    });
+
+    const serviceNoneUser = await tx.user.upsert({
+      where: { email: 'service-qa-none@test.com' },
+      create: {
+        email: 'service-qa-none@test.com',
+        passwordHash,
+        fullName: SEED_SERVICE.noSchedule,
+        role: UserRole.SERVICE,
+      },
+      update: { passwordHash, fullName: SEED_SERVICE.noSchedule, role: UserRole.SERVICE },
+    });
+    await tx.serviceCenter.upsert({
+      where: { userId: serviceNoneUser.id },
+      create: {
+        userId: serviceNoneUser.id,
+        name: SEED_SERVICE.noSchedule,
+        slug: 'seed-qa-service-no-hours',
+        city: 'Baku',
+        gallery: [],
+        rating: 4.2,
+        reviewsCount: 3,
+        verified: false,
+        schedule: Prisma.DbNull,
+        supportedBrands: ['Mercedes-Benz'],
+        categories: ['detailing'],
+      },
+      update: {
+        name: SEED_SERVICE.noSchedule,
+        slug: 'seed-qa-service-no-hours',
+        gallery: [],
+        schedule: Prisma.DbNull,
+      },
+    });
 
     const specialistZeroUser = await tx.user.upsert({
       where: { email: 'specialist-qa-zero@test.com' },
@@ -568,7 +589,7 @@ async function main() {
         verified: true,
         available: true,
         skills: ['diagnostics'],
-        specializations: ['engine'],
+        specializations: ['ENGINE'],
         portfolio: [],
       },
       update: {

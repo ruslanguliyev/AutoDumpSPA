@@ -233,6 +233,10 @@
       "generic": "Xəta baş verdi. Bir az sonra yenidən cəhd edin."
     }
   },
+  "share": {
+    "copied": "Keçid kopyalandı",
+    "failed": "Keçidi kopyalamaq mümkün olmadı"
+  },
   "indexPage": {
     "filters": "Filtrlər",
     "reset": "Sıfırla",

@@ -102,6 +102,7 @@
     "loading": "Загрузка деталей…",
     "errorFailed": "Ошибка загрузки сервиса.",
     "notFound": "Сервис не найден.",
+    "galleryAria": "Галерея {{name}}",
     "breadcrumbs": {
       "home": "Главная",
       "services": "Услуги"
@@ -120,14 +121,16 @@
     "reviews_one": "{{count, number}} отзыв",
     "reviews_few": "{{count, number}} отзыва",
     "reviews_many": "{{count, number}} отзывов",
-    "reviews_other": "{{count, number}} отзыва"
+    "reviews_other": "{{count, number}} отзыва",
+    "noReviewsYet": "Пока нет отзывов"
   },
   "priceList": {
     "title": "Услуги и цены",
     "popularBadge": "ПОПУЛЯРНО",
     "hotBadge": "ХИТ",
     "from": "от",
-    "noPrice": "—"
+    "noPrice": "Нет цены",
+    "fromPrice": "от {{price}}"
   },
   "popular": {
     "title": "Популярные услуги",
@@ -152,8 +155,14 @@
     "title": "Обслуживаемые бренды"
   },
   "reviews": {
-    "agoWeeks": "{{count}} нед. назад",
-    "agoMonths": "{{count}} мес. назад",
+    "agoWeeks_one": "{{count}} неделю назад",
+    "agoWeeks_few": "{{count}} недели назад",
+    "agoWeeks_many": "{{count}} недель назад",
+    "agoWeeks_other": "{{count}} недели назад",
+    "agoMonths_one": "{{count}} месяц назад",
+    "agoMonths_few": "{{count}} месяца назад",
+    "agoMonths_many": "{{count}} месяцев назад",
+    "agoMonths_other": "{{count}} месяца назад",
     "sampleReview1": "Отличный сервис. Быстро нашли причину неисправности X5 и отремонтировали в срок. Цена адекватная по сравнению с официальными дилерами.",
     "sampleReview2": "Качественная работа, вежливый персонал. Зона ожидания чистая, хороший кофе.",
     "basedOn_one": "На основе {{count, number}} отзыва",
@@ -179,7 +188,8 @@
     "phone": "Телефон",
     "email": "Email",
     "address": "Адрес",
-    "today": "(сегодня)"
+    "today": "(сегодня)",
+    "bookVisit": "Записаться"
   },
   "days": {
     "monday": "Понедельник",

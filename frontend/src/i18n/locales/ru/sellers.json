@@ -103,6 +103,8 @@
     "missingId": "Не указан идентификатор продавца.",
     "backToSellers": "← Назад к списку",
     "notFound": "Продавец не найден",
+    "noReviewsYet": "Пока нет отзывов",
+    "profileUnavailable": "Профиль недоступен",
     "notAvailable": "Продавец {{id}} недоступен.",
     "tabs": {
       "stock": "Товар",

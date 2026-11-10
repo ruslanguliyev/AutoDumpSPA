@@ -67,6 +67,7 @@ export type SpecialistDetail = SpecialistProfile & {
   supportedVehicles?: SupportedVehicle[];
   portfolio?: string[];
   reviews?: SpecialistReview[];
+  /** Not in the GraphQL schema — see design/BACKEND-NEEDS.md. Do not render from mocks. */
   certifications?: SpecialistCertification[];
   phone?: string | null;
   whatsapp?: string | null;

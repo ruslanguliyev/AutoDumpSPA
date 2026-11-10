@@ -39,9 +39,6 @@ export const sanitizeFilters = (filters = PARTS_DEFAULT_FILTER) => {
  */
 export const mapPartToEntity = (dto) => {
   const imageUrl = resolveMediaUrl(dto.imageUrl);
-  const fallbackImageUrl =
-    imageUrl ||
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=60';
 
   return {
     id: dto.id,
@@ -58,8 +55,8 @@ export const mapPartToEntity = (dto) => {
     compatibility: dto.compatibility ?? [],
     stock: dto.stock ?? 0,
     location: dto.location || 'N/A',
-    imageUrl: fallbackImageUrl,
-    image: dto.image ?? imageUrl ?? fallbackImageUrl,
+    imageUrl: imageUrl || null,
+    image: imageUrl ? [imageUrl] : [],
     seller: dto.seller ?? null,
     promotionTier: dto.promotionTier ?? null,
   };
