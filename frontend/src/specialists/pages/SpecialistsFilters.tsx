@@ -6,8 +6,6 @@ import { Specialization } from '@/specialists/types/specialist.types';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import Input from '@/shared/ui/Input/Input';
 import Select from '@/shared/ui/Select/Select';
-import { labelClass } from '@/shared/ui/field';
-
 type SpecialistsFiltersProps = {
   size?: 'md' | 'drawer';
   vehiclesFilterSupported?: boolean;
