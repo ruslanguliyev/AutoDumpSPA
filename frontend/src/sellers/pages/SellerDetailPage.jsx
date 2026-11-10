@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CalendarDays, Heart, MapPin, Phone } from 'lucide-react';
+import { CalendarDays, Heart, Layers, MapPin, Phone } from 'lucide-react';
 
 import { useSellerListings } from '@/sellers/hooks/useSellerListings';
 import { useSellerById } from '@/sellers/hooks/useSellerById';
@@ -13,20 +13,15 @@ import { useDebounce } from '@/shared/hooks/useDebounce';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { Badge } from '@/shared/ui/Badge';
 import Button from '@/shared/ui/button';
+import { Chip } from '@/shared/ui/Chip';
 import { Input } from '@/shared/ui/Input';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard';
 import PartCard from '@/parts/components/PartCard/PartCard';
 import { DetailLayout, ProfileHeader, ShareButton } from '@/shared/blocks';
-import { formatMonthYear, formatNumber, formatPlace, intlLocale } from '@/lib/format';
+import { formatMonthYear, formatNumber, intlLocale } from '@/lib/format';
 import { shareOrCopyUrl } from '@/lib/share';
 import { hasPublicSellerPage, normalizeSellerType } from '@/shared/utils/sellerType';
 import { buildSellerMobileBar } from '@/sellers/pages/sellerDetail/SellerDetailMobileBar';
-
-const getInitials = (name) => {
-  const safe = String(name ?? '').trim();
-  if (!safe) return '??';
-  return safe.slice(0, 2).toUpperCase();
-};
 
 const Shell = ({ children }) => (
   <div className="mx-auto w-full max-w-[1280px] px-4 py-6">{children}</div>
@@ -69,8 +64,6 @@ export default function SellerDetailPage({
     ? Number(seller.votes ?? seller.reviewsCount)
     : null;
   const city = typeof seller?.city === 'string' && seller.city.trim() ? seller.city.trim() : null;
-  const address = typeof seller?.address === 'string' && seller.address.trim() ? seller.address.trim() : null;
-  const place = formatPlace(address, city) || null;
   const listingsCount = Number.isFinite(seller?.listingsCount) ? seller.listingsCount : null;
   const memberSince = formatMonthYear(seller?.createdAt ?? seller?.memberSince, locale) || null;
   const typeKey = normalizeSellerType(seller?.type);
@@ -200,19 +193,14 @@ export default function SellerDetailPage({
 
             <ProfileHeader
               name={seller.name || t('detail.fallbackName')}
-              verified={seller.verified ? <Badge variant="verified">{verifiedLabel}</Badge> : null}
-              subtitle={typeLabel}
-              avatar={
-                <span className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-border bg-card-muted text-[13px] font-semibold text-muted-foreground">
-                  {getInitials(seller.name)}
-                </span>
-              }
+              verified={Boolean(seller.verified)}
+              verifiedBadge={seller.verified ? <Badge variant="verified">{verifiedLabel}</Badge> : null}
               rating={{ rating: ratingValue, reviewsCount }}
               meta={[
-                place
+                city
                   ? {
                       icon: <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />,
-                      text: place,
+                      text: city,
                     }
                   : null,
                 memberSince
@@ -223,11 +211,12 @@ export default function SellerDetailPage({
                   : null,
                 listingsCount != null
                   ? {
-                      icon: null,
+                      icon: <Layers size={16} strokeWidth={1.5} aria-hidden="true" />,
                       text: t('seller.listings', { ns: 'common', count: listingsCount }),
                     }
                   : null,
               ].filter(Boolean)}
+              tags={typeLabel ? <Chip>{typeLabel}</Chip> : null}
               actions={<ShareButton title={seller.name || t('detail.fallbackName')} />}
             />
 

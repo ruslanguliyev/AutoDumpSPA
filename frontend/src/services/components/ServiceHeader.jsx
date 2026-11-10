@@ -2,10 +2,10 @@ import { MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { formatPlace } from '@/lib/format';
+import { formatServiceTypeLabel } from '@/services/utils/serviceTypeLabel';
 import { ProfileHeader, ShareButton } from '@/shared/blocks';
 import { Badge } from '@/shared/ui/Badge';
-import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
-import { formatServiceTypeLabel } from '@/services/utils/serviceTypeLabel';
+import { Chip } from '@/shared/ui/Chip';
 
 export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
   const { t } = useTranslation(['services', 'common']);
@@ -17,29 +17,17 @@ export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
   return (
     <ProfileHeader
       name={service.name}
-      verified={service.verified ? <Badge variant="verified">{t('header.verified')}</Badge> : null}
-      subtitle={typeLabel || null}
-      cover={
-        coverSrc ? (
-          <div className="relative aspect-[3/1] max-h-40 w-full">
-            <ListingPhoto src={coverSrc} className="h-full w-full object-cover" loading="eager" />
-          </div>
-        ) : null
-      }
-      avatar={
-        logo ? (
-          <ListingPhoto
-            src={logo}
-            className="h-14 w-14 rounded-xl border border-border object-cover"
-          />
-        ) : null
-      }
+      coverSrc={coverSrc}
+      avatarSrc={logo}
+      verified={Boolean(service.verified)}
+      verifiedBadge={service.verified ? <Badge variant="verified">{t('header.verified')}</Badge> : null}
       rating={{ rating: ratingValue, reviewsCount }}
       meta={
         place
           ? [{ icon: <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />, text: place }]
           : []
       }
+      tags={typeLabel ? <Chip>{typeLabel}</Chip> : null}
       actions={<ShareButton title={service.name} />}
     />
   );
