@@ -1,4 +1,7 @@
 {
+  "detailBar": {
+    "aria": "Primary actions"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "home": "Home",

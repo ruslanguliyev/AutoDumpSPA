@@ -33,8 +33,10 @@ type Props = {
   phoneVisible: boolean;
   isFavorite: boolean;
   onToggleFavorite: () => void;
-  /** Hide phone / favorite in sidebar on mobile when the sticky bar carries them. */
-  hideActionsOnMobile?: boolean;
+  /** The sticky bottom bar already carries the favourite toggle: hide it here below `lg`. */
+  barCarriesFavorite?: boolean;
+  /** …and the phone button. */
+  barCarriesPhone?: boolean;
 };
 
 const initials = (name: string) => {
@@ -51,7 +53,8 @@ export function VehicleDetailSellerSidebar({
   phoneVisible,
   isFavorite,
   onToggleFavorite,
-  hideActionsOnMobile = true,
+  barCarriesFavorite = false,
+  barCarriesPhone = false,
 }: Props) {
   const { t, i18n } = useTranslation(['common', 'sellers']);
   const navigate = useNavigate();
@@ -69,7 +72,8 @@ export function VehicleDetailSellerSidebar({
   const canOpen = hasPublicSellerPage(seller.type) && seller.hasPublicPage === true;
   const phone = seller.phone?.trim() || null;
   const memberSince = formatMonthYear(seller.memberSince, intlLocale(i18n.language)) || null;
-  const actionWrap = hideActionsOnMobile ? 'hidden flex-col gap-2 lg:flex' : 'flex flex-col gap-2';
+  const showPhoneButton = Boolean(phone && showPhone);
+  const hasMobileActions = (showPhoneButton && !barCarriesPhone) || !barCarriesFavorite;
 
   const openSeller = () => {
     if (!canOpen) return;
@@ -146,9 +150,14 @@ export function VehicleDetailSellerSidebar({
         ) : null}
       </ul>
 
-      <div className={`mt-4 ${actionWrap}`}>
-        {phone && showPhone ? (
-          <Button type="button" variant="secondary" className="w-full justify-center gap-2" onClick={onTogglePhone}>
+      <div className={`mt-4 flex-col gap-2 ${hasMobileActions ? 'flex' : 'hidden lg:flex'}`}>
+        {showPhoneButton ? (
+          <Button
+            type="button"
+            variant="secondary"
+            className={`w-full justify-center gap-2 ${barCarriesPhone ? 'max-lg:hidden' : ''}`}
+            onClick={onTogglePhone}
+          >
             <Phone size={18} strokeWidth={1.5} aria-hidden="true" />
             {phoneVisible ? phone : t('vehicle.showPhoneNumber', { ns: 'sellers' })}
           </Button>
@@ -156,7 +165,7 @@ export function VehicleDetailSellerSidebar({
         <Button
           type="button"
           variant="ghost"
-          className="w-full justify-center gap-2"
+          className={`w-full justify-center gap-2 ${barCarriesFavorite ? 'max-lg:hidden' : ''}`}
           aria-pressed={isFavorite}
           onClick={onToggleFavorite}
         >

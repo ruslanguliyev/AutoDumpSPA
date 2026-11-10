@@ -119,8 +119,11 @@
     "memberSince": "Member since {{date}}",
     "respondsWithin": "Usually responds within {{time}}",
     "showPhoneNumber": "Show Phone Number",
-    "addedToFavorites": "Added to Favorites",
-    "addToFavorites": "Add to Favorites"
+      "addedToFavorites": "Added to Favorites",
+    "addToFavorites": "Add to Favorites",
+    "writeMessage": "Message",
+    "requestBooking": "Book now",
+    "callSeller": "Call"
   },
   "errors": {
     "loadFailed": "Error loading sellers page"

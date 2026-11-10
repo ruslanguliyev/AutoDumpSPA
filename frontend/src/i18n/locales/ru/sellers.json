@@ -130,7 +130,10 @@
     "respondsWithin": "Обычно отвечает в течение {{time}}",
     "showPhoneNumber": "Показать номер телефона",
     "addedToFavorites": "В избранном",
-    "addToFavorites": "В избранное"
+    "addToFavorites": "В избранное",
+    "writeMessage": "Написать",
+    "requestBooking": "Забронировать",
+    "callSeller": "Позвонить"
   },
   "errors": {
     "loadFailed": "Ошибка загрузки страницы продавцов"

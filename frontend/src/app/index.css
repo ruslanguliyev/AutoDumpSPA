@@ -225,6 +225,19 @@
   }
 }
 
+/* Sticky bottom bar of detail pages (DetailLayout): 44px control + 8px above and below,
+   plus the device's bottom inset. Only below `lg`, where the bar exists. */
+:root {
+  --mobile-bar-h: 3.75rem;
+  --mobile-bar-offset: 0px;
+}
+@media (max-width: 1023.98px) {
+  body.has-mobile-bar {
+    --mobile-bar-offset: calc(var(--mobile-bar-h) + env(safe-area-inset-bottom));
+    padding-bottom: var(--mobile-bar-offset);
+  }
+}
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;

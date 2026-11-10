@@ -120,7 +120,10 @@
     "respondsWithin": "Adətən {{time}} ərzində cavab verir",
     "showPhoneNumber": "Telefon nömrəsini göstər",
     "addedToFavorites": "Seçilmişlərdə",
-    "addToFavorites": "Seçilmişlərə"
+    "addToFavorites": "Seçilmişlərə",
+    "writeMessage": "Yaz",
+    "requestBooking": "Rezerv et",
+    "callSeller": "Zəng et"
   },
   "errors": {
     "loadFailed": "Satıcılar səhifəsi yüklənərkən xəta baş verdi"

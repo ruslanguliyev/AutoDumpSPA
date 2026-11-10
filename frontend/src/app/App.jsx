@@ -10,6 +10,7 @@ function App() {
       <AuthInitializer />
       <ScrollToTop
         smooth
+        style={{ bottom: 'calc(var(--mobile-bar-offset) + 1.25rem)' }}
         className="!bg-card !w-11 !h-11 !rounded-full !shadow-[var(--shadow-card)] !border !border-border !flex !items-center !justify-center
              hover:opacity-90 transition"
         component={<span className="text-foreground text-xl">↑</span>}

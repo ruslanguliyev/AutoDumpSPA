@@ -1,4 +1,7 @@
 {
+  "detailBar": {
+    "aria": "Əsas əməliyyatlar"
+  },
   "nav": {
     "home": "Ana səhifə",
     "sellers": "Satıcılar",
