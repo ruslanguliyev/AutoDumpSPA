@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useFilters, useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import type { FilterValue } from '@/features/filters/types/filters.types';
+import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
 import { PART_CATEGORIES } from '@/parts/utils/parts.constants';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import Input from '@/shared/ui/Input/Input';
@@ -40,7 +41,7 @@ export default function PartsFilters({
       { value: '', label: t('filter.allCategories') },
       ...PART_CATEGORIES.map((category) => ({
         value: category.value,
-        label: t(`categories.${category.value}`),
+        label: formatPartCategoryLabel(t, category.value) || category.value,
       })),
     ],
     [t]

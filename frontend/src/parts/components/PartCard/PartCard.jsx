@@ -7,7 +7,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { formatPrice, intlLocale } from '@/lib/format';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
-import { getPartCategoryI18nKey } from '@/parts/utils/partCategoryLabel';
+import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
 
 /** The part card, used by the parts catalogue, the home page and a seller's parts tab. */
 export default function PartCard({ part }) {
@@ -26,13 +26,7 @@ export default function PartCard({ part }) {
     const stock = Number.isFinite(part.stock) ? part.stock : null;
     const inStock = stock === null ? Boolean(part.inStock) : stock > 0;
     const price = Number.isFinite(part.price) ? part.price : null;
-    const categoryKey = part.category ? getPartCategoryI18nKey(part.category) : null;
-    const categoryLabel =
-        part.category && categoryKey
-            ? t(`categories.${categoryKey}`, { defaultValue: part.category })
-            : part.category
-              ? t(`categories.${String(part.category).trim().toLowerCase()}`, { defaultValue: part.category })
-              : null;
+    const categoryLabel = formatPartCategoryLabel(t, part.category) || null;
 
     return (
         <CardWrapper as="article" hover className="relative flex h-full flex-col overflow-hidden [overflow-wrap:anywhere]">

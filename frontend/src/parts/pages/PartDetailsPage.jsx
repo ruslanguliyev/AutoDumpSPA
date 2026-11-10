@@ -14,7 +14,7 @@ import { ReportListingForm } from '@/features/moderation/components/ReportListin
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
-import { getPartCategoryKey } from '@/parts/utils/parts.constants';
+import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
 import {
   DetailLayout,
   MiniSellerCard,
@@ -77,10 +77,7 @@ export default function PartDetailsPage() {
     );
   }
 
-  const categoryKey = getPartCategoryKey(part?.category);
-  const categoryLabel = categoryKey
-    ? t(`categories.${categoryKey}`, { defaultValue: part?.category ?? '' })
-    : part?.category?.trim() ?? '';
+  const categoryLabel = formatPartCategoryLabel(t, part?.category);
 
   const inStock = (part.stock ?? 0) > 0;
   const seller = part.seller ?? null;
