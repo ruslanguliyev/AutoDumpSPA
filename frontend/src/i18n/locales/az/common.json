@@ -2,6 +2,12 @@
   "detailBar": {
     "aria": "Əsas əməliyyatlar"
   },
+  "mediaViewer": {
+    "prev": "Əvvəlki şəkil",
+    "next": "Növbəti şəkil",
+    "close": "Bağla",
+    "showImage": "{{number}}-ci şəkli göstər"
+  },
   "nav": {
     "home": "Ana səhifə",
     "sellers": "Satıcılar",

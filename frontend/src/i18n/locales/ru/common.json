@@ -2,6 +2,12 @@
   "detailBar": {
     "aria": "Основные действия"
   },
+  "mediaViewer": {
+    "prev": "Предыдущее фото",
+    "next": "Следующее фото",
+    "close": "Закрыть",
+    "showImage": "Показать фото {{number}}"
+  },
   "nav": {
     "dashboard": "Кабинет",
     "home": "Главная",

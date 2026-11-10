@@ -2,6 +2,12 @@
   "detailBar": {
     "aria": "Primary actions"
   },
+  "mediaViewer": {
+    "prev": "Previous photo",
+    "next": "Next photo",
+    "close": "Close",
+    "showImage": "Show photo {{number}}"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "home": "Home",
