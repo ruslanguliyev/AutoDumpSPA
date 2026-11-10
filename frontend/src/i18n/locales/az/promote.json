@@ -1,6 +1,12 @@
 {
   "loading": "Yüklənir…",
   "notFound": "Tapılmadı.",
+  "emptyPackages": "Bu elan üçün yerləşdirmə paketi hələ yoxdur.",
+  "errors": {
+    "network": "Serverə çıxış alınmadı. Bağlantınızı yoxlayın və yenidən cəhd edin.",
+    "generic": "Xəta baş verdi. Bir az sonra yenidən cəhd edin.",
+    "loginRequired": "Davam etmək üçün daxil olun."
+  },
   "title": "İrəli çək",
   "subtitle": "Ödənişli yerləşdirmə elanı kataloqda yuxarı qaldırır. O, həmişə reklam kimi işarələnir və qeydiyyatsız da alına bilər.",
   "openTarget": "Səhifəni aç",

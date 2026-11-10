@@ -6,6 +6,7 @@ import { formatQapik } from '@/features/promotions/api/promotions.api';
 import type { PromotionTarget, PromotionTier } from '@/features/promotions/api/promotions.api';
 import { usePromotionQuote } from '@/features/promotions/hooks/usePromotions';
 import { promotePath } from '@/features/promotions/pages/PromotePage';
+import { intlLocale } from '@/lib/format';
 
 const TIERS: PromotionTier[] = ['BUMP', 'VIP', 'PREMIUM'];
 const ICON = { BUMP: ArrowUp, VIP: Gem, PREMIUM: Crown } as const;
@@ -28,7 +29,8 @@ type Props = {
 
 /** Three compact promote rows — design/components.md. */
 export function PromoteShortcuts({ targetType, targetId, className = '' }: Props) {
-  const { t } = useTranslation('promote');
+  const { t, i18n } = useTranslation('promote');
+  const locale = intlLocale(i18n.language);
   const quote = usePromotionQuote(targetType, targetId);
   const packages = quote.data?.packages ?? [];
 
@@ -58,7 +60,9 @@ export function PromoteShortcuts({ targetType, targetId, className = '' }: Props
                 <span className="min-w-0 flex-1">
                   <span className={`block text-[15px] font-semibold ${ACCENT[tier]}`}>{t(`tier.${tier}.name`)}</span>
                   <span className="block text-[13px] text-muted-foreground">
-                    {t('fromPrice', { price: formatQapik(from, quote.data?.currency ?? 'AZN') })}
+                    {t('fromPrice', {
+                      price: formatQapik(from, quote.data?.currency ?? 'AZN', locale),
+                    })}
                   </span>
                 </span>
               </Link>

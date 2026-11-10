@@ -136,9 +136,26 @@
     "noResults": "No results found",
     "tryAgain": "Try again",
     "somethingWentWrong": "Something went wrong",
-    "pageNotFound": "Page not found",
-    "pageNotFoundHint": "The page you are looking for does not exist or has been moved.",
-    "goHome": "Go to home"
+    "pageNotFound": "This page took a wrong turn",
+    "pageNotFoundHint": "The listing may have been sold or removed, or the address is wrong.",
+    "goHome": "Back to home",
+    "goCatalog": "Go to catalogue"
+  },
+  "about": {
+    "title": "About AvtoBaz",
+    "mission": "AvtoBaz is a marketplace for buying, selling and renting cars, finding parts, and booking specialists and service centres in Azerbaijan.",
+    "howTitle": "How AvtoBaz works",
+    "step1Title": "Browse",
+    "step1Body": "Open cars, rent, parts, services or specialists and filter by what you need.",
+    "step2Title": "Check the listing",
+    "step2Body": "Photos, price and seller details come from the listing. We do not invent ratings or extra fields.",
+    "step3Title": "Contact",
+    "step3Body": "Call, write or request a visit from the listing page.",
+    "step4Title": "List your own",
+    "step4Body": "Anyone can place an advert. Paid placement is always labelled as an advert.",
+    "contactTitle": "Get in touch",
+    "contactBody": "Questions about the product or a dealer account — start from the catalogue or add a listing.",
+    "forDealers": "For dealers"
   },
   "footer": {
     "company": "Company",

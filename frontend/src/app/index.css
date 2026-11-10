@@ -218,6 +218,10 @@
   }
   html {
     font-family: var(--font-sans);
+    color-scheme: light;
+  }
+  html[data-theme='dark'] {
+    color-scheme: dark;
   }
   body {
     background-color: rgb(var(--background));

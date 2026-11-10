@@ -136,9 +136,26 @@
     "noResults": "Nəticə tapılmadı",
     "tryAgain": "Yenidən cəhd et",
     "somethingWentWrong": "Nəsə səhv getdi",
-    "pageNotFound": "Səhifə tapılmadı",
-    "pageNotFoundHint": "Axtardığınız səhifə mövcud deyil və ya köçürülüb.",
-    "goHome": "Ana səhifəyə get"
+    "pageNotFound": "Bu səhifə mövcud deyil",
+    "pageNotFoundHint": "Elan satılmış və ya silinmiş ola bilər, ya da ünvan səhvdir.",
+    "goHome": "Ana səhifəyə qayıt",
+    "goCatalog": "Kataloqa keç"
+  },
+  "about": {
+    "title": "AvtoBaz haqqında",
+    "mission": "AvtoBaz Azərbaycanda avtomobil alqı-satqısı və icarəsi, ehtiyat hissələri, ustalar və servis mərkəzləri üçün bazardır.",
+    "howTitle": "AvtoBaz necə işləyir",
+    "step1Title": "Axtarış",
+    "step1Body": "Avtomobillər, icarə, ehtiyat hissələri, xidmətlər və ya ustalar bölməsini açın və filtrləyin.",
+    "step2Title": "Elanı yoxlayın",
+    "step2Body": "Foto, qiymət və satıcı məlumatı elandan gəlir. Reytinq və əlavə sahələri uydurmurıq.",
+    "step3Title": "Əlaqə",
+    "step3Body": "Elan səhifəsindən zəng edin, yazın və ya görüş tələb edin.",
+    "step4Title": "Öz elanınız",
+    "step4Body": "Elan yerləşdirmək üçün hesab məcburi deyil. Ödənişli yerləşdirmə həmişə reklam kimi işarələnir.",
+    "contactTitle": "Əlaqə",
+    "contactBody": "Məhsul və ya diler hesabı haqqında suallar üçün kataloqdan başlayın və ya elan əlavə edin.",
+    "forDealers": "Dilərlər üçün"
   },
   "footer": {
     "company": "Şirkət",

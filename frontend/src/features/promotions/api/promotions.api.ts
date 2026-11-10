@@ -1,3 +1,4 @@
+import { formatDecimalPrice } from '@/lib/format';
 import { GQL_URL, gqlRequest } from '@/lib/graphql';
 
 /** REST lives next to the GraphQL endpoint on the same server. */
@@ -194,6 +195,6 @@ export const completeMockPayment = async (token: string, outcome: 'paid' | 'fail
   if (!res.ok) throw new Error(`Payment gateway returned ${res.status}`);
 };
 
-/** 2500 -> "25.00 AZN". Amounts travel as whole qapik and are only formatted here. */
-export const formatQapik = (amount: number, currency = 'AZN'): string =>
-  `${(amount / 100).toFixed(2)} ${currency}`;
+/** 2500 qapik -> "25.00 AZN". Amounts travel as whole qapik. */
+export const formatQapik = (amount: number, currency = 'AZN', locale = 'ru-RU'): string =>
+  formatDecimalPrice(amount / 100, currency, locale);

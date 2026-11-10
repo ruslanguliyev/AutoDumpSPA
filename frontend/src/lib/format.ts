@@ -19,6 +19,20 @@ export const formatPrice = (
   return `${formatNumber(Number(value), locale)} ${currency}`;
 };
 
+/** Two-decimal amounts (promotion qapik → manat). Integer catalogue prices use `formatPrice`. */
+export const formatDecimalPrice = (
+  value: number | null | undefined,
+  currency = 'AZN',
+  locale = 'ru-RU',
+): string => {
+  if (value == null || !Number.isFinite(Number(value))) return '—';
+  const formatted = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+  return `${formatted} ${currency}`;
+};
+
 export const formatKm = (
   value: number | null | undefined,
   locale = 'ru-RU',

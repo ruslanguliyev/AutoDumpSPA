@@ -1,6 +1,12 @@
 {
   "loading": "Loading…",
   "notFound": "We could not find this.",
+  "emptyPackages": "No placement packages are available for this item yet.",
+  "errors": {
+    "network": "Could not reach the server. Check your connection and try again.",
+    "generic": "Something went wrong. Please try again later.",
+    "loginRequired": "Sign in to continue."
+  },
   "title": "Promote",
   "subtitle": "Paid placement lifts your advert in the catalogue. It is always marked as an advert, and you can buy it without an account.",
   "openTarget": "Open the page",
