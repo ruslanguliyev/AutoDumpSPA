@@ -1016,6 +1016,7 @@ enum UserRole {
 type VehicleObject {
   bodyType: String
   brand: String!
+  bumpedAt: DateTime!
   color: String
   condition: String!
   currency: String!

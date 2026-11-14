@@ -144,7 +144,9 @@
     "minDays": "Min {{count}} gün",
     "kmPerDay": "{{count}} km/gün",
     "unlimitedKm": "Limitsiz km",
-    "checkAvailability": "Tarixləri yoxla"
+    "checkAvailability": "Tarixləri yoxla",
+    "updatedToday": "bugün {{time}}",
+    "updatedYesterday": "dünən {{time}}"
   },
   "badges": {
     "hot": "HİT"

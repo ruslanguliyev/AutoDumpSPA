@@ -119,9 +119,10 @@ content padding 16px, internal gap 8px.
 
 **Car card** — image 4:3 (`bg-card-muted` placeholder), heart button top-right
 (44×44 target, translucent background), HOT badge top-left, VIP/Premium badge
-top-left when promoted. Body order: price (20px/700) → title
-`Brand Model — trim` (18px/600) → meta line
-`2019 · 4.4L · 625 HP · 45,000 km · Automatic` (13px muted) → city with pin icon.
+top-left when promoted. Body is four single lines, each truncated, no pin and
+no second line for the trim: price (17px/700) → title `Brand Model` (15px/700)
+→ `2019, 2.0 L, 45 000 km` (13px muted) → `Baku, today 00:27` (13px subtle).
+Horsepower, gearbox and trim stay on the detail page.
 
 **Part card** — image 1:1, category pill, name (16px/600), stars with count,
 stock status, price (20px/700) pushed to the bottom.

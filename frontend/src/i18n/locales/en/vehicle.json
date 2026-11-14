@@ -144,6 +144,8 @@
     "kmPerDay": "{{count}} km/day",
     "unlimitedKm": "Unlimited km",
     "checkAvailability": "Check availability",
+    "updatedToday": "today {{time}}",
+    "updatedYesterday": "yesterday {{time}}",
     "minDays_one": "Min {{count}} day",
     "minDays_other": "Min {{count}} days"
   },

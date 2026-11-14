@@ -144,7 +144,9 @@
     "minDays": "Мин. {{count}} дн.",
     "kmPerDay": "{{count}} км/сутки",
     "unlimitedKm": "Без ограничения пробега",
-    "checkAvailability": "Проверить даты"
+    "checkAvailability": "Проверить даты",
+    "updatedToday": "сегодня {{time}}",
+    "updatedYesterday": "вчера {{time}}"
   },
   "badges": {
     "hot": "ХИТ"

@@ -14,7 +14,7 @@ query Vehicles($filter: VehiclesFilterInput) {
       hasDamage isRepainted wasInAccident
       ownersCount seatsCount marketRegion
       seller { id name type hasPublicPage verified rating city phone logo }
-      promotionTier viewsCount
+      promotionTier viewsCount bumpedAt
     }
     total
   }
@@ -32,7 +32,7 @@ query VehicleById($id: String!) {
     hasDamage isRepainted wasInAccident
     ownersCount seatsCount marketRegion
     seller { id name type hasPublicPage verified rating city phone logo }
-    promotionTier viewsCount
+    promotionTier viewsCount bumpedAt
   }
 }
 `;
@@ -77,6 +77,7 @@ const mapVehicle = (row) => ({
   engine: `${row.engineVolume}L • ${row.power} HP`,
   status: 'available',
   views: row.viewsCount ?? null,
+  bumpedAt: row.bumpedAt ?? null,
   postedAt: null,
   sellerNote: row.description ?? null,
 });
@@ -172,12 +173,12 @@ query PromotedVehicles($tier: PromotionTier, $limit: Int) {
   promotedVehicles(tier: $tier, limit: $limit) {
     id brand model version year mileage fuel transmission
     engineVolume power drive condition color vehicleType bodyType
-    purpose price currency location imageUrls
+    purpose     price currency location imageUrls
     isHot isCreditAvailable isBarterAvailable
     hasDamage isRepainted wasInAccident
     ownersCount seatsCount marketRegion
     seller { id name type hasPublicPage verified rating city phone logo }
-    promotionTier viewsCount
+    promotionTier viewsCount bumpedAt
   }
 }
 `;

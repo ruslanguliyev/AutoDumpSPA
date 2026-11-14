@@ -125,6 +125,7 @@ export class VehiclesService {
         : null,
       promotionTier: visibleTier(row.listing.promotionRank, row.listing.promotedUntil),
       viewsCount: row.listing.viewsCount,
+      bumpedAt: row.listing.bumpedAt,
     };
   }
 

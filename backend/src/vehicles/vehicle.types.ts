@@ -171,6 +171,10 @@ export class VehicleObject {
   /** How many times the detail page was opened. */
   @Field(() => Int)
   viewsCount: number;
+
+  /** Last time the listing was bumped. Catalogue cards show this as "today 00:27". */
+  @Field(() => Date)
+  bumpedAt: Date;
 }
 
 @ObjectType()
