@@ -35,6 +35,11 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
       # Only needed if the API is called from another origin than the site itself.
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
+      # Paid placement. PUBLIC_WEB_URL and PAYMENT_MOCK_SECRET must be set on a server.
+      PUBLIC_WEB_URL: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      PAYMENT_MOCK_SECRET: ${PAYMENT_MOCK_SECRET:-dev-mock-secret}
+      TRUSTED_PROXY_HOPS: ${TRUSTED_PROXY_HOPS:-1}
+      PROMOTIONS_SCHEDULER: ${PROMOTIONS_SCHEDULER:-on}
     volumes:
       - uploads:/app/uploads
     # The API is reachable only through the website container (see frontend/nginx.conf).

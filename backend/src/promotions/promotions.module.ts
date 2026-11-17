@@ -12,8 +12,9 @@ import { PromotionsService } from './promotions.service';
  * Paid placement: the price list, checkout, the payment gateway behind it, the clock
  * that ends placements and spends bumps, and the administrator's controls.
  *
- * `PAYMENT_PROVIDER` chooses the gateway. Only the stub exists so far; a real
- * Azerbaijani acquirer becomes a second `PaymentProvider` and a branch here.
+ * The gateway is bound below (`PaymentProvider` -> `MockPaymentProvider`). Only the stub
+ * exists so far; a real Azerbaijani acquirer becomes a second `PaymentProvider`, and the
+ * binding is switched here. There is no environment variable for the choice yet.
  */
 @Module({
   imports: [PrismaModule, AuthModule],
