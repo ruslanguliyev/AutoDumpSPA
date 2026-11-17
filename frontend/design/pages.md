@@ -2,7 +2,7 @@
 
 Sections are listed in render order. Every account action (login, register,
 post a listing, send message, booking, payment) links out to
-`https://app.avtobaz.example/...` — no backend work on this site.
+`https://autobaz.az/...` — no backend work on this site.
 
 Copy is written in English and must go through i18next. Locales: **az** (default),
 **ru**, **en**.
