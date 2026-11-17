@@ -78,6 +78,10 @@ export class VehicleObject {
   @Field(() => Int)
   mileage: number;
 
+  /** Full value for the listing owner, last four characters for everyone else. */
+  @Field({ nullable: true })
+  vin?: string | null;
+
   @Field()
   fuel: string;
 
@@ -260,6 +264,9 @@ export class CreateVehicleInput {
   @Field(() => Int)
   mileage: number;
 
+  @Field({ nullable: true })
+  vin?: string;
+
   @Field()
   fuel: string;
 
@@ -355,6 +362,9 @@ export class UpdateVehicleInput {
 
   @Field(() => Int, { nullable: true })
   mileage?: number;
+
+  @Field({ nullable: true })
+  vin?: string;
 
   @Field({ nullable: true })
   fuel?: string;

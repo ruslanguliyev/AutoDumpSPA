@@ -239,6 +239,7 @@ input CreateVehicleInput {
   transmission: String!
   vehicleType: String
   version: String
+  vin: String
   wasInAccident: Boolean
   year: Int!
 }
@@ -994,6 +995,7 @@ input UpdateVehicleInput {
   transmission: String
   vehicleType: String
   version: String
+  vin: String
   wasInAccident: Boolean
   year: Int
 }
@@ -1056,6 +1058,7 @@ type VehicleObject {
   vehicleType: String!
   version: String
   viewsCount: Int!
+  vin: String
   wasInAccident: Boolean!
   year: Int!
 }

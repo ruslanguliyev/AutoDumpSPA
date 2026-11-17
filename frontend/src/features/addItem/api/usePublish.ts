@@ -51,10 +51,10 @@ export const publishDraft = async (draftId: string): Promise<ListingDraft> => {
     throw new Error('Draft is not ready to publish');
   }
 
-  // Ensure the latest draft (incl. imageUrls) is persisted to the backend
-  // before flipping status to published. Without this, a debounced autosave
-  // might still be in flight and the published listing would end up with
-  // stale data.
+  // Ensure the latest draft (including image URLs and the vehicle VIN) is
+  // persisted before flipping status to published. Without this, a debounced
+  // autosave might still be in flight and the published listing would end up
+  // with stale data.
   await forceSyncDraft(draftId);
 
   await gqlRequest<{ publishListing: { id: string; status: string } }>(PUBLISH_LISTING, {

@@ -193,6 +193,8 @@ model Vehicle {
   version           String?
   year              Int
   mileage           Int
+  /// ISO 3779 identifier. Empty when the seller did not provide one.
+  vin               String?
   fuel              String
   transmission      String
   displacement      String?
@@ -221,6 +223,8 @@ model Vehicle {
   marketRegion      String?
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([vin])
 }
 
 model Part {

@@ -44,6 +44,30 @@ export function normalizeBodyType(value: string | null | undefined): string | nu
   return bodyType;
 }
 
+/**
+ * ISO 3779 shape: 17 characters from A–Z and 0–9, excluding I, O and Q.
+ * Empty means "not set". The value is stored in upper case.
+ *
+ * The North-American check digit is not enforced. European and Asian VINs
+ * do not use it, so a global check would reject cars this marketplace sells.
+ */
+export function normalizeVin(value: string | null | undefined): string | null {
+  const vin = (value ?? '').trim().toUpperCase();
+  if (!vin) return null;
+  if (!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) {
+    throw new BadRequestException('Invalid VIN');
+  }
+  return vin;
+}
+
+/** Last four characters stay visible; the rest is hidden from anyone but the owner. */
+export function presentVin(vin: string | null | undefined, reveal: boolean): string | null {
+  if (!vin) return null;
+  if (reveal) return vin;
+  const visible = vin.slice(-4);
+  return `${'*'.repeat(Math.max(vin.length - visible.length, 0))}${visible}`;
+}
+
 const vehicleWithListingSeller = Prisma.validator<Prisma.VehicleDefaultArgs>()({
   include: {
     listing: { include: { seller: true, rentalTerms: true } },
@@ -61,8 +85,9 @@ export class VehiclesService {
     private readonly listingsService: ListingsService,
   ) {}
 
-  private mapVehicle(row: VehicleWithListingSeller) {
+  private mapVehicle(row: VehicleWithListingSeller, viewerUserId?: string | null) {
     const seller = row.listing?.seller;
+    const revealVin = Boolean(viewerUserId && seller?.userId === viewerUserId);
     return {
       id: row.id,
       listingId: row.listingId,
@@ -72,6 +97,7 @@ export class VehiclesService {
       version: row.version,
       year: row.year,
       mileage: row.mileage,
+      vin: presentVin(row.vin, revealVin),
       fuel: row.fuel,
       transmission: row.transmission,
       displacement: row.displacement,
@@ -283,7 +309,7 @@ export class VehiclesService {
     return rotate(rows, limit, now.getTime()).map((r) => this.mapVehicle(r));
   }
 
-  async getVehicleById(id: string) {
+  async getVehicleById(id: string, viewerUserId?: string | null) {
     const row = await this.prisma.vehicle.findUnique({
       where: { id },
       include: {
@@ -293,7 +319,7 @@ export class VehiclesService {
     if (!row || isHiddenFromPublic(row.listing.status)) {
       throw new NotFoundException('Vehicle not found');
     }
-    return this.mapVehicle(row);
+    return this.mapVehicle(row, viewerUserId);
   }
 
   async createVehicle(
@@ -337,6 +363,7 @@ export class VehiclesService {
         ownersCount: input.ownersCount ?? 1,
         seatsCount: input.seatsCount ?? null,
         marketRegion: input.marketRegion ?? null,
+        vin: normalizeVin(input.vin),
       },
     });
 
@@ -346,7 +373,7 @@ export class VehiclesService {
         listing: { include: { seller: true, rentalTerms: true } },
       },
     });
-    return this.mapVehicle(row);
+    return this.mapVehicle(row, userId);
   }
 
   async updateVehicle(userId: string, id: string, input: UpdateVehicleInput) {
@@ -365,6 +392,7 @@ export class VehiclesService {
         ...(input.generation !== undefined ? { generation: input.generation } : {}),
         ...(input.year !== undefined ? { year: input.year } : {}),
         ...(input.mileage !== undefined ? { mileage: input.mileage } : {}),
+        ...(input.vin !== undefined ? { vin: normalizeVin(input.vin) } : {}),
         ...(input.fuel !== undefined ? { fuel: input.fuel } : {}),
         ...(input.transmission !== undefined
           ? { transmission: input.transmission }
@@ -424,7 +452,7 @@ export class VehiclesService {
         listing: { include: { seller: true, rentalTerms: true } },
       },
     });
-    return this.mapVehicle(row);
+    return this.mapVehicle(row, userId);
   }
 
   /** Draft listings are only visible to their owner. */
@@ -442,7 +470,7 @@ export class VehiclesService {
     ) {
       return null;
     }
-    return this.mapVehicle(row);
+    return this.mapVehicle(row, requesterUserId);
   }
 
   async deleteVehicle(userId: string, id: string): Promise<boolean> {
