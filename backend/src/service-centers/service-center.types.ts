@@ -97,6 +97,10 @@ export class ServiceCenterObject {
   @Field(() => Int)
   reviewsCount: number;
 
+  /** How many times the service centre page was opened. */
+  @Field(() => Int)
+  viewsCount: number;
+
   @Field()
   verified: boolean;
 

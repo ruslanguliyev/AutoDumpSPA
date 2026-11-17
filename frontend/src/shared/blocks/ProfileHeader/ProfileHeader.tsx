@@ -26,6 +26,8 @@ export type ProfileHeaderProps = {
   meta?: ProfileHeaderMetaItem[];
   tags?: ReactNode;
   actions?: ReactNode;
+  /** Opened-page counter, drawn like the vehicle specification row. */
+  viewsCount?: number | null;
 };
 
 const initialsFromName = (name: string) => {
@@ -44,6 +46,7 @@ export function ProfileHeader({
   meta,
   tags,
   actions,
+  viewsCount,
 }: ProfileHeaderProps) {
   const { t, i18n } = useTranslation('common');
   const locale = intlLocale(i18n.language);
@@ -53,6 +56,7 @@ export function ProfileHeader({
   const showRating = reviewsCount > 0 && ratingValue !== null;
   const formattedCount = formatNumber(reviewsCount, locale);
   const metaItems = (meta ?? []).filter((item) => item.text);
+  const showViews = Number.isFinite(viewsCount);
   const coverImage = typeof coverSrc === 'string' && coverSrc.trim() ? coverSrc.trim() : null;
   const avatarImage = typeof avatarSrc === 'string' && avatarSrc.trim() ? avatarSrc.trim() : null;
 
@@ -112,6 +116,14 @@ export function ProfileHeader({
               </ul>
             ) : null}
             {tags ? <div className="mt-3 flex flex-wrap gap-2">{tags}</div> : null}
+            {showViews ? (
+              <div className="mt-4 flex items-baseline justify-between gap-4 border-b border-dashed border-border py-3">
+                <span className="text-[13px] font-medium text-muted-foreground">{t('profileHeader.views')}</span>
+                <span className="text-right text-[15px] font-semibold text-foreground">
+                  {formatNumber(viewsCount, locale)}
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
         {actions ? <div className="shrink-0 self-start">{actions}</div> : null}

@@ -22,6 +22,7 @@ import { formatMonthYear, formatNumber, intlLocale } from '@/lib/format';
 import { shareOrCopyUrl } from '@/lib/share';
 import { hasPublicSellerPage, normalizeSellerType } from '@/shared/utils/sellerType';
 import { buildSellerMobileBar } from '@/sellers/pages/sellerDetail/SellerDetailMobileBar';
+import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 
 const Shell = ({ children }) => (
   <div className="mx-auto w-full max-w-[1280px] px-4 py-6">{children}</div>
@@ -43,6 +44,8 @@ export default function SellerDetailPage({
   const vehicles = vehiclesProp ?? loaded.vehicles;
   const parts = partsProp ?? loaded.parts;
   const { data: seller, isLoading: sellerProfileLoading, error: sellerError } = useSellerById(sellerId);
+  const publicSellerId = seller && hasPublicSellerPage(seller.type) ? seller.id : undefined;
+  useTrackView('SELLER', publicSellerId);
   const isLoading = isLoadingProp || loaded.isLoading || sellerProfileLoading;
   const error = errorProp ?? loaded.error ?? sellerError;
 
@@ -196,6 +199,7 @@ export default function SellerDetailPage({
               verified={Boolean(seller.verified)}
               verifiedBadge={seller.verified ? <Badge variant="verified">{verifiedLabel}</Badge> : null}
               rating={{ rating: ratingValue, reviewsCount }}
+              viewsCount={Number.isFinite(Number(seller.viewsCount)) ? Number(seller.viewsCount) : null}
               meta={[
                 city
                   ? {

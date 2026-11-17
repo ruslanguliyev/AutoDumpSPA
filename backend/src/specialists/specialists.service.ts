@@ -262,6 +262,7 @@ export class SpecialistsService {
       experience: s.experience,
       rating: s.rating,
       reviewsCount: s.reviewsCount,
+      viewsCount: s.viewsCount,
       hourlyRate:
         s.hourlyRate === null || s.hourlyRate === undefined
           ? null

@@ -133,6 +133,8 @@ model Seller {
   /// Average of the reviews (0 while there are none), kept in sync by the reviews service
   rating       Float      @default(0)
   reviewsCount Int        @default(0)
+  /// How often the public seller profile was opened.
+  viewsCount   Int        @default(0)
   verified     Boolean    @default(false)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt

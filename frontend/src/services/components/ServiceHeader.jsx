@@ -7,7 +7,7 @@ import { ProfileHeader, ShareButton } from '@/shared/blocks';
 import { Badge } from '@/shared/ui/Badge';
 import { Chip } from '@/shared/ui/Chip';
 
-export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
+export default function ServiceHeader({ service, reviewsCount, ratingValue, viewsCount }) {
   const { t } = useTranslation(['services', 'common']);
   const typeLabel = formatServiceTypeLabel(t, service.type);
   const place = formatPlace(service.location?.address, service.location?.city);
@@ -22,6 +22,7 @@ export default function ServiceHeader({ service, reviewsCount, ratingValue }) {
       verified={Boolean(service.verified)}
       verifiedBadge={service.verified ? <Badge variant="verified">{t('header.verified')}</Badge> : null}
       rating={{ rating: ratingValue, reviewsCount }}
+      viewsCount={viewsCount}
       meta={
         place
           ? [{ icon: <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />, text: place }]

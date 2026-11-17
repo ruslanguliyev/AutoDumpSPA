@@ -57,6 +57,7 @@
     "inStock": "In stock",
     "outOfStock": "Out of stock",
     "location": "Location",
+    "views": "Views",
     "notFound": "Part not found",
     "missingId": "Missing part id",
     "loadingDetails": "Loading part details…",

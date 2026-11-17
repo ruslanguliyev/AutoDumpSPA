@@ -85,6 +85,10 @@ export class PartObject {
   /** VIP or PREMIUM while the listing holds paid placement, otherwise null. */
   @Field(() => PromotionTier, { nullable: true })
   promotionTier: PromotionTier | null;
+
+  /** How many times the part page was opened. Shared with the listing. */
+  @Field(() => Int)
+  viewsCount: number;
 }
 
 @ObjectType()

@@ -366,7 +366,7 @@ query PartById($id: String!) {
   partById(id: $id) {
     id listingId name category brand model condition
     description price currency oemCode
-    compatibility stock location imageUrl
+    compatibility stock location imageUrl viewsCount
     seller { id name type hasPublicPage verified rating city phone logo }
     promotionTier
   }

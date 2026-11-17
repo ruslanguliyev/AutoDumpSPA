@@ -258,7 +258,8 @@
   },
   "profileHeader": {
     "reviews_one": "{{formatted}} review",
-    "reviews_other": "{{formatted}} reviews"
+    "reviews_other": "{{formatted}} reviews",
+    "views": "Views"
   },
   "indexPage": {
     "filters": "Filters",

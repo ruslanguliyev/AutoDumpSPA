@@ -30,6 +30,7 @@ export default function ServiceDetailPage() {
   } = useServiceSpecialists(service?.id);
 
   const reviewsCount = Number.isFinite(service?.reviewsCount) ? service.reviewsCount : 0;
+  const viewsCount = Number.isFinite(service?.viewsCount) ? service.viewsCount : null;
   const ratingValue = Number.isFinite(service?.rating) ? service.rating : null;
 
   const breadcrumbs = [
@@ -72,7 +73,12 @@ export default function ServiceDetailPage() {
         main={
           <div className="flex flex-col gap-6">
             <Breadcrumbs items={breadcrumbs} />
-            <ServiceHeader service={service} ratingValue={ratingValue} reviewsCount={reviewsCount} />
+            <ServiceHeader
+              service={service}
+              ratingValue={ratingValue}
+              reviewsCount={reviewsCount}
+              viewsCount={viewsCount}
+            />
             <ServiceGallery media={service.media} serviceName={service.name} serviceId={service.id} />
             <FullPriceList services={service.services || []} />
             <BrandsServiced brands={service.supportedBrands} />

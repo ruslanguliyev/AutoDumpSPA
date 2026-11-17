@@ -268,7 +268,8 @@
     "reviews_one": "{{formatted}} отзыв",
     "reviews_few": "{{formatted}} отзыва",
     "reviews_many": "{{formatted}} отзывов",
-    "reviews_other": "{{formatted}} отзыва"
+    "reviews_other": "{{formatted}} отзыва",
+    "views": "Просмотры"
   },
   "indexPage": {
     "filters": "Фильтры",

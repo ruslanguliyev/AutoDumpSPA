@@ -23,6 +23,7 @@ import {
 import { TrustBlock } from '@/shared/blocks/TrustBlock/TrustBlock';
 import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import { buildPartMobileBar } from '@/parts/pages/partDetail/PartDetailMobileBar';
+import { formatNumber, intlLocale } from '@/lib/format';
 
 const SpecRow = ({ label, value }) => (
   <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-2">
@@ -41,7 +42,8 @@ const conditionLabel = (t, condition) => {
 };
 
 export default function PartDetailsPage() {
-  const { t } = useTranslation(['part', 'common']);
+  const { t, i18n } = useTranslation(['part', 'common']);
+  const locale = intlLocale(i18n.language);
   const { id } = useParams();
   const { data: part, isLoading, isError } = usePartDetails(id);
   useDocumentTitle(part?.name);
@@ -152,6 +154,14 @@ export default function PartDetailsPage() {
                           label={t('details.availability')}
                           value={inStock ? t('details.inStock') : t('details.outOfStock')}
                         />
+                        {Number.isFinite(part.viewsCount) ? (
+                          <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-3">
+                            <span className="text-[13px] font-medium text-muted-foreground">{t('details.views')}</span>
+                            <span className="text-right text-[15px] font-semibold text-foreground">
+                              {formatNumber(part.viewsCount, locale)}
+                            </span>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   }

@@ -70,6 +70,7 @@ export class PartsService {
           }
         : null,
       promotionTier: visibleTier(row.listing.promotionRank, row.listing.promotedUntil),
+      viewsCount: row.listing.viewsCount,
     };
   }
 

@@ -19,7 +19,7 @@ query GetServiceCenter($id: String!) {
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
-    rating reviewsCount verified isActive promotionTier
+    rating reviewsCount viewsCount verified isActive promotionTier
     schedule contacts
     services {
       id code title category
@@ -37,7 +37,7 @@ query GetServiceCenterBySlug($slug: String!) {
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
-    rating reviewsCount verified isActive promotionTier
+    rating reviewsCount viewsCount verified isActive promotionTier
     schedule contacts
     services {
       id code title category
@@ -65,6 +65,7 @@ const mapServiceCenterRow = (row) => ({
   supportedBrands: row.supportedBrands ?? [],
   rating: row.rating,
   reviewsCount: row.reviewsCount ?? 0,
+  viewsCount: typeof row.viewsCount === 'number' ? row.viewsCount : null,
   verified: row.verified,
   promotionTier: row.promotionTier ?? null,
   isActive: row.isActive ?? true,

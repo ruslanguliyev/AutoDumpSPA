@@ -48,6 +48,7 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
       verified={Boolean(specialist.verified)}
       verifiedBadge={specialist.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
       rating={{ rating: specialist.rating, reviewsCount: specialist.reviewsCount }}
+      viewsCount={specialist.viewsCount}
       meta={meta}
       tags={
         specializations.length > 0

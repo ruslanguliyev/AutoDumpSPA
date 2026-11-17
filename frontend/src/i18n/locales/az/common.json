@@ -258,7 +258,8 @@
   },
   "profileHeader": {
     "reviews_one": "{{formatted}} rəy",
-    "reviews_other": "{{formatted}} rəy"
+    "reviews_other": "{{formatted}} rəy",
+    "views": "Baxışlar"
   },
   "indexPage": {
     "filters": "Filtrlər",

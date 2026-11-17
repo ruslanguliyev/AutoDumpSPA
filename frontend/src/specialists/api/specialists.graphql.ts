@@ -32,7 +32,7 @@ query GetSpecialistBySlug($slug: String!) {
     id slug name bio city phone whatsapp
     avatarUrl coverImage
     specializations skills
-    experience rating reviewsCount
+    experience rating reviewsCount viewsCount
     priceFrom hourlyRate mobileService verified available promotionTier
     portfolio
     supportedVehicles { id brand model yearFrom yearTo }
@@ -95,6 +95,7 @@ const mapDetailRowToDetail = (s: GqlSpecialistDetailRow): SpecialistDetail => {
     ...base,
     phone: s.phone ?? null,
     whatsapp: s.whatsapp ?? null,
+    viewsCount: typeof s.viewsCount === 'number' ? s.viewsCount : null,
     portfolio: s.portfolio ?? [],
     skills: s.skills ?? [],
     supportedVehicles: (s.supportedVehicles ?? []).map((v) => ({

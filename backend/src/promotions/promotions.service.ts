@@ -115,8 +115,8 @@ export class PromotionsService {
   private readonly logger = new Logger(PromotionsService.name);
   /** An anonymous checkout is a gift to card testers, so one caller gets a budget. */
   private readonly checkoutLimiter = new FailureLimiter(20, 60 * 60 * 1000);
-  /** One view and one contact per visitor per target per half hour actually counts. */
-  private readonly viewLimiter = new FailureLimiter(1, 30 * 60 * 1000);
+  /** One revealed contact per visitor per target per half hour actually counts. */
+  private readonly contactLimiter = new FailureLimiter(1, 30 * 60 * 1000);
 
   constructor(
     private readonly prisma: PrismaService,
@@ -623,17 +623,16 @@ export class PromotionsService {
   // ------------------------------------------------------------ counters
 
   /**
-   * Counts an opened detail page. Deliberately crude: it is a yardstick for the buyer,
-   * not an analytics product, and a visitor only counts once per half hour per target.
+   * Counts a revealed phone number or a started message. Page views go through
+   * ViewsService, which also drops owners, empty agents and crawlers.
    */
-  async track(target: TargetKey, kind: 'view' | 'contact', clientKey: string): Promise<boolean> {
+  async track(target: TargetKey, kind: 'contact', clientKey: string): Promise<boolean> {
     const key = `${kind}:${targetKeyString(target)}:${clientKey}`;
-    if (this.viewLimiter.isBlocked(key)) return false;
-    this.viewLimiter.record(key);
+    if (this.contactLimiter.isBlocked(key)) return false;
+    this.contactLimiter.record(key);
 
-    const data =
-      kind === 'view' ? { viewsCount: { increment: 1 } } : { contactsCount: { increment: 1 } };
     const where = { id: target.targetId };
+    const data = { contactsCount: { increment: 1 } };
     try {
       if (target.targetType === PromotionTarget.LISTING) {
         await this.prisma.listing.update({ where, data });

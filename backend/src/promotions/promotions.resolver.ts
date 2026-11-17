@@ -13,23 +13,29 @@ import {
   PromotionOrderObject,
   PromotionQuoteObject,
 } from './promotion.types';
+import { clientIp } from '../common/views/client-ip';
+import { ViewsService } from '../common/views/views.service';
 import { PromotionsService } from './promotions.service';
+import type { Request } from 'express';
 
 interface GqlContext {
-  req?: { ip?: string };
+  req?: Request;
 }
 
 /**
- * Who is asking, for the per-caller budgets. Express resolves this through the
- * `trust proxy` setting, so a client cannot claim an address that is not its own.
+ * Who is asking, for the per-caller budgets. TRUSTED_PROXY_HOPS decides which
+ * X-Forwarded-For entry is the visitor, so a client cannot invent an address.
  */
 function clientKey(context: GqlContext): string {
-  return context?.req?.ip || 'unknown';
+  return clientIp(context?.req);
 }
 
 @Resolver()
 export class PromotionsResolver {
-  constructor(private readonly promotions: PromotionsService) {}
+  constructor(
+    private readonly promotions: PromotionsService,
+    private readonly views: ViewsService,
+  ) {}
 
   /** Prices for one listing or profile, with any upgrade credit already taken off. */
   @Query(() => PromotionQuoteObject)
@@ -66,13 +72,20 @@ export class PromotionsResolver {
   }
 
   /** Counts an opened page, so the buyer can see what the placement brought in. */
+  @UseGuards(OptionalGqlAuthGuard)
   @Mutation(() => Boolean)
   trackPromotionView(
+    @CurrentUser() user: AuthUser | null,
     @Args('targetType', { type: () => PromotionTarget }) targetType: PromotionTarget,
     @Args('targetId') targetId: string,
     @Context() context: GqlContext,
   ) {
-    return this.promotions.track({ targetType, targetId }, 'view', clientKey(context));
+    return this.views.recordView({
+      targetType,
+      targetId,
+      viewerUserId: user?.id,
+      req: context?.req,
+    });
   }
 
   /** Counts a revealed phone number or a started message. */

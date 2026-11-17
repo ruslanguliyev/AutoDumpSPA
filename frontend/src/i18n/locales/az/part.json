@@ -57,6 +57,7 @@
     "inStock": "Stokda var",
     "outOfStock": "Stokda yoxdur",
     "location": "Yerləşmə",
+    "views": "Baxışlar",
     "notFound": "Ehtiyat hissəsi tapılmadı",
     "missingId": "Ehtiyat hissəsi ID-si yoxdur",
     "loadingDetails": "Ehtiyat hissəsi detalları yüklənir…",
