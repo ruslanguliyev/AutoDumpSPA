@@ -80,6 +80,7 @@ const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
   priceFrom: toNumberOrNull(s.priceFrom),
   avatarUrl: s.avatarUrl ?? null,
   coverImage: s.coverImage ?? null,
+  location: s.city ?? null,
   specializations: s.specializations ?? [],
   supportedVehicles: (s.supportedVehicles ?? []).map((v) => ({
     brand: v.brand,

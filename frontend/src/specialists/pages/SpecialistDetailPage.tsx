@@ -15,6 +15,8 @@ import { membershipsEnabled } from '@/memberships/config';
 import { useSpecialistBySlug } from '@/specialists/hooks/useSpecialists';
 import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices';
 import { buildSpecialistMobileBar } from '@/specialists/pages/specialistDetail/SpecialistDetailMobileBar';
+import { ROUTES, withLang } from '@/shared/constants/routes';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 
 const SimilarSpecialistsSection = lazy(
   () => import('@/specialists/components/SimilarSpecialistsSection'),
@@ -29,6 +31,7 @@ const DetailSkeleton = () => (
 
 const SpecialistDetailPage = () => {
   const { t } = useTranslation(['specialists', 'common']);
+  const { language } = useLanguageSync();
   const { slug } = useParams<{ slug: string }>();
 
   const { specialist, isLoading, error } = useSpecialistBySlug(slug);
@@ -57,8 +60,8 @@ const SpecialistDetailPage = () => {
   }
 
   const breadcrumbItems = [
-    { label: t('nav.home', { ns: 'common' }), to: '/' },
-    { label: t('title'), to: '/specialists' },
+    { label: t('nav.home', { ns: 'common' }), to: withLang(ROUTES.home, language) },
+    { label: t('title'), to: withLang(ROUTES.specialists, language) },
     { label: specialist.name },
   ];
 
@@ -93,7 +96,7 @@ const SpecialistDetailPage = () => {
           }
           sidebar={
             <div className="flex flex-col gap-4">
-              <div id="specialist-booking" className="scroll-mt-24">
+              <div className="flex flex-col gap-4">
                 <SpecialistSidebarCard
                   specialist={specialist}
                   primaryService={showMemberships ? primaryService : null}

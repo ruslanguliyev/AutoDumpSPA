@@ -1,151 +1,103 @@
-import { MapPin, MessageCircle, PhoneCall } from 'lucide-react';
+import { MapPin, MessageCircle, Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { SpecialistDetail } from '@/specialists/types/specialist.types';
 
-const btnBase =
-  'inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-base font-medium no-underline transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60';
-const btnOutline = 'border border-border bg-card text-foreground hover:bg-muted hover:bg-muted/80';
-import type { ServiceProfile } from '@/services/types/service.types';
 import { formatPrice, intlLocale } from '@/lib/format';
 import { AppointmentRequestCard } from '@/features/appointments/components/AppointmentRequestCard';
+import type { ServiceProfile } from '@/services/types/service.types';
+import type { SpecialistDetail } from '@/specialists/types/specialist.types';
+import { Badge } from '@/shared/ui/Badge';
+import Button from '@/shared/ui/button';
 
 type SpecialistSidebarCardProps = {
   specialist: SpecialistDetail;
   primaryService?: ServiceProfile | null;
 };
 
-const sanitizePhone = (value: string) => value.replace(/\s/g, '');
-const sanitizeWhatsApp = (value: string) => value.replace(/[^\d]/g, '');
+const digits = (value: string) => value.replace(/[^\d]/g, '');
+const telHref = (value: string) => `tel:${value.replace(/[^\d+]/g, '')}`;
 
 const SpecialistSidebarCard = ({ specialist, primaryService }: SpecialistSidebarCardProps) => {
   const { t, i18n } = useTranslation('specialists');
   const locale = intlLocale(i18n.language);
 
   const priceFrom = Number.isFinite(specialist.priceFrom) ? Number(specialist.priceFrom) : null;
-  const phone = specialist.phone?.trim() ?? null;
-  const whatsapp = specialist.whatsapp?.trim() ?? null;
+  const phone = specialist.phone?.trim() || null;
+  const whatsapp = specialist.whatsapp?.trim() || null;
+  const available = specialist.available !== false;
 
-  const city =
-    primaryService?.location?.city ??
-    (specialist.location ? specialist.location : null);
-
+  const city = primaryService?.location?.city ?? specialist.location ?? null;
   const address = primaryService?.location?.address ?? null;
+  const showContact = Boolean(city || address || phone);
 
   return (
-    <div className="specialist-sidebar-card space-y-4">
-      {/* Booking card */}
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
-        {/* Price + availability */}
+    <div className="flex flex-col gap-4">
+      <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] [overflow-wrap:anywhere]">
         <div className="flex items-start justify-between gap-3">
-          {priceFrom !== null ? (
-            <div>
-              <p className="text-xs font-normal text-muted-foreground">
-                {t('detail.startingAt')}
-              </p>
-              <p className="mt-0.5 text-[28px] font-bold leading-none text-primary-text">
+          <div className="min-w-0">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+              {priceFrom !== null ? t('detail.startingAt') : t('detail.priceOnRequest')}
+            </p>
+            {priceFrom !== null ? (
+              <p className="mt-1 text-[28px] font-bold leading-none text-primary-text">
                 {formatPrice(priceFrom, 'AZN', locale)}
               </p>
-            </div>
-          ) : (
-            <div />
-          )}
-
-          {specialist.available === false ? (
-            <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {t('detail.unavailable')}
-            </span>
-          ) : (
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-primary ring-1 ring-primary/20">
-              {t('detail.available')}
-            </span>
-          )}
+            ) : null}
+          </div>
+          <Badge variant={available ? 'openNow' : 'closed'}>
+            {available ? t('detail.available') : t('detail.unavailable')}
+          </Badge>
         </div>
 
-        {/* Actions */}
-        <div className="mt-4 flex flex-col gap-2">
-          {whatsapp ? (
-            <a
-              href={`https://wa.me/${sanitizeWhatsApp(whatsapp)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t('detail.sendMessage')}
-              className={`${btnBase} ${btnOutline}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <MessageCircle size={16} aria-hidden="true" />
-              {t('detail.sendMessage')}
-            </a>
-          ) : phone ? (
-            <a
-              href={`tel:${sanitizePhone(phone)}`}
-              aria-label={t('detail.call')}
-              className={`${btnBase} ${btnOutline}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <PhoneCall size={16} aria-hidden="true" />
-              {t('detail.call')}
-            </a>
-          ) : (
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              className={`${btnBase} ${btnOutline}`}
-            >
-              {t('detail.sendMessage')}
-            </button>
-            )}
-        </div>
+        {phone || whatsapp ? (
+          <div className="mt-4 hidden flex-col gap-2 lg:flex">
+            {phone ? (
+              <Button asChild variant="primary" className="w-full justify-center gap-2">
+                <a href={telHref(phone)}>
+                  <Phone size={18} aria-hidden="true" />
+                  {t('detail.call')}
+                </a>
+              </Button>
+            ) : null}
+            {whatsapp ? (
+              <Button asChild variant="secondary" className="w-full justify-center gap-2">
+                <a href={`https://wa.me/${digits(whatsapp)}`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle size={18} aria-hidden="true" />
+                  {t('detail.whatsapp')}
+                </a>
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+
+      <div id="specialist-booking" className="scroll-mt-24">
+        <AppointmentRequestCard targetType="SPECIALIST" targetId={specialist.id} accepting={available} />
       </div>
 
-      <AppointmentRequestCard
-        targetType="SPECIALIST"
-        targetId={specialist.id}
-        accepting={specialist.available !== false}
-      />
-
-      {/* Contact info card */}
-      {city || address || phone ? (
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6">
-        <h2 className="text-sm font-semibold text-foreground">{t('detail.contactInfo')}</h2>
-
-        <div className="mt-4 space-y-5 text-sm text-muted-foreground">
-          {(city || address) ? (
-            <div className="flex gap-3">
-              <div className="mt-1 text-primary/70">
-                <MapPin size={18} aria-hidden="true" />
-              </div>
-              <div>
-                <p className="font-medium text-foreground mb-0">{specialist.name}</p>
-                {address ? <p className="mt-0.5 mb-0">{address}</p> : null}
-                {city ? <p className="mt-0.5 mb-0">{city}</p> : null}
-              </div>
-            </div>
-          ) : null}
-
-          {(city || address || phone) ? (
-            <div className="h-px w-full bg-border/60" aria-hidden="true" />
-          ) : null}
-
-          {phone ? (
-            <div className="flex gap-3">
-              <div className="mt-1 text-primary/70">
-                <PhoneCall size={18} aria-hidden="true" />
-              </div>
-              <div>
-                <a
-                  href={`tel:${sanitizePhone(phone)}`}
-                  className="text-primary"
-                  style={{ textDecoration: 'none' }}
-                >
+      {showContact ? (
+        <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] [overflow-wrap:anywhere]">
+          <h2 className="text-[17px] font-semibold text-foreground">{t('detail.contactInfo')}</h2>
+          <ul className="mt-3 space-y-3 text-[13px]">
+            {city || address ? (
+              <li className="flex gap-3">
+                <MapPin size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <div className="min-w-0">
+                  <p className="font-semibold text-foreground">{specialist.name}</p>
+                  {address ? <p className="mt-0.5 text-muted-foreground">{address}</p> : null}
+                  {city ? <p className="mt-0.5 text-muted-foreground">{city}</p> : null}
+                </div>
+              </li>
+            ) : null}
+            {phone ? (
+              <li className="flex gap-3">
+                <Phone size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <a href={telHref(phone)} className="font-semibold text-primary-text no-underline">
                   {phone}
                 </a>
-              </div>
-            </div>
-          ) : null}
-
-        </div>
-      </div>
+              </li>
+            ) : null}
+          </ul>
+        </section>
       ) : null}
     </div>
   );
