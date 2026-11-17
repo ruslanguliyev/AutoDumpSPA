@@ -96,7 +96,7 @@
       "services": "Xidmətlər"
     },
     "specialists": {
-      "title": "Ustalar",
+      "title": "Bu mərkəzin ustaları",
       "loading": "Ustalar yüklənir…",
       "empty": "Bu servis üçün ustalar hələ əlavə edilməyib.",
       "error": "Ustaları yükləmək mümkün olmadı."
@@ -111,7 +111,7 @@
     "noReviewsYet": "Hələ rəy yoxdur"
   },
   "priceList": {
-    "title": "Xidmətlər və qiymətlər",
+    "title": "Qiymət siyahısı",
     "popularBadge": "MƏŞHUR",
     "hotBadge": "HİT",
     "from": "dən",
@@ -136,7 +136,7 @@
     "hoursDecimal": "{{hours}},{{mins}} saat"
   },
   "brands": {
-    "title": "Xidmət göstərilən brendlər"
+    "title": "Xidmət etdiyimiz markalar"
   },
   "reviews": {
     "basedOn_one": "{{count, number}} rəyə əsasən",

@@ -1,6 +1,7 @@
 import { MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { formatPlace } from '@/lib/format';
 import { formatServiceTypeLabel } from '@/services/utils/serviceTypeLabel';
 import { ProfileHeader, ShareButton } from '@/shared/blocks';
@@ -20,7 +21,12 @@ export default function ServiceHeader({ service, reviewsCount, ratingValue, view
       coverSrc={coverSrc}
       avatarSrc={logo}
       verified={Boolean(service.verified)}
-      verifiedBadge={service.verified ? <Badge variant="verified">{t('header.verified')}</Badge> : null}
+      verifiedBadge={
+        <>
+          {service.verified ? <Badge variant="verified">{t('header.verified')}</Badge> : null}
+          {service.promotionTier ? <PromotionBadge tier={service.promotionTier} /> : null}
+        </>
+      }
       rating={{ rating: ratingValue, reviewsCount }}
       viewsCount={viewsCount}
       meta={

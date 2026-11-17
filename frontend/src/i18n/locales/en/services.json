@@ -96,7 +96,7 @@
       "services": "Services"
     },
     "specialists": {
-      "title": "Specialists",
+      "title": "Mechanics at this center",
       "loading": "Loading specialists…",
       "empty": "No specialists listed for this service yet.",
       "error": "Failed to load specialists."
@@ -111,7 +111,7 @@
     "noReviewsYet": "No reviews yet"
   },
   "priceList": {
-    "title": "Services & Prices",
+    "title": "Price list",
     "popularBadge": "POPULAR",
     "hotBadge": "HOT",
     "from": "from",
@@ -136,7 +136,7 @@
     "hoursDecimal": "{{hours}}.{{mins}} hours"
   },
   "brands": {
-    "title": "Brands Serviced"
+    "title": "Brands we service"
   },
   "reviews": {
     "sampleReview1": "Excellent service. They diagnosed the issue with my X5 quickly and the repair was done within the estimated timeframe. Price was fair compared to other official dealers.",

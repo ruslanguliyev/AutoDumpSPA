@@ -27,8 +27,8 @@ export default function FullPriceList({ services }) {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
-      <h2 className="mb-4 text-[17px] font-semibold text-foreground">{t('priceList.title')}</h2>
-      <ul className="divide-y divide-dashed divide-border">
+      <h2 className="text-[20px] font-semibold tracking-tight text-foreground">{t('priceList.title')}</h2>
+      <ul className="mt-4 divide-y divide-dashed divide-border">
         {services.map((item) => (
           <li key={item.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0 flex-1">

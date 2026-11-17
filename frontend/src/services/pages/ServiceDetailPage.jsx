@@ -1,24 +1,29 @@
-import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
+import { Wrench } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
-import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
+import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
+import { ROUTES, withLang } from '@/shared/constants/routes';
+import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
+import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
+import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
+import { EmptyState } from '@/shared/ui/EmptyState';
 import { useService } from '@/services/hooks/useService';
-import { membershipsEnabled } from '@/memberships/config';
 import { useServiceSpecialists } from '@/services/hooks/useServiceSpecialists';
+import { membershipsEnabled } from '@/memberships/config';
 import ServiceHeader from '@/services/components/ServiceHeader';
 import ServiceGallery from '@/services/components/ServiceGallery';
 import FullPriceList from '@/services/components/FullPriceList';
 import BrandsServiced from '@/services/components/BrandsServiced';
 import ServiceSidebar from '@/services/components/ServiceSidebar';
 import SpecialistCard from '@/specialists/components/SpecialistCard';
-import { useTrackView } from '@/features/promotions/hooks/usePromotions';
 import { buildServiceMobileBar } from '@/services/pages/serviceDetail/ServiceDetailMobileBar';
 
 export default function ServiceDetailPage() {
   const { t } = useTranslation('services');
+  const { language } = useLanguageSync();
   const { idOrSlug } = useParams();
   const { service, isLoading, error } = useService(idOrSlug);
   useTrackView('SERVICE_CENTER', service?.id);
@@ -34,9 +39,9 @@ export default function ServiceDetailPage() {
   const ratingValue = Number.isFinite(service?.rating) ? service.rating : null;
 
   const breadcrumbs = [
-    { label: t('detail.breadcrumbs.home'), to: '/' },
+    { label: t('detail.breadcrumbs.home'), to: withLang(ROUTES.home, language) },
     ...(service?.location?.city ? [{ label: service.location.city }] : []),
-    { label: t('detail.breadcrumbs.services'), to: '/services' },
+    { label: t('detail.breadcrumbs.services'), to: withLang(ROUTES.services, language) },
     ...(service?.name ? [{ label: service.name }] : []),
   ];
 
@@ -82,28 +87,30 @@ export default function ServiceDetailPage() {
             <ServiceGallery media={service.media} serviceName={service.name} serviceId={service.id} />
             <FullPriceList services={service.services || []} />
             <BrandsServiced brands={service.supportedBrands} />
-            {membershipsEnabled() ? (
-              <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
-                <h2 className="text-[17px] font-semibold text-foreground">{t('detail.specialists.title')}</h2>
-                <div className="mt-4">
-                  {specialistsLoading ? (
-                    <p className="text-[15px] text-muted-foreground">{t('detail.specialists.loading')}</p>
-                  ) : specialistsError ? (
-                    <p className="text-[15px] text-muted-foreground">{t('detail.specialists.error')}</p>
-                  ) : specialists.length ? (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      {specialists.map((specialist) => (
-                        <SpecialistCard key={specialist.id} specialist={specialist} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="rounded-xl border border-dashed border-border px-4 py-6 text-center text-[15px] text-muted-foreground">
-                      {t('detail.specialists.empty')}
-                    </p>
-                  )}
-                </div>
-              </section>
-            ) : null}
+            <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
+              <h2 className="text-[20px] font-semibold tracking-tight text-foreground">
+                {t('detail.specialists.title')}
+              </h2>
+              {membershipsEnabled() && specialistsLoading ? (
+                <p className="mt-4 text-[15px] text-muted-foreground">{t('detail.specialists.loading')}</p>
+              ) : specialistsError ? (
+                <p className="mt-4 text-[15px] text-destructive" role="alert">
+                  {t('detail.specialists.error')}
+                </p>
+              ) : specialists.length ? (
+                <ul className="mt-4 grid list-none grid-cols-1 gap-4 lg:grid-cols-2">
+                  {specialists.map((specialist) => (
+                    <li key={specialist.id} className="min-w-0">
+                      <SpecialistCard specialist={specialist} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <EmptyState className="mt-4" icon={<Wrench size={26} strokeWidth={1.5} />}>
+                  {t('detail.specialists.empty')}
+                </EmptyState>
+              )}
+            </section>
             <ReviewsSection targetType="SERVICE_CENTER" targetId={service.id} />
           </div>
         }
@@ -115,6 +122,7 @@ export default function ServiceDetailPage() {
               schedule={service.schedule}
               contacts={contacts}
               location={service.location}
+              barCarriesContacts={Boolean(mobileBar)}
             />
             <PromoteShortcuts targetType="SERVICE_CENTER" targetId={service.id} />
           </div>
