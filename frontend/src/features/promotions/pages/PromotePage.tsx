@@ -7,9 +7,9 @@ import { ArrowUp, Crown, Gem, Info } from 'lucide-react';
 import { formatQapik } from '@/features/promotions/api/promotions.api';
 import type {
   PromotionPackage,
-  PromotionTarget,
   PromotionTier,
 } from '@/features/promotions/api/promotions.api';
+import { promotionTargetFromPath } from '@/features/promotions/promotePath';
 import {
   useCreatePromotionOrder,
   usePromotionQuote,
@@ -30,17 +30,6 @@ const TIER_ACCENT = {
   PREMIUM: 'text-promo-premium',
 } as const;
 
-const TARGET_FROM_PATH: Record<string, PromotionTarget> = {
-  listing: 'LISTING',
-  specialist: 'SPECIALIST',
-  'service-center': 'SERVICE_CENTER',
-};
-
-export const promotePath = (targetType: PromotionTarget, targetId: string): string => {
-  const segment = Object.keys(TARGET_FROM_PATH).find((key) => TARGET_FROM_PATH[key] === targetType);
-  return `/promote/${segment ?? 'listing'}/${targetId}`;
-};
-
 const cheapest = (packages: PromotionPackage[], tier: PromotionTier) =>
   packages
     .filter((p) => p.tier === tier)
@@ -53,7 +42,7 @@ export function PromotePage() {
   const { t, i18n } = useTranslation(['promote', 'common']);
   const locale = intlLocale(i18n.language);
   const params = useParams();
-  const targetType = TARGET_FROM_PATH[params.targetType ?? ''] ?? 'LISTING';
+  const targetType = promotionTargetFromPath(params.targetType);
   const targetId = params.targetId ?? '';
 
   const quote = usePromotionQuote(targetType, targetId);

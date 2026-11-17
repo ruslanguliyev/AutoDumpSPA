@@ -226,7 +226,7 @@ const FiltersPanel = (props: FiltersPanelProps) => {
     if (stored?.isCollapsed !== undefined) return;
     didSetMobileDefault.current = true;
     setCollapsed(domain, true);
-  }, [domain, setCollapsed]);
+  }, [domain, setCollapsed, disableAutoCollapse, forceExpanded]);
 
   const activeFiltersCount = useMemo(
     () => getActiveFiltersCount(filters, defaults),

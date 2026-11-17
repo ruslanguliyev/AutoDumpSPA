@@ -20,7 +20,7 @@ type GraphQLResponse<T> = {
   errors?: Array<{ message: string }>;
 };
 
-export async function gqlRequest<T = any>(
+export async function gqlRequest<T = unknown>(
   query: string,
   variables?: Record<string, unknown>,
   token?: string | null,
@@ -54,7 +54,7 @@ export async function gqlRequest<T = any>(
 }
 
 /** Object-argument variant kept for modules that call `graphqlRequest({ query, variables })`. */
-export const graphqlRequest = <T = any>({
+export const graphqlRequest = <T = unknown>({
   query,
   variables,
 }: {

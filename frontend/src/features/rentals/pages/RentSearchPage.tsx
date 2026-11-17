@@ -85,7 +85,7 @@ export default function RentSearchPage() {
     placeholderData: keepPreviousData,
   });
 
-  const fetched = query.data ?? [];
+  const fetched = useMemo(() => query.data ?? [], [query.data]);
   const pricePerDaySupported = !query.isLoading && fetched.length < RENT_CATALOG_LIMIT;
 
   const cars = useMemo(() => {

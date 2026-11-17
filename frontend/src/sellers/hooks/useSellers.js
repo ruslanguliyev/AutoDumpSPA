@@ -14,7 +14,10 @@ export const useSellers = () => {
   const { t } = useTranslation('sellers');
   const filters = useFiltersStore((state) => state.filters.sellers);
   const { sellers: sellersData, isLoading } = useSellersData();
-  const safeSellers = Array.isArray(sellersData) ? sellersData : [];
+  const safeSellers = useMemo(
+    () => (Array.isArray(sellersData) ? sellersData : []),
+    [sellersData]
+  );
 
   const DOMAIN_OPTIONS = useMemo(
     () => [

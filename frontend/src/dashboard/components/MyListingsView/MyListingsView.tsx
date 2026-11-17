@@ -11,7 +11,7 @@ import { formatPrice, intlLocale } from '@/lib/format';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { useStartEditListing } from '@/features/addItem/api/editListing';
-import { promotePath } from '@/features/promotions/pages/PromotePage';
+import { promotePath } from '@/features/promotions/promotePath';
 
 type Props = {
   kind: ListingKind;

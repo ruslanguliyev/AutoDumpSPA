@@ -5,7 +5,8 @@ import { Star } from 'lucide-react';
 import RatingStars from '@/shared/ui/RatingStars/RatingStars';
 import Button from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/EmptyState';
-import { controlClass, FieldLabel } from '@/shared/ui/field';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldLabel } from '@/shared/ui/field';
 import { formatReviewAuthorName } from './formatReviewAuthor';
 import { ReviewStarPicker } from './ReviewStarPicker';
 

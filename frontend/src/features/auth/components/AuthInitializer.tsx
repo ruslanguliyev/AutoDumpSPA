@@ -5,14 +5,15 @@ import { useFavoritesSync } from '@/features/favorites/useFavoritesSync';
 
 const AuthInitializer = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
-  const currentUserQuery = useCurrentUser({ enabled: false });
+  // The query result is a new object every render; `refetch` itself stays stable.
+  const { refetch } = useCurrentUser({ enabled: false });
   useFavoritesSync();
 
   useEffect(() => {
     if (accessToken) {
-      currentUserQuery.refetch();
+      void refetch();
     }
-  }, []);
+  }, [accessToken, refetch]);
 
   return null;
 };

@@ -2,7 +2,8 @@ import type { FormEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Button from '@/shared/ui/button';
-import { controlClass, FieldError, FieldLabel } from '@/shared/ui/field';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldError, FieldLabel } from '@/shared/ui/field';
 
 type ContactFormProps = {
   title?: string;

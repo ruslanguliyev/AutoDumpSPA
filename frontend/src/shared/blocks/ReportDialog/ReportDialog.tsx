@@ -5,7 +5,8 @@ import { Flag, X } from 'lucide-react';
 
 import Button from '@/shared/ui/button';
 import { Select } from '@/shared/ui/Select';
-import { controlClass, FieldLabel } from '@/shared/ui/field';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldLabel } from '@/shared/ui/field';
 
 export type ReportReasonOption = { value: string; label: string };
 

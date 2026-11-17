@@ -10,7 +10,8 @@ import { formatDate, formatPrice, intlLocale } from '@/lib/format';
 import { mapSubmitError } from '@/lib/formSubmitError';
 import { ContactForm } from '@/shared/blocks/ContactForm';
 import Button from '@/shared/ui/button';
-import { controlClass, FieldError, FieldLabel } from '@/shared/ui/field';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldError, FieldLabel } from '@/shared/ui/field';
 
 type RentalCar = {
   listingId?: string | null;

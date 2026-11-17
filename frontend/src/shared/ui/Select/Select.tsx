@@ -1,7 +1,8 @@
 import { useId } from 'react';
 import type { ReactNode, SelectHTMLAttributes } from 'react';
 
-import { FieldError, FieldHint, FieldLabel, controlClass } from '@/shared/ui/field';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldError, FieldHint, FieldLabel } from '@/shared/ui/field';
 import type { FieldSize } from '@/shared/ui/field';
 
 export type SelectOption = { value: string; label: string; disabled?: boolean };
