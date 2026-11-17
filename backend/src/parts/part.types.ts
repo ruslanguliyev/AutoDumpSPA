@@ -89,6 +89,10 @@ export class PartObject {
   /** How many times the part page was opened. Shared with the listing. */
   @Field(() => Int)
   viewsCount: number;
+
+  /** Last time the listing was bumped. "Newest first" sorts by this, not by createdAt. */
+  @Field(() => Date)
+  bumpedAt: Date;
 }
 
 @ObjectType()

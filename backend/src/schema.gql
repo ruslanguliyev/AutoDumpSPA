@@ -422,6 +422,7 @@ type PaginatedVehicles {
 
 type PartObject {
   brand: String!
+  bumpedAt: DateTime!
   category: String!
   compatibility: [String!]!
   condition: String!

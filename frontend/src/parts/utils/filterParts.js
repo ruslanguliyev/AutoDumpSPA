@@ -60,6 +60,7 @@ export const mapPartToEntity = (dto) => {
     seller: dto.seller ?? null,
     promotionTier: dto.promotionTier ?? null,
     viewsCount: typeof dto.viewsCount === 'number' ? dto.viewsCount : null,
+    bumpedAt: dto.bumpedAt ?? null,
   };
 };
 
