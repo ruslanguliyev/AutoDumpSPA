@@ -8,7 +8,7 @@ import { ViewTarget } from './views.types';
 const VIEW_WINDOW_MS = 30 * 60 * 1000;
 
 interface ResolvedView {
-  /** Dedup bucket. A part and its listing share one, so the page cannot be counted twice. */
+  /** Dedup bucket. One address counts once per bucket per half hour. A part is its own bucket. */
   dedupKey: string;
   ownerUserId: string;
   increment: () => Promise<unknown>;
@@ -70,17 +70,27 @@ export class ViewsService {
     if (targetType === ViewTarget.PART) {
       const part = await this.prisma.part.findUnique({
         where: { id: targetId },
-        select: { listingId: true, listing: { select: { seller: { select: { userId: true } } } } },
+        select: { id: true, listingId: true, listing: { select: { seller: { select: { userId: true } } } } },
       });
       if (!part) return null;
       return {
-        dedupKey: `view:LISTING:${part.listingId}`,
+        dedupKey: `view:PART:${part.id}`,
         ownerUserId: part.listing.seller.userId,
         increment: () =>
-          this.prisma.listing.update({
-            where: { id: part.listingId },
-            data: { viewsCount: { increment: 1 } },
-          }),
+          // The part counter is what the seller sees on the part card.
+          // The listing counter is what promotion reports bill against (viewsGained
+          // is listing.viewsCount minus viewsAtStart). Both move together: dropping
+          // the listing increment would zero out paid placement stats.
+          this.prisma.$transaction([
+            this.prisma.part.update({
+              where: { id: part.id },
+              data: { viewsCount: { increment: 1 } },
+            }),
+            this.prisma.listing.update({
+              where: { id: part.listingId },
+              data: { viewsCount: { increment: 1 } },
+            }),
+          ]),
       };
     }
 

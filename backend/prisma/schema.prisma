@@ -243,6 +243,8 @@ model Part {
   imageUrl      String?
   compatibility String[]
   location      String?
+  /// Openings of this part's page. Listing.viewsCount stays the number promotions bill against.
+  viewsCount    Int      @default(0)
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }

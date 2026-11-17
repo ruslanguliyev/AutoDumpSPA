@@ -189,9 +189,10 @@ describe('favorites, inquiries and seller phone', () => {
 
       expect((await track('PART', partId, { token: seller })).data?.trackView).toBe(false);
       expect((await track('PART', partId)).data?.trackView).toBe(true);
-      expect((await track('LISTING', listingId)).data?.trackView).toBe(false);
       const partView = await ctx.gql(`query($id: String!) { partById(id: $id) { viewsCount } }`, { id: partId });
       expect(partView.data.partById.viewsCount).toBe(1);
+      const listedPart = await ctx.prisma.listing.findUniqueOrThrow({ where: { id: listingId } });
+      expect(listedPart.viewsCount).toBe(1);
 
       const centerToken = await ctx.registerUser('View garage');
       const center = await ctx.gql(
@@ -223,6 +224,42 @@ describe('favorites, inquiries and seller phone', () => {
       expect((await track('SELLER', sellerId)).data?.trackView).toBe(false);
       const sellerView = await ctx.gql(`query($id: String!) { sellerById(id: $id) { viewsCount } }`, { id: sellerId });
       expect(sellerView.data.sellerById.viewsCount).toBe(1);
+    });
+
+    it('counts two parts of one listing apart, and a part view still moves the listing counter', async () => {
+      const listing = await ctx.gql(
+        `mutation($t: String!) { createListing(input: { title: $t, description: "d", price: 20 }) { id } }`,
+        { t: 'Two pads' },
+        seller,
+      );
+      const listingId = listing.data.createListing.id as string;
+      const make = (name: string) =>
+        ctx.gql(
+          `mutation($l: String!, $i: CreatePartInput!) { createPart(listingId: $l, input: $i) { id } }`,
+          { l: listingId, i: { name, category: 'brakes', brand: 'Bosch', model: 'X', condition: 'new', stock: 1 } },
+          seller,
+        );
+      const partA = (await make('Pad A')).data.createPart.id as string;
+      const partB = (await make('Pad B')).data.createPart.id as string;
+      await ctx.gql(`mutation($id: String!) { publishListing(id: $id) { status } }`, { id: listingId }, seller);
+
+      expect((await track('PART', partA, { token: seller })).data?.trackView).toBe(false);
+      expect((await track('PART', partA, { userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1)' })).data?.trackView).toBe(false);
+
+      expect((await track('PART', partA, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(true);
+      expect((await track('PART', partA, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(false);
+      // Same address, other part of the same listing: its own bucket, so it counts.
+      expect((await track('PART', partB, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(true);
+
+      const views = await ctx.gql(
+        `query($a: String!, $b: String!) { a: partById(id: $a) { viewsCount } b: partById(id: $b) { viewsCount } }`,
+        { a: partA, b: partB },
+      );
+      expect(views.data.a.viewsCount).toBe(1);
+      expect(views.data.b.viewsCount).toBe(1);
+
+      const listed = await ctx.prisma.listing.findUniqueOrThrow({ where: { id: listingId } });
+      expect(listed.viewsCount).toBe(2);
     });
   });
 });

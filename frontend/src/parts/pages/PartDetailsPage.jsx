@@ -47,7 +47,7 @@ export default function PartDetailsPage() {
   const { id } = useParams();
   const { data: part, isLoading, isError } = usePartDetails(id);
   useDocumentTitle(part?.name);
-  useTrackView('LISTING', part?.listingId ?? undefined);
+  useTrackView('PART', part?.id);
 
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const isFavorited = useFavoritesStore((s) => (part?.id ? s.isFavorited('part', part.id) : false));

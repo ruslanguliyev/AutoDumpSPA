@@ -86,7 +86,7 @@ export class PartObject {
   @Field(() => PromotionTier, { nullable: true })
   promotionTier: PromotionTier | null;
 
-  /** How many times the part page was opened. Shared with the listing. */
+  /** How many times this part's page was opened. Not the listing counter promotions use. */
   @Field(() => Int)
   viewsCount: number;
 
