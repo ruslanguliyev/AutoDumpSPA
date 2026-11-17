@@ -149,11 +149,6 @@
 /* =========================================================================
    DEPRECATED — remove once every usage is migrated
 
-   --premium: 147 51 234  (#9333EA, purple)
-       The purple `premium` token and `Badge variant="premium"` predate the
-       paid-placement system. Premium is a promotion tier and now uses
-       --promo-premium (amber). Do not reintroduce purple for tiers.
-
    --bs-* bridge variables and the !important overrides for
    `a.card-cta` / `.specialist-sidebar-card a`
        These exist only to fight Bootstrap. They go away with Bootstrap.

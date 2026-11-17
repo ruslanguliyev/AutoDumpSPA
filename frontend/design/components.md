@@ -87,9 +87,8 @@ Pill, 11–12px, weight 600, letter-spacing 0.04em, padding 3–4px / 10px.
 | Category | filled `bg-primary text-primary-foreground` |
 | Filter chip | outlined `border-border text-muted-foreground`, optional ✕ |
 
-`PromotionBadge` must read its colours from the `--promo-*` tokens. The old
-purple `premium` token is deprecated — see the note at the bottom of
-`tokens.css`.
+`PromotionBadge` must read its colours from the `--promo-*` tokens. Premium is
+always amber (`--promo-premium`).
 
 The **Ad** row was corrected during the build: `--subtle-foreground` reaches only
 2.6:1 as a border on the light background, below the 3:1 a border needs, and the

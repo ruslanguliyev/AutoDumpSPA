@@ -73,8 +73,6 @@
   --color-sidebar-accent: rgb(var(--sidebar-accent));
   --color-sidebar-accent-foreground: rgb(var(--sidebar-accent-foreground));
   --color-sidebar-border: rgb(var(--sidebar-border));
-  /* DEPRECATED — purple, predates the paid-placement tiers. Use --promo-premium. */
-  --color-premium: rgb(var(--premium));
 
   /* Inter ships as the variable family "Inter Variable" (@fontsource-variable/inter) */
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
@@ -150,8 +148,6 @@
   --sidebar-accent-foreground: 15 23 42;
   --sidebar-border: 226 232 240;
   --shadow-color: 15 23 42; /* triple for rgb(var(--shadow-color) / a) in SCSS */
-  /* DEPRECATED — purple. Superseded by --promo-premium (amber). */
-  --premium: 147 51 234;
 }
 
 /* --- Dark --------------------------------------------------------------- */
@@ -211,8 +207,6 @@
   --sidebar-accent-foreground: 248 250 252;
   --sidebar-border: 51 65 85;
   --shadow-color: 0 0 0;
-  /* DEPRECATED — purple. Superseded by --promo-premium (amber). */
-  --premium: 168 85 247;
 }
 
 /* --- Base --------------------------------------------------------------- */

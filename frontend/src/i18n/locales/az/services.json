@@ -76,10 +76,6 @@
   },
   "card": {
     "verified": "Təsdiqlənmiş",
-    "legacyPromoted": {
-      "boosted": "İrəli çəkilmiş",
-      "premium": "Premium"
-    },
     "avgCheck": "Orta çek",
     "priceRange": "Qiymət aralığı",
     "viewService": "Ətraflı →",

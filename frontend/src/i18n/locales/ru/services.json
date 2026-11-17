@@ -82,10 +82,6 @@
   },
   "card": {
     "verified": "Проверен",
-    "legacyPromoted": {
-      "boosted": "Поднято",
-      "premium": "Премиум"
-    },
     "avgCheck": "Средний чек",
     "priceRange": "Ценовой диапазон",
     "viewService": "Подробнее →",

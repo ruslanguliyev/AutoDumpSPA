@@ -84,11 +84,7 @@
     "openNow": "Open now",
     "closed": "Closed",
     "reviews_one": "{{count, number}} review",
-    "reviews_other": "{{count, number}} reviews",
-    "legacyPromoted": {
-      "boosted": "Boosted",
-      "premium": "Premium"
-    }
+    "reviews_other": "{{count, number}} reviews"
   },
   "detail": {
     "loading": "Loading service details…",
