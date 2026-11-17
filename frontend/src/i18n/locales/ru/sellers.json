@@ -107,7 +107,7 @@
     "profileUnavailable": "Профиль недоступен",
     "notAvailable": "Продавец {{id}} недоступен.",
     "tabs": {
-      "stock": "Объявления",
+      "stock": "В наличии",
       "parts": "Запчасти",
       "reviews": "Отзывы",
       "about": "О продавце"
@@ -120,8 +120,13 @@
       "noListings": "Нет объявлений",
       "noParts": "Нет запчастей",
       "reviewsSoon": "Отзывы скоро появятся",
-      "aboutSoon": "Информация о продавце скоро появится"
+      "aboutSoon": "Информация о нас скоро появится"
     },
+    "activeFor_one": "Активный продавец — {{count}} год",
+    "activeFor_few": "Активный продавец — {{count}} года",
+    "activeFor_many": "Активный продавец — {{count}} лет",
+    "activeFor_other": "Активный продавец — {{count}} года",
+    "memberSinceLabel": "На сайте с",
     "breadcrumbs": {
       "home": "Главная",
       "sellers": "Продавцы"

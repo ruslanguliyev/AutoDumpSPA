@@ -1,19 +1,22 @@
 import { useMemo, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CalendarDays, Heart, Layers, MapPin, Phone } from 'lucide-react';
+import { CalendarDays, Heart, Layers, MapPin, Phone, SearchX } from 'lucide-react';
 
 import { useSellerListings } from '@/sellers/hooks/useSellerListings';
 import { useSellerById } from '@/sellers/hooks/useSellerById';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { useDebounce } from '@/shared/hooks/useDebounce';
+import { ROUTES, withLang } from '@/shared/constants/routes';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { Badge } from '@/shared/ui/Badge';
 import Button from '@/shared/ui/button';
 import { Chip } from '@/shared/ui/Chip';
+import { EmptyState } from '@/shared/ui/EmptyState';
 import { Input } from '@/shared/ui/Input';
 import AutoCard from '@/vehicles/components/AutoCardComponent/AutoCard';
 import PartCard from '@/parts/components/PartCard/PartCard';
@@ -36,6 +39,7 @@ export default function SellerDetailPage({
 } = {}) {
   const { t, i18n } = useTranslation(['sellers', 'common']);
   const locale = intlLocale(i18n.language);
+  const { language } = useLanguageSync();
   const params = useParams();
   const sellerId = String(params?.sellerId ?? '').trim();
 
@@ -49,7 +53,7 @@ export default function SellerDetailPage({
   const isLoading = isLoadingProp || loaded.isLoading || sellerProfileLoading;
   const error = errorProp ?? loaded.error ?? sellerError;
 
-  const [activeTab, setActiveTab] = useState('listings');
+  const [activeTab, setActiveTab] = useState('stock');
   const [searchQuery, setSearchQuery] = useState('');
   const [phoneVisible, setPhoneVisible] = useState(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 350);
@@ -68,18 +72,31 @@ export default function SellerDetailPage({
     : null;
   const city = typeof seller?.city === 'string' && seller.city.trim() ? seller.city.trim() : null;
   const listingsCount = Number.isFinite(seller?.listingsCount) ? seller.listingsCount : null;
-  const memberSince = formatMonthYear(seller?.createdAt ?? seller?.memberSince, locale) || null;
+  const createdAt = seller?.createdAt ?? seller?.memberSince ?? null;
+  const memberSince = formatMonthYear(createdAt, locale) || null;
+  const yearsActive = (() => {
+    if (!createdAt) return null;
+    const date = new Date(createdAt);
+    if (Number.isNaN(date.getTime())) return null;
+    const years = Math.floor((Date.now() - date.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+    return years >= 1 ? years : null;
+  })();
   const typeKey = normalizeSellerType(seller?.type);
   const isPartsSeller = typeKey === 'parts';
   const phone = seller?.phone?.trim() || null;
 
   const sellerListings = useMemo(() => {
-    if (!sellerId) return { vehicles: [], parts: [] };
+    if (!sellerId) return { vehicles: [], parts: [], stockTotal: 0, partsTotal: 0 };
     const sellerVehicles = vehicles.filter((v) => v?.seller?.id && String(v.seller.id) === sellerId);
     const sellerParts = parts.filter((p) => p?.seller?.id && String(p.seller.id) === sellerId);
 
     if (!debouncedSearchQuery.trim()) {
-      return { vehicles: sellerVehicles, parts: sellerParts };
+      return {
+        vehicles: sellerVehicles,
+        parts: sellerParts,
+        stockTotal: sellerVehicles.length,
+        partsTotal: sellerParts.length,
+      };
     }
 
     const query = debouncedSearchQuery.toLowerCase().trim();
@@ -95,6 +112,8 @@ export default function SellerDetailPage({
         const model = item?.model?.toLowerCase() || '';
         return name.includes(query) || brand.includes(query) || model.includes(query);
       }),
+      stockTotal: sellerVehicles.length,
+      partsTotal: sellerParts.length,
     };
   }, [vehicles, parts, sellerId, debouncedSearchQuery]);
 
@@ -120,7 +139,7 @@ export default function SellerDetailPage({
       <Shell>
         <h1 className="text-[22px] font-semibold text-foreground">{t('detail.fallbackName')}</h1>
         <p className="mt-1 text-[15px] text-muted-foreground">{t('detail.missingId')}</p>
-        <Link to="/sellers" className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
+        <Link to={withLang(ROUTES.sellers, language)} className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
           {t('detail.backToSellers')}
         </Link>
       </Shell>
@@ -139,7 +158,7 @@ export default function SellerDetailPage({
     return (
       <Shell>
         <h1 className="text-[22px] font-semibold text-foreground">{t('detail.notFound')}</h1>
-        <Link to="/sellers" className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
+        <Link to={withLang(ROUTES.sellers, language)} className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
           {t('detail.backToSellers')}
         </Link>
       </Shell>
@@ -150,31 +169,57 @@ export default function SellerDetailPage({
     return (
       <Shell>
         <h1 className="text-[22px] font-semibold text-foreground">{t('detail.profileUnavailable')}</h1>
-        <Link to="/sellers" className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
+        <Link to={withLang(ROUTES.sellers, language)} className="mt-4 inline-flex min-h-11 items-center text-primary-text underline">
           {t('detail.backToSellers')}
         </Link>
       </Shell>
     );
   }
 
-  const allListingsCount = sellerListings.vehicles.length + sellerListings.parts.length;
   const breadcrumbs = [
-    { label: t('detail.breadcrumbs.home'), to: '/' },
-    { label: t('detail.breadcrumbs.sellers'), to: '/sellers' },
+    { label: t('detail.breadcrumbs.home'), to: withLang(ROUTES.home, language) },
+    { label: t('detail.breadcrumbs.sellers'), to: withLang(ROUTES.sellers, language) },
     { label: seller.name || t('detail.fallbackName') },
   ];
-  const stockTabLabel = isPartsSeller ? t('detail.tabs.parts') : t('detail.tabs.stock');
+  const stockTabLabel = t('detail.tabs.stock');
+  const partsTabLabel = t('detail.tabs.parts');
   const verifiedLabel = isPartsSeller ? t('card.verifiedPartsSeller') : t('card.verifiedDealer');
-  const emptyListingsKey = isPartsSeller ? 'detail.empty.noParts' : 'detail.empty.noListings';
   const typeLabel = typeKey ? t(`seller.type.${typeKey}`, { ns: 'common' }) : null;
+  const stockCount = sellerListings.stockTotal;
+  const partsCount = sellerListings.partsTotal;
+  const searching = Boolean(debouncedSearchQuery.trim());
 
   const tabClass = (key) =>
     [
-      'min-h-11 shrink-0 border-b-2 px-3 text-[15px] font-semibold transition',
+      'min-h-11 shrink-0 whitespace-nowrap border-b-2 px-3 text-[15px] font-semibold transition',
       activeTab === key
         ? 'border-primary text-primary-text'
         : 'border-transparent text-muted-foreground hover:text-foreground',
     ].join(' ');
+
+  const tileClass =
+    'flex min-h-11 min-w-0 flex-col justify-center rounded-[var(--radius)] border border-dashed border-border-strong px-3 py-2 dark:border-border';
+
+  const renderCatalogue = (items, emptyKey, renderItem) => (
+    <div className="flex flex-col gap-4">
+      <Input
+        label={activeTab === 'parts' ? partsTabLabel : stockTabLabel}
+        labelHidden
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder={
+          activeTab === 'parts' ? t('detail.searchPlaceholderParts') : t('detail.searchPlaceholder')
+        }
+      />
+      {items.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">{items.map(renderItem)}</div>
+      ) : (
+        <EmptyState icon={<SearchX size={26} strokeWidth={1.5} />}>
+          {searching ? t('detail.empty.nothingFound') : t(emptyKey)}
+        </EmptyState>
+      )}
+    </div>
+  );
 
   const mobileBar = buildSellerMobileBar({
     t,
@@ -207,12 +252,17 @@ export default function SellerDetailPage({
                       text: city,
                     }
                   : null,
-                memberSince
+                yearsActive != null
                   ? {
                       icon: <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />,
-                      text: t('vehicle.memberSince', { date: memberSince }),
+                      text: t('detail.activeFor', { count: yearsActive }),
                     }
-                  : null,
+                  : memberSince
+                    ? {
+                        icon: <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />,
+                        text: t('vehicle.memberSince', { date: memberSince }),
+                      }
+                    : null,
                 listingsCount != null
                   ? {
                       icon: <Layers size={16} strokeWidth={1.5} aria-hidden="true" />,
@@ -225,9 +275,11 @@ export default function SellerDetailPage({
             />
 
             <div className="flex gap-1 overflow-x-auto border-b border-border">
-              <button type="button" className={tabClass('listings')} onClick={() => setActiveTab('listings')}>
-                {stockTabLabel}
-                {listingsCount != null ? ` (${formatNumber(listingsCount, locale)})` : ''}
+              <button type="button" className={tabClass('stock')} onClick={() => setActiveTab('stock')}>
+                {stockTabLabel} ({formatNumber(stockCount, locale)})
+              </button>
+              <button type="button" className={tabClass('parts')} onClick={() => setActiveTab('parts')}>
+                {partsTabLabel} ({formatNumber(partsCount, locale)})
               </button>
               <button type="button" className={tabClass('reviews')} onClick={() => setActiveTab('reviews')}>
                 {t('detail.tabs.reviews')}
@@ -238,37 +290,21 @@ export default function SellerDetailPage({
               </button>
             </div>
 
-            {activeTab === 'listings' ? (
-              <div className="flex flex-col gap-4">
-                <Input
-                  label={stockTabLabel}
-                  labelHidden
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={
-                    isPartsSeller ? t('detail.searchPlaceholderParts') : t('detail.searchPlaceholder')
-                  }
-                />
-                {allListingsCount > 0 ? (
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {sellerListings.vehicles.map((vehicle) => (
-                      <AutoCard
-                        key={vehicle.id}
-                        car={vehicle}
-                        variant={vehicle.purpose === 'RENT' ? 'rent' : 'sale'}
-                      />
-                    ))}
-                    {sellerListings.parts.map((part) => (
-                      <PartCard key={part.id} part={part} />
-                    ))}
+            {activeTab === 'stock'
+              ? renderCatalogue(sellerListings.vehicles, 'detail.empty.noListings', (vehicle) => (
+                  <div key={vehicle.id} className="min-w-0">
+                    <AutoCard car={vehicle} variant={vehicle.purpose === 'RENT' ? 'rent' : 'sale'} />
                   </div>
-                ) : (
-                  <p className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-[15px] text-muted-foreground">
-                    {debouncedSearchQuery.trim() ? t('detail.empty.nothingFound') : t(emptyListingsKey)}
-                  </p>
-                )}
-              </div>
-            ) : null}
+                ))
+              : null}
+
+            {activeTab === 'parts'
+              ? renderCatalogue(sellerListings.parts, 'detail.empty.noParts', (part) => (
+                  <div key={part.id} className="min-w-0">
+                    <PartCard part={part} />
+                  </div>
+                ))
+              : null}
 
             {activeTab === 'reviews' ? (
               <ReviewsSection
@@ -279,37 +315,38 @@ export default function SellerDetailPage({
             ) : null}
 
             {activeTab === 'about' ? (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {typeLabel ? (
-                  <div className="rounded-[var(--radius)] border border-dashed border-border-strong px-3 py-2 dark:border-border">
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                      {t('filters.sellerType')}
-                    </p>
-                    <p className="mt-1 text-[15px] font-semibold text-foreground">{typeLabel}</p>
-                  </div>
-                ) : null}
-                {memberSince ? (
-                  <div className="rounded-[var(--radius)] border border-dashed border-border-strong px-3 py-2 dark:border-border">
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                      {t('vehicle.memberSince', { date: memberSince })}
-                    </p>
-                  </div>
-                ) : null}
-                {!typeLabel && !memberSince ? (
-                  <p className="text-[15px] text-muted-foreground">{t('detail.empty.aboutSoon')}</p>
-                ) : null}
+              <div className="flex flex-col gap-4">
+                <p className="text-[15px] leading-relaxed text-muted-foreground">{t('detail.empty.aboutSoon')}</p>
+                <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {typeLabel ? (
+                    <div className={tileClass}>
+                      <dt className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                        {t('filters.sellerType')}
+                      </dt>
+                      <dd className="mt-1 text-[15px] font-semibold text-foreground">{typeLabel}</dd>
+                    </div>
+                  ) : null}
+                  {memberSince ? (
+                    <div className={tileClass}>
+                      <dt className="text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                        {t('detail.memberSinceLabel')}
+                      </dt>
+                      <dd className="mt-1 text-[15px] font-semibold text-foreground">{memberSince}</dd>
+                    </div>
+                  ) : null}
+                </dl>
               </div>
             ) : null}
           </div>
         }
         sidebar={
-          <div className="hidden flex-col gap-3 lg:flex">
+          <div className="hidden flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] lg:flex">
             {phone ? (
               phoneVisible ? (
                 <Button asChild variant="secondary" className="min-h-11 w-full justify-center gap-2">
                   <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
                     <Phone size={18} aria-hidden="true" />
-                    {phone}
+                    <span className="truncate">{phone}</span>
                   </a>
                 </Button>
               ) : (
