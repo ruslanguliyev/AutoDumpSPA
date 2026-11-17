@@ -6,7 +6,7 @@ import { ROUTES, withLang } from '@/shared/constants/routes';
 import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { HeaderLanguageSelector } from '@/shared/layout/Header/HeaderUtilities';
 import Button from '@/shared/ui/button';
-import logoUrl from '@/assets/images/avtobaz-logo.svg';
+import logoUrl from '@/assets/images/autobaz-logo.svg';
 
 const columnTitleClass =
   'mb-3 text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground';
@@ -78,10 +78,10 @@ const Footer = () => {
           {/* Brand, tagline, and the legal links that sit under them in the design. */}
           <div>
             <Link to={ROUTES.home} className="inline-flex items-center" aria-label={t('common.goHome')}>
-              <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
+              <img src={logoUrl} alt="AutoBaz" className="block h-9 w-auto" />
             </Link>
             <p className="mt-3 max-w-[280px] text-[14px] leading-relaxed text-muted-foreground">
-              <span className="font-semibold text-foreground">AvtoBaz</span> — {t('footer.tagline')}
+              <span className="font-semibold text-foreground">AutoBaz</span> — {t('footer.tagline')}
             </p>
 
             <h2 className={`${columnTitleClass} mt-6`}>{t('footer.legalAndHelp')}</h2>

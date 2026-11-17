@@ -1,4 +1,4 @@
-# AvtoBaz — page structure
+# AutoBaz — page structure
 
 Sections are listed in render order. Every account action (login, register,
 post a listing, send message, booking, payment) links out to
@@ -11,7 +11,7 @@ Copy is written in English and must go through i18next. Locales: **az** (default
 
 ## Global header (sticky, every page)
 
-Logo "AvtoBaz" · nav: Cars, Rent, Parts (mega-menu: Categories / By car / Brands /
+Logo "AutoBaz" · nav: Cars, Rent, Parts (mega-menu: Categories / By car / Brands /
 Popular), Auto Services, Specialists, Sellers · right side: language switcher
 (AZ / RU / EN), theme toggle, Favorites, Account, primary "+ Add listing".
 
@@ -22,7 +22,7 @@ On mobile: logo, language, Favorites, hamburger. Nav moves into the drawer.
 Logo + tagline "A marketplace for everything automotive: cars for sale and rent,
 parts, mechanics and auto services." Columns: Company (About us, Press),
 For buyers, For sellers, For dealers, Legal (Privacy, Imprint), Help / FAQ.
-Bottom bar: "© 2026 AvtoBaz" + language switcher.
+Bottom bar: "© 2026 AutoBaz" + language switcher.
 
 ---
 
@@ -183,7 +183,7 @@ always labelled as an advert · upgrade later and pay only the difference.
 ## 14. About — `/about`
 
 Mission statement → three numbers (active listings, verified sellers, reviews
-written) → "How AvtoBaz works" in four steps → contact CTA with a separate
+written) → "How AutoBaz works" in four steps → contact CTA with a separate
 "For dealers" button.
 
 ## 15. 404

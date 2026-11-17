@@ -1,5 +1,5 @@
 /* =========================================================================
-   AvtoBaz — design tokens
+   AutoBaz — design tokens
    Drop-in replacement for the colour block in src/app/index.css.
    Convention kept from the existing code: space-separated RGB triples,
    exposed to Tailwind through @theme inline.

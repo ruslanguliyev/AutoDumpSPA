@@ -2,7 +2,7 @@
   "name": "avtobaz-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "AvtoBaz marketplace backend",
+  "description": "AutoBaz marketplace backend",
   "license": "UNLICENSED",
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

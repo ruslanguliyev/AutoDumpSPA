@@ -1,4 +1,4 @@
-# AvtoBaz — component spec
+# AutoBaz — component spec
 
 Every component below is defined by **tokens**, never by literal hex values.
 If a colour you need is not in `tokens.css`, that is a gap in the token set —

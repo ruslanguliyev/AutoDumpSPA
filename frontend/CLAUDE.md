@@ -1,4 +1,4 @@
-# AvtoBaz — working rules
+# AutoBaz — working rules
 
 The design system lives in `design/`. Read `design/components.md` once per
 session, and only the section of `design/pages.md` for the page you are

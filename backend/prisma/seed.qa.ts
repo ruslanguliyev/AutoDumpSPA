@@ -26,17 +26,17 @@ const SEED_RENT = {
   suvMid: '[SEED RENT] SUV class Toyota Land Cruiser',
   premiumMaxPrice: '[SEED RENT] Premium class Rolls-Royce Ghost max price',
   noDeposit: '[SEED RENT] Compact class Kia Rio no deposit',
-  title60NoPhoto: 'Avtobaz seed rent listing title exactly sixty characters!!!!',
+  title60NoPhoto: 'AutoBaz seed rent listing title exactly sixty characters!!!!',
   hotPremium: '[SEED RENT] Mercedes G63 HOT plus PREMIUM',
 } as const;
 
 const SEED_SALE = {
-  title60NoPhoto: 'Avtobaz seed sale vehicle listing title sixty characters t!!',
+  title60NoPhoto: 'AutoBaz seed sale vehicle listing title sixty characters t!!',
   priceMin: '[SEED SALE] Lada Samara price 1 AZN',
 } as const;
 
 const SEED_PART = {
-  title60: 'Avtobaz seed part product name exactly sixty characters!!!!!',
+  title60: 'AutoBaz seed part product name exactly sixty characters!!!!!',
   price1: '[SEED PART] Boundary 1 AZN no photo',
 } as const;
 

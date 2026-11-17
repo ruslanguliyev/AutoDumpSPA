@@ -142,9 +142,9 @@
     "goCatalog": "Go to catalogue"
   },
   "about": {
-    "title": "About AvtoBaz",
-    "mission": "AvtoBaz is a marketplace for buying, selling and renting cars, finding parts, and booking specialists and service centres in Azerbaijan.",
-    "howTitle": "How AvtoBaz works",
+    "title": "About AutoBaz",
+    "mission": "AutoBaz is a marketplace for buying, selling and renting cars, finding parts, and booking specialists and service centres in Azerbaijan.",
+    "howTitle": "How AutoBaz works",
     "step1Title": "Browse",
     "step1Body": "Open cars, rent, parts, services or specialists and filter by what you need.",
     "step2Title": "Check the listing",
@@ -175,7 +175,7 @@
     "rules": "Rules and fees",
     "guarantees": "Guarantees / Escrow",
     "sellerVerification": "Seller verification",
-    "copyright": "© 2026 AvtoBaz. All rights reserved.",
+    "copyright": "© 2026 AutoBaz. All rights reserved.",
     "tagline": "a marketplace for everything automotive: cars for sale and rent, parts, mechanics and auto services.",
     "browseCars": "Browse cars",
     "rentCar": "Rent a car",

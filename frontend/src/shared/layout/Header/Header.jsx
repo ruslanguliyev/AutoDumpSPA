@@ -7,7 +7,7 @@ import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useFavoritesStore } from "@/shared/store/favoritesStore";
 import { useLanguageSync } from "@/shared/hooks/useLanguageSync";
 import { HeaderLanguageSelector, HeaderThemeToggle } from "./HeaderUtilities";
-import logoUrl from "@/assets/images/avtobaz-logo.svg";
+import logoUrl from "@/assets/images/autobaz-logo.svg";
 import { MegaMenu } from "@/components/navigation";
 import { PARTS_MEGA_MENU } from "@/domain/navigation/megaMenu.config";
 import { useNavStore } from "@/shared/store/navStore";
@@ -255,7 +255,7 @@ export default function Header() {
             >
                 <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center gap-4 px-4">
                     <Link to={ROUTES.home} className="flex shrink-0 items-center" aria-label={t('common.goHome')}>
-                        <img src={logoUrl} alt="AvtoBaz" className="block h-9 w-auto" />
+                        <img src={logoUrl} alt="AutoBaz" className="block h-9 w-auto" />
                     </Link>
 
                     {!isMobile ? (

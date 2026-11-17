@@ -4,7 +4,7 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 /* =========================================================================
-   AvtoBaz design tokens — source: design/tokens.css
+   AutoBaz design tokens — source: design/tokens.css
    Space-separated RGB triples, exposed to Tailwind through @theme inline.
    Dark theme switches on <html data-theme="dark">.
    ========================================================================= */

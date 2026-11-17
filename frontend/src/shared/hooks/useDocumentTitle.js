@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-export const APP_NAME = 'AvtoBaz';
+export const APP_NAME = 'AutoBaz';
 
-/** "Page — AvtoBaz", or just "AvtoBaz" when there is no page title. */
+/** "Page — AutoBaz", or just "AutoBaz" when there is no page title. */
 export const formatTitle = (title) => {
   const clean = typeof title === 'string' ? title.trim() : '';
   return clean ? `${clean} — ${APP_NAME}` : APP_NAME;

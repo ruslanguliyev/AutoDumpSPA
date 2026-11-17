@@ -1,6 +1,6 @@
 # design/
 
-Design system handoff for the AvtoBaz rebuild.
+Design system handoff for the AutoBaz rebuild.
 
 | File | What it is |
 |---|---|

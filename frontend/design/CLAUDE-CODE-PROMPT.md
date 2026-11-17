@@ -20,7 +20,7 @@ rewrite in one go produces a diff nobody can review.
 
 ```
 Read design/tokens.css, design/components.md and design/pages.md, plus the
-screenshots in design/screenshots/. They define the new AvtoBaz design system.
+screenshots in design/screenshots/. They define the new AutoBaz design system.
 
 Do only this stage, then stop and report:
 
