@@ -54,6 +54,5 @@ export type ServiceProfile = {
   schedule?: Record<string, unknown> | null;
   contacts?: Record<string, unknown> | null;
   media?: ServiceMedia | null;
-  promotedLevel?: string | null;
   isActive?: boolean | null;
 };

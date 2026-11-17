@@ -18,7 +18,6 @@ export type BadgeVariant =
   | 'outOfStock'
   | 'openNow'
   | 'closed'
-  | 'boosted'
   | 'custom';
 
 type BadgeProps = {
@@ -48,8 +47,6 @@ const variantClasses: Record<BadgeVariant, string> = {
   outOfStock: `${plain} text-destructive`,
   openNow: `${plain} text-success`,
   closed: `${plain} text-muted-foreground`,
-  // --primary is a fill in dark theme, so the label takes --primary-text.
-  boosted: `${pill} border-primary/30 bg-primary/10 text-primary-text`,
   custom: pill,
 };
 

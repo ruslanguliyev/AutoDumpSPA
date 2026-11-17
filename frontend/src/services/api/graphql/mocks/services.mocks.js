@@ -103,7 +103,6 @@ export const MOCK_SERVICES = [
         'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800',
       ],
     },
-    promotedLevel: 'premium',
     isActive: true,
   },
   {
@@ -176,7 +175,6 @@ export const MOCK_SERVICES = [
       cover: null,
       gallery: [],
     },
-    promotedLevel: 'boosted',
     isActive: true,
   },
   {
@@ -251,7 +249,6 @@ export const MOCK_SERVICES = [
         'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
       ],
     },
-    promotedLevel: 'premium',
     isActive: true,
   },
   {
@@ -324,7 +321,6 @@ export const MOCK_SERVICES = [
       cover: null,
       gallery: [],
     },
-    promotedLevel: 'none',
     isActive: true,
   },
   {
@@ -419,7 +415,6 @@ export const MOCK_SERVICES = [
         'https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=800',
       ],
     },
-    promotedLevel: 'premium',
     isActive: true,
   },
   {
@@ -499,7 +494,6 @@ export const MOCK_SERVICES = [
       cover: null,
       gallery: [],
     },
-    promotedLevel: 'boosted',
     isActive: true,
   },
 ];
