@@ -10,8 +10,9 @@ import { formatDate, formatPrice, intlLocale } from '@/lib/format';
 import { mapSubmitError } from '@/lib/formSubmitError';
 import { ContactForm } from '@/shared/blocks/ContactForm';
 import Button from '@/shared/ui/button';
-import { controlClass } from '@/shared/ui/controlClass';
-import { FieldError, FieldLabel } from '@/shared/ui/field';
+import { Chip } from '@/shared/ui/Chip';
+import { FieldError } from '@/shared/ui/field';
+import { Input } from '@/shared/ui/Input';
 
 type RentalCar = {
   listingId?: string | null;
@@ -121,16 +122,26 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
           </p>
         ) : null}
 
-        <ul className="mt-3 space-y-1 text-[14px] text-muted-foreground">
-          <li>{t('rental.term.minDays', { count: terms.minDays })}</li>
-          {terms.maxDays ? <li>{t('rental.term.maxDays', { count: terms.maxDays })}</li> : null}
-          <li>
+        <ul className="mt-4 border-t border-dashed border-border text-[15px] text-foreground">
+          <li className="border-b border-dashed border-border py-3">{t('rental.term.minDays', { count: terms.minDays })}</li>
+          {terms.maxDays ? (
+            <li className="border-b border-dashed border-border py-3">
+              {t('rental.term.maxDays', { count: terms.maxDays })}
+            </li>
+          ) : null}
+          <li className="border-b border-dashed border-border py-3">
             {terms.deposit
               ? t('rental.term.deposit', { amount: formatPrice(terms.deposit, currency, locale) })
               : t('rental.term.noDeposit')}
           </li>
-          <li>{terms.kmPerDay ? t('rental.term.kmPerDay', { count: terms.kmPerDay }) : t('rental.term.unlimitedKm')}</li>
-          {terms.minDriverAge ? <li>{t('rental.term.minDriverAge', { count: terms.minDriverAge })}</li> : null}
+          <li className="border-b border-dashed border-border py-3">
+            {terms.kmPerDay ? t('rental.term.kmPerDay', { count: terms.kmPerDay }) : t('rental.term.unlimitedKm')}
+          </li>
+          {terms.minDriverAge ? (
+            <li className="border-b border-dashed border-border py-3">
+              {t('rental.term.minDriverAge', { count: terms.minDriverAge })}
+            </li>
+          ) : null}
         </ul>
 
         {unavailable.length > 0 ? (
@@ -138,15 +149,14 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
             <p className="text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground">
               {t('rental.unavailableDays')}
             </p>
-            <ul className="mt-2 flex flex-wrap gap-2">
+            <ul className="mt-2 flex list-none flex-wrap gap-2 p-0">
               {unavailable.map((r) => (
-                <li
-                  key={`${r.startDate}-${r.endDate}-${r.reason}`}
-                  className="rounded-full border border-border px-2.5 py-1 text-[12px] font-semibold text-foreground"
-                >
-                  {r.startDate === r.endDate
-                    ? formatDate(r.startDate, locale)
-                    : `${formatDate(r.startDate, locale)} → ${formatDate(r.endDate, locale)}`}
+                <li key={`${r.startDate}-${r.endDate}-${r.reason}`} className="max-w-full">
+                  <Chip className="max-w-full whitespace-normal">
+                    {r.startDate === r.endDate
+                      ? formatDate(r.startDate, locale)
+                      : `${formatDate(r.startDate, locale)} → ${formatDate(r.endDate, locale)}`}
+                  </Chip>
                 </li>
               ))}
             </ul>
@@ -201,33 +211,31 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
           )
         }
       >
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <FieldLabel htmlFor="rental-start">{t('rental.from')}</FieldLabel>
-            <input
-              id="rental-start"
-              type="date"
-              className={controlClass('md', showMissing && !start)}
-              min={today}
-              value={start}
-              aria-invalid={showMissing && !start}
-              aria-describedby="rental-dates-note"
-              onChange={(e) => onStartChange(e.target.value)}
-            />
-          </div>
-          <div>
-            <FieldLabel htmlFor="rental-end">{t('rental.to')}</FieldLabel>
-            <input
-              id="rental-end"
-              type="date"
-              className={controlClass('md', showMissing && !end)}
-              min={start || today}
-              value={end}
-              aria-invalid={showMissing && !end}
-              aria-describedby="rental-dates-note"
-              onChange={(e) => onEndChange(e.target.value)}
-            />
-          </div>
+        <div className="grid grid-cols-1 gap-3">
+          <Input
+            id="rental-start"
+            type="date"
+            label={t('rental.from')}
+            wrapperClassName="min-w-0"
+            className="min-w-0 max-w-full"
+            min={today}
+            value={start}
+            aria-invalid={showMissing && !start ? true : undefined}
+            aria-describedby="rental-dates-note"
+            onChange={(e) => onStartChange(e.target.value)}
+          />
+          <Input
+            id="rental-end"
+            type="date"
+            label={t('rental.to')}
+            wrapperClassName="min-w-0"
+            className="min-w-0 max-w-full"
+            min={start || today}
+            value={end}
+            aria-invalid={showMissing && !end ? true : undefined}
+            aria-describedby="rental-dates-note"
+            onChange={(e) => onEndChange(e.target.value)}
+          />
         </div>
 
         <div id="rental-dates-note" aria-live="polite">
