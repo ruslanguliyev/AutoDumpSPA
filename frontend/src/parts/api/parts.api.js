@@ -303,9 +303,6 @@ const applyMockFiltering = (payload, filters) => {
     return true;
   });
 
-  if (filters.sort === 'PRICE_ASC') items = [...items].sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-  if (filters.sort === 'PRICE_DESC') items = [...items].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-
   const total = items.length;
   const offset = Number(filters.offset ?? 0);
   const limit = Number(filters.limit ?? 20);

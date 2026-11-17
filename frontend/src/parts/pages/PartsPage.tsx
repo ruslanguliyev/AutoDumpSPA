@@ -25,6 +25,17 @@ type PartRow = {
   id: string;
   stock?: number;
   inStock?: boolean;
+  price?: number | null;
+};
+
+/** A missing price is not zero: it sorts after every real price, in either direction. */
+const byPrice = (direction: 1 | -1) => (a: PartRow, b: PartRow) => {
+  const left = typeof a.price === 'number' && Number.isFinite(a.price) ? a.price : null;
+  const right = typeof b.price === 'number' && Number.isFinite(b.price) ? b.price : null;
+  if (left == null && right == null) return 0;
+  if (left == null) return 1;
+  if (right == null) return -1;
+  return (left - right) * direction;
 };
 
 type SortKey = 'RELEVANCE' | 'PRICE_ASC' | 'PRICE_DESC' | 'NEWEST';
@@ -56,13 +67,19 @@ export default function PartsPage() {
   const showResultCount = !(filters.inStockOnly && !inStockSupported);
 
   const filteredParts = useMemo(() => {
-    if (!filters.inStockOnly || !inStockSupported) return parts;
-    return parts.filter((part: PartRow) => {
-      const stock = Number.isFinite(part.stock) ? part.stock : null;
-      if (stock !== null) return stock > 0;
-      return Boolean(part.inStock);
-    });
-  }, [filters.inStockOnly, inStockSupported, parts]);
+    const base =
+      !filters.inStockOnly || !inStockSupported
+        ? parts
+        : parts.filter((part: PartRow) => {
+            const stock = Number.isFinite(part.stock) ? part.stock : null;
+            if (stock !== null) return stock > 0;
+            return Boolean(part.inStock);
+          });
+    // Default keeps the server order (paid placement first). A chosen price sort replaces it.
+    if (toolbarSort === 'PRICE_ASC') return [...base].sort(byPrice(1));
+    if (toolbarSort === 'PRICE_DESC') return [...base].sort(byPrice(-1));
+    return base;
+  }, [filters.inStockOnly, inStockSupported, parts, toolbarSort]);
 
   const viewKey = `${toolbarSort}|${JSON.stringify(filters)}`;
   const [pageState, setPageState] = useState({ key: viewKey, page: 1 });
