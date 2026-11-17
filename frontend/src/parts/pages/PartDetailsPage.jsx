@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { Badge } from '@/shared/ui/Badge';
 import { Chip } from '@/shared/ui/Chip';
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
+import { ROUTES, withLang } from '@/shared/constants/routes';
 import { useFavoritesStore } from '@/shared/store/favoritesStore';
 import { PartGallery } from '@/parts/components/part-details/PartGallery';
 import { PartPurchaseCard } from '@/parts/components/part-details/PartPurchaseCard';
@@ -26,9 +29,9 @@ import { buildPartMobileBar } from '@/parts/pages/partDetail/PartDetailMobileBar
 import { formatNumber, intlLocale } from '@/lib/format';
 
 const SpecRow = ({ label, value }) => (
-  <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-2">
+  <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-3">
     <span className="text-[13px] font-medium text-muted-foreground">{label}</span>
-    <span className="text-right text-[15px] font-semibold text-foreground">{value}</span>
+    <span className="text-right text-[15px] font-semibold text-foreground [overflow-wrap:anywhere]">{value}</span>
   </div>
 );
 
@@ -44,6 +47,7 @@ const conditionLabel = (t, condition) => {
 export default function PartDetailsPage() {
   const { t, i18n } = useTranslation(['part', 'common']);
   const locale = intlLocale(i18n.language);
+  const { language } = useLanguageSync();
   const { id } = useParams();
   const { data: part, isLoading, isError } = usePartDetails(id);
   useDocumentTitle(part?.name);
@@ -58,8 +62,8 @@ export default function PartDetailsPage() {
   }, [part?.compatibility]);
 
   const breadcrumbs = [
-    { label: t('nav.home', { ns: 'common' }), to: '/' },
-    { label: t('nav.parts', { ns: 'common' }), to: '/parts' },
+    { label: t('nav.home', { ns: 'common' }), to: withLang(ROUTES.home, language) },
+    { label: t('nav.parts', { ns: 'common' }), to: withLang(ROUTES.parts, language) },
     ...(part?.name ? [{ label: part.name }] : []),
   ];
 
@@ -108,10 +112,12 @@ export default function PartDetailsPage() {
             <PartGallery part={part} />
 
             <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
-              <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0 flex-1">
-                  <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[30px]">{part.name}</h1>
-                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
+              <header>
+                <div className="flex items-start justify-between gap-3">
+                  <h1 className="min-w-0 text-[22px] font-semibold tracking-tight text-foreground md:text-[30px]">{part.name}</h1>
+                  {part.promotionTier ? <PromotionBadge tier={part.promotionTier} className="mt-1 shrink-0" /> : null}
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
                     {categoryLabel ? <Badge variant="category">{categoryLabel}</Badge> : null}
                     {part.brand ? (
                       <span>
@@ -125,7 +131,6 @@ export default function PartDetailsPage() {
                       </span>
                     ) : null}
                   </div>
-                </div>
               </header>
 
               <div className="mt-6">
@@ -155,12 +160,7 @@ export default function PartDetailsPage() {
                           value={inStock ? t('details.inStock') : t('details.outOfStock')}
                         />
                         {Number.isFinite(part.viewsCount) ? (
-                          <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-border py-3">
-                            <span className="text-[13px] font-medium text-muted-foreground">{t('details.views')}</span>
-                            <span className="text-right text-[15px] font-semibold text-foreground">
-                              {formatNumber(part.viewsCount, locale)}
-                            </span>
-                          </div>
+                          <SpecRow label={t('details.views')} value={formatNumber(part.viewsCount, locale)} />
                         ) : null}
                       </div>
                     </div>
@@ -195,6 +195,7 @@ export default function PartDetailsPage() {
             <PartPurchaseCard
               part={part}
               isFavorited={isFavorited}
+              barCarriesActions={Boolean(mobileBar)}
               onToggleFavorite={() =>
                 toggleFavorite({
                   type: 'part',

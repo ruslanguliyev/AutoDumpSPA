@@ -23,23 +23,26 @@ export const PartGallery = ({ part }) => {
   }, [part, t]);
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-border bg-card-muted">
-      <Suspense
-        fallback={
-          <div className="rounded-xl bg-secondary p-6 text-sm font-semibold text-muted-foreground">
-            {t('gallery.loadingImages')}
-          </div>
-        }
-      >
-        <MediaCarousel
-          items={media}
-          ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? t('labels.part', { ns: 'common' }) })}
-          viewportClassName="aspect-video bg-card-muted"
-          mediaClassName="object-contain"
-          showCounter={media.length > 1}
-          thumbnailsClassName="px-2"
-        />
-      </Suspense>
-    </section>
+    <Suspense
+      fallback={
+        <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-border bg-card-muted text-[15px] text-muted-foreground">
+          {t('gallery.loadingImages')}
+        </div>
+      }
+    >
+      <MediaCarousel
+        className="w-full"
+        items={media}
+        ariaLabel={t('gallery.ariaLabel', { name: part?.name ?? t('labels.part', { ns: 'common' }) })}
+        showCounter
+        showControls
+        showThumbnails
+        viewportClassName="aspect-video !rounded-2xl bg-card-muted"
+        mediaClassName="aspect-video h-full w-full object-contain"
+        thumbnailsClassName="!justify-start gap-2 px-0.5"
+        thumbButtonClassName="!min-h-11 shrink-0 !opacity-100"
+        thumbImageClassName="h-14 w-[4.5rem] rounded-[var(--radius)] object-contain"
+      />
+    </Suspense>
   );
 };

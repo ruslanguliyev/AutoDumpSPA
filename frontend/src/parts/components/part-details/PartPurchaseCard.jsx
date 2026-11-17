@@ -5,7 +5,7 @@ import { formatPrice, intlLocale } from '@/lib/format';
 import Button from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/Badge';
 
-export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
+export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite, barCarriesActions = false }) => {
   const { t, i18n } = useTranslation('part');
   const locale = intlLocale(i18n.language);
   const inStock = (part?.stock ?? 0) > 0;
@@ -45,17 +45,26 @@ export const PartPurchaseCard = ({ part, isFavorited, onToggleFavorite }) => {
             type="button"
             variant="icon"
             size="icon"
-            className="shrink-0"
+            className={barCarriesActions ? 'max-lg:hidden shrink-0' : 'shrink-0'}
             aria-label={isFavorited ? t('card.removeFromFavorites') : t('card.addToFavorites')}
             aria-pressed={Boolean(isFavorited)}
             onClick={onFav}
             disabled={!part?.id}
           >
-            <Heart size={20} strokeWidth={1.5} fill={isFavorited ? 'currentColor' : 'none'} aria-hidden="true" />
+            <Heart
+              size={20}
+              strokeWidth={1.5}
+              aria-hidden="true"
+              className={isFavorited ? 'fill-destructive text-destructive' : undefined}
+            />
           </Button>
         </div>
 
-        <Button asChild variant="primary" className="w-full min-h-11 justify-center">
+        <Button
+          asChild
+          variant="primary"
+          className={barCarriesActions ? 'max-lg:hidden w-full min-h-11 justify-center' : 'w-full min-h-11 justify-center'}
+        >
           <a href="#contact-seller">{t('purchase.contactSeller')}</a>
         </Button>
 
