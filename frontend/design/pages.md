@@ -65,7 +65,9 @@ Shared skeleton: breadcrumbs → H1 + result count + sort select → filter side
 | Parts | `/parts` | category, car brand, condition, price, city, in-stock only | search by name or OEM |
 | Services | `/services` | city, brand serviced, service type, rating, verified only | open/closed status on card |
 | Specialists | `/specialists` | city, specialization, vehicles, rating, available now | price from / on request |
-| Sellers | `/sellers` | type (dealer / parts / private / rental), city, verified | search by name; listing count on card |
+| Sellers | `/sellers` | type (dealer / parts), city, verified | search by name; listing count on card |
+
+Private individuals are not in this catalogue: they have no public profile page, so a card would lead nowhere.
 
 ---
 

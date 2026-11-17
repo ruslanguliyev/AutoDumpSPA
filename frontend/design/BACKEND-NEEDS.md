@@ -24,7 +24,6 @@ One line per missing capability. “Blocks” = public page or filter called out
 - **`SpecialistsFilterInput` → wire `available` for “Available now”** — optional: field exists on filter input but specialists index still applies availability client-side after fetch.
 - **Service centre list filters** (`serviceTypes`, `brands`, `ratingFrom`, `verifiedOnly` on query)** — blocks server-side services sidebar filters on `/services` (only `city` is passed to GraphQL today).
 - **`ServiceCenterObject` lat/lng (or map URL)** — blocks “View map” on service detail; address is shown as text until coordinates exist.
-- **Private sellers (`SellerType.PRIVATE`) in public directory** — product decision pending: `pages.md` lists “private” seller type; `/sellers` deliberately excludes private profiles until policy is set.
 - **`SellerObject.responseTime` (or derived SLA) on `VehicleSellerObject`** - blocks sidebar "Responds within" on car detail; not in any seller GraphQL shape, so the row is not drawn.
 - **`VehicleObject.createdAt` / `VehicleSellerObject.createdAt` + `reviewsCount`** - car detail reads them today through two extra calls (`listing(id)` and `sellerById(id)`, skipped for sellers without a public page). Embedding them removes two round trips per page view.
 - **`VehicleObject.code` ("Vehicle code") and `VehicleObject.isFinanced` ("Financed")** - both rows are in `pages.md` car specs; neither field exists in the schema, so the rows are not drawn.
