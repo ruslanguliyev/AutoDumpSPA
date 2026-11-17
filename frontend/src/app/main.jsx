@@ -5,7 +5,7 @@ import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Initialize i18next (must be imported before components that use it)
-import '@/i18n';
+import { i18nReady } from '@/i18n';
 import App from '@/app/App.jsx';
 import '@/app/index.css';
 
@@ -29,15 +29,22 @@ const ReactQueryDevtools = import.meta.env.DEV
     )
   : null;
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      {import.meta.env.DEV && ReactQueryDevtools ? (
-        <Suspense fallback={null}>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Suspense>
-      ) : null}
-    </QueryClientProvider>
-  </StrictMode>
-);
+// Render once the active language bundle is in; useSuspense is off, so rendering
+// earlier would flash raw translation keys.
+const renderApp = () =>
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        {import.meta.env.DEV && ReactQueryDevtools ? (
+          <Suspense fallback={null}>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Suspense>
+        ) : null}
+      </QueryClientProvider>
+    </StrictMode>
+  );
+
+i18nReady
+  .catch((error) => console.error('Failed to load translations:', error))
+  .finally(renderApp);

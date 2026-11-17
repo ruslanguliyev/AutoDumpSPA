@@ -29,8 +29,27 @@ const utf8HeaderPlugin = () => ({
   },
 })
 
+// Splits the entry bundle: translations load per language, and the framework
+// libraries get their own long-lived chunks instead of riding in index-*.js.
+const manualChunks = (id) => {
+  const locale = id.match(/\/src\/i18n\/locales\/(az|ru|en)\//);
+  if (locale) return `locale-${locale[1]}`;
+
+  if (!id.includes('/node_modules/')) return undefined;
+  if (/\/node_modules\/(react|react-dom|scheduler)\//.test(id)) return 'vendor-react';
+  if (/\/node_modules\/(react-router|react-router-dom)\//.test(id)) return 'vendor-router';
+  if (/\/node_modules\/@tanstack\/(react-)?query/.test(id)) return 'vendor-query';
+  if (/\/node_modules\/(i18next|react-i18next)\//.test(id)) return 'vendor-i18n';
+  return undefined;
+};
+
 export default defineConfig({
   plugins: [utf8HeaderPlugin(), react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      output: { manualChunks },
+    },
+  },
   server: {
     host: true,
     hmr: {
