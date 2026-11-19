@@ -84,7 +84,8 @@
     "openNow": "Open now",
     "closed": "Closed",
     "reviews_one": "{{count, number}} review",
-    "reviews_other": "{{count, number}} reviews"
+    "reviews_other": "{{count, number}} reviews",
+    "brandsMore": "+{{count}}"
   },
   "detail": {
     "loading": "Loading service details…",

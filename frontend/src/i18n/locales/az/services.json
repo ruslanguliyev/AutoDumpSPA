@@ -84,7 +84,8 @@
     "openNow": "Açıqdır",
     "closed": "Bağlıdır",
     "reviews_one": "{{count, number}} rəy",
-    "reviews_other": "{{count, number}} rəy"
+    "reviews_other": "{{count, number}} rəy",
+    "brandsMore": "+{{count}}"
   },
   "detail": {
     "loading": "Xidmət məlumatları yüklənir…",
