@@ -1,3 +1,4 @@
+import { Slot } from '@radix-ui/react-slot';
 import { X } from 'lucide-react';
 import type { ReactNode } from 'react';
 

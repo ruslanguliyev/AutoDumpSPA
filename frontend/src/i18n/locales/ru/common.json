@@ -140,6 +140,7 @@
     "somethingWentWrong": "Что-то пошло не так",
     "pageNotFound": "Страница свернула не туда",
     "pageNotFoundHint": "Объявление могли продать или снять, либо адрес указан неверно.",
+    "pageNotFoundSearch": "Найти запчасть по названию или OEM",
     "goHome": "На главную",
     "goCatalog": "В каталог"
   },

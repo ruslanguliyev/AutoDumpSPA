@@ -138,6 +138,7 @@
     "somethingWentWrong": "Nəsə səhv getdi",
     "pageNotFound": "Bu səhifə mövcud deyil",
     "pageNotFoundHint": "Elan satılmış və ya silinmiş ola bilər, ya da ünvan səhvdir.",
+    "pageNotFoundSearch": "Ehtiyat hissəsini ad və ya OEM üzrə axtarın",
     "goHome": "Ana səhifəyə qayıt",
     "goCatalog": "Kataloqa keç"
   },

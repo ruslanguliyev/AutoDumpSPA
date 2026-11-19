@@ -138,6 +138,7 @@
     "somethingWentWrong": "Something went wrong",
     "pageNotFound": "This page took a wrong turn",
     "pageNotFoundHint": "The listing may have been sold or removed, or the address is wrong.",
+    "pageNotFoundSearch": "Search parts by name or OEM",
     "goHome": "Back to home",
     "goCatalog": "Go to catalogue"
   },
