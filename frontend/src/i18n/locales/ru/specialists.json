@@ -70,6 +70,7 @@
     "verified": "Проверен",
     "mobileService": "Выездной сервис",
     "viewProfile": "Смотреть профиль",
+    "priceLabel": "Цена",
     "priceFrom": "от {{price}}",
     "priceOnRequest": "Цена по запросу",
     "available": "Свободен",

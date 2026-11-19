@@ -64,6 +64,7 @@
     "verified": "Verified",
     "mobileService": "Mobile service",
     "viewProfile": "View profile",
+    "priceLabel": "Price",
     "priceFrom": "From {{price}}",
     "priceOnRequest": "Price on request",
     "available": "Available",

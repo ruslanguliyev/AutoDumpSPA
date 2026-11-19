@@ -64,6 +64,7 @@
     "verified": "Təsdiqlənmiş",
     "mobileService": "Mobil servis",
     "viewProfile": "Profilə bax",
+    "priceLabel": "Qiymət",
     "priceFrom": "{{price}}-dən",
     "priceOnRequest": "Qiymət sorğu ilə",
     "available": "Boşdur",
