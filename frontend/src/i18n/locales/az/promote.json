@@ -22,13 +22,16 @@
   "bestValue": "Ən sərfəli",
   "tier": {
     "BUMP": {
-      "name": "İrəli çək"
+      "name": "İrəli çək",
+      "summary": "Elanı kataloqun yuxarısına qaldırır."
     },
     "VIP": {
-      "name": "VIP"
+      "name": "VIP",
+      "summary": "Kataloq üzərindəki VIP blokunda yer və gündəlik qaldırma."
     },
     "PREMIUM": {
-      "name": "Premium"
+      "name": "Premium",
+      "summary": "Maksimum əhatə: ana səhifə, VIP blok və gündə üç qaldırma."
     }
   },
   "feature": {
@@ -120,5 +123,12 @@
     "paid": "ödənilib",
     "granted": "hədiyyə",
     "revoke": "Götür"
+  },
+  "chooseTier": "Tarifi seçin",
+  "perBump": "Qaldırma başına {{price}}",
+  "notes": {
+    "noAccount": "Hesab tələb olunmur",
+    "labelled": "Ödənişli yerləşdirmə həmişə reklam kimi qeyd olunur",
+    "upgrade": "Sonradan yuxarı tarifə keçib yalnız fərqi ödəyə bilərsiniz"
   }
 }
