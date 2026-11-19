@@ -475,6 +475,7 @@ export default function Header() {
                     ) : (
                         <div className="flex flex-1 items-center justify-end gap-1">
                             <HeaderLanguageSelector value={language} onChange={setLanguage} compact />
+                            <HeaderThemeToggle />
 
                             <Button asChild variant="icon" aria-label={favoritesCountLabel}>
                                 <Link to="/favorites" className="relative">
@@ -530,7 +531,6 @@ export default function Header() {
 
                         <div className="flex flex-wrap items-center gap-2 px-4 py-3">
                             <HeaderLanguageSelector value={language} onChange={setLanguage} />
-                            <HeaderThemeToggle />
                         </div>
 
                         <nav className="flex flex-col px-2 pb-4" aria-label={t('labels.mobileNavigation')}>
