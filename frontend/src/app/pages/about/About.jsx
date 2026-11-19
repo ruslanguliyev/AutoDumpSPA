@@ -82,7 +82,7 @@ export default function About() {
             <Link to={withLang(ROUTES.add, language)}>{t('nav.addListing')}</Link>
           </Button>
           <Button asChild variant="secondary" className="w-full sm:w-auto">
-            <Link to={withLang(ROUTES.sellers, language)}>{t('about.forDealers')}</Link>
+            <Link to={withLang(ROUTES.add, language)}>{t('about.forDealers')}</Link>
           </Button>
         </div>
       </section>
