@@ -52,6 +52,14 @@ export default defineConfig({
   },
   server: {
     host: true,
+    // Mirrors nginx.conf: the browser talks to this origin and Vite forwards API
+    // traffic to the backend, so no CORS setup is needed in development.
+    // Set VITE_API_URL=/graphql in .env to use it.
+    proxy: {
+      '/graphql': 'http://localhost:4000',
+      '/uploads': 'http://localhost:4000',
+      '/socket.io': { target: 'http://localhost:4000', ws: true },
+    },
     hmr: {
       overlay: true
     },
