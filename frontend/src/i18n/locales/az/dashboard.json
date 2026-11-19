@@ -270,6 +270,18 @@
     "sentText": "Sahibi onu kabinetində görəcək. Cavab \"İcarə\" bölməsində görünəcək.",
     "myBookings": "Rezervlərim",
     "unavailableDays": "Məşğul günlər",
+
+    "calendar": {
+
+      "group": "Kirayə tarixləri",
+
+      "previousMonth": "Əvvəlki ay",
+
+      "nextMonth": "Növbəti ay",
+
+      "unavailable": "məşğul"
+
+    },
     "messagePlaceholder": "Sahibinə mesaj (məcburi deyil)",
     "title": "Avtomobili rezerv et",
     "formTitle": "İcarə tarixləri",

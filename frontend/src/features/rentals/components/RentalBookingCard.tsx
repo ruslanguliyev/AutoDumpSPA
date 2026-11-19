@@ -10,9 +10,8 @@ import { formatDate, formatPrice, intlLocale } from '@/lib/format';
 import { mapSubmitError } from '@/lib/formSubmitError';
 import { ContactForm } from '@/shared/blocks/ContactForm';
 import Button from '@/shared/ui/button';
-import { Chip } from '@/shared/ui/Chip';
+import { DateRangeCalendar } from '@/shared/ui/DateRangeCalendar';
 import { FieldError } from '@/shared/ui/field';
-import { Input } from '@/shared/ui/Input';
 
 type RentalCar = {
   listingId?: string | null;
@@ -98,15 +97,17 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
     });
   };
 
-  const onStartChange = (value: string) => {
-    setStart(value);
-    if (end && value > end) setEnd(value);
-    request.reset();
-  };
+  const isUnavailable = (day: string) => unavailable.some((r) => day >= r.startDate && day <= r.endDate);
 
-  const onEndChange = (value: string) => {
-    setEnd(value);
+  /** First click sets the start, the second the end; a click after a full range, or before the start, starts over. */
+  const onPick = (day: string) => {
     request.reset();
+    if (!start || end || day < start) {
+      setStart(day);
+      setEnd('');
+      return;
+    }
+    setEnd(day);
   };
 
   const showMissing = submitted && datesMissing;
@@ -143,25 +144,6 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
             </li>
           ) : null}
         </ul>
-
-        {unavailable.length > 0 ? (
-          <div className="mt-4">
-            <p className="text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground">
-              {t('rental.unavailableDays')}
-            </p>
-            <ul className="mt-2 flex list-none flex-wrap gap-2 p-0">
-              {unavailable.map((r) => (
-                <li key={`${r.startDate}-${r.endDate}-${r.reason}`} className="max-w-full">
-                  <Chip className="max-w-full whitespace-normal">
-                    {r.startDate === r.endDate
-                      ? formatDate(r.startDate, locale)
-                      : `${formatDate(r.startDate, locale)} → ${formatDate(r.endDate, locale)}`}
-                  </Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
 
         <p className="mt-4 text-[13px] text-muted-foreground">{t('rental.requestNote')}</p>
       </section>
@@ -211,31 +193,42 @@ export function RentalBookingCard({ car }: { car: RentalCar }) {
           )
         }
       >
-        <div className="grid grid-cols-1 gap-3">
-          <Input
-            id="rental-start"
-            type="date"
-            label={t('rental.from')}
-            wrapperClassName="min-w-0"
-            className="min-w-0 max-w-full"
-            min={today}
-            value={start}
-            aria-invalid={showMissing && !start ? true : undefined}
-            aria-describedby="rental-dates-note"
-            onChange={(e) => onStartChange(e.target.value)}
-          />
-          <Input
-            id="rental-end"
-            type="date"
-            label={t('rental.to')}
-            wrapperClassName="min-w-0"
-            className="min-w-0 max-w-full"
-            min={start || today}
-            value={end}
-            aria-invalid={showMissing && !end ? true : undefined}
-            aria-describedby="rental-dates-note"
-            onChange={(e) => onEndChange(e.target.value)}
-          />
+        <DateRangeCalendar
+          start={start}
+          end={end}
+          min={today}
+          isUnavailable={isUnavailable}
+          onPick={onPick}
+          locale={locale}
+          labels={{
+            group: t('rental.calendar.group'),
+            previousMonth: t('rental.calendar.previousMonth'),
+            nextMonth: t('rental.calendar.nextMonth'),
+            unavailable: t('rental.calendar.unavailable'),
+          }}
+        />
+        <p className="flex items-center gap-2 text-[13px] text-muted-foreground">
+          <span
+            aria-hidden="true"
+            className="inline-flex h-5 w-5 items-center justify-center rounded-[var(--radius)] bg-card-muted text-[12px] line-through"
+          >
+            1
+          </span>
+          {t('rental.unavailableDays')}
+        </p>
+        <div className="grid grid-cols-2 gap-3 text-[15px]">
+          <p>
+            <span className="block text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground">
+              {t('rental.from')}
+            </span>
+            <span className="mt-1.5 block font-semibold text-foreground">{start ? formatDate(start, locale) : '—'}</span>
+          </p>
+          <p>
+            <span className="block text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground">
+              {t('rental.to')}
+            </span>
+            <span className="mt-1.5 block font-semibold text-foreground">{end ? formatDate(end, locale) : '—'}</span>
+          </p>
         </div>
 
         <div id="rental-dates-note" aria-live="polite">
