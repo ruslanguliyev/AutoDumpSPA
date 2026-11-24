@@ -1,8 +1,8 @@
 {
   "launcher": "Ask AI",
-  "open": "Open the AvtoBaz assistant",
-  "title": "AvtoBaz assistant",
-  "subtitle": "Searches only listings on AvtoBaz",
+  "open": "Open the AutoBaz assistant",
+  "title": "AutoBaz assistant",
+  "subtitle": "Searches only listings on AutoBaz",
   "close": "Close chat",
   "reset": "Start a new chat",
   "greeting": "Hi! Tell me what you are looking for: a car, a rental, a spare part, a car service or a mechanic. I will search our listings. You can also send a photo of a car, a part or a dashboard warning light.",

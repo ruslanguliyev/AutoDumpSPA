@@ -96,7 +96,7 @@ export const CATALOG_TOOLS: AiTool[] = [
   {
     name: 'search_cars',
     description:
-      'Search cars FOR SALE on AvtoBaz. Prices are in AZN. Returns real listings with their total count. Leave a filter out when the user did not ask for it. brand and model match as substrings and catalogue model names vary ("G-Class", "G 63", "G 500"), so when a model search finds little, search again with the brand only and pick the matching rows.',
+      'Search cars FOR SALE on AutoBaz. Prices are in AZN. Returns real listings with their total count. Leave a filter out when the user did not ask for it. brand and model match as substrings and catalogue model names vary ("G-Class", "G 63", "G 500"), so when a model search finds little, search again with the brand only and pick the matching rows.',
     schema: object({
       ...vehicleProps,
       priceFrom: num,
@@ -108,13 +108,13 @@ export const CATALOG_TOOLS: AiTool[] = [
   {
     name: 'search_rentals',
     description:
-      'Search cars FOR RENT (daily rental) on AvtoBaz. pricePerDayTo is the maximum price per day in AZN.',
+      'Search cars FOR RENT (daily rental) on AutoBaz. pricePerDayTo is the maximum price per day in AZN.',
     schema: object({ ...vehicleProps, pricePerDayTo: num }),
   },
   {
     name: 'search_parts',
     description:
-      'Search spare parts on AvtoBaz. query holds the part words in English AND in the user\'s language (e.g. "brake pads тормозные колодки"). carBrand/carModel narrow to parts for that car.',
+      'Search spare parts on AutoBaz. query holds the part words in English AND in the user\'s language (e.g. "brake pads тормозные колодки"). carBrand/carModel narrow to parts for that car.',
     schema: object({
       query: str,
       oemCode: { ...str, description: 'OEM / article number if the user gave one.' },
@@ -145,7 +145,7 @@ export const CATALOG_TOOLS: AiTool[] = [
   {
     name: 'search_sellers',
     description:
-      'Search dealers and parts dealers (companies) on AvtoBaz by name or city. Private sellers are not listed.',
+      'Search dealers and parts dealers (companies) on AutoBaz by name or city. Private sellers are not listed.',
     schema: object({
       query: str,
       city: str,

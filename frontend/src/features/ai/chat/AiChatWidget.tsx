@@ -29,7 +29,7 @@ const toApiLanguage = (lang: string): AiLanguageCode =>
 
 /**
  * The site assistant: one floating chat on every public page. It answers only from the
- * AvtoBaz catalogue; the cards under a reply are the real listings its searches returned.
+ * AutoBaz catalogue; the cards under a reply are the real listings its searches returned.
  * Hidden entirely while the server has AI switched off. While the site-wide daily cap is
  * reached it stays visible and says it is resting until tomorrow.
  */
