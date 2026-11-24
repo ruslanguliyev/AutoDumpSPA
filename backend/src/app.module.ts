@@ -29,6 +29,7 @@ import { PromotionsModule } from './promotions/promotions.module';
 import { AiModule } from './ai/ai.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
+import { ViewsModule } from './common/views/views.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { PrismaModule } from './prisma/prisma.module';
       resolvers: { JSON: GraphQLJSON },
     }),
     PrismaModule,
+    ViewsModule,
     AuthModule,
     UsersModule,
     VehiclesModule,

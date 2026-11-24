@@ -1,4 +1,4 @@
-# AvtoBaz — working rules
+# AutoBaz — working rules
 
 The design system lives in `design/`. Read `design/components.md` once per
 session, and only the section of `design/pages.md` for the page you are
@@ -20,7 +20,7 @@ building. Screenshots are in `design/screenshots/`.
 - Never invent a field. If the API does not return it, do not render a
   placeholder value for it — say so instead.
 - Account actions (login, register, post, message, booking, payment) link to
-  `https://app.avtobaz.example/...`. No backend work on this site.
+  `https://autobaz.az/...`. No backend work on this site.
 - Migrate any SCSS the page still uses to Tailwind and delete the `.scss`.
   Never leave both.
 - Both themes work on every screen. No component pins a theme.

@@ -9,6 +9,10 @@ import { useRequestAppointment } from '@/features/appointments/hooks/useAppointm
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { useMyProfessional } from '@/features/professional/hooks/useProfessional';
 import { todayString } from '@/features/rentals/api/rentals.api';
+import Button from '@/shared/ui/button';
+import { controlClass } from '@/shared/ui/controlClass';
+import { FieldLabel } from '@/shared/ui/field';
+import { Input } from '@/shared/ui/Input';
 
 const MAX_DAYS_AHEAD = 90;
 
@@ -17,9 +21,6 @@ const addDays = (day: string, offset: number) => {
   date.setUTCDate(date.getUTCDate() + offset);
   return date.toISOString().slice(0, 10);
 };
-
-const inputClass =
-  'w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
 /**
  * "Book a visit" box for a specialist or service center: the customer proposes a day (and time),
@@ -51,7 +52,7 @@ export function AppointmentRequestCard({
   const [phone, setPhone] = useState('');
 
   if (!targetId) return null;
-  const box = `rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-6 ${className}`;
+  const box = `rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] [overflow-wrap:anywhere] ${className}`;
 
   const ownProfile =
     (targetType === 'SPECIALIST' && mine.specialist?.id === targetId) ||
@@ -61,17 +62,20 @@ export function AppointmentRequestCard({
   if (request.isSuccess) {
     return (
       <section className={box}>
-        <h3 className="text-base font-semibold text-foreground">{t('appointment.sentTitle')}</h3>
-        <p className="mt-2 text-sm text-muted-foreground">{t('appointment.sentText')}</p>
-        <Link to="/dashboard/appointments" className="mt-3 inline-flex text-sm font-semibold text-primary hover:underline">
+        <h3 className="text-[18px] font-semibold text-foreground">{t('appointment.sentTitle')}</h3>
+        <p className="mt-2 text-[15px] text-muted-foreground">{t('appointment.sentText')}</p>
+        <Link
+          to="/dashboard/appointments"
+          className="mt-3 inline-flex min-h-11 items-center text-[15px] font-semibold text-primary-text underline"
+        >
           {t('appointment.myBookings')}
         </Link>
       </section>
     );
   }
 
-  const phoneInvalid = !isValidPhone(phone);
-  const canSubmit = Boolean(date) && !phoneInvalid && !request.isPending;
+  const phoneInvalid = phone.trim().length > 0 && !isValidPhone(phone);
+  const canSubmit = Boolean(date) && phone.trim().length > 0 && !phoneInvalid && !request.isPending;
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -89,90 +93,79 @@ export function AppointmentRequestCard({
 
   return (
     <section className={box}>
-      <h3 className="text-base font-semibold text-foreground">{t('appointment.title')}</h3>
+      <h3 className="text-[18px] font-semibold text-foreground">{t('appointment.title')}</h3>
       {!accepting ? (
-        <p className="mt-3 text-sm text-muted-foreground">{t('appointment.notAccepting')}</p>
+        <p className="mt-3 text-[15px] text-muted-foreground">{t('appointment.notAccepting')}</p>
       ) : !isAuthenticated ? (
         <div className="mt-3">
-          <p className="text-sm text-muted-foreground">{t('appointment.loginRequired')}</p>
-          <Link
-            to="/login"
-            state={{ from: location }}
-            className="mt-2 inline-flex rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:opacity-90"
-          >
-            {t('contact.login')}
-          </Link>
+          <p className="text-[15px] text-muted-foreground">{t('appointment.loginRequired')}</p>
+          <Button asChild variant="primary" className="mt-3 w-full">
+            <Link to="/login" state={{ from: location }}>
+              {t('contact.login')}
+            </Link>
+          </Button>
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="mt-3 grid gap-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-xs font-semibold text-muted-foreground" htmlFor="appt-date">
-                {t('appointment.date')}
-              </label>
-              <input
-                id="appt-date"
-                type="date"
-                className={inputClass}
-                min={today}
-                max={addDays(today, MAX_DAYS_AHEAD)}
-                value={date}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                  request.reset();
-                }}
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-semibold text-muted-foreground" htmlFor="appt-time">
-                {t('appointment.time')}
-              </label>
-              <input id="appt-time" type="time" className={inputClass} value={time} onChange={(e) => setTime(e.target.value)} />
-            </div>
+        <form onSubmit={onSubmit} noValidate className="mt-4 flex flex-col gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Input
+              label={t('appointment.date')}
+              type="date"
+              wrapperClassName="min-w-0"
+              className="min-w-0"
+              min={today}
+              max={addDays(today, MAX_DAYS_AHEAD)}
+              value={date}
+              onChange={(e) => {
+                setDate(e.target.value);
+                request.reset();
+              }}
+            />
+            <Input
+              label={t('appointment.time')}
+              type="time"
+              wrapperClassName="min-w-0"
+              className="min-w-0"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
           </div>
-          <input
-            className={inputClass}
+          <Input
+            label={t('appointment.vehicle')}
             maxLength={100}
             value={vehicle}
             onChange={(e) => setVehicle(e.target.value)}
             placeholder={t('appointment.vehiclePlaceholder')}
-            aria-label={t('appointment.vehiclePlaceholder')}
-          />
-          <textarea
-            className={inputClass}
-            rows={3}
-            maxLength={1000}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={t('appointment.messagePlaceholder')}
-            aria-label={t('appointment.messagePlaceholder')}
           />
           <div>
-            <input
-              type="tel"
-              className={inputClass}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder={t('appointment.phonePlaceholder')}
-              aria-label={t('appointment.phonePlaceholder')}
+            <FieldLabel htmlFor="appt-note">{t('appointment.messagePlaceholder')}</FieldLabel>
+            <textarea
+              id="appt-note"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              maxLength={1000}
+              rows={4}
+              placeholder={t('appointment.messagePlaceholder')}
+              className={`${controlClass('md')} h-auto! min-h-24 resize-y py-2.5`}
             />
-            {phone.trim() && phoneInvalid ? (
-              <p className="mt-1 text-xs text-destructive">{t('settings.seller.phoneInvalid')}</p>
-            ) : null}
           </div>
+          <Input
+            label={t('appointment.phonePlaceholder')}
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder={t('appointment.phonePlaceholder')}
+            error={phone.trim() && phoneInvalid ? t('settings.seller.phoneInvalid') : null}
+          />
           {request.isError ? (
-            <p role="alert" className="text-xs text-destructive">
+            <p role="alert" className="text-[13px] text-destructive">
               {request.error.message}
             </p>
           ) : null}
-          <button
-            type="submit"
-            disabled={!canSubmit}
-            className="rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60"
-          >
+          <Button type="submit" disabled={!canSubmit} className="w-full">
             {request.isPending ? t('settings.saving') : t('appointment.request')}
-          </button>
-          <p className="text-xs text-muted-foreground">{t('appointment.note')}</p>
+          </Button>
+          <p className="text-[13px] text-muted-foreground">{t('appointment.note')}</p>
         </form>
       )}
     </section>

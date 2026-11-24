@@ -97,7 +97,7 @@
     "profileUnavailable": "Profil əlçatan deyil",
     "notAvailable": "Satıcı {{id}} mövcud deyil.",
     "tabs": {
-      "stock": "Elanlar",
+      "stock": "Anbarda",
       "parts": "Ehtiyat hissələri",
       "reviews": "Rəylər",
       "about": "Haqqında"
@@ -110,8 +110,11 @@
       "noListings": "Elan yoxdur",
       "noParts": "Ehtiyat hissələri yoxdur",
       "reviewsSoon": "Rəylər tezliklə əlavə olunacaq",
-      "aboutSoon": "Satıcı haqqında məlumat tezliklə əlavə olunacaq"
+      "aboutSoon": "Haqqımızda məlumat tezliklə əlavə olunacaq"
     },
+    "activeFor_one": "Aktiv satıcı — {{count}} il",
+    "activeFor_other": "Aktiv satıcı — {{count}} il",
+    "memberSinceLabel": "Saytda",
     "breadcrumbs": {
       "home": "Ana səhifə",
       "sellers": "Satıcılar"

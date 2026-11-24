@@ -17,7 +17,7 @@ export default function OpeningHours({ schedule }) {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
-      <div className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-foreground">
+      <div className="mb-3 flex items-center gap-2 text-[17px] font-semibold text-foreground">
         <Clock size={18} strokeWidth={1.5} aria-hidden="true" />
         {t('sidebar.openingHours')}
       </div>

@@ -11,7 +11,7 @@ query GetSellers {
 const GET_SELLER_QUERY = `
 query GetSeller($id: String!) {
   sellerById(id: $id) {
-    id userId type name city phone rating reviewsCount verified listingsCount createdAt
+    id userId type name city phone rating reviewsCount viewsCount verified listingsCount createdAt
   }
 }
 `;
@@ -30,6 +30,7 @@ const mapSeller = (row) => ({
   listingsCount: row.listingsCount ?? 0,
   logo: null,
   votes: row.reviewsCount ?? 0,
+  viewsCount: typeof row.viewsCount === 'number' ? row.viewsCount : null,
   createdAt: row.createdAt,
 });
 

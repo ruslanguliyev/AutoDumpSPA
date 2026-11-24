@@ -40,6 +40,10 @@ export class SellerObject {
   @Field(() => Int)
   reviewsCount: number;
 
+  /** How many times the public seller profile was opened. */
+  @Field(() => Int)
+  viewsCount: number;
+
   @Field()
   verified: boolean;
 

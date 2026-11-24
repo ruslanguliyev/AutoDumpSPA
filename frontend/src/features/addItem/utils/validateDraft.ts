@@ -7,6 +7,17 @@ import {
 
 const trim = (value: string | undefined | null) => String(value ?? '').trim();
 
+/** ISO 3779: 17 characters, A–Z and 0–9, excluding I, O and Q. Empty is allowed. */
+const VIN_PATTERN = /^[A-HJ-NPR-Z0-9]{17}$/;
+
+export const normalizeVin = (value: string | undefined | null): string =>
+  trim(value).toUpperCase().replace(/\s+/g, '');
+
+export const isValidVin = (value: string | undefined | null): boolean => {
+  const vin = normalizeVin(value);
+  return vin === '' || VIN_PATTERN.test(vin);
+};
+
 /** Engine volume in litres ("2.0", "2,5"); undefined when missing or implausible. */
 export const parseEngineVolume = (value: string | undefined | null): number | undefined => {
   const n = parseFloat(trim(value).replace(',', '.'));
@@ -90,6 +101,7 @@ export const validateVehicle = (draft: ListingDraft) => {
   if (draft.type !== 'vehicle') return true;
   const vehicle = draft.vehicle;
   if (!vehicle) return false;
+  if (!isValidVin(vehicle.vin)) return false;
   if (!trim(vehicle.brand) || !trim(vehicle.model)) return false;
   if (parseEngineVolume(vehicle.displacement) === undefined) return false;
   if (parsePower(vehicle.horsepower) === undefined) return false;

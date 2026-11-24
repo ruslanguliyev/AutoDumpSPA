@@ -7,7 +7,7 @@ export default function ServiceContacts({ location, contacts }) {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
-      <h3 className="text-[15px] font-semibold text-foreground">{t('sidebar.contactDetails')}</h3>
+      <h3 className="text-[17px] font-semibold text-foreground">{t('sidebar.contactDetails')}</h3>
       <ul className="mt-3 space-y-3 text-[13px]">
         {contacts?.phone ? (
           <li className="flex gap-3">

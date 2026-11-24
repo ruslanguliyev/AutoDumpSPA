@@ -7,7 +7,7 @@ import { formatQapik } from '@/features/promotions/api/promotions.api';
 import type { Promotion } from '@/features/promotions/api/promotions.api';
 import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { useMyPromotions } from '@/features/promotions/hooks/usePromotions';
-import { promotePath } from '@/features/promotions/pages/PromotePage';
+import { promotePath } from '@/features/promotions/promotePath';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
 function Stat({

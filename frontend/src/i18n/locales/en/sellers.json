@@ -97,7 +97,7 @@
     "profileUnavailable": "Profile unavailable",
     "notAvailable": "Seller {{id}} is not available.",
     "tabs": {
-      "stock": "Listings",
+      "stock": "Stock",
       "parts": "Parts",
       "reviews": "Reviews",
       "about": "About"
@@ -110,8 +110,11 @@
       "noListings": "No listings",
       "noParts": "No parts listed",
       "reviewsSoon": "Reviews coming soon",
-      "aboutSoon": "About section coming soon"
+      "aboutSoon": "About us coming soon"
     },
+    "activeFor_one": "Active seller — {{count}} yr",
+    "activeFor_other": "Active seller — {{count}} yrs",
+    "memberSinceLabel": "Member since",
     "breadcrumbs": {
       "home": "Home",
       "sellers": "Sellers"

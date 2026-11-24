@@ -22,6 +22,8 @@ export type VehicleDetailCar = {
   transmission?: string | null;
   drive?: string | null;
   mileage?: number | null;
+  /** Full VIN for the owner, last four characters for everyone else. */
+  vin?: string | null;
   location?: string | null;
   ownersCount?: number | null;
   owners?: number | null;
@@ -77,6 +79,7 @@ export function buildVehicleSpecRows(
       label: t('specs.mileage'),
       value: car.mileage != null ? formatMileage(car.mileage, locale) : null,
     },
+    { key: 'vin', label: t('specs.vin'), value: car.vin },
     { key: 'location', label: t('specs.location'), value: car.location },
     {
       key: 'owners',

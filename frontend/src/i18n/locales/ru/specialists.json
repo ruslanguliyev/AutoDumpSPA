@@ -94,6 +94,7 @@
     "servicesLoading": "Загрузка сервисов…",
     "servicesError": "Не удалось загрузить сервисы.",
     "portfolio": "Портфолио",
+    "galleryAria": "Галерея {{name}}",
     "reviews": "Отзывы",
     "call": "Позвонить",
     "bookVisit": "Записаться",

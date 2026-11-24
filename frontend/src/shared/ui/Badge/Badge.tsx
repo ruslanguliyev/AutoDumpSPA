@@ -18,15 +18,9 @@ export type BadgeVariant =
   | 'outOfStock'
   | 'openNow'
   | 'closed'
-  | 'boosted'
-  | 'premium'
   | 'custom';
 
 type BadgeProps = {
-  /**
-   * `'premium'` is DEPRECATED (purple, predates the paid-placement tiers). Paid tiers are
-   * rendered by `PromotionBadge` from the `--promo-*` tokens; do not add new uses.
-   */
   variant?: BadgeVariant;
   /** Leading icon or dot. `verified` supplies a check when this is left out. */
   icon?: ReactNode;
@@ -53,10 +47,6 @@ const variantClasses: Record<BadgeVariant, string> = {
   outOfStock: `${plain} text-destructive`,
   openNow: `${plain} text-success`,
   closed: `${plain} text-muted-foreground`,
-  // --primary is a fill in dark theme, so the label takes --primary-text.
-  boosted: `${pill} border-primary/30 bg-primary/10 text-primary-text`,
-  /** @deprecated purple; use PromotionBadge (--promo-premium). Removed with the --premium token. */
-  premium: `${pill} border-premium/30 bg-premium/10 text-premium`,
   custom: pill,
 };
 

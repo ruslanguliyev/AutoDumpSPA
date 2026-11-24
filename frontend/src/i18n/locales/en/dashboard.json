@@ -272,6 +272,18 @@
     "sentText": "The owner will see it in their dashboard. The answer will appear under \"Rentals\".",
     "myBookings": "My bookings",
     "unavailableDays": "Unavailable days",
+
+    "calendar": {
+
+      "group": "Rental dates",
+
+      "previousMonth": "Previous month",
+
+      "nextMonth": "Next month",
+
+      "unavailable": "unavailable"
+
+    },
     "messagePlaceholder": "Message to the owner (optional)",
     "title": "Book this car",
     "formTitle": "Rental dates",

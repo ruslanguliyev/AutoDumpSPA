@@ -25,6 +25,30 @@ type PartRow = {
   id: string;
   stock?: number;
   inStock?: boolean;
+  price?: number | null;
+  bumpedAt?: string | null;
+};
+
+/** A missing price is not zero: it sorts after every real price, in either direction. */
+const byPrice = (direction: 1 | -1) => (a: PartRow, b: PartRow) => {
+  const left = typeof a.price === 'number' && Number.isFinite(a.price) ? a.price : null;
+  const right = typeof b.price === 'number' && Number.isFinite(b.price) ? b.price : null;
+  if (left == null && right == null) return 0;
+  if (left == null) return 1;
+  if (right == null) return -1;
+  return (left - right) * direction;
+};
+
+/** A missing bump time sorts after every real date. Newest is the later bumpedAt. */
+const byBumpedAtDesc = (a: PartRow, b: PartRow) => {
+  const left = a.bumpedAt ? Date.parse(a.bumpedAt) : NaN;
+  const right = b.bumpedAt ? Date.parse(b.bumpedAt) : NaN;
+  const leftOk = Number.isFinite(left);
+  const rightOk = Number.isFinite(right);
+  if (!leftOk && !rightOk) return 0;
+  if (!leftOk) return 1;
+  if (!rightOk) return -1;
+  return right - left;
 };
 
 type SortKey = 'RELEVANCE' | 'PRICE_ASC' | 'PRICE_DESC' | 'NEWEST';
@@ -56,13 +80,20 @@ export default function PartsPage() {
   const showResultCount = !(filters.inStockOnly && !inStockSupported);
 
   const filteredParts = useMemo(() => {
-    if (!filters.inStockOnly || !inStockSupported) return parts;
-    return parts.filter((part: PartRow) => {
-      const stock = Number.isFinite(part.stock) ? part.stock : null;
-      if (stock !== null) return stock > 0;
-      return Boolean(part.inStock);
-    });
-  }, [filters.inStockOnly, inStockSupported, parts]);
+    const base =
+      !filters.inStockOnly || !inStockSupported
+        ? parts
+        : parts.filter((part: PartRow) => {
+            const stock = Number.isFinite(part.stock) ? part.stock : null;
+            if (stock !== null) return stock > 0;
+            return Boolean(part.inStock);
+          });
+    // Default keeps the server order (paid placement first). Any other sort replaces it.
+    if (toolbarSort === 'PRICE_ASC') return [...base].sort(byPrice(1));
+    if (toolbarSort === 'PRICE_DESC') return [...base].sort(byPrice(-1));
+    if (toolbarSort === 'NEWEST') return [...base].sort(byBumpedAtDesc);
+    return base;
+  }, [filters.inStockOnly, inStockSupported, parts, toolbarSort]);
 
   const viewKey = `${toolbarSort}|${JSON.stringify(filters)}`;
   const [pageState, setPageState] = useState({ key: viewKey, page: 1 });

@@ -35,6 +35,7 @@ export type SpecialistProfile = {
   yearsExperience?: number | null;
   rating?: number | null;
   reviewsCount?: number | null;
+  viewsCount?: number | null;
   verified?: boolean | null;
   /** Paid placement badge, when the profile holds one. */
   promotionTier?: PromotionTier | null;

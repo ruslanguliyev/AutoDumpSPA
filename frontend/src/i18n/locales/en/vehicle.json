@@ -107,6 +107,7 @@
     "transmission": "Transmission",
     "drive": "Drive",
     "mileage": "Mileage",
+    "vin": "VIN",
     "km": "km",
     "location": "Location",
     "owners": "Number of owners",

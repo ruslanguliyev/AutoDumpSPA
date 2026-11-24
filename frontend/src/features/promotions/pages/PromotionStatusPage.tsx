@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { CircleAlert, CircleCheck, Loader } from 'lucide-react';
 
 import { formatQapik } from '@/features/promotions/api/promotions.api';
-import { promotePath } from '@/features/promotions/pages/PromotePage';
+import { promotePath } from '@/features/promotions/promotePath';
 import { usePromotionOrder } from '@/features/promotions/hooks/usePromotions';
 
 /**

@@ -85,6 +85,14 @@ export class PartObject {
   /** VIP or PREMIUM while the listing holds paid placement, otherwise null. */
   @Field(() => PromotionTier, { nullable: true })
   promotionTier: PromotionTier | null;
+
+  /** How many times this part's page was opened. Not the listing counter promotions use. */
+  @Field(() => Int)
+  viewsCount: number;
+
+  /** Last time the listing was bumped. "Newest first" sorts by this, not by createdAt. */
+  @Field(() => Date)
+  bumpedAt: Date;
 }
 
 @ObjectType()

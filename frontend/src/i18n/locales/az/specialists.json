@@ -84,6 +84,7 @@
     "servicesLoading": "Servislər yüklənir…",
     "servicesError": "Servisləri yükləmək mümkün olmadı.",
     "portfolio": "Portfel",
+    "galleryAria": "{{name}} qalereyası",
     "reviews": "Rəylər",
     "call": "Zəng et",
     "bookVisit": "Görüş təyin et",

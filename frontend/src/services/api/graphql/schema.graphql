@@ -31,7 +31,6 @@ type Service {
 
   media: ServiceMedia
 
-  promotedLevel: String         # none | boosted | premium
   isActive: Boolean!
 }
 

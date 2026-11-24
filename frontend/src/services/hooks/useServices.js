@@ -15,7 +15,7 @@ export const useServices = () => {
     placeholderData: keepPreviousData,
   });
 
-  const services = query.data ?? [];
+  const services = useMemo(() => query.data ?? [], [query.data]);
 
   /** Brand chips must reflect the city-scoped catalogue, not the current brand selection. */
   const brandCatalogFilters = useMemo(() => {

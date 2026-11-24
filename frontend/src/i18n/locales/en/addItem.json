@@ -60,6 +60,7 @@
     "name": "Name",
     "location": "Location",
     "vin": "VIN",
+    "vinHint": "Optional. 17 characters: letters and digits, without I, O or Q.",
     "trim": "Trim",
     "drivetrain": "Drivetrain",
     "partName": "Part name",
@@ -177,7 +178,8 @@
     "minLength": "Minimum length is {{min}} characters",
     "invalidVehicleCategory": "Choose a category from the list",
     "invalidVehicleModel": "Choose a model from the list for the selected brand",
-    "invalidVehicleTrim": "Choose a trim from the list"
+    "invalidVehicleTrim": "Choose a trim from the list",
+    "invalidVin": "VIN must be 17 characters: A–Z and 0–9, without I, O or Q."
   },
   "success": {
     "title": "Listing published",

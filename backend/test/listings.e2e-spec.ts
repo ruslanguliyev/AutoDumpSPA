@@ -140,4 +140,28 @@ describe('listings: visibility, publishing, ownership', () => {
     expect((await update('')).data.updateVehicle.bodyType).toBeNull();
     expect(listingId).toBeDefined();
   });
+
+  it('stores a valid VIN, rejects an invalid one and allows an empty value', async () => {
+    const { vehicleId } = await ctx.createVehicleListing(owner, { brand: 'VinBrand', publish: true });
+    const update = (vin: string) =>
+      ctx.gql(
+        `mutation($id: String!, $v: String!) { updateVehicle(id: $id, input: { vin: $v }) { vin } }`,
+        { id: vehicleId, v: vin },
+        owner,
+      );
+
+    // European VIN: the North-American check digit does not apply and must not reject it.
+    expect((await update('  wvwzzz3czwe123456 ')).data.updateVehicle.vin).toBe('WVWZZZ3CZWE123456');
+
+    const asOwner = await ctx.gql(`query($id: String!) { vehicleById(id: $id) { vin } }`, { id: vehicleId }, owner);
+    expect(asOwner.data.vehicleById.vin).toBe('WVWZZZ3CZWE123456');
+    const asStranger = await ctx.gql(`query($id: String!) { vehicleById(id: $id) { vin } }`, { id: vehicleId }, stranger);
+    expect(asStranger.data.vehicleById.vin).toBe('*************3456');
+    const asAnon = await ctx.gql(`query($id: String!) { vehicleById(id: $id) { vin } }`, { id: vehicleId });
+    expect(asAnon.data.vehicleById.vin).toBe('*************3456');
+
+    expect((await update('WVWZZZ3CZWE12345I')).errors?.[0].message).toMatch(/invalid vin/i);
+    expect((await update('')).data.updateVehicle.vin).toBeNull();
+    expect((await update('   ')).data.updateVehicle.vin).toBeNull();
+  });
 });

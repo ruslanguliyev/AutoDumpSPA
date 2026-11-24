@@ -54,6 +54,7 @@ export class ServiceCentersService {
       supportedBrands: row.supportedBrands,
       rating: row.rating,
       reviewsCount: row.reviewsCount,
+      viewsCount: row.viewsCount,
       verified: row.verified,
       promotionTier: visibleTier(row.promotionRank, row.promotedUntil),
       isActive: row.isActive,

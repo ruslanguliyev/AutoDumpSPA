@@ -10,7 +10,6 @@ import type { FilterValue } from '@/features/filters/types/filters.types';
 import ServiceCard from '@/services/components/ServiceCard';
 import ServicesFilters from '@/services/pages/ServicesFilters';
 import { useServices } from '@/services/hooks/useServices';
-import type { ServiceProfile } from '@/services/types/service.types';
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import { IndexPage } from '@/shared/ui/IndexPage';
 import type { ActiveFilterChip } from '@/shared/ui/IndexPage';
@@ -38,17 +37,10 @@ export default function ServicesListPage() {
   const [sort, setSort] = useState<SortKey>('default');
 
   const sorted = useMemo(() => {
-    const list = [...services] as ServiceProfile[];
     if (sort === 'ratingDesc') {
-      return list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      return [...services].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     }
-    return list.sort((a, b) => {
-      const promotedOrder = { premium: 3, boosted: 2, none: 1 } as const;
-      const aPromoted = promotedOrder[a.promotedLevel as keyof typeof promotedOrder] || 1;
-      const bPromoted = promotedOrder[b.promotedLevel as keyof typeof promotedOrder] || 1;
-      if (aPromoted !== bPromoted) return bPromoted - aPromoted;
-      return (b.rating ?? 0) - (a.rating ?? 0);
-    });
+    return services;
   }, [services, sort]);
 
   const viewKey = `${sort}|${JSON.stringify(filters)}`;

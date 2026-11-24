@@ -43,7 +43,7 @@ export function BackToSiteLink({ surface, iconOnly = false, className }: BackToS
 
 export function BrandHomeLink({
   className,
-  children = 'AvtoBaz',
+  children = 'AutoBaz',
 }: {
   className?: string;
   children?: string;

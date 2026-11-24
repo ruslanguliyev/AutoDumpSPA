@@ -2,14 +2,14 @@ import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, Crown, Gem, Info } from 'lucide-react';
+import { ArrowUp, Check, Crown, Gem, Info } from 'lucide-react';
 
 import { formatQapik } from '@/features/promotions/api/promotions.api';
 import type {
   PromotionPackage,
-  PromotionTarget,
   PromotionTier,
 } from '@/features/promotions/api/promotions.api';
+import { promotionTargetFromPath } from '@/features/promotions/promotePath';
 import {
   useCreatePromotionOrder,
   usePromotionQuote,
@@ -18,6 +18,7 @@ import { formatDate, intlLocale } from '@/lib/format';
 import { mapSubmitError } from '@/lib/formSubmitError';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import Button from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/Badge';
 import { Input } from '@/shared/ui/Input';
 import { ListingPhoto } from '@/shared/ui/ListingImagePlaceholder';
 
@@ -30,16 +31,18 @@ const TIER_ACCENT = {
   PREMIUM: 'text-promo-premium',
 } as const;
 
-const TARGET_FROM_PATH: Record<string, PromotionTarget> = {
-  listing: 'LISTING',
-  specialist: 'SPECIALIST',
-  'service-center': 'SERVICE_CENTER',
+/** What each tier does, read off the backend's promotion rules (promotion-pricing.ts). Copy only; no amounts. */
+const TIER_FEATURES: Record<PromotionTier, string[]> = {
+  BUMP: ['top', 'dailyBump'],
+  VIP: ['top', 'vipBlock', 'dailyBump'],
+  PREMIUM: ['top', 'vipBlock', 'homePage', 'thriceDaily'],
 };
 
-export const promotePath = (targetType: PromotionTarget, targetId: string): string => {
-  const segment = Object.keys(TARGET_FROM_PATH).find((key) => TARGET_FROM_PATH[key] === targetType);
-  return `/promote/${segment ?? 'listing'}/${targetId}`;
-};
+const TIER_TILE = {
+  BUMP: 'bg-promo-bump-fill/15',
+  VIP: 'bg-promo-vip-fill/15',
+  PREMIUM: 'bg-promo-premium-fill/15',
+} as const;
 
 const cheapest = (packages: PromotionPackage[], tier: PromotionTier) =>
   packages
@@ -53,7 +56,7 @@ export function PromotePage() {
   const { t, i18n } = useTranslation(['promote', 'common']);
   const locale = intlLocale(i18n.language);
   const params = useParams();
-  const targetType = TARGET_FROM_PATH[params.targetType ?? ''] ?? 'LISTING';
+  const targetType = promotionTargetFromPath(params.targetType);
   const targetId = params.targetId ?? '';
 
   const quote = usePromotionQuote(targetType, targetId);
@@ -61,16 +64,16 @@ export function PromotePage() {
 
   const [search] = useSearchParams();
   const asked = search.get('tier');
-  const [tier, setTier] = useState<PromotionTier>(
-    asked === 'BUMP' || asked === 'PREMIUM' || asked === 'VIP' ? asked : 'VIP',
-  );
+  const askedTier: PromotionTier =
+    asked === 'BUMP' || asked === 'PREMIUM' || asked === 'VIP' ? asked : 'VIP';
   const [code, setCode] = useState<string | null>(null);
   const [contact, setContact] = useState('');
 
   const packages = useMemo(() => quote.data?.packages ?? [], [quote.data?.packages]);
-  const forTier = useMemo(() => packages.filter((p) => p.tier === tier), [packages, tier]);
-  const selected =
-    forTier.find((p) => p.code === code) ?? forTier.find((p) => p.recommended) ?? forTier[0] ?? null;
+  const byTier = (tier: PromotionTier) => packages.filter((p) => p.tier === tier);
+  const preselected =
+    byTier(askedTier).find((p) => p.recommended) ?? byTier(askedTier)[0] ?? packages[0] ?? null;
+  const selected = packages.find((p) => p.code === code) ?? preselected;
   const currency = quote.data?.currency ?? 'AZN';
   const price = (amount: number) => formatQapik(amount, currency, locale);
 
@@ -118,7 +121,7 @@ export function PromotePage() {
 
   if (packages.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-10">
+      <div className="mx-auto w-full max-w-[1280px] px-4 py-8 sm:py-10">
         <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[26px]">
           {t('title')}
         </h1>
@@ -128,7 +131,7 @@ export function PromotePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-10">
+    <div className="mx-auto w-full max-w-[1280px] px-4 py-8 sm:py-10">
       <h1 className="text-[22px] font-semibold tracking-tight text-foreground md:text-[26px]">
         {t('title')}
       </h1>
@@ -162,79 +165,111 @@ export function PromotePage() {
       ) : null}
 
       <form onSubmit={onSubmit}>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div role="radiogroup" aria-label={t('chooseTier')} className="mt-6 grid gap-4 lg:grid-cols-3">
           {availableTiers.map((candidate) => {
-            const from = cheapest(packages, candidate);
-            if (!from) return null;
             const Icon = TIER_ICON[candidate];
-            const active = tier === candidate;
+            const options = byTier(candidate);
+            const from = cheapest(packages, candidate);
+            const active = selected?.tier === candidate;
+            const unit = candidate === 'BUMP' ? 'bump' : 'day';
             return (
-              <button
+              <section
                 key={candidate}
-                type="button"
-                aria-pressed={active}
-                onClick={() => {
-                  setTier(candidate);
-                  setCode(null);
-                }}
-                className={`appearance-none min-h-11 rounded-2xl border bg-card p-4 text-left transition ${
-                  active
-                    ? 'border-primary shadow-[var(--shadow-card)] ring-1 ring-primary'
-                    : 'border-border hover:border-primary/40'
+                className={`flex flex-col rounded-2xl border bg-card p-5 shadow-[var(--shadow-card)] [overflow-wrap:anywhere] ${
+                  active ? 'border-primary ring-1 ring-primary' : 'border-border'
                 }`}
               >
-                <span className="flex items-center gap-2 font-semibold text-foreground">
-                  <Icon size={18} className={TIER_ACCENT[candidate]} aria-hidden="true" />
-                  {t(`tier.${candidate}.name`)}
-                </span>
-                <span className="mt-1 block text-[13px] text-muted-foreground">
-                  {t('fromPrice', { price: price(from.amount) })}
-                </span>
-              </button>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius)] ${TIER_TILE[candidate]}`}
+                  >
+                    <Icon size={22} strokeWidth={1.5} className={TIER_ACCENT[candidate]} aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className={`text-[20px] font-semibold leading-tight ${TIER_ACCENT[candidate]}`}>
+                      {t(`tier.${candidate}.name`)}
+                    </h2>
+                    {from ? (
+                      <p className="text-[13px] text-muted-foreground">
+                        {t('fromPrice', { price: price(from.amount) })}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+
+                <p className="mt-4 text-[15px] text-foreground">{t(`tier.${candidate}.summary`)}</p>
+
+                <ul className="mt-4 flex list-none flex-col gap-2 p-0 text-[15px] text-foreground">
+                  {TIER_FEATURES[candidate].map((key) => (
+                    <li key={key} className="flex items-start gap-2">
+                      <Check size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
+                      <span>{t(`feature.${key}`)}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <fieldset className="mt-5 border-t border-dashed border-border pt-4">
+                  <legend className="mb-2 text-[12px] font-semibold uppercase leading-none tracking-[0.06em] text-muted-foreground">
+                    {t(candidate === 'BUMP' ? 'chooseCount' : 'chooseDuration')}
+                    <span className="sr-only"> — {t(`tier.${candidate}.name`)}</span>
+                  </legend>
+                  <div className="flex flex-col gap-2">
+                    {options.map((pkg) => {
+                      const checked = selected?.code === pkg.code;
+                      const units = unit === 'bump' ? pkg.bumps : pkg.days;
+                      return (
+                        <label
+                          key={pkg.code}
+                          className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-[var(--radius)] border px-3 py-2 transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary ${
+                            checked ? 'border-primary bg-primary/10' : 'border-border hover:border-border-strong'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="promotion-package"
+                            value={pkg.code}
+                            checked={checked}
+                            onChange={() => setCode(pkg.code)}
+                            className="h-5 w-5 shrink-0 [accent-color:rgb(var(--primary))]"
+                          />
+                          <span className="min-w-0 flex-1">
+                            <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] font-semibold text-foreground">
+                              {unit === 'bump'
+                                ? t('bumpCount', { count: pkg.bumps })
+                                : t('dayCount', { count: pkg.days })}
+                              {pkg.recommended ? (
+                                <Badge variant="custom" className="border-success text-success">
+                                  {t('bestValue')}
+                                </Badge>
+                              ) : null}
+                            </span>
+                            {units > 1 ? (
+                              <span className="block text-[12px] text-muted-foreground">
+                                {t(unit === 'bump' ? 'perBump' : 'perDay', {
+                                  price: price(Math.round(pkg.amount / units)),
+                                })}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="shrink-0 text-[15px] font-bold text-foreground">{price(pkg.amount)}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              </section>
             );
           })}
         </div>
 
-        <fieldset className="mt-6">
-          <legend className="text-[15px] font-semibold text-foreground">
-            {t(tier === 'BUMP' ? 'chooseCount' : 'chooseDuration')}
-          </legend>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {forTier.map((pkg) => {
-              const active = selected?.code === pkg.code;
-              return (
-                <button
-                  key={pkg.code}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setCode(pkg.code)}
-                  className={`appearance-none min-h-11 rounded-xl border bg-card px-4 py-3 text-left transition ${
-                    active
-                      ? 'border-primary ring-1 ring-primary'
-                      : 'border-border hover:border-primary/40'
-                  }`}
-                >
-                  <span className="block text-[15px] font-semibold text-foreground">
-                    {tier === 'BUMP'
-                      ? t('bumpCount', { count: pkg.bumps })
-                      : t('dayCount', { count: pkg.days })}
-                  </span>
-                  <span className="block text-[15px] text-foreground">{price(pkg.amount)}</span>
-                  {pkg.days > 1 && tier !== 'BUMP' ? (
-                    <span className="block text-[12px] text-muted-foreground">
-                      {t('perDay', { price: price(Math.round(pkg.amount / pkg.days)) })}
-                    </span>
-                  ) : null}
-                  {pkg.recommended ? (
-                    <span className="mt-1 inline-block rounded bg-success/10 px-1.5 py-0.5 text-[10px] font-semibold text-success">
-                      {t('bestValue')}
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
+        <ul className="mt-6 flex list-none flex-col gap-2 p-0 text-[13px] text-muted-foreground sm:flex-row sm:flex-wrap sm:gap-x-6">
+          {(['noAccount', 'labelled', 'upgrade'] as const).map((key) => (
+            <li key={key} className="flex items-start gap-2">
+              <Check size={16} strokeWidth={1.5} className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
+              <span>{t(`notes.${key}`)}</span>
+            </li>
+          ))}
+        </ul>
 
         {selected ? (
           <div className="mt-6 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">

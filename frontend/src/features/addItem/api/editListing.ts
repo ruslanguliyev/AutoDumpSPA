@@ -14,7 +14,7 @@ query EditListing($id: String!) {
   listing(id: $id) { id title description price status purpose sellerId }
   mySeller { id name type phone showPhone contactEmail }
   vehicleByListing(listingId: $id) {
-    id brand model generation version year mileage fuel transmission
+    id brand model generation version year mileage vin fuel transmission
     displacement horsepower engineVolume power bodyType drive condition location description
     price currency imageUrls
     rental { deposit minDays maxDays kmPerDay minDriverAge }
@@ -52,6 +52,7 @@ type EditQueryResult = {
     version: string | null;
     year: number;
     mileage: number;
+    vin: string | null;
     fuel: string;
     transmission: string;
     displacement: string | null;
@@ -102,7 +103,7 @@ const toImages = (urls: string[]): ListingImage[] =>
 
 /**
  * Builds a wizard draft from a listing stored on the server.
- * Fields the backend does not persist (VIN, which the wizard has no input for) are carried over
+ * Fields the backend does not persist (negotiable, VAT) are carried over
  * from an existing local draft when there is one.
  */
 export const buildDraftFromServer = (
@@ -162,7 +163,7 @@ export const buildDraftFromServer = (
     },
     vehicle: v
       ? {
-          vin: previous?.vehicle?.vin ?? '',
+          vin: v.vin ?? previous?.vehicle?.vin ?? '',
           brand: v.brand,
           model: v.model,
           generation: v.generation ?? '',

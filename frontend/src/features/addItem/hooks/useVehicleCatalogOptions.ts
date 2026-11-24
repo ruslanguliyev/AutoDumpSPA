@@ -11,7 +11,7 @@ import {
 import type { ComboboxOption } from '@/shared/ui/Combobox';
 
 export function useVehicleCatalogOptions(vehicle: ListingVehicle | undefined) {
-  const { t, i18n } = useTranslation('addItem');
+  const { t } = useTranslation('addItem');
 
   const brandKey = useMemo(() => normalizeBrandKey(vehicle?.brand), [vehicle?.brand]);
 
@@ -26,7 +26,7 @@ export function useVehicleCatalogOptions(vehicle: ListingVehicle | undefined) {
             ? t('form.modelOther')
             : value,
       })),
-    [modelValues, i18n.resolvedLanguage]
+    [modelValues, t]
   );
 
   const trimValues = useMemo(

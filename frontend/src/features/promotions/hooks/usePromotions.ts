@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useMyListings } from '@/dashboard/hooks/useMyListings';
 import { promotionsApi } from '@/features/promotions/api/promotions.api';
-import type { PromotionTarget } from '@/features/promotions/api/promotions.api';
+import type { PromotionTarget, ViewTarget } from '@/features/promotions/api/promotions.api';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { useActiveProfile } from '@/store/useActiveProfileStore';
 
@@ -52,12 +52,12 @@ export const useMyPromotions = () => {
 };
 
 /** Counts one opened page. Fires once per mount; failures are silent on purpose. */
-export const useTrackView = (targetType: PromotionTarget, targetId: string | undefined) => {
+export const useTrackView = (targetType: ViewTarget, targetId: string | undefined) => {
   const tracked = useRef<string | null>(null);
   useEffect(() => {
     if (!targetId || tracked.current === targetId) return;
     tracked.current = targetId;
-    void promotionsApi.track('view', targetType, targetId);
+    void promotionsApi.trackView(targetType, targetId);
   }, [targetType, targetId]);
 };
 

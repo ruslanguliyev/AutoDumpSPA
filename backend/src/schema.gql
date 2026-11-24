@@ -316,6 +316,7 @@ input CreateVehicleInput {
   transmission: String!
   vehicleType: String
   version: String
+  vin: String
   wasInAccident: Boolean
   year: Int!
 }
@@ -491,6 +492,7 @@ type Mutation {
   syncFavorites(items: [FavoriteRefInput!]!): Int!
   trackPromotionContact(targetId: String!, targetType: PromotionTarget!): Boolean!
   trackPromotionView(targetId: String!, targetType: PromotionTarget!): Boolean!
+  trackView(targetId: String!, targetType: ViewTarget!): Boolean!
   unblockListing(listingId: String!): Boolean!
   unpublishListing(id: String!): ListingObject!
   updateListing(id: String!, input: UpdateListingInput!): ListingObject!
@@ -557,6 +559,7 @@ type ParsedVehicleSearchFilters {
 
 type PartObject {
   brand: String!
+  bumpedAt: DateTime!
   category: String!
   compatibility: [String!]!
   condition: String!
@@ -573,6 +576,7 @@ type PartObject {
   promotionTier: PromotionTier
   seller: PartSellerObject
   stock: Int!
+  viewsCount: Int!
 }
 
 type PartSellerObject {
@@ -893,6 +897,7 @@ type SellerObject {
   updatedAt: DateTime!
   userId: String!
   verified: Boolean!
+  viewsCount: Int!
 }
 
 """Seller type enum"""
@@ -928,6 +933,7 @@ type ServiceCenterObject {
   updatedAt: DateTime!
   userId: String!
   verified: Boolean!
+  viewsCount: Int!
   website: String
   whatsapp: String
 }
@@ -981,6 +987,7 @@ type SpecialistObject {
   updatedAt: DateTime!
   userId: String!
   verified: Boolean!
+  viewsCount: Int!
   whatsapp: String
 }
 
@@ -1129,6 +1136,7 @@ input UpdateVehicleInput {
   transmission: String
   vehicleType: String
   version: String
+  vin: String
   wasInAccident: Boolean
   year: Int
 }
@@ -1191,6 +1199,7 @@ type VehicleObject {
   vehicleType: String!
   version: String
   viewsCount: Int!
+  vin: String
   wasInAccident: Boolean!
   year: Int!
 }
@@ -1225,4 +1234,12 @@ input VehiclesFilterInput {
   vehicleType: String
   yearFrom: Int
   yearTo: Int
+}
+
+enum ViewTarget {
+  LISTING
+  PART
+  SELLER
+  SERVICE_CENTER
+  SPECIALIST
 }

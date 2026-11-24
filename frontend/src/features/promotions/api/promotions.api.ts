@@ -6,6 +6,9 @@ const API_ORIGIN = GQL_URL.replace(/\/graphql\/?$/, '');
 
 export type PromotionTier = 'BUMP' | 'VIP' | 'PREMIUM';
 export type PromotionTarget = 'LISTING' | 'SPECIALIST' | 'SERVICE_CENTER';
+
+/** Page-view targets. PART shares the listing counter; SELLER is the public seller profile. */
+export type ViewTarget = PromotionTarget | 'PART' | 'SELLER';
 export type PromotionOrderStatus =
   | 'PENDING'
   | 'PAID'
@@ -142,7 +145,16 @@ export const promotionsApi = {
       }`,
     ).then((d) => d.myPromotions),
 
-  /** Counts an opened page or a revealed phone number. Never blocks the UI. */
+  /** Counts an opened page. Never blocks the UI. */
+  trackView: (targetType: ViewTarget, targetId: string) =>
+    gqlRequest(
+      `mutation($t: ViewTarget!, $id: String!) {
+        trackView(targetType: $t, targetId: $id)
+      }`,
+      { t: targetType, id: targetId },
+    ).catch(() => undefined),
+
+  /** Counts a revealed phone number. Never blocks the UI. */
   track: (kind: 'view' | 'contact', targetType: PromotionTarget, targetId: string) =>
     gqlRequest(
       `mutation($t: PromotionTarget!, $id: String!) {

@@ -6,7 +6,7 @@ import {
   VEHICLE_CATEGORY_IDS,
 } from '@/features/addItem/constants/vehicleCatalog';
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
-import { FormNativeSelect } from '@/shared/ui/FormNativeSelect';
+import { Select } from '@/shared/ui/Select';
 
 const controlClass =
   'w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -57,30 +57,32 @@ const BasicsStep = () => {
 
       <div className="space-y-4">
         <div>
-          <label
-            className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
-            htmlFor="add-item-category"
-          >
-            {t('form.category')}
-          </label>
           {draft.type === 'vehicle' ? (
-            <FormNativeSelect
+            <Select
               id="add-item-category"
+              label={t('form.category')}
               value={vehicleCategoryValue}
-              onChange={(v) => setCommonField('category', v)}
+              onChange={(event) => setCommonField('category', event.target.value)}
               options={vehicleCategoryOptions}
               placeholder={t('form.categoryPlaceholderVehicle')}
               error={categoryError}
-              aria-label={t('form.category')}
             />
           ) : (
-            <input
-              id="add-item-category"
-              className={inputClass}
-              placeholder={t('form.categoryPlaceholderPart')}
-              value={draft.common.category}
-              onChange={(event) => setCommonField('category', event.target.value)}
-            />
+            <>
+              <label
+                className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
+                htmlFor="add-item-category"
+              >
+                {t('form.category')}
+              </label>
+              <input
+                id="add-item-category"
+                className={inputClass}
+                placeholder={t('form.categoryPlaceholderPart')}
+                value={draft.common.category}
+                onChange={(event) => setCommonField('category', event.target.value)}
+              />
+            </>
           )}
         </div>
 

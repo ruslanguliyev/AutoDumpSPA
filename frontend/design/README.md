@@ -1,6 +1,6 @@
 # design/
 
-Design system handoff for the AvtoBaz rebuild.
+Design system handoff for the AutoBaz rebuild.
 
 | File | What it is |
 |---|---|
@@ -14,11 +14,11 @@ The source of truth for how things look is the design canvas; this folder is
 its written form. If the two disagree, the canvas wins and this folder gets
 updated.
 
+Premium is always amber (`--promo-premium`). Paid tiers do not use a purple colour.
+
 ## Open decisions
 
-1. **Premium colour** — amber here, purple in the current `premium` token.
-   Pick one; the whole system follows the token.
-2. **Bootstrap** — the pack assumes it is removed. If something depends on its
+1. **Bootstrap** — the pack assumes it is removed. If something depends on its
    JS, that has to be found before Stage 0.
-3. **Forced themes** — `AuthLayout` pins dark, the specialist page pins light.
+2. **Forced themes** — `AuthLayout` pins dark, the specialist page pins light.
    Both pins are removed in the rebuild.

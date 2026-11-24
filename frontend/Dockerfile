@@ -1,4 +1,4 @@
-# AvtoBaz frontend: build the Vite app, serve it with nginx. Build context: ./frontend
+# AutoBaz frontend: build the Vite app, serve it with nginx. Build context: ./frontend
 FROM node:24-slim AS build
 WORKDIR /app
 
@@ -10,6 +10,9 @@ COPY . .
 # works on any domain and there are no CORS problems.
 ARG VITE_API_URL=/graphql
 ENV VITE_API_URL=$VITE_API_URL
+# Public origin for login and account links. Vite bakes this in during npm run build.
+ARG VITE_PUBLIC_APP_URL=https://autobaz.az
+ENV VITE_PUBLIC_APP_URL=$VITE_PUBLIC_APP_URL
 RUN npm run build
 
 FROM nginx:1.27-alpine

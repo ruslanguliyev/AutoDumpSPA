@@ -8,7 +8,14 @@ import {
   normalizeServiceSchedule,
 } from '@/services/utils/serviceSchedule.utils';
 
-export default function ServiceSidebar({ serviceId, accepting = true, schedule, contacts, location }) {
+export default function ServiceSidebar({
+  serviceId,
+  accepting = true,
+  schedule,
+  contacts,
+  location,
+  barCarriesContacts = false,
+}) {
   const normalized = normalizeServiceSchedule(schedule);
   const todaySchedule = normalized ? getCurrentDaySchedule(normalized) : null;
   const isOpen = normalized ? isServiceOpen(normalized) : false;
@@ -20,6 +27,7 @@ export default function ServiceSidebar({ serviceId, accepting = true, schedule, 
         todaySchedule={todaySchedule}
         contacts={contacts}
         hasSchedule={Boolean(normalized)}
+        barCarriesContacts={barCarriesContacts}
       />
       <OpeningHours schedule={normalized} />
       <ServiceContacts location={location} contacts={contacts} />

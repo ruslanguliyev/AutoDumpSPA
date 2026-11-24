@@ -1,4 +1,4 @@
-# AvtoBaz frontend (Vite)
+# AutoBaz frontend (Vite)
 
 ## Local dev
 

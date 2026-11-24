@@ -1,8 +1,8 @@
-# AvtoBaz — page structure
+# AutoBaz — page structure
 
 Sections are listed in render order. Every account action (login, register,
 post a listing, send message, booking, payment) links out to
-`https://app.avtobaz.example/...` — no backend work on this site.
+`https://autobaz.az/...` — no backend work on this site.
 
 Copy is written in English and must go through i18next. Locales: **az** (default),
 **ru**, **en**.
@@ -11,7 +11,7 @@ Copy is written in English and must go through i18next. Locales: **az** (default
 
 ## Global header (sticky, every page)
 
-Logo "AvtoBaz" · nav: Cars, Rent, Parts (mega-menu: Categories / By car / Brands /
+Logo "AutoBaz" · nav: Cars, Rent, Parts (mega-menu: Categories / By car / Brands /
 Popular), Auto Services, Specialists, Sellers · right side: language switcher
 (AZ / RU / EN), theme toggle, Favorites, Account, primary "+ Add listing".
 
@@ -22,7 +22,7 @@ On mobile: logo, language, Favorites, hamburger. Nav moves into the drawer.
 Logo + tagline "A marketplace for everything automotive: cars for sale and rent,
 parts, mechanics and auto services." Columns: Company (About us, Press),
 For buyers, For sellers, For dealers, Legal (Privacy, Imprint), Help / FAQ.
-Bottom bar: "© 2026 AvtoBaz" + language switcher.
+Bottom bar: "© 2026 AutoBaz" + language switcher.
 
 ---
 
@@ -65,7 +65,9 @@ Shared skeleton: breadcrumbs → H1 + result count + sort select → filter side
 | Parts | `/parts` | category, car brand, condition, price, city, in-stock only | search by name or OEM |
 | Services | `/services` | city, brand serviced, service type, rating, verified only | open/closed status on card |
 | Specialists | `/specialists` | city, specialization, vehicles, rating, available now | price from / on request |
-| Sellers | `/sellers` | type (dealer / parts / private / rental), city, verified | search by name; listing count on card |
+| Sellers | `/sellers` | type (dealer / parts), city, verified | search by name; listing count on card |
+
+Private individuals are not in this catalogue: they have no public profile page, so a card would lead nowhere.
 
 ---
 
@@ -183,7 +185,7 @@ always labelled as an advert · upgrade later and pay only the difference.
 ## 14. About — `/about`
 
 Mission statement → three numbers (active listings, verified sellers, reviews
-written) → "How AvtoBaz works" in four steps → contact CTA with a separate
+written) → "How AutoBaz works" in four steps → contact CTA with a separate
 "For dealers" button.
 
 ## 15. 404

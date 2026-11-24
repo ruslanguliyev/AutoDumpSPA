@@ -60,6 +60,7 @@
     "name": "Ad",
     "location": "Yer",
     "vin": "VIN",
+    "vinHint": "Məcburi deyil. 17 simvol: hərf və rəqəm, I, O və Q olmadan.",
     "trim": "Komplektasiya",
     "drivetrain": "Ötürücü tipi",
     "partName": "Hissənin adı",
@@ -176,7 +177,8 @@
     "minLength": "Minimum {{min}} simvol",
     "invalidVehicleCategory": "Kateqoriyanı siyahıdan seçin",
     "invalidVehicleModel": "Seçilmiş marka üçün modeli siyahıdan seçin",
-    "invalidVehicleTrim": "Komplektasiyanı siyahıdan seçin"
+    "invalidVehicleTrim": "Komplektasiyanı siyahıdan seçin",
+    "invalidVin": "VIN 17 simvol olmalıdır: A–Z və 0–9, I, O və Q olmadan."
   },
   "success": {
     "title": "Elan dərc edildi",

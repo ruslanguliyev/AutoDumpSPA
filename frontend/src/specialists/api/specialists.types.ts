@@ -42,6 +42,7 @@ export type GqlSpecialistDetailRow = GqlSpecialistListRow & {
   whatsapp: string | null;
   hourlyRate: number | string | null;
   portfolio: string[];
+  viewsCount?: number | null;
   supportedVehicles: Array<{
     id: string;
     brand: string;

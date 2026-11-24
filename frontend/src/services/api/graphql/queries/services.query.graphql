@@ -108,7 +108,6 @@ query Services(
       cover
       gallery
     }
-    promotedLevel
     isActive
   }
 }
@@ -203,7 +202,6 @@ query Service($id: ID, $slug: String) {
       cover
       gallery
     }
-    promotedLevel
     isActive
   }
 }

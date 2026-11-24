@@ -82,10 +82,6 @@
   },
   "card": {
     "verified": "Проверен",
-    "legacyPromoted": {
-      "boosted": "Поднято",
-      "premium": "Премиум"
-    },
     "avgCheck": "Средний чек",
     "priceRange": "Ценовой диапазон",
     "viewService": "Подробнее →",
@@ -108,7 +104,7 @@
       "services": "Услуги"
     },
     "specialists": {
-      "title": "Мастера",
+      "title": "Мастера этого центра",
       "loading": "Загрузка мастеров…",
       "empty": "Для этого сервиса мастера пока не указаны.",
       "error": "Не удалось загрузить мастеров."
@@ -125,7 +121,7 @@
     "noReviewsYet": "Пока нет отзывов"
   },
   "priceList": {
-    "title": "Услуги и цены",
+    "title": "Прайс-лист",
     "popularBadge": "ПОПУЛЯРНО",
     "hotBadge": "ХИТ",
     "from": "от",
@@ -152,7 +148,7 @@
     "hour_other": "{{count}} ч"
   },
   "brands": {
-    "title": "Обслуживаемые бренды"
+    "title": "Марки, которые обслуживаем"
   },
   "reviews": {
     "agoWeeks_one": "{{count}} неделю назад",

@@ -1,4 +1,4 @@
-# AvtoBaz backend (NestJS + Prisma). Build context: ./backend
+# AutoBaz backend (NestJS + Prisma). Build context: ./backend
 FROM node:24-slim
 
 # Prisma's engines need OpenSSL.

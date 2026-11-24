@@ -10,6 +10,8 @@ import {
 import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog';
 import {
   isValidEmail,
+  isValidVin,
+  normalizeVin,
   parseEngineVolume,
   parseOptionalAmount,
   parseOptionalInt,
@@ -305,6 +307,9 @@ async function syncDraftToBackend(draft: ListingDraft) {
         generation: v.generation || undefined,
         year: parseInt(v.year, 10) || 2020,
         mileage: parseInt(v.mileage, 10) || 0,
+        // Omit a half-typed VIN so autosave still persists the rest of the car.
+        // An empty string clears a previously saved value.
+        ...(isValidVin(v.vin) ? { vin: normalizeVin(v.vin) } : {}),
         fuel: v.fuel || 'Petrol',
         transmission: v.transmission || 'Automatic',
         displacement: v.displacement || undefined,

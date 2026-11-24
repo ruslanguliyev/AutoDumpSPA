@@ -44,6 +44,7 @@ export type ServiceProfile = {
   location?: ServiceLocation | null;
   rating?: number | null;
   reviewsCount?: number | null;
+  viewsCount?: number | null;
   verified?: boolean | null;
   /** Paid placement badge, when the profile holds one. */
   promotionTier?: PromotionTier | null;
@@ -53,6 +54,5 @@ export type ServiceProfile = {
   schedule?: Record<string, unknown> | null;
   contacts?: Record<string, unknown> | null;
   media?: ServiceMedia | null;
-  promotedLevel?: string | null;
   isActive?: boolean | null;
 };

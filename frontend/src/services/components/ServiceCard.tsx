@@ -32,19 +32,6 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
   const cover = service.media?.cover;
   const brands = service.supportedBrands?.slice(0, 3) ?? [];
 
-  /**
-   * One card, one promo mark: `promotionTier` is the paid-placement system and the legacy
-   * `promotedLevel` only speaks when the card has no tier.
-   */
-  const legacyPromoted =
-    service.promotionTier
-      ? null
-      : service.promotedLevel === 'premium'
-        ? 'premium'
-        : service.promotedLevel === 'boosted'
-          ? 'boosted'
-          : null;
-
   // Open or closed can only be told from the opening hours; the list does not always carry them.
   const open = normalizeServiceSchedule(service.schedule) ? isServiceOpen(service.schedule) : null;
 
@@ -55,9 +42,6 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
 
         <div className="absolute right-3 top-3 flex flex-wrap items-center justify-end gap-1.5">
           <PromotionBadge tier={service.promotionTier} />
-          {legacyPromoted ? (
-            <Badge variant={legacyPromoted}>{t(`card.legacyPromoted.${legacyPromoted}`)}</Badge>
-          ) : null}
           {service.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
         </div>
       </div>

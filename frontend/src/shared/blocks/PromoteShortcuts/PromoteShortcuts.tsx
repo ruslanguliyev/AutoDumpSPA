@@ -5,7 +5,7 @@ import { ArrowUp, Crown, Gem } from 'lucide-react';
 import { formatQapik } from '@/features/promotions/api/promotions.api';
 import type { PromotionTarget, PromotionTier } from '@/features/promotions/api/promotions.api';
 import { usePromotionQuote } from '@/features/promotions/hooks/usePromotions';
-import { promotePath } from '@/features/promotions/pages/PromotePage';
+import { promotePath } from '@/features/promotions/promotePath';
 import { intlLocale } from '@/lib/format';
 
 const TIERS: PromotionTier[] = ['BUMP', 'VIP', 'PREMIUM'];

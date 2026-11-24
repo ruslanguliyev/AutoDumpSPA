@@ -1,3 +1,4 @@
+import request = require('supertest');
 import { createTestContext, TestContext } from './helpers';
 
 describe('favorites, inquiries and seller phone', () => {
@@ -126,6 +127,139 @@ describe('favorites, inquiries and seller phone', () => {
 
       const cleared = await ctx.gql(`mutation { updateSeller(input: { contactEmail: "" }) { contactEmail } }`, undefined, seller);
       expect(cleared.data.updateSeller.contactEmail).toBeNull();
+    });
+  });
+
+  describe('views', () => {
+    const TRACK = `mutation($t: ViewTarget!, $id: String!) { trackView(targetType: $t, targetId: $id) }`;
+
+    const track = async (
+      targetType: string,
+      targetId: string,
+      opts?: { token?: string; userAgent?: string | null; forwardedFor?: string },
+    ) => {
+      const req = request(ctx.app.getHttpServer()).post('/graphql');
+      if (opts?.userAgent === null) req.unset('User-Agent');
+      else req.set('User-Agent', opts?.userAgent ?? 'Mozilla/5.0');
+      if (opts?.forwardedFor) req.set('X-Forwarded-For', opts.forwardedFor);
+      if (opts?.token) req.set('Authorization', `Bearer ${opts.token}`);
+      const res = await req.send({ query: TRACK, variables: { t: targetType, id: targetId } });
+      return res.body as { data?: { trackView: boolean }; errors?: Array<{ message: string }> };
+    };
+
+    beforeAll(() => {
+      process.env.TRUSTED_PROXY_HOPS = '1';
+    });
+
+    it('counts one address once per 30 minutes, and ignores bots and the owner', async () => {
+      const live = await ctx.createVehicleListing(seller, { brand: 'Viewed', publish: true });
+
+      expect((await track('LISTING', live.listingId, { token: seller })).data?.trackView).toBe(false);
+      expect((await track('LISTING', live.listingId, { userAgent: null })).data?.trackView).toBe(false);
+      expect((await track('LISTING', live.listingId, { userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1)' })).data?.trackView).toBe(false);
+      expect((await track('LISTING', live.listingId, { userAgent: 'SomeCrawler/1.0' })).data?.trackView).toBe(false);
+      expect((await track('LISTING', live.listingId, { userAgent: 'Spiderbot' })).data?.trackView).toBe(false);
+
+      expect((await track('LISTING', live.listingId)).data?.trackView).toBe(true);
+      expect((await track('LISTING', live.listingId)).data?.trackView).toBe(false);
+      // The left-hand address is spoofable; hop 1 keeps the right-hand one.
+      expect((await track('LISTING', live.listingId, { forwardedFor: '198.51.100.4, 203.0.113.9' })).data?.trackView).toBe(true);
+      expect((await track('LISTING', live.listingId, { forwardedFor: '203.0.113.9' })).data?.trackView).toBe(false);
+
+      const listed = await ctx.prisma.listing.findUniqueOrThrow({ where: { id: live.listingId } });
+      expect(listed.viewsCount).toBe(2);
+      const shown = await ctx.gql(`query($id: String!) { vehicleById(id: $id) { viewsCount } }`, { id: live.vehicleId });
+      expect(shown.data.vehicleById.viewsCount).toBe(2);
+    });
+
+    it('counts parts, service centres and seller or specialist profiles', async () => {
+      const listing = await ctx.gql(
+        `mutation($t: String!) { createListing(input: { title: $t, description: "d", price: 20 }) { id } }`,
+        { t: 'Brake pads' },
+        seller,
+      );
+      const listingId = listing.data.createListing.id as string;
+      const part = await ctx.gql(
+        `mutation($l: String!, $i: CreatePartInput!) { createPart(listingId: $l, input: $i) { id } }`,
+        { l: listingId, i: { name: 'Pads', category: 'brakes', brand: 'Bosch', model: 'X', condition: 'new', stock: 2 } },
+        seller,
+      );
+      const partId = part.data.createPart.id as string;
+      await ctx.gql(`mutation($id: String!) { publishListing(id: $id) { status } }`, { id: listingId }, seller);
+
+      expect((await track('PART', partId, { token: seller })).data?.trackView).toBe(false);
+      expect((await track('PART', partId)).data?.trackView).toBe(true);
+      const partView = await ctx.gql(`query($id: String!) { partById(id: $id) { viewsCount } }`, { id: partId });
+      expect(partView.data.partById.viewsCount).toBe(1);
+      const listedPart = await ctx.prisma.listing.findUniqueOrThrow({ where: { id: listingId } });
+      expect(listedPart.viewsCount).toBe(1);
+
+      const centerToken = await ctx.registerUser('View garage');
+      const center = await ctx.gql(
+        `mutation($i: CreateServiceCenterInput!) { createServiceCenter(input: $i) { id } }`,
+        { i: { name: 'View garage', city: 'Baku', categories: ['engine'] } },
+        centerToken,
+      );
+      const centerId = center.data.createServiceCenter.id as string;
+      expect((await track('SERVICE_CENTER', centerId, { token: centerToken })).data?.trackView).toBe(false);
+      expect((await track('SERVICE_CENTER', centerId)).data?.trackView).toBe(true);
+      const centerView = await ctx.gql(`query($id: String!) { serviceCenter(id: $id) { viewsCount } }`, { id: centerId });
+      expect(centerView.data.serviceCenter.viewsCount).toBe(1);
+
+      const masterToken = await ctx.registerUser('View master');
+      const master = await ctx.gql(
+        `mutation($i: CreateSpecialistInput!) { createSpecialist(input: $i) { id } }`,
+        { i: { name: 'View master', slug: `view-master-${Date.now()}`, city: 'Baku', skills: [], specializations: [], experience: 2, portfolio: [] } },
+        masterToken,
+      );
+      const masterId = master.data.createSpecialist.id as string;
+      expect((await track('SPECIALIST', masterId, { token: masterToken })).data?.trackView).toBe(false);
+      expect((await track('SPECIALIST', masterId)).data?.trackView).toBe(true);
+      const masterView = await ctx.gql(`query($id: String!) { specialist(id: $id) { viewsCount } }`, { id: masterId });
+      expect(masterView.data.specialist.viewsCount).toBe(1);
+
+      const sellerId = (await ctx.gql(`{ mySeller { id } }`, undefined, seller)).data.mySeller.id as string;
+      expect((await track('SELLER', sellerId, { token: seller })).data?.trackView).toBe(false);
+      expect((await track('SELLER', sellerId)).data?.trackView).toBe(true);
+      expect((await track('SELLER', sellerId)).data?.trackView).toBe(false);
+      const sellerView = await ctx.gql(`query($id: String!) { sellerById(id: $id) { viewsCount } }`, { id: sellerId });
+      expect(sellerView.data.sellerById.viewsCount).toBe(1);
+    });
+
+    it('counts two parts of one listing apart, and a part view still moves the listing counter', async () => {
+      const listing = await ctx.gql(
+        `mutation($t: String!) { createListing(input: { title: $t, description: "d", price: 20 }) { id } }`,
+        { t: 'Two pads' },
+        seller,
+      );
+      const listingId = listing.data.createListing.id as string;
+      const make = (name: string) =>
+        ctx.gql(
+          `mutation($l: String!, $i: CreatePartInput!) { createPart(listingId: $l, input: $i) { id } }`,
+          { l: listingId, i: { name, category: 'brakes', brand: 'Bosch', model: 'X', condition: 'new', stock: 1 } },
+          seller,
+        );
+      const partA = (await make('Pad A')).data.createPart.id as string;
+      const partB = (await make('Pad B')).data.createPart.id as string;
+      await ctx.gql(`mutation($id: String!) { publishListing(id: $id) { status } }`, { id: listingId }, seller);
+
+      expect((await track('PART', partA, { token: seller })).data?.trackView).toBe(false);
+      expect((await track('PART', partA, { userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1)' })).data?.trackView).toBe(false);
+
+      expect((await track('PART', partA, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(true);
+      expect((await track('PART', partA, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(false);
+      // Same address, other part of the same listing: its own bucket, so it counts.
+      expect((await track('PART', partB, { forwardedFor: '198.51.100.10' })).data?.trackView).toBe(true);
+
+      const views = await ctx.gql(
+        `query($a: String!, $b: String!) { a: partById(id: $a) { viewsCount } b: partById(id: $b) { viewsCount } }`,
+        { a: partA, b: partB },
+      );
+      expect(views.data.a.viewsCount).toBe(1);
+      expect(views.data.b.viewsCount).toBe(1);
+
+      const listed = await ctx.prisma.listing.findUniqueOrThrow({ where: { id: listingId } });
+      expect(listed.viewsCount).toBe(2);
     });
   });
 });

@@ -1,9 +1,12 @@
-import { ArrowRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ArrowRight } from 'lucide-react';
+
 import SpecialistCard from '@/specialists/components/SpecialistCard';
 import { useSpecialistsQuery } from '@/specialists/hooks/useSpecialists';
+import { ROUTES, withLang } from '@/shared/constants/routes';
+import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import type { Specialization } from '@/specialists/types/specialist.types';
 
 type SimilarSpecialistsSectionProps = {
@@ -16,6 +19,7 @@ const SimilarSpecialistsSection = ({
   specialization,
 }: SimilarSpecialistsSectionProps) => {
   const { t } = useTranslation('specialists');
+  const { language } = useLanguageSync();
 
   const { specialists: raw, isLoading } = useSpecialistsQuery(
     {
@@ -37,18 +41,18 @@ const SimilarSpecialistsSection = ({
   if (isLoading || !similar.length) return null;
 
   return (
-    <section className="space-y-5">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-foreground">{t('detail.similarTitle')}</h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">{t('detail.similarSubtitle')}</p>
+    <section className="min-w-0 space-y-5 [overflow-wrap:anywhere]">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="text-[20px] font-semibold tracking-tight text-foreground">{t('detail.similarTitle')}</h2>
+          <p className="mt-1 text-[15px] text-muted-foreground">{t('detail.similarSubtitle')}</p>
         </div>
         <Link
-          to="/specialists"
-          className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-primary hover:underline"
+          to={withLang(ROUTES.specialists, language)}
+          className="inline-flex min-h-11 shrink-0 items-center gap-1 text-[15px] font-semibold text-primary-text no-underline"
         >
           {t('detail.viewAllLink')}
-          <ArrowRight size={14} aria-hidden="true" />
+          <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
         </Link>
       </div>
 

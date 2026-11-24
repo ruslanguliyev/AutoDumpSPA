@@ -1,6 +1,7 @@
 import { MapPin, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { PromotionBadge } from '@/features/promotions/components/PromotionBadge';
 import { formatNumber, intlLocale } from '@/lib/format';
 import { ProfileHeader, ShareButton } from '@/shared/blocks';
 import type { ProfileHeaderMetaItem } from '@/shared/blocks';
@@ -46,8 +47,14 @@ const SpecialistHero = ({ specialist }: SpecialistHeroProps) => {
       coverSrc={banner}
       avatarSrc={avatar}
       verified={Boolean(specialist.verified)}
-      verifiedBadge={specialist.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
+      verifiedBadge={
+        <>
+          {specialist.verified ? <Badge variant="verified">{t('card.verified')}</Badge> : null}
+          {specialist.promotionTier ? <PromotionBadge tier={specialist.promotionTier} /> : null}
+        </>
+      }
       rating={{ rating: specialist.rating, reviewsCount: specialist.reviewsCount }}
+      viewsCount={specialist.viewsCount}
       meta={meta}
       tags={
         specializations.length > 0

@@ -8,6 +8,7 @@ import {
 } from '@/features/addItem/constants/vehicleCatalog';
 import { useVehicleCatalogOptions } from '@/features/addItem/hooks/useVehicleCatalogOptions';
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
+import { isValidVin } from '@/features/addItem/utils/validateDraft';
 import {
   fetchGenerations,
   getGenerationPhotoUrl,
@@ -20,7 +21,7 @@ import {
   mapTransmission,
 } from '@/lib/carSpecs';
 import { Combobox } from '@/shared/ui/Combobox';
-import { FormNativeSelect } from '@/shared/ui/FormNativeSelect';
+import { Select } from '@/shared/ui/Select';
 import { cn } from '@/shared/utils/cn';
 
 const inputClass =
@@ -231,6 +232,9 @@ const VehicleStep = () => {
       ? t('validation.invalidVehicleTrim')
       : undefined;
 
+  const vin = v.vin ?? '';
+  const vinError = vin && !isValidVin(vin) ? t('validation.invalidVin') : undefined;
+
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4">
@@ -241,17 +245,6 @@ const VehicleStep = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('form.vin')}
-          </label>
-          <input
-            className={inputClass}
-            placeholder={t('form.vinPlaceholder')}
-            value={v.vin}
-            onChange={(event) => setVehicleField('vin', event.target.value)}
-          />
-        </div>
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {t('form.year')}
@@ -270,21 +263,62 @@ const VehicleStep = () => {
           </select>
         </div>
         <div>
-          <label
-            className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
-            htmlFor="vehicle-brand"
-          >
-            {t('form.brand')}
+          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            {t('form.mileage')}
           </label>
-          <FormNativeSelect
-            id="vehicle-brand"
-            value={v.brand ?? ''}
-            onChange={(brand) => setBrandAndResetDependents(brand)}
-            options={brandOptions}
-            placeholder={t('form.brandPlaceholder')}
-            aria-label={t('form.brand')}
+          <input
+            type="number"
+            min={0}
+            max={999999}
+            className={inputClass}
+            placeholder={t('form.mileagePlaceholder')}
+            value={v.mileage}
+            onChange={(event) => setVehicleField('mileage', event.target.value)}
           />
         </div>
+        <div className="md:col-span-2">
+          <label
+            className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
+            htmlFor="vehicle-vin"
+          >
+            {t('form.vin')}
+          </label>
+          <input
+            id="vehicle-vin"
+            className={cn(inputClass, 'uppercase tracking-wide', vinError && 'border-destructive')}
+            placeholder={t('form.vinPlaceholder')}
+            value={vin}
+            maxLength={17}
+            autoCapitalize="characters"
+            autoCorrect="off"
+            spellCheck={false}
+            aria-invalid={vinError ? true : undefined}
+            aria-describedby="vehicle-vin-hint"
+            onChange={(event) =>
+              setVehicleField(
+                'vin',
+                event.target.value.toUpperCase().replace(/\s+/g, '').slice(0, 17),
+              )
+            }
+          />
+          <div className="mt-1 flex items-start justify-between gap-3">
+            <p
+              id="vehicle-vin-hint"
+              className={cn('text-xs', vinError ? 'text-destructive' : 'text-muted-foreground')}
+            >
+              {vinError ?? t('form.vinHint')}
+            </p>
+            <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{vin.length}/17</span>
+          </div>
+        </div>
+        <Select
+          id="vehicle-brand"
+          label={t('form.brand')}
+          value={v.brand ?? ''}
+          onChange={(event) => setBrandAndResetDependents(event.target.value)}
+          options={brandOptions}
+          placeholder={t('form.brandPlaceholder')}
+        />
         <div>
           <label
             className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
@@ -424,20 +458,6 @@ const VehicleStep = () => {
             disabled={trimDisabled || trimOptions.length === 0}
             error={trimError}
             aria-label={t('form.trim')}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('form.mileage')}
-          </label>
-          <input
-            type="number"
-            min={0}
-            max={999999}
-            className={inputClass}
-            placeholder={t('form.mileagePlaceholder')}
-            value={v.mileage}
-            onChange={(event) => setVehicleField('mileage', event.target.value)}
           />
         </div>
         <div>

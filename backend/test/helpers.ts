@@ -50,6 +50,8 @@ export async function createTestContext(): Promise<TestContext> {
 
   const gql: TestContext['gql'] = async (query, variables, token) => {
     const req = request(app.getHttpServer()).post('/graphql');
+    // A real browser always sends an agent. An empty one is not counted as a view.
+    req.set('User-Agent', 'Mozilla/5.0');
     if (token) req.set('Authorization', `Bearer ${token}`);
     const res = await req.send({ query, variables });
     return res.body;

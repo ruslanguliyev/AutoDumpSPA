@@ -75,6 +75,10 @@ export class SpecialistObject {
   @Field(() => Int)
   reviewsCount: number;
 
+  /** How many times the specialist page was opened. */
+  @Field(() => Int)
+  viewsCount: number;
+
   @Field(() => Float, { nullable: true })
   hourlyRate: number | null;
 

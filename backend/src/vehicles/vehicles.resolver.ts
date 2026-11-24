@@ -43,9 +43,13 @@ export class VehiclesResolver {
     );
   }
 
+  @UseGuards(OptionalGqlAuthGuard)
   @Query(() => VehicleObject)
-  async vehicleById(@Args('id') id: string): Promise<VehicleObject> {
-    return this.vehiclesService.getVehicleById(id);
+  async vehicleById(
+    @CurrentUser() user: AuthUser | null,
+    @Args('id') id: string,
+  ): Promise<VehicleObject> {
+    return this.vehiclesService.getVehicleById(id, user?.id);
   }
 
   @UseGuards(OptionalGqlAuthGuard)

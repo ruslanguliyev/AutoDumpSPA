@@ -30,6 +30,8 @@
  * @property {string} location
  * @property {string} imageUrl
  * @property {string | string[]} image
+ * @property {number | null} [viewsCount]
+ * @property {string | null} [bumpedAt]
  * @property {{ id: string; name?: string; logo?: string; avatarUrl?: string; type?: string; domain?: string; hasPublicPage?: boolean; rating?: number; votes?: number } | null} seller
  */
 

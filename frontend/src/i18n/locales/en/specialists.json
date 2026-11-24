@@ -84,6 +84,7 @@
     "servicesLoading": "Loading services…",
     "servicesError": "Failed to load services.",
     "portfolio": "Portfolio",
+    "galleryAria": "{{name}} gallery",
     "reviews": "Reviews",
     "call": "Call",
     "bookVisit": "Book a visit",
