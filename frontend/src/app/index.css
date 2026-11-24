@@ -263,7 +263,7 @@
    off the page. It stops for anyone who asked for less motion. */
 @layer utilities {
   .pulse-soft {
-    animation: pulse-soft 2.8s ease-in-out infinite;
+    animation: pulse-soft 2.2s ease-in-out infinite;
   }
   @media (prefers-reduced-motion: reduce) {
     .pulse-soft {
@@ -275,9 +275,11 @@
 @keyframes pulse-soft {
   0%,
   100% {
-    box-shadow: var(--shadow-card), 0 0 0 0 rgb(var(--primary) / 0.45);
+    transform: scale(1);
+    box-shadow: var(--shadow-card), 0 0 0 0 rgb(var(--primary) / 0.7);
   }
   50% {
-    box-shadow: var(--shadow-card), 0 0 0 10px rgb(var(--primary) / 0);
+    transform: scale(1.04);
+    box-shadow: var(--shadow-card), 0 0 0 16px rgb(var(--primary) / 0);
   }
 }
