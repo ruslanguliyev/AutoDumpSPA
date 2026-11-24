@@ -1,0 +1,39 @@
+{
+  "launcher": "Süni intellektdən soruş",
+  "open": "AvtoBaz köməkçisini aç",
+  "title": "AvtoBaz köməkçisi",
+  "subtitle": "Yalnız AvtoBaz elanlarında axtarır",
+  "close": "Çatı bağla",
+  "reset": "Yeni çat başlat",
+  "greeting": "Salam! Nə axtardığınızı yazın: avtomobil, icarə, ehtiyat hissəsi, avtoservis və ya usta. Elanlarımızda axtaracağam.",
+  "examples": {
+    "car": "2018-ci ildən yeni ağ Toyota, Bakıda 25 000 AZN-dək",
+    "part": "Kia Sportage 2019 üçün ön əyləc bəndləri",
+    "service": "Bakıda kompüter diaqnostikasını harada etmək olar?"
+  },
+  "inputLabel": "Mesajınız",
+  "placeholder": "Öz sözlərinizlə yazın…",
+  "send": "Göndər",
+  "thinking": "Kataloqda axtarıram…",
+  "disclaimer": "Köməkçi səhv edə bilər. Təfərrüatları elan səhifəsində yoxlayın.",
+  "kind": {
+    "CAR": "Satılan avtomobil",
+    "RENTAL": "İcarə",
+    "PART": "Ehtiyat hissəsi",
+    "SERVICE_CENTER": "Avtoservis",
+    "SPECIALIST": "Usta",
+    "SELLER": "Diler"
+  },
+  "price": {
+    "from": "{{price}}-dən",
+    "perDay": "/ gün",
+    "perHour": "/ saat"
+  },
+  "errors": {
+    "RATE_LIMITED": "Çox mesaj göndərildi. Bir az sonra yenidən cəhd edin.",
+    "UNAVAILABLE": "Köməkçi hazırda əlçatan deyil. Sonra yenidən cəhd edin.",
+    "INVALID_INPUT": "Mesaj boşdur və ya çox uzundur.",
+    "INVALID_RESULT": "Cavab verə bilmədim. Sorğunu başqa cür yazın.",
+    "GENERIC": "Nəsə alınmadı. Yenidən cəhd edin."
+  }
+}

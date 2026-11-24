@@ -25,6 +25,65 @@ type AdminPromotionObject {
   tier: PromotionTier!
 }
 
+type AiChatCard {
+  city: String
+  currency: String
+  id: String!
+  imageUrl: String
+  kind: AiChatCardKind!
+  path: String!
+  price: Float
+  priceUnit: AiChatPriceUnit
+  rating: Float
+  subtitle: String
+  title: String!
+}
+
+enum AiChatCardKind {
+  CAR
+  PART
+  RENTAL
+  SELLER
+  SERVICE_CENTER
+  SPECIALIST
+}
+
+input AiChatInput {
+  language: AiLanguage!
+  messages: [AiChatMessageInput!]!
+}
+
+input AiChatMessageInput {
+  role: AiChatRole!
+  text: String!
+}
+
+enum AiChatPriceUnit {
+  DAY
+  FROM
+  HOUR
+}
+
+type AiChatReply {
+  cards: [AiChatCard!]!
+  text: String!
+}
+
+enum AiChatRole {
+  ASSISTANT
+  USER
+}
+
+enum AiLanguage {
+  AZ
+  EN
+  RU
+}
+
+type AiStatus {
+  enabled: Boolean!
+}
+
 type AppointmentObject {
   createdAt: DateTime!
   customerEmail: String!
@@ -248,6 +307,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+enum DescriptionMode {
+  GENERATE
+  LONGER
+  REGENERATE
+  SHORTER
+}
+
+enum DescriptionTone {
+  NEUTRAL
+  SALES
+  SHORT
+}
+
 type FavoriteItemObject {
   createdAt: DateTime!
   currency: String
@@ -261,6 +333,32 @@ type FavoriteItemObject {
 input FavoriteRefInput {
   itemId: String!
   type: String!
+}
+
+input GenerateListingDescriptionInput {
+  bodyType: String
+  brand: String!
+  city: String
+  condition: String
+  currentText: String
+  engineVolume: Float
+  fuel: String
+  generation: String
+  horsepower: Int
+  language: AiLanguage!
+  mileage: Int
+  mode: DescriptionMode!
+  model: String!
+  tone: DescriptionTone!
+  transmission: String
+  trim: String
+  year: Int!
+}
+
+type GenerateListingDescriptionResult {
+  missingHints: [String!]!
+  text: String!
+  usedFields: [String!]!
 }
 
 type ImageObject {
@@ -328,6 +426,7 @@ input ListingsFilterInput {
 type Mutation {
   addFavorite(itemId: String!, type: String!): Boolean!
   addRentalBlock(endDate: String!, listingId: String!, note: String, startDate: String!): RentalBlockObject!
+  aiChat(input: AiChatInput!): AiChatReply!
   blockListing(listingId: String!, reason: String!): Boolean!
   cancelAppointment(id: String!): AppointmentObject!
   cancelPromotionOrder(token: String!): Boolean!
@@ -353,9 +452,11 @@ type Mutation {
   deleteVehicle(id: String!): Boolean!
   dismissReport(id: String!): Boolean!
   finishAuction(id: String!): AuctionObject!
+  generateListingDescription(input: GenerateListingDescriptionInput!): GenerateListingDescriptionResult!
   grantPromotion(days: Int!, targetId: String!, targetType: PromotionTarget!, tier: PromotionTier!): Boolean!
   login(email: String!, password: String!): AuthPayload!
   markInquiryRead(id: String!): InquiryObject!
+  parseVehicleSearchQuery(language: AiLanguage!, query: String!): ParsedVehicleSearch!
   placeBid(input: PlaceBidInput!): BidObject!
   publishListing(id: String!): ListingObject!
   register(email: String!, fullName: String!, password: String!): AuthPayload!
@@ -416,6 +517,24 @@ type PaginatedParts {
 type PaginatedVehicles {
   items: [VehicleObject!]!
   total: Int!
+}
+
+type ParsedVehicleSearch {
+  filters: ParsedVehicleSearchFilters!
+  unapplied: [String!]!
+}
+
+type ParsedVehicleSearchFilters {
+  brand: String
+  condition: String
+  fuel: String
+  location: String
+  model: String
+  priceFrom: Float
+  priceTo: Float
+  transmission: String
+  yearFrom: Int
+  yearTo: Int
 }
 
 type PartObject {
@@ -555,6 +674,7 @@ enum PromotionTier {
 type Query {
   adminProfiles(limit: Int, search: String, targetType: ReviewTargetType!): [AdminProfileObject!]!
   adminPromotions(activeOnly: Boolean): [AdminPromotionObject!]!
+  aiStatus: AiStatus!
   auction(id: String!): AuctionObject!
   auctionByListing(listingId: String!): AuctionObject
   bidsByAuction(auctionId: String!): [BidObject!]!

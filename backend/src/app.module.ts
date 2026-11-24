@@ -26,6 +26,7 @@ import { RentalsModule } from './rentals/rentals.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { PromotionsModule } from './promotions/promotions.module';
+import { AiModule } from './ai/ai.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -62,6 +63,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ReviewsModule,
     AppointmentsModule,
     PromotionsModule,
+    AiModule,
   ],
   controllers: [HealthController],
   providers: [AppResolver, AppService],

@@ -20,6 +20,7 @@ import {
   PaginatedListings,
   UpdateListingInput,
 } from './listing.types';
+import { assertDescriptionWithinLimit } from './description-limit';
 
 @Injectable()
 export class ListingsService {
@@ -33,6 +34,7 @@ export class ListingsService {
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }
+    assertDescriptionWithinLimit(input.description);
 
     const listing = await this.prisma.listing.create({
       data: {
@@ -50,6 +52,7 @@ export class ListingsService {
 
   async updateListing(userId: string, id: string, input: UpdateListingInput) {
     const listing = await this.getOwnedListing(userId, id);
+    if (input.description !== undefined) assertDescriptionWithinLimit(input.description);
 
     const updated = await this.prisma.listing.update({
       where: { id: listing.id },

@@ -17,13 +17,24 @@ const readStoredToken = (): string | null =>
 
 type GraphQLResponse<T> = {
   data?: T | null;
-  errors?: Array<{ message: string }>;
+  errors?: Array<{ message: string; extensions?: { code?: string } }>;
 };
+
+export class GraphQLRequestError extends Error {
+  code?: string;
+
+  constructor(message: string, code?: string) {
+    super(message);
+    this.name = 'GraphQLRequestError';
+    this.code = code;
+  }
+}
 
 export async function gqlRequest<T = any>(
   query: string,
   variables?: Record<string, unknown>,
   token?: string | null,
+  init?: { signal?: AbortSignal },
 ): Promise<T> {
   const authToken = token === undefined ? readStoredToken() : token;
 
@@ -34,6 +45,7 @@ export async function gqlRequest<T = any>(
       ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
     body: JSON.stringify({ query, variables }),
+    signal: init?.signal,
   });
 
   // GraphQL errors arrive with HTTP 200 or 4xx plus a JSON body: prefer their message.
@@ -45,7 +57,8 @@ export async function gqlRequest<T = any>(
   }
 
   if (json?.errors?.length) {
-    throw new Error(json.errors[0].message);
+    const first = json.errors[0];
+    throw new GraphQLRequestError(first.message, first.extensions?.code);
   }
   if (!res.ok) {
     throw new Error(`GraphQL request failed (${res.status})`);

@@ -21,6 +21,7 @@ import {
 } from '../promotions/promotion-pricing';
 import { rotate } from '../promotions/promotion-rotation';
 import { ListingsService } from '../listings/listings.service';
+import { assertDescriptionWithinLimit } from '../listings/description-limit';
 import {
   CreateVehicleInput,
   UpdateVehicleInput,
@@ -302,6 +303,7 @@ export class VehiclesService {
     input: CreateVehicleInput,
   ) {
     await this.assertListingOwnership(userId, listingId);
+    assertDescriptionWithinLimit(input.description);
 
     const created = await this.prisma.vehicle.create({
       data: {
@@ -356,6 +358,7 @@ export class VehiclesService {
     }
 
     await this.assertListingOwnership(userId, vehicle.listingId);
+    if (input.description !== undefined) assertDescriptionWithinLimit(input.description);
 
     await this.prisma.vehicle.update({
       where: { id },

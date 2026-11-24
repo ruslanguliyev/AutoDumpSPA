@@ -1,0 +1,39 @@
+{
+  "launcher": "Ask AI",
+  "open": "Open the AvtoBaz assistant",
+  "title": "AvtoBaz assistant",
+  "subtitle": "Searches only listings on AvtoBaz",
+  "close": "Close chat",
+  "reset": "Start a new chat",
+  "greeting": "Hi! Tell me what you are looking for: a car, a rental, a spare part, a car service or a mechanic. I will search our listings.",
+  "examples": {
+    "car": "White Toyota from 2018, up to 25 000 AZN in Baku",
+    "part": "Front brake pads for Kia Sportage 2019",
+    "service": "Where can I do computer diagnostics in Baku?"
+  },
+  "inputLabel": "Your message",
+  "placeholder": "Write in your own words…",
+  "send": "Send",
+  "thinking": "Searching the catalogue…",
+  "disclaimer": "The assistant can make mistakes. Check details on the listing page.",
+  "kind": {
+    "CAR": "Car for sale",
+    "RENTAL": "Rental",
+    "PART": "Spare part",
+    "SERVICE_CENTER": "Car service",
+    "SPECIALIST": "Mechanic",
+    "SELLER": "Dealer"
+  },
+  "price": {
+    "from": "from {{price}}",
+    "perDay": "/ day",
+    "perHour": "/ hour"
+  },
+  "errors": {
+    "RATE_LIMITED": "Too many messages. Please try again a little later.",
+    "UNAVAILABLE": "The assistant is unavailable right now. Please try again later.",
+    "INVALID_INPUT": "The message is empty or too long.",
+    "INVALID_RESULT": "I could not answer that. Try rephrasing your request.",
+    "GENERIC": "Something went wrong. Please try again."
+  }
+}
