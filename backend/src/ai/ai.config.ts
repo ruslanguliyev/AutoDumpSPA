@@ -16,6 +16,8 @@ export type AiConfig = {
   chatTimeoutMs: number;
   chatLimit: number;
   chatWindowMs: number;
+  chatImageLimit: number;
+  chatImageWindowMs: number;
 };
 
 const num = (value: unknown, fallback: number) => {
@@ -49,5 +51,7 @@ export function readAiConfig(config: ConfigService): AiConfig {
     chatTimeoutMs: num(config.get('AI_CHAT_TIMEOUT_MS'), 45_000),
     chatLimit: num(config.get('AI_RATE_LIMIT_CHAT'), 40),
     chatWindowMs: num(config.get('AI_RATE_LIMIT_CHAT_WINDOW_SEC'), 3600) * 1000,
+    chatImageLimit: num(config.get('AI_RATE_LIMIT_CHAT_IMAGE'), 15),
+    chatImageWindowMs: num(config.get('AI_RATE_LIMIT_CHAT_IMAGE_WINDOW_SEC'), 3600) * 1000,
   };
 }

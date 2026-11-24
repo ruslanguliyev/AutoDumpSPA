@@ -6,7 +6,13 @@ export type AiLanguageCode = 'AZ' | 'RU' | 'EN';
 export type DescriptionTone = 'NEUTRAL' | 'SALES' | 'SHORT';
 export type DescriptionMode = 'GENERATE' | 'REGENERATE' | 'SHORTER' | 'LONGER';
 
-export type AiErrorCode = 'RATE_LIMITED' | 'UNAVAILABLE' | 'INVALID_RESULT' | 'INVALID_INPUT' | 'GENERIC';
+export type AiErrorCode =
+  | 'RATE_LIMITED'
+  | 'UNAVAILABLE'
+  | 'INVALID_RESULT'
+  | 'INVALID_INPUT'
+  | 'INVALID_IMAGE'
+  | 'GENERIC';
 
 export type ParsedSearchFilters = {
   brand?: string | null;
@@ -55,7 +61,13 @@ mutation ParseVehicleSearchQuery($query: String!, $language: AiLanguage!) {
 
 export function aiErrorCode(error: unknown): AiErrorCode {
   const code = error instanceof GraphQLRequestError ? error.code ?? error.message : error instanceof Error ? error.message : '';
-  if (code === 'RATE_LIMITED' || code === 'UNAVAILABLE' || code === 'INVALID_RESULT' || code === 'INVALID_INPUT') {
+  if (
+    code === 'RATE_LIMITED' ||
+    code === 'UNAVAILABLE' ||
+    code === 'INVALID_RESULT' ||
+    code === 'INVALID_INPUT' ||
+    code === 'INVALID_IMAGE'
+  ) {
     return code;
   }
   return 'GENERIC';

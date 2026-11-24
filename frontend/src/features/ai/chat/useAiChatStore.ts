@@ -8,6 +8,8 @@ export type AiChatEntry = {
   role: AiChatRole;
   text: string;
   cards?: AiChatCard[];
+  /** Small JPEG data URL of the photo sent with this message; the photo itself is not kept. */
+  photo?: string;
 };
 
 type AiChatState = {

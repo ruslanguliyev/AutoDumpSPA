@@ -5,7 +5,7 @@
   "subtitle": "Yalnız AvtoBaz elanlarında axtarır",
   "close": "Çatı bağla",
   "reset": "Yeni çat başlat",
-  "greeting": "Salam! Nə axtardığınızı yazın: avtomobil, icarə, ehtiyat hissəsi, avtoservis və ya usta. Elanlarımızda axtaracağam.",
+  "greeting": "Salam! Nə axtardığınızı yazın: avtomobil, icarə, ehtiyat hissəsi, avtoservis və ya usta. Elanlarımızda axtaracağam. Avtomobilin, detalın və ya paneldəki xəbərdarlıq işarəsinin fotosunu da göndərə bilərsiniz.",
   "examples": {
     "car": "2018-ci ildən yeni ağ Toyota, Bakıda 25 000 AZN-dək",
     "part": "Kia Sportage 2019 üçün ön əyləc bəndləri",
@@ -34,6 +34,14 @@
     "UNAVAILABLE": "Köməkçi hazırda əlçatan deyil. Sonra yenidən cəhd edin.",
     "INVALID_INPUT": "Mesaj boşdur və ya çox uzundur.",
     "INVALID_RESULT": "Cavab verə bilmədim. Sorğunu başqa cür yazın.",
-    "GENERIC": "Nəsə alınmadı. Yenidən cəhd edin."
-  }
+    "GENERIC": "Nəsə alınmadı. Yenidən cəhd edin.",
+    "INVALID_IMAGE": "Bu fayl uyğun deyil. JPEG, PNG və ya WebP foto göndərin.",
+    "PHOTO_TYPE": "Yalnız JPEG, PNG və ya WebP foto göndərmək olar.",
+    "PHOTO_SIZE": "Foto çox böyükdür. 20 MB-dan kiçik fayl seçin.",
+    "PHOTO_UNREADABLE": "Bu fayl foto kimi açılmır."
+  },
+  "attachPhoto": "Foto əlavə et",
+  "removePhoto": "Fotonu sil",
+  "photoAlt": "Sizin fotonuz",
+  "photoReady": "Foto əlavə olundu. Sual yazın və ya sadəcə göndərin."
 }

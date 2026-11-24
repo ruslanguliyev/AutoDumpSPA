@@ -5,7 +5,7 @@
   "subtitle": "Searches only listings on AvtoBaz",
   "close": "Close chat",
   "reset": "Start a new chat",
-  "greeting": "Hi! Tell me what you are looking for: a car, a rental, a spare part, a car service or a mechanic. I will search our listings.",
+  "greeting": "Hi! Tell me what you are looking for: a car, a rental, a spare part, a car service or a mechanic. I will search our listings. You can also send a photo of a car, a part or a dashboard warning light.",
   "examples": {
     "car": "White Toyota from 2018, up to 25 000 AZN in Baku",
     "part": "Front brake pads for Kia Sportage 2019",
@@ -34,6 +34,14 @@
     "UNAVAILABLE": "The assistant is unavailable right now. Please try again later.",
     "INVALID_INPUT": "The message is empty or too long.",
     "INVALID_RESULT": "I could not answer that. Try rephrasing your request.",
-    "GENERIC": "Something went wrong. Please try again."
-  }
+    "GENERIC": "Something went wrong. Please try again.",
+    "INVALID_IMAGE": "This file can't be used. Send a JPEG, PNG or WebP photo.",
+    "PHOTO_TYPE": "Only JPEG, PNG or WebP photos can be sent.",
+    "PHOTO_SIZE": "The photo is too large. Pick one under 20 MB.",
+    "PHOTO_UNREADABLE": "This file doesn't open as a photo."
+  },
+  "attachPhoto": "Attach a photo",
+  "removePhoto": "Remove the photo",
+  "photoAlt": "Your photo",
+  "photoReady": "Photo attached. Add a question or just send it."
 }

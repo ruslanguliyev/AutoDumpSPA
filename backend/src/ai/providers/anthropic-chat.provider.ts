@@ -34,10 +34,20 @@ export class AnthropicChatProvider implements AiChatProvider {
       description: tool.description,
       input_schema: tool.schema as Anthropic.Tool.InputSchema,
     }));
-    const messages: Anthropic.MessageParam[] = request.history.map((turn) => ({
-      role: turn.role,
-      content: turn.text,
-    }));
+    const messages: Anthropic.MessageParam[] = request.history.map((turn) =>
+      turn.image && turn.role === 'user'
+        ? {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: { type: 'base64', media_type: turn.image.mediaType, data: turn.image.data },
+              },
+              { type: 'text', text: turn.text },
+            ],
+          }
+        : { role: turn.role, content: turn.text },
+    );
     const withFallback = FALLBACK_MODELS.test(request.model);
     const deadline = Date.now() + request.timeoutMs;
 

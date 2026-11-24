@@ -5,6 +5,7 @@ import { aiError } from '../ai.errors';
 import { readAiConfig } from '../ai.config';
 import type { AiLanguageCode } from '../description/description-result';
 import { AI_CHAT_PROVIDER, AiChatProvider, AiChatTurn } from '../providers/ai-chat-provider';
+import type { ChatImage } from './chat-image';
 import { AiRateLimiter } from '../rate-limit';
 import { CatalogCard, CatalogSearchResult, CatalogSearchService } from './catalog-search.service';
 import {
@@ -37,14 +38,18 @@ const forModel = (result: CatalogSearchResult) => ({
  * Keeps the last messages, trims each one and makes sure the history starts with the user,
  * as the Messages API requires. Returns null when there is nothing to answer.
  */
-export function normalizeHistory(messages: ChatMessage[]): AiChatTurn[] | null {
+/** Stands in for the user's words when they send a photo without writing anything. */
+export const PHOTO_ONLY_TEXT = '[The user sent a photo without a message.]';
+
+export function normalizeHistory(messages: ChatMessage[], withPhoto = false): AiChatTurn[] | null {
   const turns = messages
     .map((message) => ({
       role: message.role === 'ASSISTANT' ? ('assistant' as const) : ('user' as const),
       text: (message.text ?? '').trim(),
     }))
-    .filter((turn) => turn.text.length > 0);
+    .filter((turn, index, all) => turn.text.length > 0 || (withPhoto && index === all.length - 1));
   const last = turns[turns.length - 1];
+  if (withPhoto && last?.role === 'user' && !last.text) last.text = PHOTO_ONLY_TEXT;
   if (!last || last.role !== 'user' || last.text.length > CHAT_MAX_MESSAGE_LENGTH) return null;
 
   const recent = turns
@@ -65,13 +70,26 @@ export class AiChatService {
     private readonly catalog: CatalogSearchService,
   ) {}
 
-  async reply(messages: ChatMessage[], language: AiLanguageCode, ip: string): Promise<ChatReply> {
+  async reply(
+    messages: ChatMessage[],
+    language: AiLanguageCode,
+    ip: string,
+    image?: ChatImage | null,
+  ): Promise<ChatReply> {
     const config = readAiConfig(this.configService);
     if (!config.enabled) throw aiError('UNAVAILABLE');
-    const history = normalizeHistory(messages ?? []);
+    const history = normalizeHistory(messages ?? [], Boolean(image));
     if (!history) throw aiError('INVALID_INPUT');
-    if (!this.limiter.take(`chat:${ip || 'unknown'}`, config.chatLimit, config.chatWindowMs)) {
+    const caller = ip || 'unknown';
+    if (image && !this.limiter.take(`chat-image:${caller}`, config.chatImageLimit, config.chatImageWindowMs)) {
       throw aiError('RATE_LIMITED');
+    }
+    if (!this.limiter.take(`chat:${caller}`, config.chatLimit, config.chatWindowMs)) {
+      throw aiError('RATE_LIMITED');
+    }
+    if (image) {
+      // The photo belongs to the message it was sent with: the last one.
+      history[history.length - 1].image = { mediaType: image.mediaType, data: image.data };
     }
 
     const cards = new Map<string, CatalogCard>();

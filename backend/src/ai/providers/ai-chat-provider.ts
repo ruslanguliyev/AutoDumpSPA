@@ -2,7 +2,10 @@ import type { AiTool } from './ai-provider';
 
 export const AI_CHAT_PROVIDER = Symbol('AI_CHAT_PROVIDER');
 
-export type AiChatTurn = { role: 'user' | 'assistant'; text: string };
+export type AiChatImage = { mediaType: 'image/jpeg' | 'image/png' | 'image/webp'; data: string };
+
+/** A photo rides only on the user turn it was sent with. */
+export type AiChatTurn = { role: 'user' | 'assistant'; text: string; image?: AiChatImage };
 
 /** Runs one tool the model asked for and returns what the model should read back. */
 export type AiToolRunner = (name: string, input: unknown) => Promise<unknown>;

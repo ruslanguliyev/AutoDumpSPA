@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { RotateCcw, Send, X } from 'lucide-react';
+import { ImagePlus, RotateCcw, Send, X } from 'lucide-react';
 
 import { aiErrorCode, useAiEnabled } from '@/features/ai/ai.api';
 import type { AiLanguageCode } from '@/features/ai/ai.api';
@@ -11,13 +11,18 @@ import Button from '@/shared/ui/button';
 import { Input } from '@/shared/ui/Input';
 import { AiSparkle } from '@/shared/ui/AiSparkle/AiSparkle';
 
-import { sendAiChat } from './aiChat.api';
+import { sendAiChat, sendAiChatWithPhoto } from './aiChat.api';
+import { PHOTO_TYPES, PhotoError, preparePhoto } from './preparePhoto';
+import type { PreparedPhoto } from './preparePhoto';
 import { AiChatResultCard } from './AiChatResultCard';
 import { useAiChatStore } from './useAiChatStore';
 
 const MAX_LENGTH = 1000;
 /** Messages the server reads; it keeps the same number on its side. */
 const HISTORY_SENT = 16;
+
+/** Older messages lose their photo; the model still reads its own description of it. */
+const PHOTO_MARK = '[photo]';
 
 const toApiLanguage = (lang: string): AiLanguageCode =>
   lang === 'ru' ? 'RU' : lang === 'en' ? 'EN' : 'AZ';
@@ -39,18 +44,26 @@ function AiChatPanel() {
   const { open, entries, setOpen, add, reset } = useAiChatStore();
   const [draft, setDraft] = useState('');
   const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<PreparedPhoto | null>(null);
+  const [preparing, setPreparing] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const mutation = useMutation({
-    mutationFn: async (text: string) => {
+    mutationFn: async ({ blob }: { blob: Blob | null }) => {
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
-      const history = [...useAiChatStore.getState().entries]
-        .slice(-HISTORY_SENT)
-        .map(({ role, text: body }) => ({ role, text: body }));
-      return sendAiChat(history.length ? history : [{ role: 'USER', text }], toApiLanguage(language), controller.signal);
+      const entries = useAiChatStore.getState().entries.slice(-HISTORY_SENT);
+      const history = entries.map((entry, index) => {
+        const isNew = index === entries.length - 1;
+        const text = entry.photo && !isNew ? [entry.text, PHOTO_MARK].filter(Boolean).join(' ') : entry.text;
+        return { role: entry.role, text };
+      });
+      return blob
+        ? sendAiChatWithPhoto(history, toApiLanguage(language), blob, controller.signal)
+        : sendAiChat(history, toApiLanguage(language), controller.signal);
     },
     onSuccess: (reply) => add({ role: 'ASSISTANT', text: reply.text, cards: reply.cards }),
     onError: (error) => {
@@ -77,17 +90,33 @@ function AiChatPanel() {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const text = draft.trim();
-    if (!text || mutation.isPending) return;
+    if ((!text && !photo) || mutation.isPending || preparing) return;
     setErrorCode(null);
-    add({ role: 'USER', text });
+    add({ role: 'USER', text, ...(photo ? { photo: photo.thumbnail } : {}) });
     setDraft('');
-    mutation.mutate(text);
+    setPhoto(null);
+    mutation.mutate({ blob: photo?.blob ?? null });
+  };
+
+  const pickPhoto = async (file: File | undefined) => {
+    if (fileRef.current) fileRef.current.value = '';
+    if (!file) return;
+    setErrorCode(null);
+    setPreparing(true);
+    try {
+      setPhoto(await preparePhoto(file));
+    } catch (error) {
+      setErrorCode(error instanceof PhotoError ? `PHOTO_${error.reason.toUpperCase()}` : 'INVALID_IMAGE');
+    } finally {
+      setPreparing(false);
+    }
   };
 
   const startOver = () => {
     abortRef.current?.abort();
     mutation.reset();
     setErrorCode(null);
+    setPhoto(null);
     reset();
   };
 
@@ -144,7 +173,16 @@ function AiChatPanel() {
         ) : null}
         {entries.map((entry) => (
           <div key={entry.id} className="space-y-2">
-            <Bubble role={entry.role}>{entry.text}</Bubble>
+            {entry.photo ? (
+              <div className="flex justify-end">
+                <img
+                  src={entry.photo}
+                  alt={t('photoAlt')}
+                  className="max-h-40 max-w-[60%] rounded-2xl border border-border object-cover"
+                />
+              </div>
+            ) : null}
+            {entry.text ? <Bubble role={entry.role}>{entry.text}</Bubble> : null}
             {entry.cards?.length ? (
               <div className="space-y-2">
                 {entry.cards.map((card) => (
@@ -173,7 +211,35 @@ function AiChatPanel() {
         ) : null}
       </div>
 
+      {photo ? (
+        <div className="flex items-center gap-2 border-t border-border px-3 pt-3">
+          <img src={photo.thumbnail} alt={t('photoAlt')} className="h-14 w-14 rounded-[var(--radius)] object-cover" />
+          <span className="min-w-0 flex-1 truncate text-[13px] text-muted-foreground">{t('photoReady')}</span>
+          <Button variant="icon" size="icon" onClick={() => setPhoto(null)} aria-label={t('removePhoto')}>
+            <X size={18} />
+          </Button>
+        </div>
+      ) : null}
       <form onSubmit={submit} className="flex items-end gap-2 border-t border-border p-3">
+        <input
+          ref={fileRef}
+          type="file"
+          accept={PHOTO_TYPES.join(',')}
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
+          onChange={(event) => void pickPhoto(event.target.files?.[0])}
+        />
+        <Button
+          variant="icon"
+          size="icon"
+          onClick={() => fileRef.current?.click()}
+          disabled={mutation.isPending || preparing}
+          aria-label={t('attachPhoto')}
+          title={t('attachPhoto')}
+        >
+          <ImagePlus size={18} />
+        </Button>
         <Input
           label={t('inputLabel')}
           labelHidden
@@ -185,7 +251,12 @@ function AiChatPanel() {
           wrapperClassName="min-w-0 flex-1"
           autoFocus
         />
-        <Button type="submit" size="icon" disabled={!draft.trim() || mutation.isPending} aria-label={t('send')}>
+        <Button
+          type="submit"
+          size="icon"
+          disabled={(!draft.trim() && !photo) || mutation.isPending || preparing}
+          aria-label={t('send')}
+        >
           <Send size={18} />
         </Button>
       </form>

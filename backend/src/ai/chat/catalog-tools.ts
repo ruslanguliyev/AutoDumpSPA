@@ -96,7 +96,7 @@ export const CATALOG_TOOLS: AiTool[] = [
   {
     name: 'search_cars',
     description:
-      'Search cars FOR SALE on AvtoBaz. Prices are in AZN. Returns real listings with their total count. Leave a filter out when the user did not ask for it.',
+      'Search cars FOR SALE on AvtoBaz. Prices are in AZN. Returns real listings with their total count. Leave a filter out when the user did not ask for it. brand and model match as substrings and catalogue model names vary ("G-Class", "G 63", "G 500"), so when a model search finds little, search again with the brand only and pick the matching rows.',
     schema: object({
       ...vehicleProps,
       priceFrom: num,
