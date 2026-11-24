@@ -1,7 +1,7 @@
 import '@fontsource-variable/inter';
 // Initialize theme BEFORE React renders to prevent FOUC
 import '@/shared/utils/theme-init';
-import { lazy, StrictMode, Suspense } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Initialize i18next (must be imported before components that use it)
@@ -18,17 +18,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Dynamic import so the production build drops the module entirely.
-// A static import would still be tree-shaken today (the package no-ops outside
-// development), but the package would stay a reason to install it for the build.
-const ReactQueryDevtools = import.meta.env.DEV
-  ? lazy(() =>
-      import('@tanstack/react-query-devtools').then((mod) => ({
-        default: mod.ReactQueryDevtools,
-      })),
-    )
-  : null;
-
 // Render once the active language bundle is in; useSuspense is off, so rendering
 // earlier would flash raw translation keys.
 const renderApp = () =>
@@ -36,12 +25,6 @@ const renderApp = () =>
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <App />
-        {import.meta.env.DEV && ReactQueryDevtools ? (
-          <Suspense fallback={null}>
-            {/* Default bottom-right sits on the detail-page call bar. */}
-            <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
-          </Suspense>
-        ) : null}
       </QueryClientProvider>
     </StrictMode>
   );
