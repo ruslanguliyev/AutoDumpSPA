@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 
 import MainLayout from '@/shared/layout/MainLayout';
 import ScrollToTopOnRouteChange from '@/shared/hooks/ScrollToTopOnRouteChange';
 import RouteTitle from '@/routes/RouteTitle';
+import RouteFallback from '@/routes/route-fallback';
 
 const isDashboardPath = (pathname) =>
   /^(\/[a-z]{2})?\/dashboard(\/|$)/.test(pathname);
@@ -15,7 +17,9 @@ const LayoutRoute = () => {
       <>
         <ScrollToTopOnRouteChange />
         <RouteTitle />
-        <Outlet />
+        <Suspense fallback={<RouteFallback />}>
+          <Outlet />
+        </Suspense>
       </>
     );
   }

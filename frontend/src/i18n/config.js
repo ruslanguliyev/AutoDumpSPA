@@ -1,58 +1,44 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import enCommon from './locales/en/common.json';
-import enVehicle from './locales/en/vehicle.json';
-import enPart from './locales/en/part.json';
-import enSellers from './locales/en/sellers.json';
-import enServices from './locales/en/services.json';
-import enSpecialists from './locales/en/specialists.json';
-import enAddListing from './locales/en/addListing.json';
-import enAddItem from './locales/en/addItem.json';
-import enAuth from './locales/en/auth.json';
-import enHome from './locales/en/home.json';
-import enDashboard from './locales/en/dashboard.json';
-import enPromote from './locales/en/promote.json';
-import enAiChat from './locales/en/aiChat.json';
-import ruCommon from './locales/ru/common.json';
-import ruVehicle from './locales/ru/vehicle.json';
-import ruPart from './locales/ru/part.json';
-import ruSellers from './locales/ru/sellers.json';
-import ruServices from './locales/ru/services.json';
-import ruSpecialists from './locales/ru/specialists.json';
-import ruAddListing from './locales/ru/addListing.json';
-import ruAddItem from './locales/ru/addItem.json';
-import ruAuth from './locales/ru/auth.json';
-import ruHome from './locales/ru/home.json';
-import ruDashboard from './locales/ru/dashboard.json';
-import ruPromote from './locales/ru/promote.json';
-import ruAiChat from './locales/ru/aiChat.json';
-import azCommon from './locales/az/common.json';
-import azVehicle from './locales/az/vehicle.json';
-import azPart from './locales/az/part.json';
-import azSellers from './locales/az/sellers.json';
-import azServices from './locales/az/services.json';
-import azSpecialists from './locales/az/specialists.json';
-import azAddListing from './locales/az/addListing.json';
-import azAddItem from './locales/az/addItem.json';
-import azAuth from './locales/az/auth.json';
-import azHome from './locales/az/home.json';
-import azDashboard from './locales/az/dashboard.json';
-import azPromote from './locales/az/promote.json';
-import azAiChat from './locales/az/aiChat.json';
-
 export const SUPPORTED_LANGUAGES = ['en', 'ru', 'az'];
 export const DEFAULT_LANGUAGE = 'az';
 export const NAMESPACES = ['common', 'part', 'vehicle', 'sellers', 'services', 'specialists', 'addListing', 'addItem', 'auth', 'home', 'dashboard', 'promote', 'aiChat'];
 
-const resources = {
-  en: { common: enCommon, vehicle: enVehicle, part: enPart, sellers: enSellers, services: enServices, specialists: enSpecialists, addListing: enAddListing, addItem: enAddItem, auth: enAuth, home: enHome, dashboard: enDashboard, promote: enPromote, aiChat: enAiChat },
-  ru: { common: ruCommon, vehicle: ruVehicle, part: ruPart, sellers: ruSellers, services: ruServices, specialists: ruSpecialists, addListing: ruAddListing, addItem: ruAddItem, auth: ruAuth, home: ruHome, dashboard: ruDashboard, promote: ruPromote, aiChat: ruAiChat },
-  az: { common: azCommon, vehicle: azVehicle, part: azPart, sellers: azSellers, services: azServices, specialists: azSpecialists, addListing: azAddListing, addItem: azAddItem, auth: azAuth, home: azHome, dashboard: azDashboard, promote: azPromote, aiChat: azAiChat },
+// Each locale file is its own lazy module. vite.config.js groups them into one
+// chunk per language, so a visitor downloads only the language they use.
+const localeFiles = import.meta.glob('./locales/*/*.json', { import: 'default' });
+
+const loadedLanguages = new Set();
+const pendingLanguages = new Map();
+
+export const loadLanguage = (lang) => {
+  if (loadedLanguages.has(lang)) return Promise.resolve();
+  if (!pendingLanguages.has(lang)) {
+    const request = Promise.all(
+      NAMESPACES.map(async (ns) => {
+        const load = localeFiles[`./locales/${lang}/${ns}.json`];
+        if (!load) return;
+        i18n.addResourceBundle(lang, ns, await load(), true, true);
+      }),
+    )
+      .then(() => {
+        loadedLanguages.add(lang);
+      })
+      .finally(() => {
+        pendingLanguages.delete(lang);
+      });
+    pendingLanguages.set(lang, request);
+  }
+  return pendingLanguages.get(lang);
 };
 
-// Get initial language from localStorage (via Zustand persist) or default
+// Get initial language from the URL prefix, then localStorage (via Zustand persist) or default
 const getInitialLanguage = () => {
+  // A deep link such as /ru/cars wins over the stored language, otherwise the
+  // first paint would flash the stored language until the URL sync catches up.
+  const urlLang = window.location.pathname.split('/')[1];
+  if (SUPPORTED_LANGUAGES.includes(urlLang)) return urlLang;
   try {
     const stored = localStorage.getItem('autodump-ui');
     if (stored) {
@@ -68,20 +54,27 @@ const getInitialLanguage = () => {
   return DEFAULT_LANGUAGE;
 };
 
-// Single i18next instance initialized with initReactI18next + static resources
+// Single i18next instance initialized with initReactI18next. Resources are added
+// per language by loadLanguage(); the app renders once i18nReady resolves.
+const initialLanguage = getInitialLanguage();
+
 i18n.use(initReactI18next).init({
-  resources,
+  resources: {},
   ns: NAMESPACES,
   defaultNS: 'common',
   fallbackLng: DEFAULT_LANGUAGE,
-  lng: getInitialLanguage(),
+  lng: initialLanguage,
   supportedLngs: SUPPORTED_LANGUAGES,
   interpolation: { escapeValue: false },
   react: { useSuspense: false },
 });
 
+export const i18nReady = loadLanguage(initialLanguage);
+
 export const changeLanguage = async (lang) => {
   const next = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
+  // Load the bundle first so the UI never renders raw keys while switching.
+  await loadLanguage(next);
   await i18n.changeLanguage(next);
 };
 

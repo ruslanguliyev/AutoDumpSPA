@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 import { DashboardSidebar } from '@/dashboard/components/DashboardSidebar/DashboardSidebar';
@@ -10,11 +11,13 @@ import { useDashboardUIStore } from '@/dashboard/store/useDashboardUIStore';
 import ErrorBoundary from '@/shared/ui/ErrorBoundary';
 
 function DashboardContentFallback() {
+  const { t } = useTranslation('common');
+
   return (
-    <div className="flex flex-1 items-center justify-center p-8">
+    <div className="flex flex-1 items-center justify-center p-8" role="status" aria-live="polite">
       <div className="flex flex-col items-center gap-4">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-        <p className="text-sm text-muted-foreground">Loading...</p>
+        <p className="text-[15px] text-muted-foreground">{t('common.loading')}</p>
       </div>
     </div>
   );

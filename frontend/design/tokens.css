@@ -27,6 +27,7 @@
   --primary:                37  99 235;   /* #2563EB */
   --primary-foreground:    255 255 255;   /* #FFFFFF */
   --primary-text:           29  78 216;   /* #1D4ED8  links and prices on light */
+  --primary-accent:         79  70 229;   /* #4F46E5  far end of the primary gradient */
   --brand:                  65 110 151;   /* #416E97  secondary steel blue */
 
   /* status */
@@ -75,6 +76,7 @@
   --primary:                37  99 235;   /* #2563EB  fill */
   --primary-foreground:    255 255 255;   /* #FFFFFF */
   --primary-text:           96 165 250;   /* #60A5FA  text, links, prices */
+  --primary-accent:         79  70 229;   /* #4F46E5  far end of the primary gradient */
   --brand:                 129 171 206;   /* #81ABCE */
 
   --success:                52 211 153;   /* #34D399 */
@@ -113,6 +115,7 @@
   --color-primary:               rgb(var(--primary));
   --color-primary-foreground:    rgb(var(--primary-foreground));
   --color-primary-text:          rgb(var(--primary-text));
+  --color-primary-accent:        rgb(var(--primary-accent));
   --color-brand:                 rgb(var(--brand));
 
   --color-success:               rgb(var(--success));

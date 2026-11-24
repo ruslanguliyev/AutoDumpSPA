@@ -40,9 +40,11 @@ const TopSpecialists = () => {
         linkText={t('common.findSpecialists', 'Find Specialists')}
         linkHref="/specialists"
       />
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 [&>*]:h-full">
         {topSpecialists.map((specialist) => (
-          <SpecialistCard key={specialist.id} specialist={specialist} />
+          <div key={specialist.id} className="h-full">
+            <SpecialistCard specialist={specialist} />
+          </div>
         ))}
       </div>
     </section>
