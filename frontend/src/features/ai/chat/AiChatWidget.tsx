@@ -153,7 +153,7 @@ function AiChatPanel({ paused }: { paused: boolean }) {
     return (
       <Button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-40 h-12 rounded-full px-5 shadow-[var(--shadow-card)] sm:bottom-6 sm:right-6"
+        className="pulse-soft fixed bottom-4 right-4 z-40 h-12 cursor-pointer rounded-full px-5 shadow-[var(--shadow-card)] hover:[animation-play-state:paused] sm:bottom-6 sm:right-6"
         aria-label={t('open')}
       >
         <AiSparkle size={18} />
