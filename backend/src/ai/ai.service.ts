@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { AiBudget } from './ai-budget.service';
 import { aiError } from './ai.errors';
 import { readAiConfig } from './ai.config';
 import { normalizeSearch, RawSearchParse } from './catalog/normalize-search';
@@ -55,10 +56,17 @@ export class AiService {
     @Inject(AI_PROVIDER) private readonly provider: AiProvider,
     private readonly limiter: AiRateLimiter,
     private readonly cache: SearchParseCache,
+    private readonly budget: AiBudget,
   ) {}
 
   isEnabled(): boolean {
     return readAiConfig(this.configService).enabled;
+  }
+
+  /** True while the site-wide daily AI cap is reached; every AI feature is paused until tomorrow. */
+  async isPaused(): Promise<boolean> {
+    const config = readAiConfig(this.configService);
+    return config.enabled && (await this.budget.isPaused(config));
   }
 
   async generateDescription(userId: string, command: GenerateDescriptionCommand) {
@@ -77,10 +85,12 @@ export class AiService {
     if (!this.limiter.take(`description:${userId}`, config.descriptionLimit, config.descriptionWindowMs)) {
       throw aiError('RATE_LIMITED');
     }
+    await this.budget.reserve(config, `user:${userId}`, 1);
 
     let raw: unknown;
     try {
       raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('description', [usage]),
         model: config.descriptionModel,
         system: descriptionSystemPrompt(),
         user: descriptionUserPrompt({
@@ -125,10 +135,12 @@ export class AiService {
     if (!this.limiter.take(`search:${ip || 'unknown'}`, config.searchLimit, config.searchWindowMs)) {
       throw aiError('RATE_LIMITED');
     }
+    await this.budget.reserve(config, ip || 'unknown', 1);
 
     let raw: unknown;
     try {
       raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('search', [usage]),
         model: config.searchModel,
         system: searchSystemPrompt(),
         user: searchUserPrompt(text, language),

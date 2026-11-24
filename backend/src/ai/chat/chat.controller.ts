@@ -6,11 +6,12 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 import { GraphQLError } from 'graphql';
 import { memoryStorage } from 'multer';
 
@@ -24,7 +25,27 @@ const STATUS_BY_CODE: Record<string, HttpStatus> = {
   INVALID_INPUT: HttpStatus.BAD_REQUEST,
   INVALID_IMAGE: HttpStatus.BAD_REQUEST,
   INVALID_RESULT: HttpStatus.BAD_GATEWAY,
+  DAILY_LIMIT: HttpStatus.TOO_MANY_REQUESTS,
+  PAUSED: HttpStatus.SERVICE_UNAVAILABLE,
 };
+
+const codeOf = (error: unknown) =>
+  error instanceof GraphQLError ? String(error.extensions?.code ?? 'UNAVAILABLE') : null;
+
+const IMAGE_UPLOAD = FileInterceptor('image', {
+  storage: memoryStorage(),
+  limits: { fileSize: CHAT_IMAGE_MAX_BYTES, files: 1, fields: 2, fieldSize: 64 * 1024, parts: 3 },
+});
+
+function readImage(file?: Express.Multer.File) {
+  if (!file) return null;
+  try {
+    return validateChatImage(file.buffer);
+  } catch (error) {
+    if (error instanceof ChatImageError) throw fail('INVALID_IMAGE');
+    throw error;
+  }
+}
 
 const fail = (code: string) =>
   new HttpException({ code }, STATUS_BY_CODE[code] ?? HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,32 +85,82 @@ export class AiChatController {
 
   @Post('chat')
   @HttpCode(200)
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: memoryStorage(),
-      limits: { fileSize: CHAT_IMAGE_MAX_BYTES, files: 1, fields: 2, fieldSize: 64 * 1024, parts: 3 },
-    }),
-  )
+  @UseInterceptors(IMAGE_UPLOAD)
   async send(
     @Req() req: Request,
     @Body('payload') payload: unknown,
     @UploadedFile() file?: Express.Multer.File,
   ): Promise<ChatReply> {
     const { messages, language } = readPayload(payload);
-    let image = null;
-    if (file) {
-      try {
-        image = validateChatImage(file.buffer);
-      } catch (error) {
-        if (error instanceof ChatImageError) throw fail('INVALID_IMAGE');
-        throw error;
-      }
-    }
+    const image = readImage(file);
     try {
       return await this.chat.reply(messages, language, req.ip ?? 'unknown', image);
     } catch (error) {
-      if (error instanceof GraphQLError) throw fail(String(error.extensions?.code ?? 'UNAVAILABLE'));
+      const code = codeOf(error);
+      if (code) throw fail(code);
       throw error;
+    }
+  }
+
+  /**
+   * The same chat, streamed as NDJSON lines so the answer appears while it is written:
+   *   {"type":"searching"}            the model is searching the catalogue
+   *   {"type":"text","text":"…"}      a piece of the answer
+   *   {"type":"done","text":"…","cards":[…]}
+   *   {"type":"error","code":"…"}     after the stream started
+   * Errors found before anything is sent (limits, bad input) come back as a plain HTTP error.
+   */
+  @Post('chat/stream')
+  @UseInterceptors(IMAGE_UPLOAD)
+  async stream(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body('payload') payload: unknown,
+    @UploadedFile() file?: Express.Multer.File,
+  ): Promise<void> {
+    const abort = new AbortController();
+    res.on('close', () => {
+      if (!res.writableFinished) abort.abort();
+    });
+    const write = (event: Record<string, unknown>) => {
+      if (!res.headersSent) {
+        res.status(200);
+        res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
+        res.setHeader('Cache-Control', 'no-cache, no-transform');
+        // Tells nginx not to buffer, so lines reach the browser as they are written.
+        res.setHeader('X-Accel-Buffering', 'no');
+        res.flushHeaders();
+      }
+      if (!res.writableEnded) res.write(`${JSON.stringify(event)}
+`);
+    };
+
+    try {
+      const { messages, language } = readPayload(payload);
+      const image = readImage(file);
+      const reply = await this.chat.reply(messages, language, req.ip ?? 'unknown', image, {
+        onText: (text) => write({ type: 'text', text }),
+        onSearch: () => write({ type: 'searching' }),
+        signal: abort.signal,
+      });
+      write({ type: 'done', text: reply.text, cards: reply.cards });
+      res.end();
+    } catch (error) {
+      const code =
+        codeOf(error) ??
+        (error instanceof HttpException ? String((error.getResponse() as { code?: string })?.code ?? '') : '') ??
+        '';
+      if (abort.signal.aborted) {
+        res.end();
+        return;
+      }
+      if (!res.headersSent) {
+        const status = STATUS_BY_CODE[code] ?? HttpStatus.INTERNAL_SERVER_ERROR;
+        res.status(status).json({ code: code || 'UNAVAILABLE' });
+        return;
+      }
+      write({ type: 'error', code: code || 'UNAVAILABLE' });
+      res.end();
     }
   }
 }

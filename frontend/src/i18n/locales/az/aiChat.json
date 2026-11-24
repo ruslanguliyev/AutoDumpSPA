@@ -15,7 +15,7 @@
   "placeholder": "Öz sözlərinizlə yazın…",
   "send": "Göndər",
   "thinking": "Kataloqda axtarıram…",
-  "disclaimer": "Köməkçi səhv edə bilər. Təfərrüatları elan səhifəsində yoxlayın.",
+  "disclaimer": "Köməkçi səhv edə bilər. Təfərrüatları elan səhifəsində yoxlayın. Nasazlıqlar barədə məsləhətlər servisdə diaqnostikanı əvəz etmir.",
   "kind": {
     "CAR": "Satılan avtomobil",
     "RENTAL": "İcarə",
@@ -38,10 +38,15 @@
     "INVALID_IMAGE": "Bu fayl uyğun deyil. JPEG, PNG və ya WebP foto göndərin.",
     "PHOTO_TYPE": "Yalnız JPEG, PNG və ya WebP foto göndərmək olar.",
     "PHOTO_SIZE": "Foto çox böyükdür. 20 MB-dan kiçik fayl seçin.",
-    "PHOTO_UNREADABLE": "Bu fayl foto kimi açılmır."
+    "PHOTO_UNREADABLE": "Bu fayl foto kimi açılmır.",
+    "DAILY_LIMIT": "Bu gün köməkçiyə çox sual verdiniz. Sabah davam edək, hələlik kataloqla axtara bilərsiniz.",
+    "PAUSED": "Köməkçi bu gün istirahət edir. Sabah yenidən gəlin."
   },
   "attachPhoto": "Foto əlavə et",
   "removePhoto": "Fotonu sil",
   "photoAlt": "Sizin fotonuz",
-  "photoReady": "Foto əlavə olundu. Sual yazın və ya sadəcə göndərin."
+  "photoReady": "Foto əlavə olundu. Sual yazın və ya sadəcə göndərin.",
+  "waiting": "Bir saniyə…",
+  "paused": "Köməkçi bu gün istirahət edir: günlük sorğu limiti bitib. Sabah yenidən gəlin, hələlik kataloq və filtrlərlə axtara bilərsiniz.",
+  "photoPrivacy": "Foto yalnız tanınmaq üçün Anthropic-ə göndərilir və saxlanılmır."
 }

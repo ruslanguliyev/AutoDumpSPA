@@ -15,7 +15,7 @@
   "placeholder": "Write in your own words…",
   "send": "Send",
   "thinking": "Searching the catalogue…",
-  "disclaimer": "The assistant can make mistakes. Check details on the listing page.",
+  "disclaimer": "The assistant can make mistakes. Check details on the listing page. Advice about faults does not replace a diagnosis at a car service.",
   "kind": {
     "CAR": "Car for sale",
     "RENTAL": "Rental",
@@ -38,10 +38,15 @@
     "INVALID_IMAGE": "This file can't be used. Send a JPEG, PNG or WebP photo.",
     "PHOTO_TYPE": "Only JPEG, PNG or WebP photos can be sent.",
     "PHOTO_SIZE": "The photo is too large. Pick one under 20 MB.",
-    "PHOTO_UNREADABLE": "This file doesn't open as a photo."
+    "PHOTO_UNREADABLE": "This file doesn't open as a photo.",
+    "DAILY_LIMIT": "You have asked the assistant a lot today. Let us continue tomorrow; meanwhile you can search with the catalogue.",
+    "PAUSED": "The assistant is resting for today. Come back tomorrow."
   },
   "attachPhoto": "Attach a photo",
   "removePhoto": "Remove the photo",
   "photoAlt": "Your photo",
-  "photoReady": "Photo attached. Add a question or just send it."
+  "photoReady": "Photo attached. Add a question or just send it.",
+  "waiting": "One moment…",
+  "paused": "The assistant is resting for today: the daily request limit is used up. Come back tomorrow; meanwhile you can search with the catalogue and filters.",
+  "photoPrivacy": "The photo is sent to Anthropic only to recognise it and is not stored."
 }

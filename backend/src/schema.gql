@@ -80,8 +80,26 @@ enum AiLanguage {
   RU
 }
 
+type AiSearchMissSummary {
+  count: Int!
+  filters: String!
+  lastSeen: DateTime!
+  tool: String!
+}
+
 type AiStatus {
   enabled: Boolean!
+  paused: Boolean!
+}
+
+type AiUsageDayReport {
+  cacheReadTokens: Int!
+  costUsd: Float!
+  day: String!
+  inputTokens: Int!
+  outputTokens: Int!
+  requests: Int!
+  units: Int!
 }
 
 type AppointmentObject {
@@ -674,7 +692,9 @@ enum PromotionTier {
 type Query {
   adminProfiles(limit: Int, search: String, targetType: ReviewTargetType!): [AdminProfileObject!]!
   adminPromotions(activeOnly: Boolean): [AdminPromotionObject!]!
+  aiSearchMisses(days: Int! = 7): [AiSearchMissSummary!]!
   aiStatus: AiStatus!
+  aiUsage(days: Int! = 14): [AiUsageDayReport!]!
   auction(id: String!): AuctionObject!
   auctionByListing(listingId: String!): AuctionObject
   bidsByAuction(auctionId: String!): [BidObject!]!

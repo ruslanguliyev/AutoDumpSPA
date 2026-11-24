@@ -155,7 +155,9 @@
     "step4Body": "Elan yerləşdirmək üçün hesab məcburi deyil. Ödənişli yerləşdirmə həmişə reklam kimi işarələnir.",
     "contactTitle": "Əlaqə",
     "contactBody": "Məhsul və ya diler hesabı haqqında suallar üçün kataloqdan başlayın və ya elan əlavə edin.",
-    "forDealers": "Dilərlər üçün"
+    "forDealers": "Dilərlər üçün",
+    "privacyTitle": "Məlumatların qorunması",
+    "privacyAiPhotos": "AvtoBaz köməkçisinin çatına göndərdiyiniz fotolar yalnız avtomobili, hissəni və ya işarəni tanımaq üçün Anthropic-ə ötürülür və nə bizdə, nə də serverdəki çat tarixçəsində saxlanılmır."
   },
   "footer": {
     "company": "Şirkət",

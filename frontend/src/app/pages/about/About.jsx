@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
@@ -9,6 +10,14 @@ const STEPS = ['step1', 'step2', 'step3', 'step4'];
 export default function About() {
   const { t } = useTranslation('common');
   useDocumentTitle(t('about.title'));
+  const { hash } = useLocation();
+
+  // The footer's "Data protection" link opens this page at #privacy.
+  useEffect(() => {
+    if (!hash) return undefined;
+    const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView(), 50);
+    return () => window.clearTimeout(timer);
+  }, [hash]);
 
   return (
     <div className="mx-auto w-full max-w-[800px] px-4 py-8 sm:py-10">
@@ -36,6 +45,11 @@ export default function About() {
           </li>
         ))}
       </ol>
+
+      <section id="privacy" className="mt-10 scroll-mt-24">
+        <h2 className="text-[17px] font-semibold text-foreground">{t('about.privacyTitle')}</h2>
+        <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{t('about.privacyAiPhotos')}</p>
+      </section>
 
       <section className="mt-10 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
         <h2 className="text-[17px] font-semibold text-foreground">{t('about.contactTitle')}</h2>

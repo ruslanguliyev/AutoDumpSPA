@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { ImagePlus, RotateCcw, Send, X } from 'lucide-react';
 
-import { aiErrorCode, useAiEnabled } from '@/features/ai/ai.api';
+import { AI_STATUS_QUERY_KEY, aiErrorCode, useAiStatus } from '@/features/ai/ai.api';
 import type { AiLanguageCode } from '@/features/ai/ai.api';
 import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import Button from '@/shared/ui/button';
 import { Input } from '@/shared/ui/Input';
 import { AiSparkle } from '@/shared/ui/AiSparkle/AiSparkle';
 
-import { sendAiChat, sendAiChatWithPhoto } from './aiChat.api';
+import { streamAiChat } from './aiChat.api';
 import { PHOTO_TYPES, PhotoError, preparePhoto } from './preparePhoto';
 import type { PreparedPhoto } from './preparePhoto';
 import { AiChatResultCard } from './AiChatResultCard';
@@ -30,15 +30,16 @@ const toApiLanguage = (lang: string): AiLanguageCode =>
 /**
  * The site assistant: one floating chat on every public page. It answers only from the
  * AvtoBaz catalogue; the cards under a reply are the real listings its searches returned.
- * Hidden entirely while the server has AI switched off.
+ * Hidden entirely while the server has AI switched off. While the site-wide daily cap is
+ * reached it stays visible and says it is resting until tomorrow.
  */
 export function AiChatWidget() {
-  const enabled = useAiEnabled();
-  if (!enabled) return null;
-  return <AiChatPanel />;
+  const status = useAiStatus();
+  if (!status.enabled) return null;
+  return <AiChatPanel paused={status.paused} />;
 }
 
-function AiChatPanel() {
+function AiChatPanel({ paused }: { paused: boolean }) {
   const { t } = useTranslation('aiChat');
   const { language } = useLanguageSync();
   const { open, entries, setOpen, add, reset } = useAiChatStore();
@@ -46,6 +47,10 @@ function AiChatPanel() {
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [photo, setPhoto] = useState<PreparedPhoto | null>(null);
   const [preparing, setPreparing] = useState(false);
+  /** The answer as it streams in; moved into the conversation once it is complete. */
+  const [streaming, setStreaming] = useState('');
+  const [searching, setSearching] = useState(false);
+  const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -61,14 +66,38 @@ function AiChatPanel() {
         const text = entry.photo && !isNew ? [entry.text, PHOTO_MARK].filter(Boolean).join(' ') : entry.text;
         return { role: entry.role, text };
       });
-      return blob
-        ? sendAiChatWithPhoto(history, toApiLanguage(language), blob, controller.signal)
-        : sendAiChat(history, toApiLanguage(language), controller.signal);
+      setStreaming('');
+      setSearching(false);
+      return streamAiChat(
+        history,
+        toApiLanguage(language),
+        blob,
+        {
+          onText: (text) => {
+            if (controller.signal.aborted) return;
+            setSearching(false);
+            setStreaming((current) => current + text);
+          },
+          onSearching: () => {
+            if (!controller.signal.aborted) setSearching(true);
+          },
+        },
+        controller.signal,
+      );
     },
     onSuccess: (reply) => add({ role: 'ASSISTANT', text: reply.text, cards: reply.cards }),
     onError: (error) => {
       if (error instanceof DOMException && error.name === 'AbortError') return;
-      setErrorCode(aiErrorCode(error));
+      const code = aiErrorCode(error);
+      if (code === 'PAUSED') {
+        queryClient.setQueryData(AI_STATUS_QUERY_KEY, { enabled: true, paused: true });
+        return;
+      }
+      setErrorCode(code);
+    },
+    onSettled: () => {
+      setStreaming('');
+      setSearching(false);
     },
   });
 
@@ -76,7 +105,7 @@ function AiChatPanel() {
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
-  }, [entries.length, mutation.isPending, open]);
+  }, [entries.length, mutation.isPending, open, streaming]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -90,7 +119,7 @@ function AiChatPanel() {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const text = draft.trim();
-    if ((!text && !photo) || mutation.isPending || preparing) return;
+    if ((!text && !photo) || mutation.isPending || preparing || paused) return;
     setErrorCode(null);
     add({ role: 'USER', text, ...(photo ? { photo: photo.thumbnail } : {}) });
     setDraft('');
@@ -199,9 +228,15 @@ function AiChatPanel() {
             ) : null}
           </div>
         ))}
-        {mutation.isPending ? (
+        {mutation.isPending && streaming ? <Bubble role="ASSISTANT">{streaming}</Bubble> : null}
+        {mutation.isPending && !streaming ? (
           <p className="text-[13px] text-muted-foreground" role="status">
-            {t('thinking')}
+            {searching ? t('thinking') : t('waiting')}
+          </p>
+        ) : null}
+        {paused ? (
+          <p className="rounded-2xl border border-border px-3 py-2 text-[14px] text-muted-foreground" role="status">
+            {t('paused')}
           </p>
         ) : null}
         {errorCode ? (
@@ -214,7 +249,9 @@ function AiChatPanel() {
       {photo ? (
         <div className="flex items-center gap-2 border-t border-border px-3 pt-3">
           <img src={photo.thumbnail} alt={t('photoAlt')} className="h-14 w-14 rounded-[var(--radius)] object-cover" />
-          <span className="min-w-0 flex-1 truncate text-[13px] text-muted-foreground">{t('photoReady')}</span>
+          <span className="min-w-0 flex-1 text-[13px] text-muted-foreground">
+            {t('photoReady')} <span className="text-[12px]">{t('photoPrivacy')}</span>
+          </span>
           <Button variant="icon" size="icon" onClick={() => setPhoto(null)} aria-label={t('removePhoto')}>
             <X size={18} />
           </Button>
@@ -234,7 +271,7 @@ function AiChatPanel() {
           variant="icon"
           size="icon"
           onClick={() => fileRef.current?.click()}
-          disabled={mutation.isPending || preparing}
+          disabled={mutation.isPending || preparing || paused}
           aria-label={t('attachPhoto')}
           title={t('attachPhoto')}
         >
@@ -247,6 +284,7 @@ function AiChatPanel() {
           maxLength={MAX_LENGTH}
           onChange={(event) => setDraft(event.target.value)}
           placeholder={t('placeholder')}
+          disabled={paused}
           autoComplete="off"
           wrapperClassName="min-w-0 flex-1"
           autoFocus
@@ -254,7 +292,7 @@ function AiChatPanel() {
         <Button
           type="submit"
           size="icon"
-          disabled={(!draft.trim() && !photo) || mutation.isPending || preparing}
+          disabled={(!draft.trim() && !photo) || mutation.isPending || preparing || paused}
           aria-label={t('send')}
         >
           <Send size={18} />

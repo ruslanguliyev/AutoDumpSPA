@@ -1,7 +1,9 @@
 import { GraphQLError } from 'graphql';
 
 import { AiService } from './ai.service';
+import { AiBudget } from './ai-budget.service';
 import { AiRateLimiter } from './rate-limit';
+import { fakeAiPrisma } from './testing';
 import { SearchParseCache } from './search-cache';
 import type { AiProvider } from './providers/ai-provider';
 
@@ -39,6 +41,7 @@ describe('AiService', () => {
       provider,
       new AiRateLimiter(),
       new SearchParseCache(),
+      new AiBudget(fakeAiPrisma() as never),
     );
     return { service, provider };
   };

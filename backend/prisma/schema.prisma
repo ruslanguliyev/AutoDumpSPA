@@ -656,3 +656,35 @@ model Payment {
   @@unique([provider, providerPaymentId])
   @@index([orderId])
 }
+
+/// AI spend for one day (Asia/Baku calendar day). One row per day; the chat, smart search and
+/// description features all add to it, and the AI pauses itself once the daily cap is reached.
+model AiUsageDay {
+  /// YYYY-MM-DD in Baku time.
+  day              String   @id
+  /// Weighted request units (a photo counts as several text messages).
+  units            Int      @default(0)
+  requests         Int      @default(0)
+  inputTokens      Int      @default(0)
+  outputTokens     Int      @default(0)
+  cacheReadTokens  Int      @default(0)
+  cacheWriteTokens Int      @default(0)
+  /// Estimated cost in millionths of a US dollar, from list prices.
+  costMicroUsd     Int      @default(0)
+  updatedAt        DateTime @updatedAt
+}
+
+/// A catalogue search the assistant ran that found nothing, so the owner can see what
+/// inventory is missing. Only the search filters are kept: no IP, no user, no chat text.
+model AiSearchMiss {
+  id        String   @id @default(cuid())
+  /// search_cars, search_parts, …
+  tool      String
+  /// The filters the tool was called with (already cleaned of phone numbers and e-mails).
+  filters   Json
+  language  String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([tool, createdAt])
+}

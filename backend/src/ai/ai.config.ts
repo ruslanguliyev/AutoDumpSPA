@@ -18,6 +18,20 @@ export type AiConfig = {
   chatWindowMs: number;
   chatImageLimit: number;
   chatImageWindowMs: number;
+  /** Model for photo messages; text chat runs on the cheaper chatModel. */
+  chatVisionModel: string;
+  /** Weighted units one visitor (IP) may spend per Baku calendar day. */
+  dailyIpUnits: number;
+  /** Weighted units the whole site may spend per day before the AI pauses itself. */
+  dailyGlobalUnits: number;
+  /** Estimated USD the whole site may spend per day before the AI pauses itself. */
+  dailyBudgetUsd: number;
+  /** Units a photo message costs (a text message costs 1). */
+  chatImageWeight: number;
+  /** How long an identical first question keeps its answer. */
+  chatCacheTtlMs: number;
+  /** How long an identical catalogue search keeps its rows. */
+  catalogCacheTtlMs: number;
 };
 
 const num = (value: unknown, fallback: number) => {
@@ -46,12 +60,19 @@ export function readAiConfig(config: ConfigService): AiConfig {
     searchLimit: num(config.get('AI_RATE_LIMIT_SEARCH'), 30),
     searchWindowMs: num(config.get('AI_RATE_LIMIT_SEARCH_WINDOW_SEC'), 3600) * 1000,
     searchCacheTtlMs: num(config.get('AI_SEARCH_CACHE_TTL_MS'), 60_000),
-    chatModel: String(config.get('AI_MODEL_CHAT') ?? '').trim() || 'claude-opus-5-5',
+    chatModel: String(config.get('AI_MODEL_CHAT') ?? '').trim() || 'claude-haiku-5-5',
     chatEffort: effort(config.get('AI_CHAT_EFFORT')),
     chatTimeoutMs: num(config.get('AI_CHAT_TIMEOUT_MS'), 45_000),
     chatLimit: num(config.get('AI_RATE_LIMIT_CHAT'), 40),
     chatWindowMs: num(config.get('AI_RATE_LIMIT_CHAT_WINDOW_SEC'), 3600) * 1000,
     chatImageLimit: num(config.get('AI_RATE_LIMIT_CHAT_IMAGE'), 15),
     chatImageWindowMs: num(config.get('AI_RATE_LIMIT_CHAT_IMAGE_WINDOW_SEC'), 3600) * 1000,
+    chatVisionModel: String(config.get('AI_MODEL_CHAT_VISION') ?? '').trim() || 'claude-sonnet-5-5',
+    dailyIpUnits: num(config.get('AI_DAILY_LIMIT_PER_IP'), 60),
+    dailyGlobalUnits: num(config.get('AI_DAILY_LIMIT_GLOBAL'), 3000),
+    dailyBudgetUsd: num(config.get('AI_DAILY_BUDGET_USD'), 5),
+    chatImageWeight: num(config.get('AI_CHAT_IMAGE_WEIGHT'), 5),
+    chatCacheTtlMs: num(config.get('AI_CHAT_CACHE_TTL_SEC'), 600) * 1000,
+    catalogCacheTtlMs: num(config.get('AI_CATALOG_CACHE_TTL_SEC'), 120) * 1000,
   };
 }

@@ -12,6 +12,8 @@ export type AiErrorCode =
   | 'INVALID_RESULT'
   | 'INVALID_INPUT'
   | 'INVALID_IMAGE'
+  | 'DAILY_LIMIT'
+  | 'PAUSED'
   | 'GENERIC';
 
 export type ParsedSearchFilters = {
@@ -27,7 +29,7 @@ export type ParsedSearchFilters = {
   location?: string | null;
 };
 
-const STATUS_QUERY = `query AiStatus { aiStatus { enabled } }`;
+const STATUS_QUERY = `query AiStatus { aiStatus { enabled paused } }`;
 
 const GENERATE_MUTATION = `
 mutation GenerateListingDescription($input: GenerateListingDescriptionInput!) {
@@ -66,31 +68,48 @@ export function aiErrorCode(error: unknown): AiErrorCode {
     code === 'UNAVAILABLE' ||
     code === 'INVALID_RESULT' ||
     code === 'INVALID_INPUT' ||
-    code === 'INVALID_IMAGE'
+    code === 'INVALID_IMAGE' ||
+    code === 'DAILY_LIMIT' ||
+    code === 'PAUSED'
   ) {
     return code;
   }
   return 'GENERIC';
 }
 
-export async function fetchAiEnabled(): Promise<boolean> {
+export type AiStatus = { enabled: boolean; paused: boolean };
+
+const AI_OFF: AiStatus = { enabled: false, paused: false };
+
+export async function fetchAiStatus(): Promise<AiStatus> {
   try {
-    const data = await gqlRequest<{ aiStatus?: { enabled?: boolean } }>(STATUS_QUERY);
-    return data?.aiStatus?.enabled === true;
+    const data = await gqlRequest<{ aiStatus?: { enabled?: boolean; paused?: boolean } }>(STATUS_QUERY);
+    return { enabled: data?.aiStatus?.enabled === true, paused: data?.aiStatus?.paused === true };
   } catch {
-    return false;
+    return AI_OFF;
   }
 }
 
-/** False while loading and when the server says AI is off, so the UI never shows a dead control. */
-export function useAiEnabled(): boolean {
+export const AI_STATUS_QUERY_KEY = ['ai-status'] as const;
+
+/** Off while loading and when the server says AI is off, so the UI never shows a dead control. */
+export function useAiStatus(): AiStatus {
   const query = useQuery({
-    queryKey: ['ai-status'],
-    queryFn: fetchAiEnabled,
+    queryKey: AI_STATUS_QUERY_KEY,
+    queryFn: fetchAiStatus,
     staleTime: 60_000,
     retry: false,
   });
-  return query.data === true;
+  return query.data ?? AI_OFF;
+}
+
+/**
+ * True when AI tools may be shown. While the site-wide daily cap is reached they hide;
+ * only the chat stays visible to explain that it is resting until tomorrow.
+ */
+export function useAiEnabled(): boolean {
+  const status = useAiStatus();
+  return status.enabled && !status.paused;
 }
 
 export type DescriptionInput = {

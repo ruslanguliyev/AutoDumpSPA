@@ -155,7 +155,9 @@
     "step4Body": "Anyone can place an advert. Paid placement is always labelled as an advert.",
     "contactTitle": "Get in touch",
     "contactBody": "Questions about the product or a dealer account — start from the catalogue or add a listing.",
-    "forDealers": "For dealers"
+    "forDealers": "For dealers",
+    "privacyTitle": "Data protection",
+    "privacyAiPhotos": "Photos you send in the AvtoBaz assistant chat are passed to Anthropic only to recognise the car, part or warning light, and are not stored by us or kept in the chat history on the server."
   },
   "footer": {
     "company": "Company",

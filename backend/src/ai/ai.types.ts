@@ -136,4 +136,50 @@ export class ParsedVehicleSearch {
 export class AiStatus {
   @Field()
   enabled: boolean;
+
+  /** The site-wide daily AI cap is reached: the assistant says so and the other AI tools hide. */
+  @Field({ defaultValue: false })
+  paused: boolean;
+}
+
+/** An empty catalogue search the assistant ran, grouped by its filters (admin only). */
+@ObjectType()
+export class AiSearchMissSummary {
+  @Field()
+  tool: string;
+
+  /** The filters as JSON text. */
+  @Field()
+  filters: string;
+
+  @Field(() => Int)
+  count: number;
+
+  @Field()
+  lastSeen: Date;
+}
+
+/** AI spend for one Baku calendar day (admin only). */
+@ObjectType()
+export class AiUsageDayReport {
+  @Field()
+  day: string;
+
+  @Field(() => Int)
+  units: number;
+
+  @Field(() => Int)
+  requests: number;
+
+  @Field(() => Int)
+  inputTokens: number;
+
+  @Field(() => Int)
+  outputTokens: number;
+
+  @Field(() => Int)
+  cacheReadTokens: number;
+
+  @Field(() => Float)
+  costUsd: number;
 }

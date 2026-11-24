@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import Anthropic from '@anthropic-ai/sdk';
 
 import { readAiConfig } from '../ai.config';
+import { usageFrom } from '../ai-usage';
 import { AiCompletionRequest, AiProvider } from './ai-provider';
 
 @Injectable()
@@ -34,6 +35,7 @@ export class AnthropicAiProvider implements AiProvider {
       { signal: AbortSignal.timeout(request.timeoutMs) },
     );
 
+    request.onUsage?.(usageFrom(message.model || request.model, message.usage));
     const block = message.content.find(
       (item) => item.type === 'tool_use' && item.name === request.tool.name,
     );

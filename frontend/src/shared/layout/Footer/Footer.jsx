@@ -66,7 +66,7 @@ const Footer = () => {
   ];
 
   const legalLinks = [
-    { label: t('footer.privacy'), to: ROUTES.about },
+    { label: t('footer.privacy'), to: `${ROUTES.about}#privacy` },
     { label: t('footer.imprint'), to: ROUTES.about },
     { label: t('footer.help'), to: ROUTES.about },
   ];

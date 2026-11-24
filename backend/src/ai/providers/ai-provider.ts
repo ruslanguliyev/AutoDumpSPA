@@ -1,3 +1,5 @@
+import type { AiUsage } from '../ai-usage';
+
 export const AI_PROVIDER = Symbol('AI_PROVIDER');
 
 export type AiTool = {
@@ -14,6 +16,8 @@ export type AiCompletionRequest = {
   temperature: number;
   maxTokens: number;
   timeoutMs: number;
+  /** Receives the tokens the call used, for the daily budget and the cost log. */
+  onUsage?: (usage: AiUsage) => void;
 };
 
 export interface AiProvider {
