@@ -264,7 +264,7 @@ export const useAddItemStore = create<AddItemStoreState>((set) => ({
         ...current,
         common: {
           ...current.common,
-          [key]: value,
+          [key]: key === 'description' ? String(value ?? '') : value,
         },
       })),
       dirty: true,

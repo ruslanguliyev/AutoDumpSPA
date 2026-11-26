@@ -1,4 +1,4 @@
-﻿{
+{
   "title": "Yeni elan əlavə et",
   "subtitle": "Addım-addım yaradılması üçün elan növünü seçin.",
   "entry": {
@@ -244,5 +244,45 @@
       "kmPerDay": "Yürüş: 1-dən 5000-ə qədər tam ədəd",
       "minDriverAge": "Yaş: 16-dan 100-ə qədər tam ədəd"
     }
+  },
+  "ai": {
+    "toneLabel": "Ton",
+    "languageLabel": "Təsvirin dili",
+    "hint": "Vəziyyət, tarixçə və komplektasiya haqqında yazın. Və ya ilk qaralamanı AI-ya həvalə edin.",
+    "generate": "AI ilə yaz",
+    "writing": "Təsvir yazılır…",
+    "retry": "Yenidən cəhd et",
+    "toneNeutral": "Neytral",
+    "toneSales": "Satış",
+    "toneShort": "Qısa",
+    "placeholder": "Vəziyyəti, tarixçəni və komplektasiyanı yazın. Və ya «AI ilə yaz» düyməsini basın: mətn elanın məlumatlarından yığılacaq.",
+    "needFacts": "Marka, model və ili doldurun, AI təsvir yaza bilsin.",
+    "toStep": "«{{step}}» addımına",
+    "draftTitle": "AI qaralaması",
+    "draftTitleMobile": "AI qaralaması. Dərc etməzdən əvvəl yoxlayın",
+    "draftHint": "Dərc etməzdən əvvəl yoxlayın və düzəldin",
+    "regenerate": "Yenidən yaz",
+    "shorter": "Qısa",
+    "longer": "Ətraflı",
+    "cancel": "Ləğv et",
+    "used": "AI istifadə etdi:",
+    "usedCount": "AI {{count}} sahədən istifadə etdi",
+    "changeData": "Məlumatı dəyiş",
+    "changeShort": "dəyiş",
+    "counter": "{{count}} / {{max}}",
+    "errorGeneric": "Təsviri yaratmaq alınmadı. Mətniniz dəyişməyib.",
+    "errorRate": "Sorğu həddən çoxdur. Bir az gözləyib yenidən cəhd edin. Mətniniz dəyişməyib.",
+    "errorUnavailable": "AI indi əlçatan deyil. Mətniniz dəyişməyib.",
+    "replaceTitle": "Cari mətn əvəz edilsin?",
+    "replaceConfirm": "Əvəz et",
+    "replaceCancel": "Ləğv et",
+    "bracketWarning": "Təsvirdə mötərizədə ipucları qalıb",
+    "bracketFix": "Düzəlt",
+    "bracketContinue": "Yenə də davam et",
+    "howTitle": "AI təsviri necə işləyir",
+    "how1": "Yalnız doldurulmuş elan sahələrindən istifadə edir.",
+    "how2": "Bilmədiyini uydurmur: mötərizədə ipucu saxlayır.",
+    "how3": "«Növbəti» basılmayana qədər mətn dərc olunmur. Həmişəki kimi düzəltmək olar.",
+    "previewBuyer": "Alıcılar belə görəcək"
   }
 }
