@@ -35,6 +35,14 @@
   --destructive:           220  38  38;   /* #DC2626  errors and Report only */
   --star:                  217 119   6;   /* #D97706  rating stars on light */
 
+  /* AI accent on light: dark purple text on a lavender surface. */
+  --ai-surface:            237 233 255;   /* #EDE9FF */
+  --ai-border:             124 108 196;   /* #7C6CC4 */
+  --ai-border-strong:       79  52 176;   /* #4F34B0 */
+  --ai-text:                55  35 140;   /* #37238C */
+  --ai-text-soft:           67  42 158;   /* #432A9E */
+  --ai-text-icon:           79  52 176;   /* #4F34B0 */
+
   /* paid placement — never used for anything else */
   --promo-bump:             21 128  61;   /* #15803D */
   --promo-vip:             190  18  60;   /* #BE123C  text/border */
@@ -82,6 +90,14 @@
   --destructive:           248 113 113;   /* #F87171 */
   --star:                  245 158  11;   /* #F59E0B */
 
+  /* AI accent on dark, taken from the AI artboards. */
+  --ai-surface:             28  26  58;   /* #1C1A3A */
+  --ai-border:              58  56 112;   /* #3A3870 */
+  --ai-border-strong:       90  82 184;   /* #5A52B8 */
+  --ai-text:               201 189 255;   /* #C9BDFF */
+  --ai-text-soft:          216 210 255;   /* #D8D2FF */
+  --ai-text-icon:          185 169 255;   /* #B9A9FF */
+
   --promo-bump:             52 211 153;   /* #34D399 */
   --promo-vip:             251 113 133;   /* #FB7185 */
   --promo-vip-fill:        225  29  72;   /* #E11D48 */
@@ -119,6 +135,13 @@
   --color-warning:               rgb(var(--warning));
   --color-destructive:           rgb(var(--destructive));
   --color-star:                  rgb(var(--star));
+
+  --color-ai-surface:            rgb(var(--ai-surface));
+  --color-ai-border:             rgb(var(--ai-border));
+  --color-ai-border-strong:      rgb(var(--ai-border-strong));
+  --color-ai-text:               rgb(var(--ai-text));
+  --color-ai-text-soft:          rgb(var(--ai-text-soft));
+  --color-ai-text-icon:          rgb(var(--ai-text-icon));
 
   --color-promo-bump:            rgb(var(--promo-bump));
   --color-promo-vip:             rgb(var(--promo-vip));

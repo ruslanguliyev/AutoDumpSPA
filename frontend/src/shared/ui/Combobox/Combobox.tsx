@@ -37,6 +37,8 @@ export type ComboboxProps = {
   disabled?: boolean;
   error?: string;
   className?: string;
+  /** Extra classes for the closed control, e.g. an AI border on a filled field. */
+  triggerClassName?: string;
   'aria-label'?: string;
 };
 
@@ -51,6 +53,7 @@ export function Combobox({
   disabled,
   error,
   className,
+  triggerClassName,
   'aria-label': ariaLabel,
 }: ComboboxProps) {
   const reactId = useId();
@@ -291,7 +294,7 @@ export function Combobox({
         aria-controls={listboxId}
         aria-invalid={Boolean(error)}
         aria-label={ariaLabel}
-        className={cn(triggerBaseClass, error && 'border-destructive')}
+        className={cn(triggerBaseClass, error && 'border-destructive', triggerClassName)}
         onClick={() => !disabled && setOpen((o) => !o)}
         onKeyDown={onKeyDownButton}
       >
