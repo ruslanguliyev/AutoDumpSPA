@@ -1,7 +1,9 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PhotoFocusEditor } from '@/features/addItem/components/PhotoFocusEditor';
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
+import { focusPosition } from '@/lib/imageFocus';
 import { getApiBase, normalizeUploadUrl, resolveMediaUrl } from '@/lib/mediaUrl';
 import Button from '@/shared/ui/button';
 
@@ -26,6 +28,7 @@ const PhotosStep = () => {
   const addImage = useAddItemStore((state) => state.addImage);
   const removeImage = useAddItemStore((state) => state.removeImage);
   const setMainImage = useAddItemStore((state) => state.setMainImage);
+  const setImageUrl = useAddItemStore((state) => state.setImageUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [urlError, setUrlError] = useState<string>('');
   const [uploadError, setUploadError] = useState<string>('');
@@ -125,6 +128,7 @@ const PhotosStep = () => {
   };
 
   const uploading = pending.length > 0;
+  const mainImage = draft.media.images.find((image) => image.isMain) ?? draft.media.images[0];
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
@@ -176,6 +180,12 @@ const PhotosStep = () => {
         <p className="mt-2 text-xs text-destructive">{uploadError}</p>
       ) : null}
 
+      {mainImage ? (
+        <div className="mt-6">
+          <PhotoFocusEditor url={mainImage.url} onChange={(url) => setImageUrl(mainImage.id, url)} />
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {draft.media.images.length === 0 && pending.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
@@ -215,6 +225,7 @@ const PhotosStep = () => {
                         src={displayUrl}
                         alt={t('form.draftUploadAlt')}
                         className="h-36 w-full object-cover"
+                        style={{ objectPosition: focusPosition(image.url) }}
                       />
                     ) : (
                       <div className="flex h-36 items-center justify-center text-xs text-muted-foreground">

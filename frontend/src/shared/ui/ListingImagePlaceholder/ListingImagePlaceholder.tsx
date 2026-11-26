@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { focusPosition } from '@/lib/imageFocus';
+
 export const LISTING_IMAGE_PLACEHOLDER_SRC = '/icons/sedan-car-model-svgrepo-com.svg';
 
 type PlaceholderProps = {
@@ -49,6 +51,8 @@ export function ListingPhoto({ src, className = '', loading = 'lazy' }: ListingP
       alt=""
       loading={loading}
       className={className}
+      // The seller's chosen crop (see lib/imageFocus); the centre when none was set.
+      style={{ objectPosition: focusPosition(safeSrc) }}
       onError={() => setBroken(true)}
     />
   );

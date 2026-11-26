@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -48,6 +48,98 @@ const DRIVETRAIN_OPTIONS = [
   { value: 'RWD' },
   { value: 'AWD' },
 ] as const;
+
+
+const INTEGER_RE = /^\d*$/;
+/** Litres: digits with one optional point and up to two decimals ("2", "2.", "1.6"). */
+const DECIMAL_RE = /^\d*\.?\d{0,2}$/;
+
+/**
+ * Number-only text field. A keystroke or paste with anything else is refused:
+ * the value stays as it was, the box shakes, turns red and says why.
+ */
+function NumericField({
+  id,
+  label,
+  value,
+  onChange,
+  decimal = false,
+  placeholder,
+  disabled,
+  suffix,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  decimal?: boolean;
+  placeholder?: string;
+  disabled?: boolean;
+  suffix?: ReactNode;
+}) {
+  const { t } = useTranslation('addItem');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const timer = useRef<number | undefined>(undefined);
+  const [rejected, setRejected] = useState(false);
+
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  const reject = () => {
+    setRejected(true);
+    const el = inputRef.current;
+    if (el) {
+      // Restart the animation even when letters keep coming.
+      el.classList.remove('shake-x');
+      void el.offsetWidth;
+      el.classList.add('shake-x');
+    }
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setRejected(false), 2500);
+  };
+
+  const errorId = `${id}-error`;
+
+  return (
+    <div>
+      <label
+        className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
+        htmlFor={id}
+      >
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          ref={inputRef}
+          id={id}
+          inputMode={decimal ? 'decimal' : 'numeric'}
+          autoComplete="off"
+          className={cn(inputClass, 'h-11', rejected && '!border-destructive ring-2 ring-destructive/40 focus-visible:ring-destructive!')}
+          placeholder={placeholder}
+          value={value}
+          disabled={disabled}
+          aria-invalid={rejected ? true : undefined}
+          aria-describedby={rejected ? errorId : undefined}
+          onAnimationEnd={(event) => event.currentTarget.classList.remove('shake-x')}
+          onChange={(event) => {
+            const next = decimal ? event.target.value.replace(',', '.') : event.target.value;
+            if ((decimal ? DECIMAL_RE : INTEGER_RE).test(next)) {
+              if (rejected) setRejected(false);
+              onChange(next);
+            } else {
+              reject();
+            }
+          }}
+        />
+        {suffix}
+      </div>
+      {rejected ? (
+        <p id={errorId} role="alert" className="mt-1 text-xs text-destructive">
+          {t('validation.digitsOnly')}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
 const VehicleStep = () => {
   const { t } = useTranslation('addItem');
@@ -234,6 +326,8 @@ const VehicleStep = () => {
 
   const vin = v.vin ?? '';
   const vinError = vin && !isValidVin(vin) ? t('validation.invalidVin') : undefined;
+  // Ask for the year once the car itself is chosen, not on an untouched form.
+  const yearMissing = Boolean(v.brand) && !v.year;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
@@ -246,12 +340,18 @@ const VehicleStep = () => {
 
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          <label
+            className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground"
+            htmlFor="vehicle-year"
+          >
             {t('form.year')}
           </label>
           <select
-            className={inputClass}
+            id="vehicle-year"
+            className={cn(inputClass, 'h-11', !v.year && 'text-subtle-foreground', yearMissing && 'border-destructive')}
             value={v.year}
+            aria-invalid={yearMissing ? true : undefined}
+            aria-describedby={yearMissing ? 'vehicle-year-error' : undefined}
             onChange={(event) => setVehicleField('year', event.target.value)}
           >
             <option value="">{t('form.yearPlaceholder')}</option>
@@ -261,6 +361,11 @@ const VehicleStep = () => {
               </option>
             ))}
           </select>
+          {yearMissing ? (
+            <p id="vehicle-year-error" className="mt-1 text-xs text-destructive">
+              {t('validation.yearRequired')}
+            </p>
+          ) : null}
         </div>
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -406,37 +511,30 @@ const VehicleStep = () => {
             )}
           </div>
         ) : null}
-        <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('vehicleForm.engineVolume')}
-          </label>
-          <div className="relative">
-            <input
-              className={inputClass}
-              placeholder={specsLoading ? t('vehicleForm.loading') : '2.0'}
-              value={v.displacement ?? ''}
-              onChange={(event) => setVehicleField('displacement', event.target.value)}
-              disabled={specsLoading}
-            />
-            {specsLoading ? (
+        <NumericField
+          id="vehicle-engine-volume"
+          label={t('vehicleForm.engineVolume')}
+          decimal
+          placeholder={specsLoading ? t('vehicleForm.loading') : '2.0'}
+          value={v.displacement ?? ''}
+          onChange={(value) => setVehicleField('displacement', value)}
+          disabled={specsLoading}
+          suffix={
+            specsLoading ? (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground animate-pulse">
                 ⏳
               </span>
-            ) : null}
-          </div>
-        </div>
-        <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('vehicleForm.power')}
-          </label>
-          <input
-            className={inputClass}
-            placeholder={specsLoading ? t('vehicleForm.loading') : '150'}
-            value={v.horsepower ?? ''}
-            onChange={(event) => setVehicleField('horsepower', event.target.value)}
-            disabled={specsLoading}
-          />
-        </div>
+            ) : null
+          }
+        />
+        <NumericField
+          id="vehicle-power"
+          label={t('vehicleForm.power')}
+          placeholder={specsLoading ? t('vehicleForm.loading') : '150'}
+          value={v.horsepower ?? ''}
+          onChange={(value) => setVehicleField('horsepower', value)}
+          disabled={specsLoading}
+        />
         {specsError ? (
           <p className="md:col-span-2 text-xs text-muted-foreground">{specsError}</p>
         ) : null}

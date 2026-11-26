@@ -102,9 +102,9 @@
     "vehicleDetailsTitle": "Данные автомобиля",
     "vehicleDetailsHint": "Основные технические характеристики.",
     "vinPlaceholder": "Идентификационный номер",
-    "yearPlaceholder": "2024",
-    "brandPlaceholder": "BMW",
-    "modelPlaceholder": "M4 Competition",
+    "yearPlaceholder": "Выберите год",
+    "brandPlaceholder": "Выберите марку",
+    "modelPlaceholder": "Выберите модель",
     "trimPlaceholder": "Выберите комплектацию",
     "modelOther": "Другая модель",
     "vehicleCategories": {
@@ -178,7 +178,9 @@
     "invalidVehicleCategory": "Выберите категорию из списка",
     "invalidVehicleModel": "Выберите модель из списка для выбранной марки",
     "invalidVehicleTrim": "Выберите комплектацию из списка",
-    "invalidVin": "VIN — 17 символов: A–Z и 0–9, без I, O и Q."
+    "invalidVin": "VIN — 17 символов: A–Z и 0–9, без I, O и Q.",
+    "digitsOnly": "Введите только цифры",
+    "yearRequired": "Выберите год выпуска"
   },
   "success": {
     "title": "Объявление опубликовано",
@@ -286,5 +288,11 @@
     "how2": "Чего не знает, не придумывает: оставляет подсказку в скобках.",
     "how3": "Текст не публикуется, пока вы не нажмёте «Далее». Править можно как обычно.",
     "previewBuyer": "Так увидят покупатели"
+  },
+  "photoFocus": {
+    "title": "Фото в карточке объявления",
+    "hint": "Перетащите фото, чтобы выбрать кадр",
+    "reset": "По центру",
+    "aria": "Кадр главного фото: перетащите или используйте стрелки"
   }
 }

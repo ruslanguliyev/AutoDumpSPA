@@ -147,6 +147,8 @@ type AddItemStoreState = {
   addImage: (url: string) => void;
   removeImage: (id: string) => void;
   setMainImage: (id: string) => void;
+  /** Rewrites the image URL with a new focal point (see lib/imageFocus). */
+  setImageUrl: (id: string, url: string) => void;
 };
 
 const createId = () => {
@@ -410,6 +412,21 @@ export const useAddItemStore = create<AddItemStoreState>((set) => ({
             ...image,
             isMain: image.id === id,
           })),
+        },
+      })),
+      dirty: true,
+      saveStatus: 'idle',
+    })),
+
+  setImageUrl: (id, url) =>
+    set((state) => ({
+      draft: updateDraftState(state.draft, (current) => ({
+        ...current,
+        media: {
+          ...current.media,
+          images: current.media.images.map((image) =>
+            image.id === id ? { ...image, url } : image,
+          ),
         },
       })),
       dirty: true,

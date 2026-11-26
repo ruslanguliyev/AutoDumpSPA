@@ -102,9 +102,9 @@
     "vehicleDetailsTitle": "Avtomobil məlumatı",
     "vehicleDetailsHint": "Əsas texniki xüsusiyyətlər.",
     "vinPlaceholder": "İdentifikasiya nömrəsi",
-    "yearPlaceholder": "2024",
-    "brandPlaceholder": "BMW",
-    "modelPlaceholder": "M4 Competition",
+    "yearPlaceholder": "İli seçin",
+    "brandPlaceholder": "Markanı seçin",
+    "modelPlaceholder": "Modeli seçin",
     "trimPlaceholder": "Komplektasiya seçin",
     "modelOther": "Digər model",
     "vehicleCategories": {
@@ -178,7 +178,9 @@
     "invalidVehicleCategory": "Kateqoriyanı siyahıdan seçin",
     "invalidVehicleModel": "Seçilmiş marka üçün modeli siyahıdan seçin",
     "invalidVehicleTrim": "Komplektasiyanı siyahıdan seçin",
-    "invalidVin": "VIN 17 simvol olmalıdır: A–Z və 0–9, I, O və Q olmadan."
+    "invalidVin": "VIN 17 simvol olmalıdır: A–Z və 0–9, I, O və Q olmadan.",
+    "digitsOnly": "Yalnız rəqəm daxil edin",
+    "yearRequired": "Buraxılış ilini seçin"
   },
   "success": {
     "title": "Elan dərc edildi",
@@ -286,5 +288,11 @@
     "how2": "Bilmədiyini uydurmur: mötərizədə ipucu saxlayır.",
     "how3": "«Növbəti» basılmayana qədər mətn dərc olunmur. Həmişəki kimi düzəltmək olar.",
     "previewBuyer": "Alıcılar belə görəcək"
+  },
+  "photoFocus": {
+    "title": "Elan kartında şəkil",
+    "hint": "Kadrı seçmək üçün şəkli sürüşdürün",
+    "reset": "Mərkəzə",
+    "aria": "Əsas şəklin kadrı: sürüşdürün və ya oxlardan istifadə edin"
   }
 }

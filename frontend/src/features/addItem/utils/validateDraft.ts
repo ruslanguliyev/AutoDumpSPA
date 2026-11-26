@@ -106,6 +106,9 @@ export const validateVehicle = (draft: ListingDraft) => {
   if (!vehicle) return false;
   if (!isValidVin(vehicle.vin)) return false;
   if (!trim(vehicle.brand) || !trim(vehicle.model)) return false;
+  // The AI description and the card title both need the year, and a placeholder
+  // year in the select is easy to mistake for a chosen one.
+  if (!/^\d{4}$/.test(trim(vehicle.year))) return false;
   if (parseEngineVolume(vehicle.displacement) === undefined) return false;
   if (parsePower(vehicle.horsepower) === undefined) return false;
   if (!isModelAllowedForBrand(vehicle.brand, vehicle.model)) return false;

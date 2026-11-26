@@ -294,7 +294,9 @@ async function syncDraftToBackend(draft: ListingDraft) {
     const v = draft.vehicle;
     // Only persist real URLs. Blob/data URLs are local-only preview artifacts
     // that must never reach the database.
-    const cleanUrls = draft.media.images
+    // The main photo goes first: every card shows imageUrls[0].
+    const cleanUrls = [...draft.media.images]
+      .sort((a, b) => Number(b.isMain) - Number(a.isMain))
       .map((img) => (img.url ?? '').trim())
       .filter((url) => url && !url.startsWith('blob:') && !url.startsWith('data:'));
     const imageUrls = cleanUrls.length > 0 ? cleanUrls : [];

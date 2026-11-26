@@ -101,9 +101,9 @@
     "vehicleDetailsTitle": "Vehicle details",
     "vehicleDetailsHint": "Capture the essential technical specifications.",
     "vinPlaceholder": "Vehicle identification number",
-    "yearPlaceholder": "2024",
-    "brandPlaceholder": "BMW",
-    "modelPlaceholder": "M4 Competition",
+    "yearPlaceholder": "Select year",
+    "brandPlaceholder": "Select make",
+    "modelPlaceholder": "Select model",
     "trimPlaceholder": "Select trim level",
     "modelOther": "Other model",
     "vehicleCategories": {
@@ -179,7 +179,9 @@
     "invalidVehicleCategory": "Choose a category from the list",
     "invalidVehicleModel": "Choose a model from the list for the selected brand",
     "invalidVehicleTrim": "Choose a trim from the list",
-    "invalidVin": "VIN must be 17 characters: A–Z and 0–9, without I, O or Q."
+    "invalidVin": "VIN must be 17 characters: A–Z and 0–9, without I, O or Q.",
+    "digitsOnly": "Digits only",
+    "yearRequired": "Select the year"
   },
   "success": {
     "title": "Listing published",
@@ -287,5 +289,11 @@
     "how2": "What it does not know, it does not invent: it leaves a hint in brackets.",
     "how3": "Nothing is published until you press “Next step”. You can edit the text as usual.",
     "previewBuyer": "What buyers will see"
+  },
+  "photoFocus": {
+    "title": "Photo in the listing card",
+    "hint": "Drag the photo to choose the crop",
+    "reset": "Center",
+    "aria": "Main photo crop: drag or use the arrow keys"
   }
 }

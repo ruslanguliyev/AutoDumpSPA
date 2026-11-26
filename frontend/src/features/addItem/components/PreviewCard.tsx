@@ -4,6 +4,7 @@ import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog
 import type { ListingDraft } from '@/features/addItem/store/useAddItemStore';
 import { getDraftTitle } from '@/features/addItem/utils/validateDraft';
 import { formatNumber } from '@/lib/format';
+import { focusPosition } from '@/lib/imageFocus';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { cn } from '@/shared/utils/cn';
 
@@ -102,13 +103,14 @@ const PreviewCard = ({ draft, title: titleLabel }: PreviewCardProps) => {
           <img
             src={primaryPhotoUrl}
             alt={title}
-            className="h-44 w-full object-cover"
+            className="aspect-[4/3] w-full object-cover"
+            style={{ objectPosition: focusPosition(primaryPhoto?.url) }}
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
           />
         ) : (
-          <div className="flex h-44 items-center justify-center text-sm text-muted-foreground">
+          <div className="flex aspect-[4/3] items-center justify-center text-sm text-muted-foreground">
             {t('preview.noPhotosYet')}
           </div>
         )}

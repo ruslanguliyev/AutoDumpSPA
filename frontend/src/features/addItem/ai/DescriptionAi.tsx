@@ -138,7 +138,9 @@ export function DescriptionAi() {
     setPhase('generating');
     setConfirming(false);
     setErrorCode('GENERIC');
-    const mileage = Number(String(vehicle.mileage ?? '').replace(/\s/g, ''));
+    const mileageText = String(vehicle.mileage ?? '').replace(/\s/g, '');
+    // An empty field is "not given", not 0 km.
+    const mileage = mileageText ? Number(mileageText) : NaN;
     const engineVolume = parseEngineVolume(vehicle.displacement);
     const horsepower = parsePower(vehicle.horsepower);
     try {
