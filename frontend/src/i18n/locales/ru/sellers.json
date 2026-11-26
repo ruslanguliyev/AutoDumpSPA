@@ -107,11 +107,21 @@
     "profileUnavailable": "Профиль недоступен",
     "notAvailable": "Продавец {{id}} недоступен.",
     "tabs": {
-      "stock": "В наличии",
+      "stock": "Склад",
       "parts": "Запчасти",
       "reviews": "Отзывы",
       "about": "О продавце"
     },
+    "verifiedDealer": "ПРОВЕРЕННЫЙ ДИЛЕР",
+    "verifiedPartsSeller": "ПРОВЕРЕННЫЙ ПРОДАВЕЦ ЗАПЧАСТЕЙ",
+    "activeListings_one": "{{formatted}} активное объявление",
+    "activeListings_few": "{{formatted}} активных объявления",
+    "activeListings_many": "{{formatted}} активных объявлений",
+    "activeListings_other": "{{formatted}} активных объявления",
+    "inStock_one": "{{formatted}} автомобиль на складе",
+    "inStock_few": "{{formatted}} автомобиля на складе",
+    "inStock_many": "{{formatted}} автомобилей на складе",
+    "inStock_other": "{{formatted}} автомобиля на складе",
     "searchPlaceholder": "Поиск по складу (напр. BMW X5…)",
     "searchPlaceholderParts": "Поиск запчастей (напр. тормозные колодки, BMW E90, OEM…)",
     "descriptionPlaceholderParts": "Продавец автозапчастей. Каталог ниже.",
@@ -120,13 +130,8 @@
       "noListings": "Нет объявлений",
       "noParts": "Нет запчастей",
       "reviewsSoon": "Отзывы скоро появятся",
-      "aboutSoon": "Информация о нас скоро появится"
+      "aboutSoon": "Информация о продавце скоро появится"
     },
-    "activeFor_one": "Активный продавец — {{count}} год",
-    "activeFor_few": "Активный продавец — {{count}} года",
-    "activeFor_many": "Активный продавец — {{count}} лет",
-    "activeFor_other": "Активный продавец — {{count}} года",
-    "memberSinceLabel": "На сайте с",
     "breadcrumbs": {
       "home": "Главная",
       "sellers": "Продавцы"

@@ -87,7 +87,10 @@ export const validateVehicleCategory = (draft: ListingDraft) => {
   return isVehicleCategoryId(trim(draft.common.category));
 };
 
+export const DESCRIPTION_MAX_LENGTH = 2000;
+
 export const validateBasics = (draft: ListingDraft) => {
+  if (draft.common.description.trim().length > DESCRIPTION_MAX_LENGTH) return false;
   if (draft.type === 'vehicle') {
     if (!validateVehicleCategory(draft)) return false;
   } else {

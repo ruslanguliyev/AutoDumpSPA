@@ -8,10 +8,12 @@ import Button from '@/shared/ui/button';
 type ShareButtonProps = {
   title: string;
   url?: string;
+  /** Icon-only square. The labelled button stays the default for other profile pages. */
+  iconOnly?: boolean;
 };
 
 /** Shared “share this page” control for profile headers. 44px target. */
-export function ShareButton({ title, url }: ShareButtonProps) {
+export function ShareButton({ title, url, iconOnly = false }: ShareButtonProps) {
   const { t } = useTranslation('common');
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -24,6 +26,26 @@ export function ShareButton({ title, url }: ShareButtonProps) {
     else if (result === 'failed') setNotice(t('share.failed'));
     else setNotice(null);
   };
+
+  if (iconOnly) {
+    return (
+      <span className="inline-flex shrink-0">
+        <Button
+          type="button"
+          variant="icon"
+          size="icon"
+          aria-label={t('share.aria')}
+          title={notice ?? t('share.action')}
+          onClick={onShare}
+        >
+          <Share2 size={18} aria-hidden="true" />
+        </Button>
+        <span className="sr-only" role="status">
+          {notice ?? ''}
+        </span>
+      </span>
+    );
+  }
 
   return (
     <div className="flex shrink-0 flex-col items-stretch gap-2 sm:items-end">

@@ -5,8 +5,10 @@ import { ChevronDown } from 'lucide-react';
 import { CAR_BRANDS, getModelsForBrand } from '@/features/addItem/constants/vehicleCatalog';
 import { useFilters, useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import type { FilterValue } from '@/features/filters/types/filters.types';
+import type { AiMarkKey, AiMarks } from '@/features/ai/aiMarks';
 import { getModelsForBrandFromSpecs } from '@/lib/carSpecsData';
 import { formatNumber } from '@/lib/format';
+import { AiSparkle } from '@/shared/ui/AiSparkle/AiSparkle';
 import { Combobox } from '@/shared/ui/Combobox';
 import { Chip } from '@/shared/ui/Chip';
 import Input from '@/shared/ui/Input/Input';
@@ -51,6 +53,7 @@ type RangePairProps = {
   min?: number;
   invalidMessage: string;
   grouped?: boolean;
+  marked?: boolean;
 };
 
 function RangePair({
@@ -64,6 +67,7 @@ function RangePair({
   min,
   invalidMessage,
   grouped = true,
+  marked = false,
 }: RangePairProps) {
   const { t, i18n } = useTranslation('vehicle');
   const locale = numberLocale(i18n.language);
@@ -79,7 +83,10 @@ function RangePair({
 
   return (
     <fieldset className="m-0 min-w-0 border-0 p-0">
-      <legend className={`${labelClass} mb-1.5`}>{legend}</legend>
+      <legend className={`${labelClass} mb-1.5 flex items-center gap-1.5`}>
+        {legend}
+        {marked ? <AiSparkle size={12} className="text-ai-text-icon" /> : null}
+      </legend>
       <div className="flex min-w-0 items-center gap-2">
         <Input
           size={size}
@@ -91,6 +98,7 @@ function RangePair({
           value={display(from, fromFocused)}
           aria-invalid={invalid || undefined}
           wrapperClassName="min-w-0 flex-1"
+          className={marked && from != null ? '!border-ai-border' : ''}
           onFocus={() => setFromFocused(true)}
           onBlur={() => setFromFocused(false)}
           onChange={(event) => onFrom(toNumberOrNull(event.target.value))}
@@ -108,6 +116,7 @@ function RangePair({
           value={display(to, toFocused)}
           aria-invalid={invalid || undefined}
           wrapperClassName="min-w-0 flex-1"
+          className={marked && to != null ? '!border-ai-border' : ''}
           onFocus={() => setToFocused(true)}
           onBlur={() => setToFocused(false)}
           onChange={(event) => onTo(toNumberOrNull(event.target.value))}
@@ -128,11 +137,20 @@ function RangePair({
 type CarsFiltersProps = {
   size?: 'md' | 'drawer';
   clientRangeFiltersSupported?: boolean;
+  aiMarks?: AiMarks;
+  onAiEdit?: (key: AiMarkKey) => void;
 };
+
+function Mark({ on }: { on?: boolean }) {
+  if (!on) return null;
+  return <AiSparkle size={12} className="text-ai-text-icon" />;
+}
 
 export default function CarsFilters({
   size = 'md',
   clientRangeFiltersSupported = true,
+  aiMarks,
+  onAiEdit,
 }: CarsFiltersProps) {
   const { t } = useTranslation('vehicle');
   const filters = useFilters('cars');
@@ -179,38 +197,54 @@ export default function CarsFilters({
   ];
 
   const advancedCount = fuel.length + transmission.length;
-  const [advancedOpen, setAdvancedOpen] = useState(advancedCount > 0);
+  const markedAdvanced = Boolean(aiMarks?.fuel || aiMarks?.transmission);
+  const [advancedOpen, setAdvancedOpen] = useState(advancedCount > 0 || markedAdvanced);
   const [bodyTechOpen, setBodyTechOpen] = useState(true);
 
   useEffect(() => {
-    if (advancedCount > 0) setAdvancedOpen(true);
-  }, [advancedCount]);
+    if (advancedCount > 0 || markedAdvanced) setAdvancedOpen(true);
+  }, [advancedCount, markedAdvanced]);
 
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <span className={`${labelClass} mb-1.5 block`}>{t('index.filters.brand')}</span>
+        <span className={`${labelClass} mb-1.5 flex items-center gap-1.5`}>
+          {t('index.filters.brand')}
+          <Mark on={aiMarks?.brand} />
+        </span>
         <Combobox
           value={brand}
-          onChange={(value) => setFilters('cars', { brand: value, model: '' })}
+          onChange={(value) => {
+            setFilters('cars', { brand: value, model: '' });
+            onAiEdit?.('brand');
+            onAiEdit?.('model');
+          }}
           options={brandOptions}
           placeholder={t('index.filters.anyBrand')}
           searchPlaceholder={t('index.filters.searchBrand')}
           emptyText={t('index.filters.noMatches')}
           aria-label={t('index.filters.brand')}
+          triggerClassName={aiMarks?.brand ? 'border-ai-border' : undefined}
         />
       </div>
       <div>
-        <span className={`${labelClass} mb-1.5 block`}>{t('index.filters.model')}</span>
+        <span className={`${labelClass} mb-1.5 flex items-center gap-1.5`}>
+          {t('index.filters.model')}
+          <Mark on={aiMarks?.model} />
+        </span>
         <Combobox
           value={String(filters.model ?? '')}
-          onChange={(value) => setFilter('cars', 'model', value)}
+          onChange={(value) => {
+            setFilter('cars', 'model', value);
+            onAiEdit?.('model');
+          }}
           options={[{ value: '', label: t('filter.allModels') }, ...modelOptions]}
           placeholder={brand ? t('filter.allModels') : t('filter.selectMakeFirst')}
           searchPlaceholder={t('index.filters.searchModel')}
           emptyText={t('index.filters.noMatches')}
           disabled={!brand}
           aria-label={t('index.filters.model')}
+          triggerClassName={aiMarks?.model ? 'border-ai-border' : undefined}
         />
       </div>
 
@@ -221,21 +255,35 @@ export default function CarsFilters({
             unit="AZN"
             from={asNumber(filters.priceFrom)}
             to={asNumber(filters.priceTo)}
-            onFrom={(value) => setFilter('cars', 'priceFrom', value)}
-            onTo={(value) => setFilter('cars', 'priceTo', value)}
+            onFrom={(value) => {
+              setFilter('cars', 'priceFrom', value);
+              onAiEdit?.('price');
+            }}
+            onTo={(value) => {
+              setFilter('cars', 'priceTo', value);
+              onAiEdit?.('price');
+            }}
             size={size}
             min={0}
+            marked={aiMarks?.price}
             invalidMessage={t('index.filters.rangeInvalid')}
           />
           <RangePair
             legend={t('index.filters.year')}
             from={asNumber(filters.yearFrom)}
             to={asNumber(filters.yearTo)}
-            onFrom={(value) => setFilter('cars', 'yearFrom', value)}
-            onTo={(value) => setFilter('cars', 'yearTo', value)}
+            onFrom={(value) => {
+              setFilter('cars', 'yearFrom', value);
+              onAiEdit?.('year');
+            }}
+            onTo={(value) => {
+              setFilter('cars', 'yearTo', value);
+              onAiEdit?.('year');
+            }}
             size={size}
             min={1900}
             grouped={false}
+            marked={aiMarks?.year}
             invalidMessage={t('index.filters.rangeInvalid')}
           />
         </>
@@ -243,20 +291,35 @@ export default function CarsFilters({
 
       <Input
         size={size}
-        label={t('index.filters.city')}
+        label={
+          <span className="inline-flex items-center gap-1.5">
+            {t('index.filters.city')}
+            <Mark on={aiMarks?.city} />
+          </span>
+        }
         placeholder={t('filter.cityPlaceholder')}
         value={String(filters.city ?? '')}
-        onChange={(event) => setFilter('cars', 'city', event.target.value)}
+        className={aiMarks?.city && String(filters.city ?? '').trim() ? '!border-ai-border' : ''}
+        onChange={(event) => {
+          setFilter('cars', 'city', event.target.value);
+          onAiEdit?.('city');
+        }}
       />
 
       <fieldset className="m-0 min-w-0 border-0 p-0">
-        <legend className={`${labelClass} mb-2`}>{t('filter.condition')}</legend>
+        <legend className={`${labelClass} mb-2 flex items-center gap-1.5`}>
+          {t('filter.condition')}
+          <Mark on={aiMarks?.condition} />
+        </legend>
         <div className="flex flex-wrap gap-2">
           {conditions.map((option) => (
             <Chip
               key={option.value}
               selected={condition === option.value}
-              onClick={() => setFilter('cars', 'condition', option.value)}
+              onClick={() => {
+                setFilter('cars', 'condition', option.value);
+                onAiEdit?.('condition');
+              }}
             >
               {option.label}
             </Chip>
@@ -320,13 +383,19 @@ export default function CarsFilters({
                 <div className="min-h-0 overflow-hidden">
                   <div className="flex flex-col gap-4 px-3 pb-3">
                     <fieldset className="m-0 min-w-0 border-0 p-0">
-                      <legend className={`${labelClass} mb-2`}>{t('index.filters.fuel')}</legend>
+                      <legend className={`${labelClass} mb-2 flex items-center gap-1.5`}>
+                        {t('index.filters.fuel')}
+                        <Mark on={aiMarks?.fuel} />
+                      </legend>
                       <div className="flex flex-wrap gap-2">
                         {fuels.map((option) => (
                           <Chip
                             key={option.value}
                             selected={fuel.includes(option.value)}
-                            onClick={() => toggleFilterValue('cars', 'fuel', option.value)}
+                            onClick={() => {
+                              toggleFilterValue('cars', 'fuel', option.value);
+                              onAiEdit?.('fuel');
+                            }}
                           >
                             {option.label}
                           </Chip>
@@ -334,17 +403,19 @@ export default function CarsFilters({
                       </div>
                     </fieldset>
                     <fieldset className="m-0 min-w-0 border-0 p-0">
-                      <legend className={`${labelClass} mb-2`}>
+                      <legend className={`${labelClass} mb-2 flex items-center gap-1.5`}>
                         {t('index.filters.transmission')}
+                        <Mark on={aiMarks?.transmission} />
                       </legend>
                       <div className="flex flex-wrap gap-2">
                         {transmissions.map((option) => (
                           <Chip
                             key={option.value}
                             selected={transmission.includes(option.value)}
-                            onClick={() =>
-                              toggleFilterValue('cars', 'transmission', option.value)
-                            }
+                            onClick={() => {
+                              toggleFilterValue('cars', 'transmission', option.value);
+                              onAiEdit?.('transmission');
+                            }}
                           >
                             {option.label}
                           </Chip>
@@ -358,6 +429,12 @@ export default function CarsFilters({
           </div>
         </div>
       </div>
+      {aiMarks && Object.values(aiMarks).some(Boolean) ? (
+        <p className="flex items-start gap-1.5 text-[12px] leading-relaxed text-muted-foreground">
+          <AiSparkle size={12} className="mt-0.5 shrink-0 text-ai-text-icon" />
+          {t('searchAi.panelNote')}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -8,9 +8,12 @@ import AddLayout from '@/features/addItem/components/AddLayout';
 import FooterActions from '@/features/addItem/components/FooterActions';
 import PreviewCard from '@/features/addItem/components/PreviewCard';
 import Stepper from '@/features/addItem/components/Stepper';
+import { HowAiWorks } from '@/features/addItem/ai/DescriptionAi';
+import { runDescriptionLeaveGuard } from '@/features/addItem/ai/descriptionLeaveGuard';
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
 import { buildSteps } from '@/features/addItem/utils/buildSteps';
 import { getDraftTitle } from '@/features/addItem/utils/validateDraft';
+import { useAiEnabled } from '@/features/ai/ai.api';
 import Button from '@/shared/ui/button';
 
 const useDebouncedValue = <T,>(value: T, delay = 700) => {
@@ -26,6 +29,7 @@ const useDebouncedValue = <T,>(value: T, delay = 700) => {
 
 const AddWizardPage = () => {
   const { t } = useTranslation('addItem');
+  const aiOn = useAiEnabled();
   const { draftId } = useParams();
   const navigate = useNavigate();
   const draftQuery = useDraft(draftId);
@@ -198,6 +202,8 @@ const AddWizardPage = () => {
   }
 
   const canProceed = steps[stepIndex]?.validate(draft) ?? true;
+  const stepId = steps[stepIndex]?.id;
+  const aiPreview = aiOn && stepId === 'basics' && draft.type === 'vehicle';
 
   return (
     <AddLayout
@@ -209,7 +215,12 @@ const AddWizardPage = () => {
           onStepChange={setStepIndex}
         />
       }
-      preview={<PreviewCard draft={draft} />}
+      preview={
+        <>
+          <PreviewCard draft={draft} title={aiPreview ? t('ai.previewBuyer') : undefined} />
+          {aiPreview ? <HowAiWorks /> : null}
+        </>
+      }
       footer={
         <FooterActions
           steps={steps}
@@ -217,7 +228,11 @@ const AddWizardPage = () => {
           draft={draft}
           saveStatus={saveStatus}
           onBack={prevStep}
-          onNext={() => nextStep(steps.length)}
+          onNext={() => {
+            const proceed = () => nextStep(steps.length);
+            if (stepId === 'basics') runDescriptionLeaveGuard(proceed);
+            else proceed();
+          }}
           onSave={handleSave}
           onPublish={handlePublish}
           isSaving={saveDraftMutation.isPending}

@@ -247,5 +247,43 @@
       "Hybrid": "Hybrid",
       "Electric": "Electric"
     }
+  },
+  "searchAi": {
+    "region": "Car search",
+    "modeLabel": "Search mode",
+    "filters": "Filters",
+    "smart": "Smart search",
+    "inputLabel": "Describe the car you are looking for",
+    "placeholder": "Describe the car you are looking for",
+    "find": "Search",
+    "searching": "Searching…",
+    "try": "Try:",
+    "exampleBmw": "BMW X5 from 2015, diesel, Baku",
+    "exampleMercedes": "New Mercedes up to 80 000 AZN",
+    "exampleAuto": "Automatic up to 20 000 AZN, petrol",
+    "understood": "This is how we read the query. Adjust anything that is off",
+    "chipBrand": "Make: {{value}}",
+    "chipModel": "Model: {{value}}",
+    "chipPrice": "Price: {{value}}",
+    "chipYear": "Year: {{value}}",
+    "chipTransmission": "Gearbox: {{value}}",
+    "chipFuel": "Fuel: {{value}}",
+    "chipCity": "City: {{value}}",
+    "chipCondition": "Condition: {{value}}",
+    "upTo": "up to {{value}}",
+    "from": "from {{value}}",
+    "unapplied": "Not applied: “{{value}}”",
+    "unappliedHint": "A dashed chip is a criterion the catalog does not have yet, so it does not change the results.",
+    "reset": "Reset all",
+    "remove": "Remove",
+    "unrecognized": "No criteria were recognized. Try a make, a price or a year.",
+    "errorGeneric": "The query could not be read. Results were not changed.",
+    "errorRate": "Too many requests. Wait a moment and try again.",
+    "errorUnavailable": "Smart search is unavailable right now.",
+    "panelNote": "Fields filled from the query. They change like any other filter.",
+    "cities": {
+      "Baku": "Baku",
+      "Sumqayit": "Sumqayit"
+    }
   }
 }

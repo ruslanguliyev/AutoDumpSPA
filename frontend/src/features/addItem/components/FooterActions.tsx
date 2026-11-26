@@ -38,35 +38,45 @@ const FooterActions = ({
   const canPublish = validateDraft(draft);
   const isPublished = draft.status === 'published';
 
+  const renderBack = () => (
+    <Button variant="ghost" size="md" onClick={onBack} disabled={isFirst} className="!h-12 sm:!h-11">
+      {t('buttons.back')}
+    </Button>
+  );
+  const renderSave = () => (
+    <Button variant="ghost" size="md" onClick={onSave} disabled={isSaving}>
+      {isSaving ? t('buttons.saving') : isPublished ? t('buttons.saveChanges') : t('buttons.saveDraft')}
+    </Button>
+  );
+  const renderNext = () =>
+    isLast ? (
+      <Button size="lg" className="!h-12 flex-1 sm:flex-none" onClick={onPublish} disabled={!canPublish || isPublishing}>
+        {isPublishing
+          ? t('buttons.publishing')
+          : isPublished
+            ? t('buttons.saveChanges')
+            : t('buttons.submit')}
+      </Button>
+    ) : (
+      <Button size="lg" className="!h-12 flex-1 sm:flex-none" onClick={onNext} disabled={!canProceed}>
+        {t('buttons.next')}
+      </Button>
+    );
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="flex items-center justify-between gap-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground sm:block">
         {t(`status.${saveStatus}`)}
+        <span className="sm:hidden">{renderSave()}</span>
       </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <Button variant="ghost" size="md" onClick={onBack} disabled={isFirst}>
-          {t('buttons.back')}
-        </Button>
-        <Button variant="ghost" size="md" onClick={onSave} disabled={isSaving}>
-          {isSaving ? t('buttons.saving') : isPublished ? t('buttons.saveChanges') : t('buttons.saveDraft')}
-        </Button>
-        {isLast ? (
-          <Button
-            size="lg"
-            onClick={onPublish}
-            disabled={!canPublish || isPublishing}
-          >
-            {isPublishing
-              ? t('buttons.publishing')
-              : isPublished
-                ? t('buttons.saveChanges')
-                : t('buttons.submit')}
-          </Button>
-        ) : (
-          <Button size="lg" onClick={onNext} disabled={!canProceed}>
-            {t('buttons.next')}
-          </Button>
-        )}
+      <div className="flex items-center gap-3 sm:hidden">
+        {renderBack()}
+        {renderNext()}
+      </div>
+      <div className="hidden flex-wrap items-center gap-3 sm:flex">
+        {renderBack()}
+        {renderSave()}
+        {renderNext()}
       </div>
     </div>
   );

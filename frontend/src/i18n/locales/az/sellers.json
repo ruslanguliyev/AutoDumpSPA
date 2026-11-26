@@ -97,11 +97,17 @@
     "profileUnavailable": "Profil əlçatan deyil",
     "notAvailable": "Satıcı {{id}} mövcud deyil.",
     "tabs": {
-      "stock": "Anbarda",
+      "stock": "Anbar",
       "parts": "Ehtiyat hissələri",
       "reviews": "Rəylər",
       "about": "Haqqında"
     },
+    "verifiedDealer": "TƏSDİQLƏNMİŞ DİLER",
+    "verifiedPartsSeller": "TƏSDİQLƏNMİŞ EHTİYAT HİSSƏLƏRİ SATICISI",
+    "activeListings_one": "{{formatted}} aktiv elan",
+    "activeListings_other": "{{formatted}} aktiv elan",
+    "inStock_one": "{{formatted}} avtomobil anbarda",
+    "inStock_other": "{{formatted}} avtomobil anbarda",
     "searchPlaceholder": "Anbarda axtarış (məs. BMW X5…)",
     "searchPlaceholderParts": "Ehtiyat hissələrində axtarış (məs. əyləc lövhələri, BMW E90, OEM…)",
     "descriptionPlaceholderParts": "Ehtiyat hissələri satıcısı. Kataloq aşağıdadır.",
@@ -110,11 +116,8 @@
       "noListings": "Elan yoxdur",
       "noParts": "Ehtiyat hissələri yoxdur",
       "reviewsSoon": "Rəylər tezliklə əlavə olunacaq",
-      "aboutSoon": "Haqqımızda məlumat tezliklə əlavə olunacaq"
+      "aboutSoon": "Satıcı haqqında məlumat tezliklə əlavə olunacaq"
     },
-    "activeFor_one": "Aktiv satıcı — {{count}} il",
-    "activeFor_other": "Aktiv satıcı — {{count}} il",
-    "memberSinceLabel": "Saytda",
     "breadcrumbs": {
       "home": "Ana səhifə",
       "sellers": "Satıcılar"

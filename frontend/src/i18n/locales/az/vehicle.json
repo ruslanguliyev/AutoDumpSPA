@@ -245,5 +245,43 @@
       "Hybrid": "Hibrid",
       "Electric": "Elektrik"
     }
+  },
+  "searchAi": {
+    "region": "Avtomobil axtarışı",
+    "modeLabel": "Axtarış rejimi",
+    "filters": "Filtrlər",
+    "smart": "Ağıllı axtarış",
+    "inputLabel": "Axtardığınız maşını təsvir edin",
+    "placeholder": "Axtardığınız maşını təsvir edin",
+    "find": "Axtar",
+    "searching": "Axtarılır…",
+    "try": "Yoxlayın:",
+    "exampleBmw": "BMW X5 2015-ci ildən, dizel, Bakı",
+    "exampleMercedes": "Yeni Mercedes 80 000 AZN-dək",
+    "exampleAuto": "Avtomat, 20 000 AZN-dək, benzin",
+    "understood": "Sorğunu belə başa düşdük. Nəsə səhvdirsə, düzəldin",
+    "chipBrand": "Marka: {{value}}",
+    "chipModel": "Model: {{value}}",
+    "chipPrice": "Qiymət: {{value}}",
+    "chipYear": "İl: {{value}}",
+    "chipTransmission": "Ötürücü: {{value}}",
+    "chipFuel": "Yanacaq: {{value}}",
+    "chipCity": "Şəhər: {{value}}",
+    "chipCondition": "Vəziyyət: {{value}}",
+    "upTo": "{{value}}-dək",
+    "from": "{{value}}-dən",
+    "unapplied": "Tətbiq olunmayıb: «{{value}}»",
+    "unappliedHint": "Qırıq-qırıq çip: bu meyar kataloqda hələ yoxdur, ona görə nəticələrə təsir etmir.",
+    "reset": "Hamısını sıfırla",
+    "remove": "Sil",
+    "unrecognized": "Meyarları tanımaq alınmadı. Marka, qiymət və ya il göstərin.",
+    "errorGeneric": "Sorğunu oxumaq alınmadı. Nəticələr dəyişməyib.",
+    "errorRate": "Sorğu həddən çoxdur. Bir az gözləyib yenidən cəhd edin.",
+    "errorUnavailable": "Ağıllı axtarış indi əlçatan deyil.",
+    "panelNote": "Sorğudan doldurulmuş sahələr. Adi filtrlər kimi dəyişir.",
+    "cities": {
+      "Baku": "Bakı",
+      "Sumqayit": "Sumqayıt"
+    }
   }
 }

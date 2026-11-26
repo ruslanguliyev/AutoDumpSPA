@@ -14,6 +14,8 @@ import { PromotedVehicles } from '@/features/promotions/components/PromotedVehic
 import { useCarsFiltersUrlSync } from '@/features/filters/hooks/useCarsFiltersUrlSync';
 import { useFilters, useFiltersStore } from '@/features/filters/store/useFiltersStore';
 import { getDefaultFilters } from '@/features/filters/store/filters.defaults';
+import type { AiMarks } from '@/features/ai/aiMarks';
+import { emptyAiMarks } from '@/features/ai/aiMarks';
 import { IndexPage } from '@/shared/ui/IndexPage';
 import type { ActiveFilterChip } from '@/shared/ui/IndexPage';
 import Button from '@/shared/ui/button';
@@ -22,6 +24,7 @@ import Skeleton from '@/shared/ui/Skeleton/Skeleton';
 import { formatNumber } from '@/lib/format';
 import { translateVehicleEnum } from '@/lib/vehicleEnumLabels';
 import CarsFilters from './CarsFilters';
+import { SmartVehicleSearch } from './SmartVehicleSearch';
 
 const PAGE_SIZE = 9;
 
@@ -72,6 +75,9 @@ export default function AutoSearchResults() {
   const resetFilters = useFiltersStore((state) => state.resetFilters);
 
   const [sort, setSort] = useState<SortKey>('default');
+  const [smartActive, setSmartActive] = useState(false);
+  const [aiMarks, setAiMarks] = useState<AiMarks>({});
+  const [filterResetKey, setFilterResetKey] = useState(0);
 
   const cars = autos as Car[];
   const hasClientRangeFilter = Boolean(
@@ -97,7 +103,11 @@ export default function AutoSearchResults() {
     : sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const hasMore = page < pageCount;
 
-  const clearAll = () => resetFilters('cars', getDefaultFilters('cars'));
+  const clearAll = () => {
+    resetFilters('cars', getDefaultFilters('cars'));
+    setAiMarks(emptyAiMarks());
+    setFilterResetKey((key) => key + 1);
+  };
 
   const chips: ActiveFilterChip[] = [];
   const brand = text(filters.brand);
@@ -212,11 +222,17 @@ export default function AutoSearchResults() {
           label: t(`index.sort.${key}`),
         })),
       }}
-      filters={<CarsFilters clientRangeFiltersSupported={catalogComplete} />}
+      filters={
+        <CarsFilters
+          clientRangeFiltersSupported={catalogComplete}
+          aiMarks={aiMarks}
+          onAiEdit={(key) => setAiMarks((current) => ({ ...current, [key]: false }))}
+        />
+      }
       filtersLabel={t('indexPage.filters', { ns: 'common' })}
       activeFilterCount={chips.length}
       onResetFilters={clearAll}
-      activeChips={chips}
+      activeChips={smartActive ? [] : chips}
       removeChipLabel={t('indexPage.removeFilter', { ns: 'common' })}
       drawerLabels={{
         title: t('indexPage.filters', { ns: 'common' }),
@@ -226,7 +242,18 @@ export default function AutoSearchResults() {
         show: t('index.showCars', { count: cars.length }),
       }}
       // Paid placement stays apart from the ranked results and labelled as an advert.
-      above={<PromotedVehicles tier="VIP" limit={4} className="!pt-0 !pb-8" />}
+      above={
+        <>
+          <SmartVehicleSearch
+            resetKey={filterResetKey}
+            marks={aiMarks}
+            onMarks={setAiMarks}
+            active={smartActive}
+            onActiveChange={setSmartActive}
+          />
+          <PromotedVehicles tier="VIP" limit={4} className="!pt-0 !pb-8" />
+        </>
+      }
       gridState={gridState}
       pagination={{
         page,

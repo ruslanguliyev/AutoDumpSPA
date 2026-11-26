@@ -14,6 +14,8 @@ type ChipProps = {
   onRemove?: () => void;
   /** Accessible name for the removing action, e.g. "Remove filter". Translated by the caller. */
   removeLabel?: string;
+  /** `ai` is a parsed-search chip. `dashed` is a criterion the catalog could not apply. */
+  tone?: 'default' | 'ai' | 'dashed';
   className?: string;
 };
 
@@ -25,6 +27,9 @@ const unselected = 'border-border-strong bg-transparent text-muted-foreground ho
 const selectedClass = 'border-transparent bg-primary text-primary-foreground';
 /** Static chips only label something (a specialisation, a serviced brand). */
 const staticClass = 'min-h-8 border-border py-1.5 text-[13px] font-medium text-muted-foreground';
+const aiClass = 'min-h-10 border-ai-border bg-ai-surface text-[13px] font-medium text-foreground';
+const dashedClass =
+  'min-h-10 border-dashed border-subtle-foreground bg-transparent text-[13px] font-normal text-foreground';
 
 export function Chip({
   children,
@@ -32,15 +37,17 @@ export function Chip({
   onClick,
   onRemove,
   removeLabel,
+  tone = 'default',
   className = '',
 }: ChipProps) {
+  const toneClass = tone === 'ai' ? aiClass : tone === 'dashed' ? dashedClass : '';
   if (onRemove) {
     return (
       <button
         type="button"
         onClick={onRemove}
         aria-label={removeLabel ? `${removeLabel}: ${String(children)}` : undefined}
-        className={`${base} ${interactive} ${unselected} ${className}`.trim()}
+        className={`${base} ${interactive} ${tone === 'default' ? unselected : toneClass} ${className}`.trim()}
       >
         {children}
         <X size={14} strokeWidth={1.5} aria-hidden="true" />
@@ -54,14 +61,18 @@ export function Chip({
         type="button"
         onClick={onClick}
         aria-pressed={selected}
-        className={`${base} ${interactive} ${selected ? selectedClass : unselected} ${className}`.trim()}
+        className={`${base} ${interactive} ${tone === 'default' ? (selected ? selectedClass : unselected) : toneClass} ${className}`.trim()}
       >
         {children}
       </button>
     );
   }
 
-  return <span className={`${base} ${staticClass} ${className}`.trim()}>{children}</span>;
+  return (
+    <span className={`${base} ${tone === 'default' ? staticClass : toneClass} ${className}`.trim()}>
+      {children}
+    </span>
+  );
 }
 
 export default Chip;

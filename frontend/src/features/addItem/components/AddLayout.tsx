@@ -15,10 +15,8 @@ const AddLayout = ({ stepper, preview, footer, children }: AddLayoutProps) => {
         <section className="space-y-6">{children}</section>
         <aside className="h-fit lg:sticky lg:top-24">{preview}</aside>
       </div>
-      <div className="sticky bottom-4 z-20 mt-8">
-        <div className="rounded-2xl border border-border bg-card/95 p-4 shadow-[var(--shadow-card)] backdrop-blur">
-          {footer}
-        </div>
+      <div className="sticky bottom-0 z-20 -mx-4 mt-8 border-t border-border bg-background/95 px-4 py-3 backdrop-blur sm:bottom-4 sm:mx-0 sm:rounded-[var(--radius-card)] sm:border sm:bg-card/95 sm:p-4 sm:shadow-[var(--shadow-card)]">
+        {footer}
       </div>
     </div>
   );

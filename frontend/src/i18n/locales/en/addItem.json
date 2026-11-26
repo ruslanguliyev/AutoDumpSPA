@@ -1,4 +1,4 @@
-﻿{
+{
   "title": "Add a new listing",
   "subtitle": "Choose the listing type to start the guided wizard.",
   "entry": {
@@ -247,5 +247,45 @@
       "kmPerDay": "Kilometres: a whole number from 1 to 5000",
       "minDriverAge": "Age: a whole number from 16 to 100"
     }
+  },
+  "ai": {
+    "toneLabel": "Tone",
+    "languageLabel": "Description language",
+    "hint": "Describe the condition, history and equipment. Or let AI write the first draft.",
+    "generate": "Write with AI",
+    "writing": "Writing the description…",
+    "retry": "Try again",
+    "toneNeutral": "Neutral",
+    "toneSales": "Selling",
+    "toneShort": "Short",
+    "placeholder": "Describe the condition, history and equipment. Or press “Write with AI”: it will build the text from the listing.",
+    "needFacts": "Fill in the make, model and year, and AI will be able to write the description.",
+    "toStep": "Go to “{{step}}”",
+    "draftTitle": "AI draft",
+    "draftTitleMobile": "AI draft. Check it before publishing",
+    "draftHint": "Check it and edit before publishing",
+    "regenerate": "Rewrite",
+    "shorter": "Shorter",
+    "longer": "Longer",
+    "cancel": "Cancel",
+    "used": "AI used:",
+    "usedCount": "AI used {{count}} fields",
+    "changeData": "Edit the data",
+    "changeShort": "edit",
+    "counter": "{{count}} / {{max}}",
+    "errorGeneric": "The description could not be generated. Your text was not changed.",
+    "errorRate": "Too many requests. Wait a moment and try again. Your text was not changed.",
+    "errorUnavailable": "AI is unavailable right now. Your text was not changed.",
+    "replaceTitle": "Replace the current text?",
+    "replaceConfirm": "Replace",
+    "replaceCancel": "Cancel",
+    "bracketWarning": "The description still has hints in brackets",
+    "bracketFix": "Fix",
+    "bracketContinue": "Continue anyway",
+    "howTitle": "How the AI description works",
+    "how1": "It uses only the fields you have filled in.",
+    "how2": "What it does not know, it does not invent: it leaves a hint in brackets.",
+    "how3": "Nothing is published until you press “Next step”. You can edit the text as usual.",
+    "previewBuyer": "What buyers will see"
   }
 }

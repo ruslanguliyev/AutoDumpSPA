@@ -9,6 +9,8 @@ import { cn } from '@/shared/utils/cn';
 
 type PreviewCardProps = {
   draft: ListingDraft;
+  /** Replaces the small “preview” label when the AI description panel is open. */
+  title?: string;
 };
 
 const formatPrice = (price: number | null, currency: string) => {
@@ -24,7 +26,7 @@ const formatPrice = (price: number | null, currency: string) => {
   }
 };
 
-const PreviewCard = ({ draft }: PreviewCardProps) => {
+const PreviewCard = ({ draft, title: titleLabel }: PreviewCardProps) => {
   const { t } = useTranslation('addItem');
   const primaryPhoto =
     draft.media.images.find((image) => image.isMain) ?? draft.media.images[0];
@@ -66,6 +68,7 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
       : '';
 
   const previewSubtitle = [categoryLabel, vehicleMeta].filter(Boolean).join(' · ');
+  const buyerDescription = draft.common.description.replace(/\n*\[[^\]\n]+\]\s*$/u, '').trim();
 
   const conditionLabel =
     draft.common.condition === 'new'
@@ -79,7 +82,7 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
       <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        <span>{t('preview.livePreview')}</span>
+        <span>{titleLabel ?? t('preview.livePreview')}</span>
         <span
           className={cn(
             'rounded-full px-2 py-1 text-[10px]',
@@ -140,6 +143,11 @@ const PreviewCard = ({ draft }: PreviewCardProps) => {
             <span className="rounded-full bg-muted px-2 py-1">{t('preview.negotiable')}</span>
           )}
         </div>
+        {buyerDescription ? (
+          <p className="line-clamp-3 border-t border-border pt-3 text-[13px] leading-relaxed text-muted-foreground">
+            {buyerDescription}
+          </p>
+        ) : null}
       </div>
     </div>
   );
