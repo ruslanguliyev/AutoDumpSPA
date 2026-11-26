@@ -35,6 +35,16 @@ const SEED_SALE = {
   priceMin: '[SEED SALE] Lada Samara price 1 AZN',
 } as const;
 
+/** One dealer with enough mixed stock to fill a 4-column seller grid. */
+const SEED_STOCK = {
+  bentley: '[SEED STOCK] Bentley Continental GT W12',
+  mercedes: '[SEED STOCK] Mercedes-Benz G 63 AMG',
+  bmw: '[SEED STOCK] BMW M5 Competition',
+  macanNoHp: '[SEED STOCK] Porsche Macan S no horsepower',
+  rent: '[SEED STOCK] Rent Land Cruiser Prado',
+  longNoPhoto: '[SEED STOCK] Long name no photo no horsepower',
+} as const;
+
 const SEED_PART = {
   title60: 'Avtobaz seed part product name exactly sixty characters!!!!!',
   price1: '[SEED PART] Boundary 1 AZN no photo',
@@ -50,6 +60,7 @@ const SEED_SPECIALIST_SLUG = 'seed-qa-zero-reviews-mechanic';
 const QA_SELLER_EMAILS = [
   'dealer-zero-reviews@test.com',
   'dealer-10k-reviews@test.com',
+  'dealer-stock-grid@test.com',
 ] as const;
 
 type Tx = Omit<
@@ -717,13 +728,197 @@ async function main() {
       },
     });
 
+    const stockUser = await tx.user.upsert({
+      where: { email: 'dealer-stock-grid@test.com' },
+      create: {
+        email: 'dealer-stock-grid@test.com',
+        passwordHash,
+        fullName: 'Prestige Motors Baku',
+        role: UserRole.DEALER,
+      },
+      update: {
+        passwordHash,
+        fullName: 'Prestige Motors Baku',
+        role: UserRole.DEALER,
+      },
+    });
+
+    const stockSeller = await tx.seller.upsert({
+      where: { userId: stockUser.id },
+      create: {
+        userId: stockUser.id,
+        type: SellerType.DEALER,
+        name: 'Prestige Motors Baku',
+        city: 'Baku',
+        phone: '+994501234567',
+        showPhone: true,
+        rating: 0,
+        reviewsCount: 0,
+        verified: true,
+      },
+      update: {
+        type: SellerType.DEALER,
+        name: 'Prestige Motors Baku',
+        city: 'Baku',
+        phone: '+994501234567',
+        showPhone: true,
+        verified: true,
+      },
+    });
+
+    const reviewAuthor = await tx.user.findUnique({ where: { email: 'dealer1@test.com' } });
+    if (reviewAuthor && reviewAuthor.id !== stockUser.id) {
+      await tx.review.upsert({
+        where: { authorId_sellerId: { authorId: reviewAuthor.id, sellerId: stockSeller.id } },
+        create: {
+          authorId: reviewAuthor.id,
+          sellerId: stockSeller.id,
+          rating: 5,
+          comment: 'QA review so the seller hero can show real stars.',
+        },
+        update: { rating: 5 },
+      });
+      await syncReviewAggregates(tx, 'seller', stockSeller.id);
+    }
+
+    await upsertSaleListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.bentley,
+      price: 184_000,
+      description: 'Sale with photo, trim and horsepower.',
+      vehicle: {
+        ...baseVehicle,
+        brand: 'Bentley',
+        model: 'Continental GT',
+        version: 'W12',
+        bodyType: 'coupe',
+        year: 2019,
+        mileage: 28_400,
+        engineVolume: 6.0,
+        power: 626,
+        drive: 'AWD',
+        price: 184_000,
+        imageUrls: ['/uploads/placeholder-car.jpg'],
+        isHot: false,
+      },
+    });
+
+    await upsertSaleListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.mercedes,
+      price: 162_500,
+      description: 'Sale with photo and horsepower.',
+      vehicle: {
+        ...baseVehicle,
+        brand: 'Mercedes-Benz',
+        model: 'G 63',
+        version: 'AMG',
+        bodyType: 'suv',
+        year: 2021,
+        mileage: 31_000,
+        engineVolume: 4.0,
+        power: 585,
+        drive: 'AWD',
+        price: 162_500,
+        imageUrls: ['/uploads/placeholder-car.jpg'],
+        isHot: false,
+      },
+    });
+
+    await upsertSaleListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.bmw,
+      price: 96_900,
+      description: 'Sale with photo and horsepower.',
+      vehicle: {
+        ...baseVehicle,
+        brand: 'BMW',
+        model: 'M5',
+        version: 'Competition',
+        bodyType: 'sedan',
+        year: 2019,
+        mileage: 45_000,
+        engineVolume: 4.4,
+        power: 625,
+        drive: 'AWD',
+        price: 96_900,
+        imageUrls: ['/uploads/placeholder-car.jpg'],
+        isHot: false,
+      },
+    });
+
+    await upsertSaleListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.macanNoHp,
+      price: 74_300,
+      description: 'Sale with photo and no horsepower (power 0).',
+      vehicle: {
+        ...baseVehicle,
+        brand: 'Porsche',
+        model: 'Macan',
+        version: 'S',
+        bodyType: 'suv',
+        year: 2020,
+        mileage: 52_800,
+        engineVolume: 3.0,
+        power: 0,
+        price: 74_300,
+        imageUrls: ['/uploads/placeholder-car.jpg'],
+        isHot: false,
+      },
+    });
+
+    await upsertRentListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.rent,
+      pricePerDay: 180,
+      description: 'Rent with deposit, minimum days and a photo.',
+      terms: { deposit: 500, minDays: 3, maxDays: 14, kmPerDay: 200, minDriverAge: 21 },
+      vehicle: {
+        ...baseVehicle,
+        brand: 'Toyota',
+        model: 'Land Cruiser',
+        version: 'Prado TX-L',
+        bodyType: 'suv',
+        year: 2020,
+        mileage: 34_000,
+        engineVolume: 2.8,
+        power: 204,
+        drive: 'AWD',
+        price: 180,
+        imageUrls: ['/uploads/placeholder-car.jpg'],
+        isHot: false,
+      },
+    });
+
+    await upsertSaleListing(tx, {
+      sellerId: stockSeller.id,
+      title: SEED_STOCK.longNoPhoto,
+      price: 58_400,
+      description: 'Long trim name, no photo, no horsepower.',
+      vehicle: {
+        ...baseVehicle,
+        brand: 'Mercedes-Benz',
+        model: 'E 220 d',
+        version: 'Avantgarde Exclusive Long Wheelbase Night Package',
+        bodyType: 'sedan',
+        year: 2018,
+        mileage: 86_200,
+        engineVolume: 2.0,
+        power: 0,
+        price: 58_400,
+        imageUrls: [],
+        isHot: false,
+      },
+    });
+
     await resetQaReviewFixtures(tx);
   });
 
   const qaRentTitles = Object.values(SEED_RENT);
   const qaSaleTitles = Object.values(SEED_SALE);
 
-  const [rentCount, saleCount, qaSellerCount] = await Promise.all([
+  const [rentCount, saleCount, qaSellerCount, stockCount] = await Promise.all([
     prisma.vehicle.count({
       where: {
         listing: {
@@ -745,15 +940,24 @@ async function main() {
     prisma.seller.count({
       where: { user: { email: { in: [...QA_SELLER_EMAILS] } } },
     }),
+    prisma.vehicle.count({
+      where: {
+        listing: {
+          status: ListingStatus.ACTIVE,
+          title: { in: [...Object.values(SEED_STOCK)] },
+          seller: { user: { email: 'dealer-stock-grid@test.com' } },
+        },
+      },
+    }),
   ]);
 
   console.log(
-    `QA seed completed: ${rentCount} RENT, ${saleCount} SALE fixtures, ${qaSellerCount} QA sellers.`,
+    `QA seed completed: ${rentCount} RENT, ${saleCount} SALE fixtures, ${qaSellerCount} QA sellers, ${stockCount} stock-grid vehicles.`,
   );
 
-  if (rentCount !== 6 || saleCount !== 2 || qaSellerCount !== 2) {
+  if (rentCount !== 6 || saleCount !== 2 || qaSellerCount !== 3 || stockCount !== 6) {
     throw new Error(
-      `QA seed counts mismatch (expected 6 RENT, 2 SALE, 2 sellers; got ${rentCount}, ${saleCount}, ${qaSellerCount}).`,
+      `QA seed counts mismatch (expected 6 RENT, 2 SALE, 3 sellers, 6 stock vehicles; got ${rentCount}, ${saleCount}, ${qaSellerCount}, ${stockCount}).`,
     );
   }
 }
