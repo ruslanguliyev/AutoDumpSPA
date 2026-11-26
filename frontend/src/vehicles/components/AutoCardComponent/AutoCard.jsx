@@ -23,7 +23,7 @@ import Button from '@/shared/ui/button';
  * Trim, horsepower and gearbox stay on the detail page so nothing wraps
  * and neighbouring cards stay the same height.
  */
-export default function AutoCard({ car, variant = 'sale' }) {
+function CatalogAutoCard({ car, variant = 'sale' }) {
     const { t, i18n } = useTranslation('vehicle');
     const locale = intlLocale(i18n.language);
     const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
@@ -141,4 +141,137 @@ export default function AutoCard({ car, variant = 'sale' }) {
             </div>
         </CardWrapper>
     );
+}
+
+/** Space as the thousands separator, as on the seller-stock reference (“184 000”). */
+const groupWithSpace = (value) =>
+    new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 })
+        .format(Number(value))
+        .replace(/[\u202F\u00A0]/g, ' ');
+
+/** Comma as the thousands separator, as on the seller-stock reference (“28,400 km”). */
+const groupWithComma = (value) =>
+    new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Number(value));
+
+/**
+ * Seller stock card. Catalogue cards keep their own formatter and the city line;
+ * this layout only changes what the dealer page draws.
+ */
+function SellerStockCard({ car, variant = 'sale' }) {
+    const { t, i18n } = useTranslation('vehicle');
+    const locale = intlLocale(i18n.language);
+    const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+    const isFav = useFavoritesStore((s) => s.isFavorited('vehicle', car?.id));
+
+    if (!car) return null;
+
+    const isRent = variant === 'rent';
+    const units = String(locale).startsWith('ru')
+        ? { km: 'км', hp: 'л.с.', liter: 'л' }
+        : { km: 'km', hp: 'HP', liter: 'L' };
+    const mainImage = Array.isArray(car.image) ? car.image[0] : car.image;
+    const baseTitle = [car.brand, car.model].filter(Boolean).join(' ');
+    const version = typeof car.version === 'string' ? car.version.trim() : '';
+    const title = version ? `${baseTitle} — ${version}` : baseTitle;
+
+    const engine = Number(car.engineVolume);
+    const power = Number(car.power);
+    const mileage = Number(car.mileage);
+    const specs = [
+        car.year ? String(car.year) : null,
+        Number.isFinite(engine) && engine > 0
+            ? `${new Intl.NumberFormat('en-US', {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+              }).format(engine)}${units.liter}`
+            : null,
+        Number.isFinite(power) && power > 0 ? `${groupWithComma(power)} ${units.hp}` : null,
+        Number.isFinite(mileage) ? `${groupWithComma(mileage)} ${units.km}` : null,
+    ]
+        .filter(Boolean)
+        .join(' · ');
+
+    const priceLabel =
+        car.price == null || !Number.isFinite(Number(car.price))
+            ? '—'
+            : `${groupWithSpace(Number(car.price))} ${car.currency || 'AZN'}`;
+
+    const rental = car.rental ?? null;
+    const terms = isRent
+        ? [
+              rental?.minDays ? t('card.minDays', { count: rental.minDays }) : null,
+              rental?.deposit
+                  ? t('card.deposit', {
+                        amount: `${groupWithSpace(Number(rental.deposit))} ${car.currency || 'AZN'}`,
+                    })
+                  : null,
+              rental?.kmPerDay ? t('card.kmPerDay', { count: rental.kmPerDay }) : null,
+          ].filter(Boolean)
+        : [];
+
+    return (
+        <CardWrapper as="article" hover className="relative flex h-full min-w-0 flex-col overflow-hidden">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-card-muted">
+                <ListingPhoto src={mainImage} className="h-full w-full object-cover" />
+
+                <div className="absolute left-3 right-12 top-3 flex flex-wrap items-center gap-1.5">
+                    {car.promotionTier ? <PromotionBadge tier={car.promotionTier} /> : null}
+                    {isRent ? <Badge variant="ad">{t('card.rent')}</Badge> : null}
+                    {car.isHot ? <Badge variant="hot">{t('card.hot')}</Badge> : null}
+                </div>
+
+                <FavoriteButton
+                    size="sm"
+                    active={isFav}
+                    label={isFav ? t('card.removeFromFavoritesAria') : t('card.addToFavoritesAria')}
+                    onToggle={() =>
+                        toggleFavorite({
+                            type: 'vehicle',
+                            id: car.id,
+                            title,
+                            thumbnail: mainImage,
+                        })
+                    }
+                    className="absolute right-3 top-3 z-10"
+                />
+            </div>
+
+            <div className="flex flex-1 flex-col gap-1 p-4">
+                <p className="flex items-baseline gap-1 overflow-hidden text-foreground">
+                    <span className="truncate text-[20px] font-bold leading-6 tabular-nums">{priceLabel}</span>
+                    {isRent ? (
+                        <span className="shrink-0 text-[13px] font-medium leading-6 text-muted-foreground">
+                            {t('card.perDay')}
+                        </span>
+                    ) : null}
+                </p>
+
+                <h3 className="text-[16px] font-semibold leading-6 text-foreground">
+                    <Link
+                        to={`/vehicles/${car.id}`}
+                        className="block truncate after:absolute after:inset-0 after:content-['']"
+                    >
+                        {title}
+                    </Link>
+                </h3>
+
+                <p className="truncate text-[13px] leading-5 text-muted-foreground">{specs || '\u00a0'}</p>
+
+                {terms.length > 0 ? (
+                    <ul className="mt-1 flex list-none flex-wrap items-center gap-1.5">
+                        {terms.map((term) => (
+                            <li key={term}>
+                                <Chip>{term}</Chip>
+                            </li>
+                        ))}
+                    </ul>
+                ) : null}
+            </div>
+        </CardWrapper>
+    );
+}
+
+export default function AutoCard({ car, variant = 'sale', layout = 'catalog' }) {
+    if (layout === 'seller') return <SellerStockCard car={car} variant={variant} />;
+    return <CatalogAutoCard car={car} variant={variant} />;
 }

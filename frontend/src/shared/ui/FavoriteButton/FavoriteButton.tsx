@@ -6,6 +6,10 @@ type FavoriteButtonProps = {
   /** Translated. The caller knows whether this adds or removes. */
   label: string;
   className?: string;
+  /**
+   * `md` is the 44px catalogue target. `sm` is the 36px circle on the seller stock card.
+   */
+  size?: 'md' | 'sm';
 };
 
 /**
@@ -14,7 +18,14 @@ type FavoriteButtonProps = {
  *
  * It sits above the card's stretched link, so clicking it never opens the listing.
  */
-export function FavoriteButton({ active, onToggle, label, className = '' }: FavoriteButtonProps) {
+export function FavoriteButton({
+  active,
+  onToggle,
+  label,
+  className = '',
+  size = 'md',
+}: FavoriteButtonProps) {
+  const box = size === 'sm' ? 'h-9 w-9' : 'h-11 w-11';
   return (
     <button
       type="button"
@@ -27,10 +38,10 @@ export function FavoriteButton({ active, onToggle, label, className = '' }: Favo
       }}
       // No position class here: the caller places it, and a `relative` baked in would
       // beat the caller's `absolute` whatever order the class list is written in.
-      className={`inline-flex h-11 w-11 items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur transition hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${className}`.trim()}
+      className={`inline-flex ${box} items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur transition hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${className}`.trim()}
     >
       <Heart
-        size={17}
+        size={size === 'sm' ? 16 : 17}
         strokeWidth={1.5}
         aria-hidden="true"
         className={active ? 'fill-current text-destructive' : ''}
