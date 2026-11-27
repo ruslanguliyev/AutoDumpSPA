@@ -318,6 +318,28 @@
     "errorSize": "The photo is too large (20 MB max).",
     "compatibilityGuess": "AI guessed the compatibility from the look of the part, with no number on the photo. Check it against the part number or VIN before publishing."
   },
+  "carAi": {
+    "title": "Fill with AI",
+    "hint": "Take a photo of the car: AI will recognise the make, model and body type and suggest a description. You set the mileage, condition, price and VIN yourself.",
+    "pick": "Upload a photo of the car",
+    "pickAnother": "Another photo",
+    "working": "Recognising the car…",
+    "notCar": "The photo does not show a car, or it could not be recognised. Try another photo: the whole car, front three-quarter view, in good light.",
+    "lowConfidence": "AI is not sure about the result. Check the fields carefully.",
+    "check": "check",
+    "guessNote": "Fields marked “check” were inferred from the look of the car, not from badges or labels on the photo. Verify them before publishing.",
+    "yearsHint": "Production years of this generation. Pick the exact year yourself in the Vehicle step.",
+    "noModel": "The model could not be matched to our list: pick it yourself.",
+    "sellerSets": "Set the year, mileage, condition, price and VIN yourself. The plate and VIN are not read from the photo.",
+    "apply": "Fill the fields",
+    "cancel": "Cancel",
+    "applied": "Fields filled. Check them in the Vehicle step and add the year, mileage and price.",
+    "errorGeneric": "Could not recognise the photo. Please try again.",
+    "errorRate": "Too many requests. Try again later.",
+    "errorUnavailable": "AI is unavailable right now. Fill the fields in by hand.",
+    "errorType": "A JPEG, PNG or WebP photo is needed.",
+    "errorSize": "The photo is too large (up to 20 MB)."
+  },
   "translations": {
     "title": "Translations",
     "hint": "Your listing is written in {{language}}. The site shows these translations in the other languages; correct them if needed. If you change the original, the translations are made again.",

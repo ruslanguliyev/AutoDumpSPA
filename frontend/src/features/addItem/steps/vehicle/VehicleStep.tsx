@@ -205,8 +205,14 @@ const VehicleStep = () => {
     });
   };
 
+  // Clear the specs only when the make or model actually changes here, not when the step
+  // mounts: values the seller (or the AI photo fill) set earlier must survive a step change.
+  const carKey = `${vBrand}|${vModel}`;
+  const carKeyRef = useRef(carKey);
   useEffect(() => {
     if (!hasVehicle) return;
+    if (carKeyRef.current === carKey) return;
+    carKeyRef.current = carKey;
     setVehicleField('displacement', '');
     setVehicleField('horsepower', '');
     setVehicleField('fuel', '');
@@ -216,7 +222,7 @@ const VehicleStep = () => {
     setGenerations([]);
     setSelectedGen(null);
     setImgErrors(new Set());
-  }, [hasVehicle, vBrand, vModel, setVehicleField]);
+  }, [hasVehicle, carKey, setVehicleField]);
 
   useEffect(() => {
     if (!hasVehicle) return;

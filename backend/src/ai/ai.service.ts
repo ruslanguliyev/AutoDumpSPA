@@ -26,6 +26,8 @@ import { SearchParseCache } from './search-cache';
 import type { ChatImage } from './chat/chat-image';
 import { PART_PHOTO_TOOL, partPhotoSystemPrompt, partPhotoUserPrompt } from './part-photo/part-photo-prompt';
 import { buildPartPhotoResult, PartPhotoResult } from './part-photo/part-photo-result';
+import { CAR_PHOTO_TOOL, carPhotoSystemPrompt, carPhotoUserPrompt } from './car-photo/car-photo-prompt';
+import { buildCarPhotoResult, CarPhotoResult } from './car-photo/car-photo-result';
 import { TRANSLATE_TOOL, translateSystemPrompt, translateUserPrompt } from './translate/translate-prompt';
 import { buildTranslateResult, TranslateResult } from './translate/translate-result';
 import type { PartText } from '../translations/part-translations';
@@ -204,6 +206,43 @@ export class AiService {
 
     try {
       return buildPartPhotoResult(raw);
+    } catch {
+      throw aiError('INVALID_RESULT');
+    }
+  }
+
+  /**
+   * Looks at a photo of a car and suggests the vehicle listing fields: make and model from our
+   * catalogue, body type, generation years, and fuel, gearbox and drive only with a visible clue,
+   * plus a short description. Price, mileage, condition, VIN and plate are never suggested.
+   */
+  async recognizeCar(userId: string, image: ChatImage, language: AiLanguageCode): Promise<CarPhotoResult> {
+    const config = readAiConfig(this.configService);
+    if (!config.enabled) throw aiError('UNAVAILABLE');
+    if (!this.limiter.take(`car-photo:${userId}`, config.chatImageLimit, config.chatImageWindowMs)) {
+      throw aiError('RATE_LIMITED');
+    }
+    await this.budget.reserve(config, `user:${userId}`, config.chatImageWeight);
+
+    let raw: unknown;
+    try {
+      raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('car-photo', [usage]),
+        model: config.chatVisionModel,
+        system: carPhotoSystemPrompt(),
+        user: carPhotoUserPrompt(language),
+        image: { mediaType: image.mediaType, data: image.data },
+        tool: CAR_PHOTO_TOOL,
+        temperature: 0,
+        maxTokens: 1200,
+        timeoutMs: config.chatTimeoutMs,
+      });
+    } catch {
+      throw aiError('UNAVAILABLE');
+    }
+
+    try {
+      return buildCarPhotoResult(raw);
     } catch {
       throw aiError('INVALID_RESULT');
     }

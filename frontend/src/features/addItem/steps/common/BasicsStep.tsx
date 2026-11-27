@@ -11,6 +11,7 @@ import { DescriptionAi } from '@/features/addItem/ai/DescriptionAi';
 import { DESCRIPTION_MAX_LENGTH } from '@/features/addItem/utils/validateDraft';
 import { useAiEnabled } from '@/features/ai/ai.api';
 import { PartPhotoAi } from '@/features/addItem/ai/PartPhotoAi';
+import { CarPhotoAi } from '@/features/addItem/ai/CarPhotoAi';
 import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
 import { getPartCategoryKey, PART_CATEGORIES } from '@/parts/utils/parts.constants';
 
@@ -76,6 +77,7 @@ const BasicsStep = () => {
 
       <div className="space-y-4">
         {draft.type === 'part' && aiOn ? <PartPhotoAi /> : null}
+        {draft.type === 'vehicle' && aiOn ? <CarPhotoAi /> : null}
 
         <div>
           {draft.type === 'vehicle' ? (

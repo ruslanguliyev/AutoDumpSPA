@@ -317,6 +317,28 @@
     "errorSize": "Şəkil çox böyükdür (20 MB-a qədər).",
     "compatibilityGuess": "Süni intellekt uyğunluğu şəkildəki nömrəyə görə yox, hissənin görünüşünə görə təxmin etdi. Dərc etməzdən əvvəl artikul və ya VIN ilə yoxlayın."
   },
+  "carAi": {
+    "title": "Süni intellektlə doldurun",
+    "hint": "Avtomobilin şəklini çəkin: süni intellekt markanı, modeli, banı müəyyən edəcək və təsvir təklif edəcək. Yürüşü, vəziyyəti, qiyməti və VIN-i özünüz göstərirsiniz.",
+    "pick": "Avtomobilin şəklini yükləyin",
+    "pickAnother": "Başqa şəkil",
+    "working": "Avtomobil tanınır…",
+    "notCar": "Şəkildə avtomobil görünmür və ya onu tanımaq mümkün olmadı. Başqa şəkil yoxlayın: avtomobil bütöv, öndən-yandan, yaxşı işıqda.",
+    "lowConfidence": "Süni intellekt nəticədən əmin deyil. Sahələri diqqətlə yoxlayın.",
+    "check": "yoxlayın",
+    "guessNote": "«Yoxlayın» qeydi olan sahələri süni intellekt şəkildəki yazılara görə yox, xarici görünüşə görə müəyyən edib. Dərc etməzdən əvvəl onları yoxlayın.",
+    "yearsHint": "Bu nəslin buraxılış illəri. Dəqiq ili «Avtomobil» addımında özünüz seçin.",
+    "noModel": "Modeli siyahımızla uyğunlaşdırmaq mümkün olmadı: onu özünüz seçin.",
+    "sellerSets": "İli, yürüşü, vəziyyəti, qiyməti və VIN-i özünüz göstərin. Nömrə və VIN şəkildən oxunmur.",
+    "apply": "Sahələri doldur",
+    "cancel": "Ləğv et",
+    "applied": "Sahələr dolduruldu. Onları «Avtomobil» addımında yoxlayın, ili, yürüşü və qiyməti göstərin.",
+    "errorGeneric": "Şəkli tanımaq alınmadı. Yenidən cəhd edin.",
+    "errorRate": "Həddindən çox sorğu. Bir az sonra cəhd edin.",
+    "errorUnavailable": "Süni intellekt hazırda əlçatan deyil. Sahələri əl ilə doldurun.",
+    "errorType": "JPEG, PNG və ya WebP formatında şəkil lazımdır.",
+    "errorSize": "Şəkil çox böyükdür (20 MB-a qədər)."
+  },
   "translations": {
     "title": "Tərcümələr",
     "hint": "Elanınız {{language}} dilində yazılıb. Sayt digər dillərdə bu tərcümələri göstərir; lazım olsa düzəldin. Orijinalı dəyişsəniz, tərcümələr yenidən hazırlanacaq.",

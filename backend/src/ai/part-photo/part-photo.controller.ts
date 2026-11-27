@@ -20,6 +20,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { AiService } from '../ai.service';
 import { AiLanguage } from '../ai.types';
 import { CHAT_IMAGE_MAX_BYTES, ChatImageError, validateChatImage } from '../chat/chat-image';
+import type { CarPhotoResult } from '../car-photo/car-photo-result';
 import type { PartPhotoResult } from './part-photo-result';
 
 const STATUS_BY_CODE: Record<string, HttpStatus> = {
@@ -36,6 +37,18 @@ const fail = (code: string) =>
   new HttpException({ code }, STATUS_BY_CODE[code] ?? HttpStatus.INTERNAL_SERVER_ERROR);
 
 const LANGUAGES = new Set<string>(Object.values(AiLanguage));
+
+/** Language and photo checks shared by both routes; the photo is checked byte by byte. */
+function checkUpload(language: unknown, file?: Express.Multer.File) {
+  if (!LANGUAGES.has(String(language))) throw fail('INVALID_INPUT');
+  if (!file) throw fail('INVALID_IMAGE');
+  try {
+    return validateChatImage(file.buffer);
+  } catch (error) {
+    if (error instanceof ChatImageError) throw fail('INVALID_IMAGE');
+    throw error;
+  }
+}
 
 /**
  * "Fill with AI" in the parts listing wizard: the seller sends a photo of the part and gets
@@ -60,17 +73,33 @@ export class PartPhotoController {
     @Body('language') language: unknown,
     @UploadedFile() file?: Express.Multer.File,
   ): Promise<PartPhotoResult> {
-    if (!LANGUAGES.has(String(language))) throw fail('INVALID_INPUT');
-    if (!file) throw fail('INVALID_IMAGE');
-    let image;
-    try {
-      image = validateChatImage(file.buffer);
-    } catch (error) {
-      if (error instanceof ChatImageError) throw fail('INVALID_IMAGE');
-      throw error;
-    }
+    const image = checkUpload(language, file);
     try {
       return await this.ai.recognizePart(req.user.id, image, language as AiLanguage);
+    } catch (error) {
+      if (error instanceof GraphQLError) throw fail(String(error.extensions?.code ?? 'UNAVAILABLE'));
+      throw error;
+    }
+  }
+
+  /** The same for a car: "Fill with AI" in the vehicle (sale and rent) listing wizard. */
+  @Post('car-photo')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: memoryStorage(),
+      limits: { fileSize: CHAT_IMAGE_MAX_BYTES, files: 1, fields: 2, fieldSize: 64, parts: 3 },
+    }),
+  )
+  async recognizeCar(
+    @Req() req: Request & { user: AuthUser },
+    @Body('language') language: unknown,
+    @UploadedFile() file?: Express.Multer.File,
+  ): Promise<CarPhotoResult> {
+    const image = checkUpload(language, file);
+    try {
+      return await this.ai.recognizeCar(req.user.id, image, language as AiLanguage);
     } catch (error) {
       if (error instanceof GraphQLError) throw fail(String(error.extensions?.code ?? 'UNAVAILABLE'));
       throw error;

@@ -51,7 +51,7 @@ function Segment<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex h-10 overflow-x-auto rounded-[var(--radius)] border border-border text-[13px]">
+    <div role="radiogroup" aria-label={label} className="flex h-11 overflow-hidden rounded-[var(--radius)] border border-border text-[13px]">
       {options.map((option, index) => {
         const selected = option.value === value;
         return (
@@ -62,7 +62,7 @@ function Segment<T extends string>({
             aria-checked={selected}
             onClick={() => onChange(option.value)}
             className={cn(
-              'inline-flex h-10 shrink-0 items-center px-3.5',
+              'inline-flex h-full min-h-0 shrink-0 items-center px-3.5',
               focusRing,
               index > 0 && 'border-l border-border',
               selected ? 'bg-card-muted font-semibold text-foreground' : 'text-muted-foreground',
@@ -229,7 +229,7 @@ export function DescriptionAi() {
           {phase === 'generating' ? <Spinner /> : <AiSparkle size={16} />}
           {phase === 'generating' ? t('ai.writing') : phase === 'error' ? t('ai.retry') : t('ai.generate')}
         </Button>
-        <div className="flex gap-2 overflow-x-auto sm:contents">
+        <div className="flex flex-wrap gap-2 sm:contents">
           <Segment<DescriptionTone> label={t('ai.toneLabel')} value={tone} options={tones} onChange={setTone} />
           <div className="sm:ml-auto">
             <Segment<AiLanguageCode> label={t('ai.languageLabel')} value={language} options={languages} onChange={setLanguage} />
