@@ -20,7 +20,8 @@
     "db:seed:qa": "node prisma/run-seed-qa.cjs",
     "admin:grant": "ts-node scripts/grant-admin.ts",
     "ai:report": "ts-node scripts/ai-report.ts",
-    "parts:i18n": "ts-node scripts/backfill-part-i18n.ts"
+    "parts:i18n": "ts-node scripts/backfill-part-i18n.ts",
+    "listings:i18n": "ts-node scripts/backfill-listing-i18n.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",

@@ -101,6 +101,9 @@
       "loading": "Loading specialists…",
       "empty": "No specialists listed for this service yet.",
       "error": "Failed to load specialists."
+    },
+    "about": {
+      "title": "About"
     }
   },
   "header": {
@@ -176,5 +179,23 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
+  },
+  "categories": {
+    "maintenance": "Maintenance",
+    "diagnostics": "Diagnostics",
+    "repair": "Repair",
+    "engine": "Engine",
+    "transmission": "Transmission",
+    "suspension": "Suspension",
+    "brakes": "Brakes",
+    "electrical": "Electrics & batteries",
+    "ev_service": "Electric & hybrid cars",
+    "ac": "Air conditioning",
+    "tires": "Tires & alignment",
+    "body_paint": "Body & paint",
+    "detailing": "Detailing & wash",
+    "glass": "Glass",
+    "tuning": "Tuning",
+    "other": "Other"
   }
 }

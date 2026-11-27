@@ -22,6 +22,7 @@ import {
 } from './listing.types';
 import { assertDescriptionWithinLimit } from './description-limit';
 import { PartTranslationService } from '../translations/part-translation.service';
+import { TextTranslationService } from '../translations/text-translation.service';
 
 @Injectable()
 export class ListingsService {
@@ -29,6 +30,7 @@ export class ListingsService {
     private readonly prisma: PrismaService,
     private readonly sellersService: SellersService,
     private readonly partTranslations: PartTranslationService,
+    private readonly textTranslations: TextTranslationService,
   ) {}
 
   async createListing(userId: string, input: CreateListingInput) {
@@ -101,6 +103,8 @@ export class ListingsService {
     });
     // The part's name and description in az/ru/en, made after the response goes out.
     if (parts > 0) this.partTranslations.refreshListingInBackground(listing.id);
+    // Likewise the car's description.
+    if (vehicles > 0) this.textTranslations.refreshListingInBackground(listing.id);
     return this.toListingObject(updated);
   }
 

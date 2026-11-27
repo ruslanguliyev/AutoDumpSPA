@@ -40,6 +40,14 @@ export const useSaveSpecialist = (exists: boolean) => {
   });
 };
 
+export const useSaveTranslations = () => {
+  const refresh = useRefresh();
+  return useMutation({
+    mutationFn: (v: Parameters<typeof professionalApi.updateTranslations>) => professionalApi.updateTranslations(...v),
+    onSuccess: refresh,
+  });
+};
+
 export const useSaveServiceCenter = (exists: boolean) => {
   const refresh = useRefresh();
   return useMutation({

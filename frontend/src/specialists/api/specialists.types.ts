@@ -15,6 +15,7 @@ export type GqlSpecialistListRow = {
   slug: string;
   name: string;
   bio: string | null;
+  translations?: unknown;
   city: string;
   avatarUrl: string | null;
   coverImage: string | null;

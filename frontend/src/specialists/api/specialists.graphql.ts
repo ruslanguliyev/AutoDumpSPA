@@ -16,7 +16,7 @@ import type { SpecialistsDataProvider } from '@/shared/api/specialists.provider'
 const GET_SPECIALISTS_QUERY = `
 query GetSpecialists($filter: SpecialistsFilterInput) {
   specialists(filter: $filter) {
-    id slug name bio city
+    id slug name bio translations city
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount
@@ -29,7 +29,7 @@ query GetSpecialists($filter: SpecialistsFilterInput) {
 const GET_SPECIALIST_BY_SLUG_QUERY = `
 query GetSpecialistBySlug($slug: String!) {
   specialistBySlug(slug: $slug) {
-    id slug name bio city phone whatsapp
+    id slug name bio translations city phone whatsapp
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount viewsCount
@@ -43,7 +43,7 @@ query GetSpecialistBySlug($slug: String!) {
 const GET_SPECIALISTS_BY_IDS_QUERY = `
 query GetSpecialistsByIds {
   specialists(filter: null) {
-    id slug name bio city
+    id slug name bio translations city
     avatarUrl coverImage
     specializations skills
     experience rating reviewsCount
@@ -70,6 +70,8 @@ const mapListRowToProfile = (s: GqlSpecialistListRow): SpecialistProfile => ({
   slug: s.slug,
   name: s.name,
   description: s.bio ?? null,
+  // The bio in az/ru/en once translated; see lib/localizeText.
+  translations: s.translations ?? null,
   experienceYears: s.experience,
   rating: s.rating,
   reviewsCount: s.reviewsCount,

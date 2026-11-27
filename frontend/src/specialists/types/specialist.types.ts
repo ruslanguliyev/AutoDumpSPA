@@ -31,6 +31,8 @@ export type SpecialistProfile = {
   name: string;
   slug: string;
   description?: string | null;
+  /** The bio (description) in az/ru/en under the key "bio"; see lib/localizeText. */
+  translations?: unknown;
   experienceYears?: number | null;
   yearsExperience?: number | null;
   rating?: number | null;

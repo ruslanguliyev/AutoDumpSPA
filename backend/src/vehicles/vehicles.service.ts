@@ -22,6 +22,8 @@ import {
 import { rotate } from '../promotions/promotion-rotation';
 import { ListingsService } from '../listings/listings.service';
 import { assertDescriptionWithinLimit } from '../listings/description-limit';
+import { TextTranslationService } from '../translations/text-translation.service';
+import { readTextTranslations, vehicleTextFields } from '../translations/text-translations';
 import {
   CreateVehicleInput,
   UpdateVehicleInput,
@@ -84,6 +86,7 @@ export class VehiclesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly listingsService: ListingsService,
+    private readonly translations: TextTranslationService,
   ) {}
 
   private mapVehicle(row: VehicleWithListingSeller, viewerUserId?: string | null) {
@@ -117,6 +120,7 @@ export class VehiclesService {
       currency: row.currency,
       location: row.location,
       description: row.description,
+      translations: readTextTranslations(row.translations, vehicleTextFields(row)),
       imageUrls: row.imageUrls,
       isHot: row.isHot,
       isCreditAvailable: row.isCreditAvailable,
@@ -448,6 +452,11 @@ export class VehiclesService {
           : {}),
       },
     });
+
+    // A live listing whose description changed gets fresh translations once the typing stops.
+    if (input.description !== undefined && (input.description || null) !== (vehicle.description || null)) {
+      this.translations.refreshInBackground('vehicle', id);
+    }
 
     const row = await this.prisma.vehicle.findUniqueOrThrow({
       where: { id },

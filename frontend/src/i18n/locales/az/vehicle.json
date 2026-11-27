@@ -237,13 +237,20 @@
   "enums": {
     "transmission": {
       "Automatic": "Avtomat",
-      "Manual": "Mexaniki"
+      "Manual": "Mexaniki",
+      "Semi-Automatic": "Robot / Variator"
     },
     "fuel": {
       "Petrol": "Benzin",
       "Diesel": "Dizel",
+      "Electric": "Elektrik",
       "Hybrid": "Hibrid",
-      "Electric": "Elektrik"
+      "Gas": "Qaz"
+    },
+    "drive": {
+      "FWD": "Ön",
+      "RWD": "Arxa",
+      "AWD": "Tam"
     }
   },
   "searchAi": {

@@ -55,6 +55,13 @@ export class ServiceCenterObject {
   @Field({ nullable: true })
   description: string | null;
 
+  /**
+   * Seller text in az/ru/en: { source, hash, edited, az?, ru?, en? }, each language
+   * { [field]: text }. Null until translated, or while the original was edited since.
+   */
+  @Field(() => GraphQLJSON, { nullable: true })
+  translations: unknown;
+
   @Field({ nullable: true })
   legalName: string | null;
 

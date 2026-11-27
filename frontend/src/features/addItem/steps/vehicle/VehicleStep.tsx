@@ -22,6 +22,7 @@ import {
 } from '@/lib/carSpecs';
 import { Combobox } from '@/shared/ui/Combobox';
 import { Select } from '@/shared/ui/Select';
+import VehicleTranslations from '@/features/addItem/steps/vehicle/VehicleTranslations';
 import { cn } from '@/shared/utils/cn';
 
 const inputClass =
@@ -330,6 +331,7 @@ const VehicleStep = () => {
   const yearMissing = Boolean(v.brand) && !v.year;
 
   return (
+    <div className="flex flex-col gap-6">
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-foreground">{t('form.vehicleDetailsTitle')}</h2>
@@ -610,6 +612,8 @@ const VehicleStep = () => {
           </select>
         </div>
       </div>
+    </div>
+    <VehicleTranslations />
     </div>
   );
 };

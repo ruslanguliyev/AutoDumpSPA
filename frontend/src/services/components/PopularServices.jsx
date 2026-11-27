@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
+import { localizeText, serviceItemKey } from '@/lib/localizeText';
+import { formatServiceCategory } from '@/services/utils/serviceCategories';
+
 const formatDuration = (minutes, t) => {
   if (!minutes) return null;
   if (minutes < 60) return t('duration.mins', { count: minutes });
@@ -13,11 +16,12 @@ const getServiceDescription = (code, category, t) => {
   if (code === 'oil_change') return t('serviceDescriptions.oil_change');
   if (code === 'brake_pads') return t('serviceDescriptions.brake_pads');
   if (code === 'diagnostics') return t('serviceDescriptions.diagnostics');
-  return category;
+  // Categories are keys ("tires"); older free text is mapped to one.
+  return formatServiceCategory(t, category);
 };
 
-export default function PopularServices({ popularServices, allServicesCount }) {
-  const { t } = useTranslation('services');
+export default function PopularServices({ popularServices, allServicesCount, translations = null }) {
+  const { t, i18n } = useTranslation('services');
   if (!popularServices || popularServices.length === 0) return null;
 
   return (
@@ -29,7 +33,7 @@ export default function PopularServices({ popularServices, allServicesCount }) {
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="service-title-row">
-                  <h3 className="service-title">{item.title}</h3>
+                  <h3 className="service-title">{localizeText(translations, i18n.language, serviceItemKey(item.code), item.title)}</h3>
                   {item.popular && (
                     <span className="service-badge popular">{t('popular.popularBadge')}</span>
                   )}

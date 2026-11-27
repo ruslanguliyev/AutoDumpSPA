@@ -1,3 +1,4 @@
+import type { TextLang, TextTranslations } from '@/lib/localizeText';
 import { create } from 'zustand';
 
 export type ListingType = 'vehicle' | 'part';
@@ -50,6 +51,13 @@ export type ListingVehicle = {
   transmission: string;
   fuel: string;
   drivetrain: string;
+  /**
+   * The live listing's description in the other interface languages, made by AI after
+   * publishing. Absent on drafts and while the description was edited since.
+   */
+  translations?: TextTranslations | null;
+  /** Languages the seller changed here; saved with the next sync. */
+  translationsEdited?: TextLang[];
 };
 
 export type PartLang = 'az' | 'ru' | 'en';

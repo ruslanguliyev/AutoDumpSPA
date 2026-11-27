@@ -2,6 +2,8 @@ import { Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { formatPrice, intlLocale } from '@/lib/format';
+import { localizeText, serviceItemKey } from '@/lib/localizeText';
+import { formatServiceCategory } from '@/services/utils/serviceCategories';
 import { Badge } from '@/shared/ui/Badge';
 
 const formatDuration = (minutes, t) => {
@@ -17,10 +19,11 @@ const getServiceDescription = (code, category, t) => {
   if (code === 'oil_change') return t('serviceDescriptions.oil_change');
   if (code === 'brake_pads') return t('serviceDescriptions.brake_pads');
   if (code === 'diagnostics') return t('serviceDescriptions.diagnostics');
-  return category;
+  // Categories are keys ("tires"); older free text is mapped to one.
+  return formatServiceCategory(t, category);
 };
 
-export default function FullPriceList({ services }) {
+export default function FullPriceList({ services, translations = null }) {
   const { t, i18n } = useTranslation('services');
   const locale = intlLocale(i18n.language);
   if (!services?.length) return null;
@@ -33,7 +36,7 @@ export default function FullPriceList({ services }) {
           <li key={item.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[15px] font-semibold text-foreground">{item.title}</h3>
+                <h3 className="text-[15px] font-semibold text-foreground">{localizeText(translations, i18n.language, serviceItemKey(item.code), item.title)}</h3>
                 {item.popular ? <Badge variant="hot">{t('priceList.popularBadge')}</Badge> : null}
                 {item.code === 'diagnostics' && !item.popular ? (
                   <Badge variant="hot">{t('priceList.hotBadge')}</Badge>

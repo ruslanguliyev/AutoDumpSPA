@@ -221,6 +221,8 @@ model Vehicle {
   ownersCount       Int      @default(1)
   seatsCount        Int?
   marketRegion      String?
+  /// Description in az/ru/en, made by AI when the listing goes live; see src/translations.
+  translations      Json?
 
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
@@ -287,6 +289,8 @@ model ServiceCenter {
   isActive        Boolean   @default(true)
   schedule        Json?
   contacts        Json?
+  /// Description and price-list titles in az/ru/en, made by AI; see src/translations.
+  translations    Json?
   promotionRank   Int       @default(0)
   promotedUntil   DateTime?
   bumpedAt        DateTime  @default(now())
@@ -343,6 +347,8 @@ model Specialist {
   verified        Boolean   @default(false)
   available       Boolean   @default(true)
   portfolio       String[]
+  /// Bio in az/ru/en, made by AI; see src/translations.
+  translations    Json?
   promotionRank   Int       @default(0)
   promotedUntil   DateTime?
   bumpedAt        DateTime  @default(now())

@@ -79,6 +79,12 @@ mutation UpdatePartTranslations($id: String!, $translations: [PartTranslationInp
 }
 `;
 
+const UPDATE_TEXT_TRANSLATIONS = `
+mutation UpdateTextTranslations(: String!, : String!, : [TextTranslationInput!]!) {
+  updateTextTranslations(kind: , id: , translations: )
+}
+`;
+
 const UPDATE_PART = `
 mutation UpdatePart($id: String!, $input: UpdatePartInput!) {
   updatePart(id: $id, input: $input) {
@@ -376,6 +382,21 @@ async function syncDraftToBackend(draft: ListingDraft) {
     if (translations.length) {
       try {
         await gqlRequest(UPDATE_PART_TRANSLATIONS, { id: draft._partId, translations });
+      } catch (err) {
+        console.error('Saving translations failed', err);
+      }
+    }
+  }
+
+  // The same for a car's description.
+  if (draft.type === 'vehicle' && draft._vehicleId && draft.vehicle?.translations && draft.vehicle.translationsEdited?.length) {
+    const t = draft.vehicle.translations;
+    const translations = draft.vehicle.translationsEdited
+      .filter((lang) => lang !== t.source && t[lang]?.description?.trim())
+      .map((lang) => ({ lang, key: 'description', text: t[lang]!.description }));
+    if (translations.length) {
+      try {
+        await gqlRequest(UPDATE_TEXT_TRANSLATIONS, { kind: 'vehicle', id: draft._vehicleId, translations });
       } catch (err) {
         console.error('Saving translations failed', err);
       }

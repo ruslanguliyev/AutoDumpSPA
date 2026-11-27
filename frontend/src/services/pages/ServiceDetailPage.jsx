@@ -10,19 +10,22 @@ import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
 import { DetailLayout, PromoteShortcuts } from '@/shared/blocks';
 import Breadcrumbs from '@/shared/ui/Breadcrumbs/Breadcrumbs';
 import { EmptyState } from '@/shared/ui/EmptyState';
+import { localizeText } from '@/lib/localizeText';
 import { useService } from '@/services/hooks/useService';
 import { useServiceSpecialists } from '@/services/hooks/useServiceSpecialists';
 import { membershipsEnabled } from '@/memberships/config';
 import ServiceHeader from '@/services/components/ServiceHeader';
 import ServiceGallery from '@/services/components/ServiceGallery';
 import FullPriceList from '@/services/components/FullPriceList';
+import { formatServiceCategory, getServiceCategoryKey } from '@/services/utils/serviceCategories';
+import { Badge } from '@/shared/ui/Badge';
 import BrandsServiced from '@/services/components/BrandsServiced';
 import ServiceSidebar from '@/services/components/ServiceSidebar';
 import SpecialistCard from '@/specialists/components/SpecialistCard';
 import { buildServiceMobileBar } from '@/services/pages/serviceDetail/ServiceDetailMobileBar';
 
 export default function ServiceDetailPage() {
-  const { t } = useTranslation('services');
+  const { t, i18n } = useTranslation('services');
   const { language } = useLanguageSync();
   const { idOrSlug } = useParams();
   const { service, isLoading, error } = useService(idOrSlug);
@@ -57,6 +60,12 @@ export default function ServiceDetailPage() {
     );
   }
 
+  // The seller's own words follow the interface language once they have been translated.
+  const about = localizeText(service.translations, i18n.language, 'description', service.description);
+  const categories = [...new Set((service.categories ?? []).map(getServiceCategoryKey))].filter(
+    (key) => key && key !== 'other',
+  );
+
   const contacts = {
     phone: service.phone || service.contacts?.phone,
     whatsapp: service.whatsapp || service.contacts?.whatsapp,
@@ -85,7 +94,24 @@ export default function ServiceDetailPage() {
               viewsCount={viewsCount}
             />
             <ServiceGallery media={service.media} serviceName={service.name} serviceId={service.id} />
-            <FullPriceList services={service.services || []} />
+            {about.trim() || categories.length ? (
+              <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
+                <h2 className="text-[20px] font-semibold tracking-tight text-foreground">{t('detail.about.title')}</h2>
+                {categories.length ? (
+                  <ul className="mt-3 flex list-none flex-wrap gap-2 p-0">
+                    {categories.map((key) => (
+                      <li key={key}>
+                        <Badge className="border-border text-foreground">{formatServiceCategory(t, key)}</Badge>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {about.trim() ? (
+                  <p className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-foreground">{about}</p>
+                ) : null}
+              </section>
+            ) : null}
+            <FullPriceList services={service.services || []} translations={service.translations} />
             <BrandsServiced brands={service.supportedBrands} />
             <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
               <h2 className="text-[20px] font-semibold tracking-tight text-foreground">

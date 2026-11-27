@@ -503,6 +503,7 @@ type Mutation {
   updateService(id: String!, input: UpdateServiceInput!): ServiceObject!
   updateServiceCenter(input: UpdateServiceCenterInput!): ServiceCenterObject!
   updateSpecialist(input: UpdateSpecialistInput!): SpecialistObject!
+  updateTextTranslations(id: String!, kind: String!, translations: [TextTranslationInput!]!): JSON!
   updateVehicle(id: String!, input: UpdateVehicleInput!): VehicleObject!
 }
 
@@ -937,6 +938,7 @@ type ServiceCenterObject {
   services: [ServiceCenterServiceObject!]!
   slug: String
   supportedBrands: [String!]!
+  translations: JSON
   type: String
   updatedAt: DateTime!
   userId: String!
@@ -992,6 +994,7 @@ type SpecialistObject {
   slug: String!
   specializations: [String!]!
   supportedVehicles: [SpecialistVehicleObject!]!
+  translations: JSON
   updatedAt: DateTime!
   userId: String!
   verified: Boolean!
@@ -1021,6 +1024,12 @@ input SubmitReviewInput {
   rating: Int!
   targetId: String!
   targetType: ReviewTargetType!
+}
+
+input TextTranslationInput {
+  key: String!
+  lang: String!
+  text: String!
 }
 
 type UnavailableRangeObject {
@@ -1203,6 +1212,7 @@ type VehicleObject {
   rental: RentalTermsObject
   seatsCount: Int
   seller: VehicleSellerObject
+  translations: JSON
   transmission: String!
   vehicleType: String!
   version: String

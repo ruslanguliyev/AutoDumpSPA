@@ -250,13 +250,20 @@
   "enums": {
     "transmission": {
       "Automatic": "Автомат",
-      "Manual": "Механика"
+      "Manual": "Механика",
+      "Semi-Automatic": "Робот/Вариатор"
     },
     "fuel": {
       "Petrol": "Бензин",
       "Diesel": "Дизель",
+      "Electric": "Электро",
       "Hybrid": "Гибрид",
-      "Electric": "Электро"
+      "Gas": "Газ"
+    },
+    "drive": {
+      "FWD": "Передний",
+      "RWD": "Задний",
+      "AWD": "Полный"
     }
   },
   "searchAi": {

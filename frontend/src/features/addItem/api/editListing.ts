@@ -9,6 +9,7 @@ import type {
   ListingImage,
 } from '@/features/addItem/store/useAddItemStore';
 import { gqlRequest } from '@/lib/graphql';
+import type { TextTranslations } from '@/lib/localizeText';
 import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 
 const EDIT_QUERY = `
@@ -18,7 +19,7 @@ query EditListing($id: String!) {
   vehicleByListing(listingId: $id) {
     id brand model generation version year mileage vin fuel transmission
     displacement horsepower engineVolume power bodyType drive condition location description
-    price currency imageUrls
+    translations price currency imageUrls
     rental { deposit minDays maxDays kmPerDay minDriverAge }
   }
   partByListing(listingId: $id) {
@@ -66,6 +67,7 @@ type EditQueryResult = {
     condition: string | null;
     location: string | null;
     description: string | null;
+    translations: TextTranslations | null;
     price: number | null;
     currency: string | null;
     imageUrls: string[];
@@ -179,6 +181,8 @@ export const buildDraftFromServer = (
           transmission: v.transmission ?? '',
           fuel: v.fuel ?? '',
           drivetrain: v.drive ?? '',
+          translations: v.translations ?? null,
+          translationsEdited: [],
         }
       : undefined,
     part: p

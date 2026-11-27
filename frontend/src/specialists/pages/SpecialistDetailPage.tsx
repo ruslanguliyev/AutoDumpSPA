@@ -17,6 +17,7 @@ import { useSpecialistServices } from '@/specialists/hooks/useSpecialistServices
 import { buildSpecialistMobileBar } from '@/specialists/pages/specialistDetail/SpecialistDetailMobileBar';
 import { ROUTES, withLang } from '@/shared/constants/routes';
 import { useLanguageSync } from '@/shared/hooks/useLanguageSync';
+import { localizeText } from '@/lib/localizeText';
 
 const SimilarSpecialistsSection = lazy(
   () => import('@/specialists/components/SimilarSpecialistsSection'),
@@ -87,7 +88,7 @@ const SpecialistDetailPage = () => {
                 <SpecialistGallery portfolio={portfolio} altPrefix={specialist.name} />
               ) : null}
               <SpecialistHighlights
-                description={specialist.description}
+                description={localizeText(specialist.translations, language, 'bio', specialist.description)}
                 rating={specialist.rating}
                 reviewsCount={specialist.reviewsCount}
               />

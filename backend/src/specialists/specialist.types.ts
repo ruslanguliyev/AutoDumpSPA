@@ -1,3 +1,4 @@
+import GraphQLJSON from 'graphql-type-json';
 import { PromotionTier } from '../promotions/promotion.types';
 import {
   Field,
@@ -44,6 +45,13 @@ export class SpecialistObject {
 
   @Field({ nullable: true })
   bio: string | null;
+
+  /**
+   * Seller text in az/ru/en: { source, hash, edited, az?, ru?, en? }, each language
+   * { [field]: text }. Null until translated, or while the original was edited since.
+   */
+  @Field(() => GraphQLJSON, { nullable: true })
+  translations: unknown;
 
   @Field()
   city: string;

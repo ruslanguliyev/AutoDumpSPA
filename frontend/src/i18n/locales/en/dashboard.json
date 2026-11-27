@@ -272,17 +272,11 @@
     "sentText": "The owner will see it in their dashboard. The answer will appear under \"Rentals\".",
     "myBookings": "My bookings",
     "unavailableDays": "Unavailable days",
-
     "calendar": {
-
       "group": "Rental dates",
-
       "previousMonth": "Previous month",
-
       "nextMonth": "Next month",
-
       "unavailable": "unavailable"
-
     },
     "messagePlaceholder": "Message to the owner (optional)",
     "title": "Book this car",
@@ -418,6 +412,20 @@
     "create": "Create profile",
     "save": "Save changes",
     "saved": "Saved",
-    "viewPublic": "View public page"
+    "viewPublic": "View public page",
+    "translations": {
+      "title": "Translations",
+      "hint": "Your text is in {{language}}. The site shows these translations to visitors who use another language; correct them if needed. When you change the original, they are made again in a minute.",
+      "pending": "Translations appear here a minute after you save the text.",
+      "save": "Save translations",
+      "saved": "Translations saved",
+      "description": "About",
+      "priceItem": "Service: {{title}}",
+      "languages": {
+        "az": "Azerbaijani",
+        "ru": "Russian",
+        "en": "English"
+      }
+    }
   }
 }

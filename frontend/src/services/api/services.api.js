@@ -4,7 +4,7 @@ import { MOCK_SERVICES } from './graphql/mocks/services.mocks.js';
 const GET_SERVICE_CENTERS_QUERY = `
 query GetServiceCenters($city: String) {
   serviceCenters(city: $city) {
-    id slug name description type
+    id slug name description translations type
     city phone website logoUrl coverImage
     categories supportedBrands rating reviewsCount verified promotionTier
     schedule
@@ -15,7 +15,7 @@ query GetServiceCenters($city: String) {
 const GET_SERVICE_CENTER_QUERY = `
 query GetServiceCenter($id: String!) {
   serviceCenter(id: $id) {
-    id slug name legalName description type
+    id slug name legalName description translations type
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
@@ -33,7 +33,7 @@ query GetServiceCenter($id: String!) {
 const GET_SERVICE_CENTER_BY_SLUG_QUERY = `
 query GetServiceCenterBySlug($slug: String!) {
   serviceCenterBySlug(slug: $slug) {
-    id slug name legalName description type
+    id slug name legalName description translations type
     city address phone whatsapp website
     logoUrl coverImage gallery
     categories supportedBrands
@@ -54,6 +54,8 @@ const mapServiceCenterRow = (row) => ({
   name: row.name,
   legalName: row.legalName ?? null,
   description: row.description ?? null,
+  // Description and price-list titles in az/ru/en once translated; see lib/localizeText.
+  translations: row.translations ?? null,
   type: row.type ?? null,
   location: {
     city: row.city,

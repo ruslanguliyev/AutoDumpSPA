@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { intlLocale } from '@/lib/format';
+import { localizeText } from '@/lib/localizeText';
 
 import { buildVehicleSpecRows, type VehicleDetailCar } from './buildVehicleSpecRows';
 
@@ -11,7 +12,10 @@ type Props = {
 export function VehicleDetailSpecs({ car }: Props) {
   const { t, i18n } = useTranslation('vehicle');
   const locale = intlLocale(i18n.language);
-  const { rows, ownerComment } = buildVehicleSpecRows(car, t, locale);
+  // The seller's comment follows the interface language once the listing has translations.
+  const original = car.sellerNote ?? car.description ?? null;
+  const localized = { ...car, sellerNote: localizeText(car.translations, i18n.language, 'description', original) };
+  const { rows, ownerComment } = buildVehicleSpecRows(localized, t, locale);
 
   if (rows.length === 0 && !ownerComment) return null;
 

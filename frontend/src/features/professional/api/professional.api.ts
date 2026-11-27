@@ -1,10 +1,13 @@
 import { gqlRequest } from '@/lib/graphql';
+import type { TextLang, TextTranslations } from '@/lib/localizeText';
 
 export type MySpecialist = {
   id: string;
   slug: string;
   name: string;
   bio: string | null;
+  /** The bio in az/ru/en under "bio", once translated. */
+  translations: TextTranslations | null;
   city: string;
   phone: string | null;
   whatsapp: string | null;
@@ -26,6 +29,8 @@ export type MyServiceCenter = {
   slug: string | null;
   name: string;
   description: string | null;
+  /** Description and price-list titles ("service:<code>") in az/ru/en, once translated. */
+  translations: TextTranslations | null;
   city: string;
   address: string | null;
   phone: string | null;
@@ -69,11 +74,20 @@ export type ServiceCenterFormValues = {
 };
 
 const SPECIALIST_FIELDS =
-  'id slug name bio city phone whatsapp experience specializations hourlyRate priceFrom mobileService available verified rating reviewsCount';
+  'id slug name bio translations city phone whatsapp experience specializations hourlyRate priceFrom mobileService available verified rating reviewsCount';
 const CENTER_FIELDS =
-  'id slug name description city address phone whatsapp website categories supportedBrands isActive verified rating reviewsCount services { code title category priceFrom }';
+  'id slug name description translations city address phone whatsapp website categories supportedBrands isActive verified rating reviewsCount services { code title category priceFrom }';
+
+export type TranslationEntry = { lang: TextLang; key: string; text: string };
 
 export const professionalApi = {
+  /** The owner's corrections of the AI translations of their profile. */
+  updateTranslations: (kind: 'specialist' | 'serviceCenter', id: string, translations: TranslationEntry[]) =>
+    gqlRequest<{ updateTextTranslations: TextTranslations }>(
+      `mutation($kind: String!, $id: String!, $translations: [TextTranslationInput!]!) { updateTextTranslations(kind: $kind, id: $id, translations: $translations) }`,
+      { kind, id, translations },
+    ).then((d) => d.updateTextTranslations),
+
   mySpecialist: () =>
     gqlRequest<{ mySpecialist: MySpecialist | null }>(`{ mySpecialist { ${SPECIALIST_FIELDS} } }`).then((d) => d.mySpecialist),
 

@@ -1,5 +1,6 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { ListingPurpose } from '@prisma/client';
+import GraphQLJSON from 'graphql-type-json';
 import { PromotionTier } from '../promotions/promotion.types';
 
 @ObjectType()
@@ -134,6 +135,13 @@ export class VehicleObject {
 
   @Field({ nullable: true })
   description: string | null;
+
+  /**
+   * Seller text in az/ru/en: { source, hash, edited, az?, ru?, en? }, each language
+   * { [field]: text }. Null until translated, or while the original was edited since.
+   */
+  @Field(() => GraphQLJSON, { nullable: true })
+  translations: unknown;
 
   @Field(() => [String])
   imageUrls: string[];

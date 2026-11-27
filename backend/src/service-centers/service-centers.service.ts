@@ -24,6 +24,12 @@ import {
   CreateServiceCenterServiceInput,
   UpdateServiceCenterInput,
 } from './service-center.types';
+import { toServiceCategoryKey, toServiceCategoryKeys } from './service-category';
+import {
+  PROFILE_SAVE_DELAY_MS,
+  TextTranslationService,
+} from '../translations/text-translation.service';
+import { readTextTranslations, serviceCenterTextFields } from '../translations/text-translations';
 
 type ServiceCenterWithServices = ServiceCenter & {
   services: ServiceCenterService[];
@@ -31,7 +37,10 @@ type ServiceCenterWithServices = ServiceCenter & {
 
 @Injectable()
 export class ServiceCentersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly translations: TextTranslationService,
+  ) {}
 
   private mapServiceRow(row: ServiceCenterWithServices) {
     return {
@@ -40,6 +49,7 @@ export class ServiceCentersService {
       name: row.name,
       slug: row.slug,
       description: row.description,
+      translations: readTextTranslations(row.translations, serviceCenterTextFields(row)),
       legalName: row.legalName,
       type: row.type,
       city: row.city,
@@ -50,7 +60,8 @@ export class ServiceCentersService {
       logoUrl: row.logoUrl,
       coverImage: row.coverImage,
       gallery: row.gallery,
-      categories: row.categories,
+      // Older profiles hold free text ("Шиномонтаж"); the site only shows keys it can translate.
+      categories: toServiceCategoryKeys(row.categories),
       supportedBrands: row.supportedBrands,
       rating: row.rating,
       reviewsCount: row.reviewsCount,
@@ -65,7 +76,7 @@ export class ServiceCentersService {
         serviceCenterId: s.serviceCenterId,
         code: s.code,
         title: s.title,
-        category: s.category,
+        category: toServiceCategoryKey(s.category) ?? 'other',
         priceFrom:
           s.priceFrom === null || s.priceFrom === undefined
             ? null
@@ -99,7 +110,7 @@ export class ServiceCentersService {
           serviceCenterId,
           code: s.code,
           title: s.title,
-          category: s.category,
+          category: toServiceCategoryKey(s.category) ?? 'other',
           priceFrom: s.priceFrom,
           priceTo: s.priceTo,
           currency: s.currency ?? 'AZN',
@@ -112,7 +123,7 @@ export class ServiceCentersService {
   }
 
   async createServiceCenter(userId: string, input: CreateServiceCenterInput) {
-    return this.prisma.$transaction(async (tx) => {
+    const saved = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.serviceCenter.findUnique({
         where: { userId },
       });
@@ -138,7 +149,7 @@ export class ServiceCentersService {
           logoUrl: input.logoUrl ?? null,
           coverImage: input.coverImage ?? null,
           gallery: input.gallery ?? [],
-          categories: input.categories ?? [],
+          categories: toServiceCategoryKeys(input.categories),
           supportedBrands: input.supportedBrands ?? [],
           rating: 0,
           reviewsCount: 0,
@@ -166,10 +177,13 @@ export class ServiceCentersService {
       });
       return this.mapServiceRow(full);
     });
+    // The description and price list in az/ru/en; nothing is called when the text is unchanged.
+    this.translations.refreshInBackground('serviceCenter', saved.id, PROFILE_SAVE_DELAY_MS);
+    return saved;
   }
 
   async updateServiceCenter(userId: string, input: UpdateServiceCenterInput) {
-    return this.prisma.$transaction(async (tx) => {
+    const saved = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.serviceCenter.findUnique({
         where: { userId },
       });
@@ -198,7 +212,7 @@ export class ServiceCentersService {
             : {}),
           ...(input.gallery !== undefined ? { gallery: input.gallery } : {}),
           ...(input.categories !== undefined
-            ? { categories: input.categories }
+            ? { categories: toServiceCategoryKeys(input.categories) }
             : {}),
           ...(input.supportedBrands !== undefined
             ? { supportedBrands: input.supportedBrands }
@@ -233,6 +247,9 @@ export class ServiceCentersService {
       });
       return this.mapServiceRow(full);
     });
+    // The description and price list in az/ru/en; nothing is called when the text is unchanged.
+    this.translations.refreshInBackground('serviceCenter', saved.id, PROFILE_SAVE_DELAY_MS);
+    return saved;
   }
 
   async getServiceCenterByUserId(userId: string) {

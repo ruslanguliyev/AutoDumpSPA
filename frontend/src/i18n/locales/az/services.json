@@ -101,6 +101,9 @@
       "loading": "Ustalar yüklənir…",
       "empty": "Bu servis üçün ustalar hələ əlavə edilməyib.",
       "error": "Ustaları yükləmək mümkün olmadı."
+    },
+    "about": {
+      "title": "Haqqında"
     }
   },
   "header": {
@@ -176,5 +179,23 @@
     "friday": "Cümə",
     "saturday": "Şənbə",
     "sunday": "Bazar"
+  },
+  "categories": {
+    "maintenance": "Texniki xidmət",
+    "diagnostics": "Diaqnostika",
+    "repair": "Təmir",
+    "engine": "Mühərrik",
+    "transmission": "Sürətlər qutusu",
+    "suspension": "Asqı",
+    "brakes": "Əyləclər",
+    "electrical": "Elektrik və akkumulyatorlar",
+    "ev_service": "Elektrik və hibrid avtomobillər",
+    "ac": "Kondisioner",
+    "tires": "Təkər xidməti və razval",
+    "body_paint": "Kuzov və rəngləmə",
+    "detailing": "Detaylinq və yuma",
+    "glass": "Şüşələr",
+    "tuning": "Tüninq",
+    "other": "Digər"
   }
 }

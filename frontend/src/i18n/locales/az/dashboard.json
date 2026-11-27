@@ -270,17 +270,11 @@
     "sentText": "Sahibi onu kabinetində görəcək. Cavab \"İcarə\" bölməsində görünəcək.",
     "myBookings": "Rezervlərim",
     "unavailableDays": "Məşğul günlər",
-
     "calendar": {
-
       "group": "Kirayə tarixləri",
-
       "previousMonth": "Əvvəlki ay",
-
       "nextMonth": "Növbəti ay",
-
       "unavailable": "məşğul"
-
     },
     "messagePlaceholder": "Sahibinə mesaj (məcburi deyil)",
     "title": "Avtomobili rezerv et",
@@ -412,6 +406,20 @@
     "create": "Profil yarat",
     "save": "Yadda saxla",
     "saved": "Saxlanıldı",
-    "viewPublic": "Açıq səhifəyə bax"
+    "viewPublic": "Açıq səhifəyə bax",
+    "translations": {
+      "title": "Tərcümələr",
+      "hint": "Mətniniz bu dildədir: {{language}}. Sayt başqa dildə olan ziyarətçilərə bu tərcümələri göstərir; lazım olsa, düzəldin. Orijinalı dəyişsəniz, tərcümələr bir dəqiqə sonra yenidən hazırlanacaq.",
+      "pending": "Tərcümələr mətni yadda saxladıqdan bir dəqiqə sonra burada görünəcək.",
+      "save": "Tərcümələri yadda saxla",
+      "saved": "Tərcümələr yadda saxlanıldı",
+      "description": "Haqqında",
+      "priceItem": "Xidmət: {{title}}",
+      "languages": {
+        "az": "Azərbaycan dili",
+        "ru": "Rus dili",
+        "en": "İngilis dili"
+      }
+    }
   }
 }

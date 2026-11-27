@@ -9,7 +9,7 @@ query Vehicles($filter: VehiclesFilterInput) {
       id brand model version year mileage fuel transmission
       engineVolume power drive condition color vehicleType bodyType
       purpose rental { deposit minDays maxDays kmPerDay minDriverAge }
-      price currency location description imageUrls
+      price currency location description translations imageUrls
       isHot isCreditAvailable isBarterAvailable
       hasDamage isRepainted wasInAccident
       ownersCount seatsCount marketRegion
@@ -27,7 +27,7 @@ query VehicleById($id: String!) {
     id listingId brand model version year mileage vin fuel transmission
     engineVolume power drive condition color vehicleType bodyType
     purpose rental { deposit minDays maxDays kmPerDay minDriverAge }
-    price currency location description imageUrls
+    price currency location description translations imageUrls
     isHot isCreditAvailable isBarterAvailable
     hasDamage isRepainted wasInAccident
     ownersCount seatsCount marketRegion
@@ -61,6 +61,8 @@ const mapVehicle = (row) => ({
   currency: row.currency ?? 'AZN',
   location: row.location ?? null,
   description: row.description ?? null,
+  // The description in az/ru/en once translated; see lib/localizeText.
+  translations: row.translations ?? null,
   image: (row.imageUrls ?? []).map(resolveMediaUrl).filter(Boolean),
   imageUrls: (row.imageUrls ?? []).map(resolveMediaUrl).filter(Boolean),
   isHot: row.isHot ?? false,

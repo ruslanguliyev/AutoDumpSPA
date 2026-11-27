@@ -25,6 +25,11 @@ import {
   SpecialistsFilterInput,
   UpdateSpecialistInput,
 } from './specialist.types';
+import {
+  PROFILE_SAVE_DELAY_MS,
+  TextTranslationService,
+} from '../translations/text-translation.service';
+import { readTextTranslations, specialistTextFields } from '../translations/text-translations';
 
 type SpecialistWithVehicles = Specialist & {
   supportedVehicles?: SpecialistVehicle[];
@@ -32,10 +37,13 @@ type SpecialistWithVehicles = Specialist & {
 
 @Injectable()
 export class SpecialistsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly translations: TextTranslationService,
+  ) {}
 
   async createSpecialist(userId: string, input: CreateSpecialistInput) {
-    return this.prisma.$transaction(async (tx) => {
+    const saved = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.specialist.findUnique({
         where: { userId },
       });
@@ -94,10 +102,13 @@ export class SpecialistsService {
 
       return this.toSpecialistObject(specialist);
     });
+    // The bio in az/ru/en; nothing is called when the text is unchanged.
+    this.translations.refreshInBackground('specialist', saved.id, PROFILE_SAVE_DELAY_MS);
+    return saved;
   }
 
   async updateSpecialist(userId: string, input: UpdateSpecialistInput) {
-    return this.prisma.$transaction(async (tx) => {
+    const saved = await this.prisma.$transaction(async (tx) => {
       const existing = await tx.specialist.findUnique({
         where: { userId },
       });
@@ -174,6 +185,9 @@ export class SpecialistsService {
 
       return this.toSpecialistObject(updated);
     });
+    // The bio in az/ru/en; nothing is called when the text is unchanged.
+    this.translations.refreshInBackground('specialist', saved.id, PROFILE_SAVE_DELAY_MS);
+    return saved;
   }
 
   async getSpecialistByUserId(userId: string) {
@@ -252,6 +266,7 @@ export class SpecialistsService {
       name: s.name,
       slug: s.slug,
       bio: s.bio,
+      translations: readTextTranslations(s.translations, specialistTextFields(s)),
       city: s.city,
       phone: s.phone,
       whatsapp: s.whatsapp,

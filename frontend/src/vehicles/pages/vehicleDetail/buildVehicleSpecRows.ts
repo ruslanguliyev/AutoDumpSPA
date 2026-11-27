@@ -33,6 +33,8 @@ export type VehicleDetailCar = {
   views?: number | null;
   sellerNote?: string | null;
   description?: string | null;
+  /** The description in az/ru/en, see lib/localizeText. */
+  translations?: unknown;
 };
 
 const hasValue = (value: unknown) => {
@@ -73,7 +75,7 @@ export function buildVehicleSpecRows(
       label: t('specs.transmission'),
       value: translateVehicleEnum(t, 'transmission', car.transmission),
     },
-    { key: 'drive', label: t('specs.drive'), value: car.drive },
+    { key: 'drive', label: t('specs.drive'), value: translateVehicleEnum(t, 'drive', car.drive) },
     {
       key: 'mileage',
       label: t('specs.mileage'),

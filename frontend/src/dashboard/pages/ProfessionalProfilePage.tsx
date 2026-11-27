@@ -12,7 +12,10 @@ import type {
   ServiceCenterFormValues,
   SpecialistFormValues,
 } from '@/features/professional/api/professional.api';
+import { ProfileTranslations } from '@/features/professional/components/ProfileTranslations';
 import { useMyProfessional, useSaveServiceCenter, useSaveSpecialist } from '@/features/professional/hooks/useProfessional';
+import { serviceItemKey } from '@/lib/localizeText';
+import { getServiceCategoryKey, SERVICE_CATEGORY_KEYS } from '@/services/utils/serviceCategories';
 import { Specialization } from '@/specialists/types/specialist.types';
 import { CardWrapper } from '@/shared/ui/CardWrapper/CardWrapper';
 
@@ -182,6 +185,15 @@ function SpecialistForm({ existing }: { existing: MySpecialist | null }) {
         label={existing ? t('professional.save') : t('professional.create')}
       />
       {existing ? (
+        <ProfileTranslations
+          key={existing.translations?.hash ?? 'none'}
+          kind="specialist"
+          id={existing.id}
+          translations={existing.translations}
+          fields={existing.bio?.trim() ? [{ key: 'bio', label: t('professional.translations.description'), multiline: true }] : []}
+        />
+      ) : null}
+      {existing ? (
         <p className="text-sm">
           <Link to={`/specialists/${existing.slug}`} className="font-semibold text-primary hover:underline">
             {t('professional.viewPublic')}
@@ -202,7 +214,11 @@ function CenterForm({ existing }: { existing: MyServiceCenter | null }) {
   const [whatsapp, setWhatsapp] = useState(existing?.whatsapp ?? '');
   const [website, setWebsite] = useState(existing?.website ?? '');
   const [description, setDescription] = useState(existing?.description ?? '');
-  const [categories, setCategories] = useState((existing?.categories ?? []).join(', '));
+  const { t: tsv } = useTranslation('services');
+  // Categories are keys the site translates; older profiles may still hold free text.
+  const [cats, setCats] = useState<string[]>(() => [
+    ...new Set((existing?.categories ?? []).map(getServiceCategoryKey).filter((key): key is string => Boolean(key))),
+  ]);
   const [brands, setBrands] = useState((existing?.supportedBrands ?? []).join(', '));
   const [active, setActive] = useState(existing?.isActive ?? true);
   const [items, setItems] = useState<Array<{ title: string; price: string }>>(
@@ -216,13 +232,12 @@ function CenterForm({ existing }: { existing: MyServiceCenter | null }) {
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!valid) return;
-    const cats = csv(categories);
     const services: PriceItem[] = items
       .filter((i) => i.title.trim())
       .map((i, index) => ({
         code: `${slugify(i.title) || 'service'}-${index + 1}`,
         title: i.title.trim(),
-        category: cats[0] ?? 'General',
+        category: cats[0] ?? 'other',
         priceFrom: numberOrNull(i.price),
       }));
     const values: ServiceCenterFormValues = {
@@ -264,9 +279,6 @@ function CenterForm({ existing }: { existing: MyServiceCenter | null }) {
         <Field label={t('professional.website')}>
           <input className={inputClass} type="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://" />
         </Field>
-        <Field label={t('professional.categories')}>
-          <input className={inputClass} value={categories} onChange={(e) => setCategories(e.target.value)} placeholder={t('professional.listHint')} />
-        </Field>
         <Field label={t('professional.brands')}>
           <input className={inputClass} value={brands} onChange={(e) => setBrands(e.target.value)} placeholder={t('professional.listHint')} />
         </Field>
@@ -275,6 +287,29 @@ function CenterForm({ existing }: { existing: MyServiceCenter | null }) {
       <Field label={t('professional.about')}>
         <textarea className={inputClass} rows={4} maxLength={2000} value={description} onChange={(e) => setDescription(e.target.value)} />
       </Field>
+
+      <fieldset>
+        <legend className={labelClass}>{t('professional.categories')}</legend>
+        <div className="flex flex-wrap gap-2">
+          {SERVICE_CATEGORY_KEYS.map((value) => {
+            const on = cats.includes(value);
+            return (
+              <label
+                key={value}
+                className={`inline-flex min-h-[44px] cursor-pointer items-center rounded-full border px-3 py-1.5 text-sm ${on ? 'border-primary bg-primary/10 text-primary-text' : 'border-border text-muted-foreground'}`}
+              >
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={on}
+                  onChange={() => setCats(on ? cats.filter((c) => c !== value) : [...cats, value])}
+                />
+                {tsv(`categories.${value}`)}
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
 
       <fieldset className="space-y-2">
         <legend className={labelClass}>{t('professional.priceList')}</legend>
@@ -330,6 +365,23 @@ function CenterForm({ existing }: { existing: MyServiceCenter | null }) {
         saved={saved}
         label={existing ? t('professional.save') : t('professional.create')}
       />
+      {existing ? (
+        <ProfileTranslations
+          key={existing.translations?.hash ?? 'none'}
+          kind="serviceCenter"
+          id={existing.id}
+          translations={existing.translations}
+          fields={[
+            ...(existing.description?.trim()
+              ? [{ key: 'description', label: t('professional.translations.description'), multiline: true }]
+              : []),
+            ...existing.services.map((item) => ({
+              key: serviceItemKey(item.code),
+              label: t('professional.translations.priceItem', { title: item.title }),
+            })),
+          ]}
+        />
+      ) : null}
       {existing ? (
         <p className="text-sm">
           <Link to={`/services/${existing.slug ?? existing.id}`} className="font-semibold text-primary hover:underline">

@@ -29,6 +29,13 @@ import { buildPartPhotoResult, PartPhotoResult } from './part-photo/part-photo-r
 import { TRANSLATE_TOOL, translateSystemPrompt, translateUserPrompt } from './translate/translate-prompt';
 import { buildTranslateResult, TranslateResult } from './translate/translate-result';
 import type { PartText } from '../translations/part-translations';
+import type { TextFields } from '../translations/text-translations';
+import {
+  buildFieldsTranslateResult,
+  FieldsTranslateResult,
+  translateFieldsTool,
+  translateFieldsUserPrompt,
+} from './translate/translate-fields';
 
 export type GenerateDescriptionCommand = {
   brand: string;
@@ -230,6 +237,42 @@ export class AiService {
 
     try {
       return buildTranslateResult(raw, text);
+    } catch {
+      throw aiError('INVALID_RESULT');
+    }
+  }
+
+  /**
+   * Any set of seller-written fields (a car description, a service center's description and
+   * price list, a master's bio) in Azerbaijani, Russian and English. `caller` is whose daily
+   * AI allowance pays for it ("seller:<id>" or "user:<id>"); `context` says what the text is.
+   */
+  async translateFields(caller: string, fields: TextFields, context: string): Promise<FieldsTranslateResult> {
+    const config = readAiConfig(this.configService);
+    if (!config.enabled) throw aiError('UNAVAILABLE');
+    if (!Object.keys(fields).length) throw aiError('INVALID_INPUT');
+    await this.budget.reserve(config, caller, 1);
+
+    const size = Object.values(fields).reduce((total, text) => total + text.length, 0);
+    let raw: unknown;
+    try {
+      raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('translate', [usage]),
+        model: config.translateModel,
+        system: translateSystemPrompt(),
+        user: translateFieldsUserPrompt(fields, context),
+        tool: translateFieldsTool(fields),
+        temperature: 0,
+        // Two translated copies of the text, with room for Azerbaijani and Russian running longer.
+        maxTokens: Math.min(16_000, Math.max(2000, Math.ceil(size * 1.5))),
+        timeoutMs: config.chatTimeoutMs,
+      });
+    } catch {
+      throw aiError('UNAVAILABLE');
+    }
+
+    try {
+      return buildFieldsTranslateResult(raw, fields);
     } catch {
       throw aiError('INVALID_RESULT');
     }

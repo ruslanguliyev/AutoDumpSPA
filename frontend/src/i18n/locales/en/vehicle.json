@@ -239,13 +239,20 @@
   "enums": {
     "transmission": {
       "Automatic": "Automatic",
-      "Manual": "Manual"
+      "Manual": "Manual",
+      "Semi-Automatic": "Robot / CVT"
     },
     "fuel": {
       "Petrol": "Petrol",
       "Diesel": "Diesel",
+      "Electric": "Electric",
       "Hybrid": "Hybrid",
-      "Electric": "Electric"
+      "Gas": "Gas"
+    },
+    "drive": {
+      "FWD": "Front",
+      "RWD": "Rear",
+      "AWD": "All-wheel"
     }
   },
   "searchAi": {

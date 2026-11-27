@@ -9,9 +9,9 @@ export function splitEngineSummary(engine: string | null | undefined): string[] 
   .filter(Boolean);
 }
 
-type EnumGroup = 'transmission' | 'fuel';
+type EnumGroup = 'transmission' | 'fuel' | 'drive';
 
-/** Maps API enum strings (Automatic, Petrol, …) to az/ru/en labels under `vehicle:enums`. */
+/** Maps API enum strings (Automatic, Petrol, FWD, …) to az/ru/en labels under `vehicle:enums`. */
 export function translateVehicleEnum(
   t: TFunction<'vehicle'>,
   group: EnumGroup,
