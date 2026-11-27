@@ -92,6 +92,8 @@
     "openPart": "Открыть {{name}}",
     "inStockCount": "В наличии: {{count, number}}",
     "stockInStockShort": "В наличии",
+    "updatedToday": "сегодня {{time}}",
+    "updatedYesterday": "вчера {{time}}",
     "noReviewsYet": "Пока нет отзывов",
     "reviews_one": "{{count, number}} отзыв",
     "reviews_few": "{{count, number}} отзыва",
