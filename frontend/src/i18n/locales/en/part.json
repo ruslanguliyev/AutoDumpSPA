@@ -89,6 +89,8 @@
     "openPart": "Open {{name}}",
     "inStockCount": "In stock: {{count, number}}",
     "stockInStockShort": "In stock",
+    "updatedToday": "today {{time}}",
+    "updatedYesterday": "yesterday {{time}}",
     "noReviewsYet": "No reviews yet",
     "reviews_one": "{{count, number}} review",
     "reviews_other": "{{count, number}} reviews"
