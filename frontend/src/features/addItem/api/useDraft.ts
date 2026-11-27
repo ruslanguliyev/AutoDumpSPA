@@ -8,6 +8,7 @@ import {
   type ListingType,
 } from '@/features/addItem/store/useAddItemStore';
 import { isVehicleCategoryId } from '@/features/addItem/constants/vehicleCatalog';
+import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 import {
   isValidEmail,
   isValidVin,
@@ -341,10 +342,11 @@ async function syncDraftToBackend(draft: ListingDraft) {
         name: p.name,
         brand: p.brand,
         model: p.model,
-        condition: p.condition || draft.common.condition,
+        // One condition for the whole listing: the select on the first step.
+        condition: draft.common.condition,
         oemCode: p.partNumber || undefined,
         stock: parseStock(p.stock),
-        category: draft.common.category || undefined,
+        category: getPartCategoryKey(draft.common.category) ?? undefined,
         compatibility: p.compatibility
           .split(',')
           .map((item) => item.trim())

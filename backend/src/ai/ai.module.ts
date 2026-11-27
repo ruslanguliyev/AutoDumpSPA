@@ -7,6 +7,7 @@ import { AiChatController } from './chat/chat.controller';
 import { AiChatService } from './chat/chat.service';
 import { CatalogSearchService } from './chat/catalog-search.service';
 import { SearchMissLog } from './chat/search-miss.service';
+import { PartPhotoController } from './part-photo/part-photo.controller';
 import { AI_CHAT_PROVIDER } from './providers/ai-chat-provider';
 import { AI_PROVIDER } from './providers/ai-provider';
 import { AnthropicChatProvider } from './providers/anthropic-chat.provider';
@@ -15,7 +16,7 @@ import { AiRateLimiter } from './rate-limit';
 import { SearchParseCache } from './search-cache';
 
 @Module({
-  controllers: [AiChatController],
+  controllers: [AiChatController, PartPhotoController],
   providers: [
     AiResolver,
     AiService,

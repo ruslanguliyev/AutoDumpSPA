@@ -12,6 +12,8 @@ export type AiCompletionRequest = {
   model: string;
   system: string;
   user: string;
+  /** A checked photo sent before the user text (base64, JPEG/PNG/WebP only). */
+  image?: { mediaType: 'image/jpeg' | 'image/png' | 'image/webp'; data: string };
   tool: AiTool;
   temperature: number;
   maxTokens: number;

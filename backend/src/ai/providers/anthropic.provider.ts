@@ -30,7 +30,20 @@ export class AnthropicAiProvider implements AiProvider {
             input_schema: request.tool.schema as Anthropic.Tool.InputSchema,
           },
         ],
-        messages: [{ role: 'user', content: request.user }],
+        messages: [
+          {
+            role: 'user',
+            content: request.image
+              ? [
+                  {
+                    type: 'image',
+                    source: { type: 'base64', media_type: request.image.mediaType, data: request.image.data },
+                  },
+                  { type: 'text', text: request.user },
+                ]
+              : request.user,
+          },
+        ],
       },
       { signal: AbortSignal.timeout(request.timeoutMs) },
     );

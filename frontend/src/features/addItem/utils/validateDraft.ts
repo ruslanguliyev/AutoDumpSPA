@@ -1,4 +1,5 @@
 import type { ListingDraft } from '@/features/addItem/store/useAddItemStore';
+import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 import {
   isModelAllowedForBrand,
   isTrimAllowedForVehicle,
@@ -94,7 +95,7 @@ export const validateBasics = (draft: ListingDraft) => {
   if (draft.type === 'vehicle') {
     if (!validateVehicleCategory(draft)) return false;
   } else {
-    if (!trim(draft.common.category).length) return false;
+    if (!getPartCategoryKey(trim(draft.common.category))) return false;
   }
   const cond = draft.common.condition;
   return cond === 'new' || cond === 'used' || cond === 'certified';

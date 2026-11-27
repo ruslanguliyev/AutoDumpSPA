@@ -152,7 +152,8 @@
     "completeMissingMessage": "Dərc üçün çatışmayan bölmələri doldurun.",
     "publicImageHint": "Şəkil URL ünvanının hamı üçün açıq olduğuna əmin olun.",
     "pricePerDay": "Günlük qiymət",
-    "perDay": "/ gün"
+    "perDay": "/ gün",
+    "categoryPlaceholderPartSelect": "Kateqoriya seçin"
   },
   "preview": {
     "livePreview": "Önbaxış",
@@ -294,5 +295,24 @@
     "hint": "Kadrı seçmək üçün şəkli sürüşdürün",
     "reset": "Mərkəzə",
     "aria": "Əsas şəklin kadrı: sürüşdürün və ya oxlardan istifadə edin"
+  },
+  "partAi": {
+    "title": "Süni intellektlə doldurun",
+    "hint": "Ehtiyat hissəsinin şəklini çəkin: süni intellekt onun nə olduğunu müəyyən edəcək və adını, kateqoriyasını, uyğunluğunu və təsvirini təklif edəcək. Vəziyyəti və qiyməti özünüz göstərirsiniz.",
+    "pick": "Hissənin şəklini yükləyin",
+    "pickAnother": "Başqa şəkil",
+    "working": "Hissə tanınır…",
+    "notPart": "Şəkildə avtomobil hissəsi görünmür. Başqa şəkil yoxlayın: hissə yaxından, yaxşı işıqda.",
+    "lowConfidence": "Süni intellekt nəticədən əmin deyil. Sahələri diqqətlə yoxlayın.",
+    "noCompatibility": "Uyğunluğu şəkildən müəyyən etmək olmur: özünüz yazın və ya nömrəli etiketin şəklini çəkin.",
+    "sellerSets": "Vəziyyəti (yeni və ya işlənmiş) və qiyməti özünüz göstərin.",
+    "apply": "Sahələri doldur",
+    "cancel": "Ləğv et",
+    "applied": "Sahələr dolduruldu. Onları yoxlayın, vəziyyəti və qiyməti göstərin.",
+    "errorGeneric": "Şəkli tanımaq alınmadı. Yenidən cəhd edin.",
+    "errorRate": "Çox sayda sorğu. Bir az sonra cəhd edin.",
+    "errorUnavailable": "Süni intellekt hazırda əlçatan deyil. Sahələri əl ilə doldurun.",
+    "errorType": "JPEG, PNG və ya WebP şəkli lazımdır.",
+    "errorSize": "Şəkil çox böyükdür (20 MB-a qədər)."
   }
 }

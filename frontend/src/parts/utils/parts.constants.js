@@ -10,6 +10,7 @@ export const PART_CATEGORIES = [
   { value: 'exterior', label: 'Exterior' },
   { value: 'wheels', label: 'Wheels & Tires' },
   { value: 'filters', label: 'Filters' },
+  { value: 'other', label: 'Other' },
 ];
 
 const normalizeCategoryValue = (value) => String(value ?? '').trim().toLowerCase();

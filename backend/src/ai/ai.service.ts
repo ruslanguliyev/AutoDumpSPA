@@ -23,6 +23,9 @@ import { AI_PROVIDER, AiProvider } from './providers/ai-provider';
 import { AiRateLimiter } from './rate-limit';
 import { SEARCH_TOOL, searchSystemPrompt, searchUserPrompt } from './search/search-prompt';
 import { SearchParseCache } from './search-cache';
+import type { ChatImage } from './chat/chat-image';
+import { PART_PHOTO_TOOL, partPhotoSystemPrompt, partPhotoUserPrompt } from './part-photo/part-photo-prompt';
+import { buildPartPhotoResult, PartPhotoResult } from './part-photo/part-photo-result';
 
 export type GenerateDescriptionCommand = {
   brand: string;
@@ -157,6 +160,43 @@ export class AiService {
     const normalized = normalizeSearch(raw as RawSearchParse);
     this.cache.set(cacheKey, normalized, config.searchCacheTtlMs);
     return normalized;
+  }
+
+  /**
+   * Looks at a photo of a car part and suggests the listing fields: name, category from our list,
+   * brand and part number when printed, compatibility matched to our own make/model catalogue,
+   * and a short description. Condition and price are never suggested; the seller sets them.
+   */
+  async recognizePart(userId: string, image: ChatImage, language: AiLanguageCode): Promise<PartPhotoResult> {
+    const config = readAiConfig(this.configService);
+    if (!config.enabled) throw aiError('UNAVAILABLE');
+    if (!this.limiter.take(`part-photo:${userId}`,config.chatImageLimit, config.chatImageWindowMs)) {
+      throw aiError('RATE_LIMITED');
+    }
+    await this.budget.reserve(config, `user:${userId}`, config.chatImageWeight);
+
+    let raw: unknown;
+    try {
+      raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('part-photo', [usage]),
+        model: config.chatVisionModel,
+        system: partPhotoSystemPrompt(),
+        user: partPhotoUserPrompt(language),
+        image: { mediaType: image.mediaType, data: image.data },
+        tool: PART_PHOTO_TOOL,
+        temperature: 0,
+        maxTokens: 1200,
+        timeoutMs: config.chatTimeoutMs,
+      });
+    } catch {
+      throw aiError('UNAVAILABLE');
+    }
+
+    try {
+      return buildPartPhotoResult(raw);
+    } catch {
+      throw aiError('INVALID_RESULT');
+    }
   }
 
   private facts(command: GenerateDescriptionCommand): DescriptionFacts {

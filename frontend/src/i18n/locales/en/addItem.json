@@ -153,7 +153,8 @@
     "pricePerDay": "Price per day",
     "perDay": "/ day",
     "imagesCount_one": "{{count}} image",
-    "imagesCount_other": "{{count}} images"
+    "imagesCount_other": "{{count}} images",
+    "categoryPlaceholderPartSelect": "Choose a category"
   },
   "preview": {
     "livePreview": "Live Preview",
@@ -295,5 +296,24 @@
     "hint": "Drag the photo to choose the crop",
     "reset": "Center",
     "aria": "Main photo crop: drag or use the arrow keys"
+  },
+  "partAi": {
+    "title": "Fill in with AI",
+    "hint": "Take a photo of the part: AI works out what it is and suggests the name, category, compatibility and description. You set the condition and price yourself.",
+    "pick": "Upload a photo of the part",
+    "pickAnother": "Another photo",
+    "working": "Recognising the part…",
+    "notPart": "No car part is visible in the photo. Try another one: the part up close, in good light.",
+    "lowConfidence": "AI is not sure about this result. Check the fields carefully.",
+    "noCompatibility": "Compatibility cannot be told from the photo: add it yourself or photograph the label with the part number.",
+    "sellerSets": "Set the condition (new or used) and the price yourself.",
+    "apply": "Fill in the fields",
+    "cancel": "Cancel",
+    "applied": "Fields filled in. Check them and set the condition and price.",
+    "errorGeneric": "Could not recognise the photo. Please try again.",
+    "errorRate": "Too many requests. Try again later.",
+    "errorUnavailable": "AI is unavailable right now. Fill in the fields by hand.",
+    "errorType": "Use a JPEG, PNG or WebP photo.",
+    "errorSize": "The photo is too large (20 MB max)."
   }
 }

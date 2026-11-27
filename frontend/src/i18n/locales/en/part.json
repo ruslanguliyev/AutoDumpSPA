@@ -40,7 +40,8 @@
     "lighting": "Lighting",
     "exterior": "Exterior",
     "wheels": "Wheels & Tires",
-    "filters": "Filters"
+    "filters": "Filters",
+    "other": "Other"
   },
   "details": {
     "title": "Part Details",

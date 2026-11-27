@@ -7,6 +7,7 @@ import { formatNumber } from '@/lib/format';
 import { focusPosition } from '@/lib/imageFocus';
 import { resolveMediaUrl } from '@/lib/mediaUrl';
 import { cn } from '@/shared/utils/cn';
+import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
 
 type PreviewCardProps = {
   draft: ListingDraft;
@@ -29,6 +30,7 @@ const formatPrice = (price: number | null, currency: string) => {
 
 const PreviewCard = ({ draft, title: titleLabel }: PreviewCardProps) => {
   const { t } = useTranslation('addItem');
+  const { t: tPart } = useTranslation('part');
   const primaryPhoto =
     draft.media.images.find((image) => image.isMain) ?? draft.media.images[0];
   const primaryPhotoUrl = resolveMediaUrl(primaryPhoto?.url);
@@ -45,7 +47,9 @@ const PreviewCard = ({ draft, title: titleLabel }: PreviewCardProps) => {
     draft.type === 'vehicle' &&
     isVehicleCategoryId(String(draft.common.category ?? '').trim())
       ? t(`form.vehicleCategories.${String(draft.common.category).trim()}`)
-      : '';
+      : draft.type === 'part'
+        ? formatPartCategoryLabel(tPart, draft.common.category) || ''
+        : '';
 
   // Only show vehicle details once the user has started filling the Vehicle step
   // (brand is explicitly set). Avoids leaking create-draft defaults like "2020".

@@ -57,17 +57,6 @@ const PartStep = () => {
         </div>
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            {t('form.condition')}
-          </label>
-          <input
-            className={inputClass}
-            placeholder={t('form.partConditionPlaceholder')}
-            value={draft.part.condition}
-            onChange={(event) => setPartField('condition', event.target.value)}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {t('form.stock')}
           </label>
           <input
