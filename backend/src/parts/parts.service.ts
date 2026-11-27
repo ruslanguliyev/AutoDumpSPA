@@ -19,6 +19,9 @@ import {
   PartsFilterInput,
   UpdatePartInput,
 } from './part.types';
+import { toPartCategoryKey } from './part-category';
+import { PartTranslationService } from '../translations/part-translation.service';
+import { readPartTranslations } from '../translations/part-translations';
 
 const partWithListingSeller = Prisma.validator<Prisma.PartDefaultArgs>()({
   include: {
@@ -33,6 +36,7 @@ export class PartsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly listingsService: ListingsService,
+    private readonly translations: PartTranslationService,
   ) {}
 
   private mapPart(row: PartWithListingSeller) {
@@ -41,7 +45,8 @@ export class PartsService {
       id: row.id,
       listingId: row.listingId,
       name: row.name,
-      category: row.category,
+      // Older rows hold free text ("Масляные фильтры"); the site only shows keys it can translate.
+      category: toPartCategoryKey(row.category) ?? 'other',
       brand: row.brand,
       model: row.model,
       condition: row.condition,
@@ -56,6 +61,7 @@ export class PartsService {
       imageUrl: row.imageUrl,
       compatibility: row.compatibility,
       location: row.location,
+      translations: readPartTranslations(row.translations, { name: row.name, description: row.description }),
       seller: seller
         ? {
             id: seller.id,
@@ -213,7 +219,7 @@ export class PartsService {
       data: {
         listingId,
         name: input.name,
-        category: input.category,
+        category: toPartCategoryKey(input.category) ?? 'other',
         brand: input.brand,
         model: input.model,
         condition: input.condition,
@@ -248,7 +254,9 @@ export class PartsService {
       where: { id },
       data: {
         ...(input.name !== undefined ? { name: input.name } : {}),
-        ...(input.category !== undefined ? { category: input.category } : {}),
+        ...(input.category !== undefined
+          ? { category: toPartCategoryKey(input.category) ?? 'other' }
+          : {}),
         ...(input.brand !== undefined ? { brand: input.brand } : {}),
         ...(input.model !== undefined ? { model: input.model } : {}),
         ...(input.condition !== undefined ? { condition: input.condition } : {}),
@@ -264,6 +272,11 @@ export class PartsService {
         ...(input.location !== undefined ? { location: input.location } : {}),
       },
     });
+    // A live listing whose text changed gets fresh translations in the background.
+    const textChanged =
+      (input.name !== undefined && input.name !== part.name) ||
+      (input.description !== undefined && (input.description ?? null) !== part.description);
+    if (textChanged) this.translations.refreshInBackground(id);
     const row = await this.prisma.part.findUniqueOrThrow({
       where: { id },
       include: {

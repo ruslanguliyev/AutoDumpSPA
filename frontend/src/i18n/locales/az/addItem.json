@@ -315,5 +315,15 @@
     "errorType": "JPEG, PNG və ya WebP şəkli lazımdır.",
     "errorSize": "Şəkil çox böyükdür (20 MB-a qədər).",
     "compatibilityGuess": "Süni intellekt uyğunluğu şəkildəki nömrəyə görə yox, hissənin görünüşünə görə təxmin etdi. Dərc etməzdən əvvəl artikul və ya VIN ilə yoxlayın."
+  },
+  "translations": {
+    "title": "Tərcümələr",
+    "hint": "Elanınız {{language}} dilində yazılıb. Sayt digər dillərdə bu tərcümələri göstərir; lazım olsa düzəldin. Orijinalı dəyişsəniz, tərcümələr yenidən hazırlanacaq.",
+    "description": "Təsvir",
+    "languages": {
+      "az": "Azərbaycan",
+      "ru": "Rus",
+      "en": "İngilis"
+    }
   }
 }

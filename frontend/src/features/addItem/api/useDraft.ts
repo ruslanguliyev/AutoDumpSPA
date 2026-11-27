@@ -73,6 +73,12 @@ mutation UpdateVehicle($id: String!, $input: UpdateVehicleInput!) {
 }
 `;
 
+const UPDATE_PART_TRANSLATIONS = `
+mutation UpdatePartTranslations($id: String!, $translations: [PartTranslationInput!]!) {
+  updatePartTranslations(id: $id, translations: $translations)
+}
+`;
+
 const UPDATE_PART = `
 mutation UpdatePart($id: String!, $input: UpdatePartInput!) {
   updatePart(id: $id, input: $input) {
@@ -358,6 +364,22 @@ async function syncDraftToBackend(draft: ListingDraft) {
         location: draft.seller.location || undefined,
       },
     });
+  }
+
+  // The seller's corrections of the AI translations. Best effort: if the original text changed
+  // in the same edit, the server makes new translations instead and refuses these.
+  if (draft.type === 'part' && draft._partId && draft.part?.translations && draft.part.translationsEdited?.length) {
+    const t = draft.part.translations;
+    const translations = draft.part.translationsEdited
+      .filter((lang) => lang !== t.source && t[lang]?.name?.trim())
+      .map((lang) => ({ lang, name: t[lang]!.name, description: t[lang]!.description ?? '' }));
+    if (translations.length) {
+      try {
+        await gqlRequest(UPDATE_PART_TRANSLATIONS, { id: draft._partId, translations });
+      } catch (err) {
+        console.error('Saving translations failed', err);
+      }
+    }
   }
 
   // Rental conditions: required to publish, so errors are not swallowed here.

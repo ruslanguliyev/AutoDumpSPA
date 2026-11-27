@@ -26,6 +26,9 @@ import { SearchParseCache } from './search-cache';
 import type { ChatImage } from './chat/chat-image';
 import { PART_PHOTO_TOOL, partPhotoSystemPrompt, partPhotoUserPrompt } from './part-photo/part-photo-prompt';
 import { buildPartPhotoResult, PartPhotoResult } from './part-photo/part-photo-result';
+import { TRANSLATE_TOOL, translateSystemPrompt, translateUserPrompt } from './translate/translate-prompt';
+import { buildTranslateResult, TranslateResult } from './translate/translate-result';
+import type { PartText } from '../translations/part-translations';
 
 export type GenerateDescriptionCommand = {
   brand: string;
@@ -194,6 +197,39 @@ export class AiService {
 
     try {
       return buildPartPhotoResult(raw);
+    } catch {
+      throw aiError('INVALID_RESULT');
+    }
+  }
+
+  /**
+   * The listing's name and description in Azerbaijani, Russian and English, plus the language
+   * the seller wrote in. Billed to the seller's daily allowance like their other AI calls.
+   */
+  async translateListing(sellerId: string, text: PartText): Promise<TranslateResult> {
+    const config = readAiConfig(this.configService);
+    if (!config.enabled) throw aiError('UNAVAILABLE');
+    if (!text.name.trim()) throw aiError('INVALID_INPUT');
+    await this.budget.reserve(config, `seller:${sellerId}`, 1);
+
+    let raw: unknown;
+    try {
+      raw = await this.provider.complete({
+        onUsage: (usage) => this.budget.record('translate', [usage]),
+        model: config.translateModel,
+        system: translateSystemPrompt(),
+        user: translateUserPrompt(text),
+        tool: TRANSLATE_TOOL,
+        temperature: 0,
+        maxTokens: 4000,
+        timeoutMs: config.chatTimeoutMs,
+      });
+    } catch {
+      throw aiError('UNAVAILABLE');
+    }
+
+    try {
+      return buildTranslateResult(raw, text);
     } catch {
       throw aiError('INVALID_RESULT');
     }

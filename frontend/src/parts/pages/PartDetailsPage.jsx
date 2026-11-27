@@ -18,6 +18,7 @@ import { ReviewsSection } from '@/features/reviews/components/ReviewsSection';
 import { usePartDetails } from '@/parts/hooks/usePartDetails';
 import { useDocumentTitle } from '@/shared/hooks/useDocumentTitle';
 import { formatPartCategoryLabel } from '@/parts/utils/partCategoryLabel';
+import { localizePart } from '@/parts/utils/localizePart';
 import {
   DetailLayout,
   MiniSellerCard,
@@ -50,7 +51,9 @@ export default function PartDetailsPage() {
   const { language } = useLanguageSync();
   const { id } = useParams();
   const { data: part, isLoading, isError } = usePartDetails(id);
-  useDocumentTitle(part?.name);
+  // Name and description follow the interface language once the listing has translations.
+  const localized = localizePart(part, i18n.language);
+  useDocumentTitle(localized.name || undefined);
   useTrackView('PART', part?.id);
 
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
@@ -64,7 +67,7 @@ export default function PartDetailsPage() {
   const breadcrumbs = [
     { label: t('nav.home', { ns: 'common' }), to: withLang(ROUTES.home, language) },
     { label: t('nav.parts', { ns: 'common' }), to: withLang(ROUTES.parts, language) },
-    ...(part?.name ? [{ label: part.name }] : []),
+    ...(localized.name ? [{ label: localized.name }] : []),
   ];
 
   if (isLoading) {
@@ -114,7 +117,7 @@ export default function PartDetailsPage() {
             <section className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5 [overflow-wrap:anywhere]">
               <header>
                 <div className="flex items-start justify-between gap-3">
-                  <h1 className="min-w-0 text-[22px] font-semibold tracking-tight text-foreground md:text-[30px]">{part.name}</h1>
+                  <h1 className="min-w-0 text-[22px] font-semibold tracking-tight text-foreground md:text-[30px]">{localized.name}</h1>
                   {part.promotionTier ? <PromotionBadge tier={part.promotionTier} className="mt-1 shrink-0" /> : null}
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
@@ -137,8 +140,8 @@ export default function PartDetailsPage() {
                 <PartDetailsTabs
                   initialTab="specs"
                   description={
-                    part.description ? (
-                      <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground">{part.description}</p>
+                    localized.description ? (
+                      <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground">{localized.description}</p>
                     ) : (
                       <p className="text-[15px] text-muted-foreground">{t('details.noDescription')}</p>
                     )

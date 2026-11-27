@@ -4,10 +4,12 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { DRAFT_QUERY_KEY, getDraft, putDraft } from '@/features/addItem/api/useDraft';
 import type {
+  PartTranslationsDraft,
   ListingDraft,
   ListingImage,
 } from '@/features/addItem/store/useAddItemStore';
 import { gqlRequest } from '@/lib/graphql';
+import { getPartCategoryKey } from '@/parts/utils/parts.constants';
 
 const EDIT_QUERY = `
 query EditListing($id: String!) {
@@ -21,7 +23,7 @@ query EditListing($id: String!) {
   }
   partByListing(listingId: $id) {
     id name category brand model condition oemCode description
-    price currency location imageUrl compatibility stock
+    price currency location imageUrl compatibility stock translations
   }
 }
 `;
@@ -90,6 +92,7 @@ type EditQueryResult = {
     imageUrl: string | null;
     compatibility: string[];
     stock: number | null;
+    translations: PartTranslationsDraft | null;
   } | null;
 };
 
@@ -143,7 +146,7 @@ export const buildDraftFromServer = (
     common: {
       title: listing.title,
       description,
-      category: v ? (v.bodyType ?? previous?.common.category ?? '') : (p?.category ?? ''),
+      category: v ? (v.bodyType ?? previous?.common.category ?? '') : (getPartCategoryKey(p?.category) ?? ''),
       condition: toCondition(v?.condition ?? p?.condition),
       pricing: {
         price: price && price > 0 ? price : null,
@@ -187,6 +190,8 @@ export const buildDraftFromServer = (
           condition: p.condition,
           compatibility: (p.compatibility ?? []).join(', '),
           stock: String(p.stock ?? 0),
+          translations: p.translations ?? null,
+          translationsEdited: [],
         }
       : undefined,
   };

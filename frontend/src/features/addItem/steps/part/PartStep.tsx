@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { useAddItemStore } from '@/features/addItem/store/useAddItemStore';
+import PartTranslations from '@/features/addItem/steps/part/PartTranslations';
 
 const inputClass =
   'w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -13,6 +14,7 @@ const PartStep = () => {
   if (!draft?.part) return null;
 
   return (
+    <div className="flex flex-col gap-6">
     <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-foreground">{t('form.partDetailsTitle')}</h2>
@@ -82,6 +84,8 @@ const PartStep = () => {
           />
         </div>
       </div>
+    </div>
+    <PartTranslations />
     </div>
   );
 };

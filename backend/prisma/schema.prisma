@@ -243,6 +243,8 @@ model Part {
   imageUrl      String?
   compatibility String[]
   location      String?
+  /// Name and description in az/ru/en, made by AI when the listing goes live; see src/translations.
+  translations  Json?
   /// Openings of this part's page. Listing.viewsCount stays the number promotions bill against.
   viewsCount    Int      @default(0)
 

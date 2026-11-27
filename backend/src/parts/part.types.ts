@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 import { PromotionTier } from '../promotions/promotion.types';
 
 @ObjectType()
@@ -78,6 +79,13 @@ export class PartObject {
 
   @Field({ nullable: true })
   location: string | null;
+
+  /**
+   * Name and description in az/ru/en: { source, hash, edited, az?, ru?, en? }, each language
+   * { name, description }. Null until translated, or while the original was edited since.
+   */
+  @Field(() => GraphQLJSON, { nullable: true })
+  translations: unknown;
 
   @Field(() => PartSellerObject, { nullable: true })
   seller: PartSellerObject | null;
@@ -223,4 +231,17 @@ export class UpdatePartInput {
 
   @Field({ nullable: true })
   location?: string;
+}
+
+@InputType()
+export class PartTranslationInput {
+  /** az, ru or en. */
+  @Field()
+  lang: string;
+
+  @Field()
+  name: string;
+
+  @Field({ nullable: true })
+  description?: string;
 }

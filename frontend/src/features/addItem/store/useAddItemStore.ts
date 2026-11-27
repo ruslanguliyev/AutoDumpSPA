@@ -52,7 +52,20 @@ export type ListingVehicle = {
   drivetrain: string;
 };
 
+export type PartLang = 'az' | 'ru' | 'en';
+
+/**
+ * The live listing's name and description in the other interface languages, made by AI after
+ * publishing. Absent on drafts and while the original was edited since the last translation.
+ */
+export type PartTranslationsDraft = {
+  source: PartLang;
+} & Partial<Record<PartLang, { name: string; description: string | null }>>;
+
 export type ListingPart = {
+  translations?: PartTranslationsDraft | null;
+  /** Languages the seller changed here; saved with the next sync. */
+  translationsEdited?: PartLang[];
   name: string;
   brand: string;
   model: string;

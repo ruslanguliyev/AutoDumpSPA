@@ -316,5 +316,15 @@
     "errorType": "Use a JPEG, PNG or WebP photo.",
     "errorSize": "The photo is too large (20 MB max).",
     "compatibilityGuess": "AI guessed the compatibility from the look of the part, with no number on the photo. Check it against the part number or VIN before publishing."
+  },
+  "translations": {
+    "title": "Translations",
+    "hint": "Your listing is written in {{language}}. The site shows these translations in the other languages; correct them if needed. If you change the original, the translations are made again.",
+    "description": "Description",
+    "languages": {
+      "az": "Azerbaijani",
+      "ru": "Russian",
+      "en": "English"
+    }
   }
 }

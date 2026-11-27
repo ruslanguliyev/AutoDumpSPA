@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { PromotionTier } from '@prisma/client';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from '../auth/auth.types';
@@ -10,13 +10,20 @@ import {
   PaginatedParts,
   PartObject,
   PartsFilterInput,
+  PartTranslationInput,
   UpdatePartInput,
 } from './part.types';
 import { PartsService } from './parts.service';
+import { PartTranslationService } from '../translations/part-translation.service';
+import { isListingLang } from '../translations/part-translations';
+import GraphQLJSON from 'graphql-type-json';
 
 @Resolver(() => PartObject)
 export class PartsResolver {
-  constructor(private readonly partsService: PartsService) {}
+  constructor(
+    private readonly partsService: PartsService,
+    private readonly partTranslations: PartTranslationService,
+  ) {}
 
   @Query(() => PaginatedParts)
   async parts(
@@ -79,5 +86,20 @@ export class PartsResolver {
     @Args('id') id: string,
   ): Promise<boolean> {
     return this.partsService.deletePart(user.id, id);
+  }
+
+  /** The seller's own corrections of the AI translations of a part's name and description. */
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => GraphQLJSON)
+  async updatePartTranslations(
+    @CurrentUser() user: AuthUser,
+    @Args('id') id: string,
+    @Args('translations', { type: () => [PartTranslationInput] }) translations: PartTranslationInput[],
+  ): Promise<unknown> {
+    const entries = translations.map((entry) => {
+      if (!isListingLang(entry.lang)) throw new BadRequestException(`Unknown language ${entry.lang}`);
+      return { lang: entry.lang, name: entry.name, description: entry.description ?? null };
+    });
+    return this.partTranslations.setManual(user.id, id, entries);
   }
 }

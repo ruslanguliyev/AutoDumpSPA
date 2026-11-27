@@ -5,6 +5,8 @@ export type AiConfig = {
   apiKey: string;
   descriptionModel: string;
   searchModel: string;
+  /** Model that translates listing names and descriptions into az/ru/en. */
+  translateModel: string;
   timeoutMs: number;
   descriptionLimit: number;
   descriptionWindowMs: number;
@@ -54,6 +56,7 @@ export function readAiConfig(config: ConfigService): AiConfig {
     descriptionModel:
       String(config.get('AI_MODEL_DESCRIPTION') ?? '').trim() || 'claude-sonnet-5-5',
     searchModel: String(config.get('AI_MODEL_SEARCH') ?? '').trim() || 'claude-haiku-5-5',
+    translateModel: String(config.get('AI_MODEL_TRANSLATE') ?? '').trim() || 'claude-haiku-5-5',
     timeoutMs: num(config.get('AI_TIMEOUT_MS'), 20_000),
     descriptionLimit: num(config.get('AI_RATE_LIMIT_DESCRIPTION'), 20),
     descriptionWindowMs: num(config.get('AI_RATE_LIMIT_DESCRIPTION_WINDOW_SEC'), 3600) * 1000,

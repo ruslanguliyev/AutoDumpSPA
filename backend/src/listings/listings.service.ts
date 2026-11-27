@@ -21,12 +21,14 @@ import {
   UpdateListingInput,
 } from './listing.types';
 import { assertDescriptionWithinLimit } from './description-limit';
+import { PartTranslationService } from '../translations/part-translation.service';
 
 @Injectable()
 export class ListingsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly sellersService: SellersService,
+    private readonly partTranslations: PartTranslationService,
   ) {}
 
   async createListing(userId: string, input: CreateListingInput) {
@@ -97,6 +99,8 @@ export class ListingsService {
       where: { id: listing.id },
       data: { status: ListingStatus.ACTIVE },
     });
+    // The part's name and description in az/ru/en, made after the response goes out.
+    if (parts > 0) this.partTranslations.refreshListingInBackground(listing.id);
     return this.toListingObject(updated);
   }
 

@@ -497,6 +497,7 @@ type Mutation {
   unpublishListing(id: String!): ListingObject!
   updateListing(id: String!, input: UpdateListingInput!): ListingObject!
   updatePart(id: String!, input: UpdatePartInput!): PartObject!
+  updatePartTranslations(id: String!, translations: [PartTranslationInput!]!): JSON!
   updateProfile(input: UpdateProfileInput!): UserObject!
   updateSeller(input: UpdateSellerInput!): SellerObject!
   updateService(id: String!, input: UpdateServiceInput!): ServiceObject!
@@ -576,6 +577,7 @@ type PartObject {
   promotionTier: PromotionTier
   seller: PartSellerObject
   stock: Int!
+  translations: JSON
   viewsCount: Int!
 }
 
@@ -589,6 +591,12 @@ type PartSellerObject {
   rating: Float!
   type: String!
   verified: Boolean!
+}
+
+input PartTranslationInput {
+  description: String
+  lang: String!
+  name: String!
 }
 
 input PartsFilterInput {
