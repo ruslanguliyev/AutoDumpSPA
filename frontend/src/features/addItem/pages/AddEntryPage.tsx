@@ -18,6 +18,9 @@ const AddEntryPage = () => {
       onSuccess: (draft) => {
         navigate(`/add/${draft.id}`);
       },
+      onError: (error) => {
+        console.error('Creating a draft failed', error);
+      },
     });
   };
 
@@ -29,6 +32,16 @@ const AddEntryPage = () => {
           {t('subtitle')}
         </p>
       </div>
+
+      {/* An expired login logs out and redirects to /login (see ProtectedRoute); anything else lands here. */}
+      {createDraft.isError ? (
+        <p
+          className="mb-6 rounded-[var(--radius)] bg-destructive/15 px-3 py-2.5 text-sm text-destructive"
+          role="alert"
+        >
+          {t('entry.error')}
+        </p>
+      ) : null}
 
       <div className="grid gap-6 md:grid-cols-3">
         <div className={cardClass}>

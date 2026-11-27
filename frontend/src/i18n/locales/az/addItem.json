@@ -16,7 +16,8 @@
       "title": "İcarəyə avtomobil",
       "description": "Avtomobilinizi icarəyə verin: günlük qiymət, girov, şərtlər və məşğulluq təqvimi.",
       "button": "Avtomobili icarəyə ver"
-    }
+    },
+    "error": "Qaralamanı yaratmaq alınmadı. Yenidən cəhd edin."
   },
   "steps": {
     "vehicle": "Avtomobil",

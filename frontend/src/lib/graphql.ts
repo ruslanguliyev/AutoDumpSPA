@@ -1,3 +1,5 @@
+import { notifySessionExpired } from '@/lib/authToken';
+
 /**
  * Single GraphQL client for the whole app.
  *
@@ -58,6 +60,10 @@ export async function gqlRequest<T = unknown>(
 
   if (json?.errors?.length) {
     const first = json.errors[0];
+    // The stored login was rejected (usually expired): log out so the app can ask to log in again.
+    if (first.extensions?.code === 'UNAUTHENTICATED' && token === undefined && authToken) {
+      notifySessionExpired();
+    }
     throw new GraphQLRequestError(first.message, first.extensions?.code);
   }
   if (!res.ok) {

@@ -13,7 +13,8 @@ const arrowClass =
   'absolute top-1/2 -translate-y-1/2 border-0! bg-scrim! px-0 text-primary-foreground hover:brightness-125';
 
 /**
- * Photo gallery: main image (click opens the lightbox), arrows, counter, thumbnails, swipe.
+ * Photo gallery: main image (click opens the lightbox), arrows, counter, swipe, and
+ * thumbnails that switch the main image on click or, with a mouse, on hover.
  * The `*ClassName` props let a page size the viewport and the thumbnails.
  */
 export default function MediaCarousel({
@@ -149,6 +150,11 @@ export default function MediaCarousel({
                 thumbButtonClassName,
               )}
               onClick={() => goTo(i)}
+              // Hovering a thumbnail previews it in the main picture. Mouse only:
+              // a touch tap also fires pointerenter, and there the click does the job.
+              onPointerEnter={(e) => {
+                if (e.pointerType === 'mouse') goTo(i);
+              }}
               aria-label={t('mediaViewer.showImage', { number: i + 1 })}
               aria-current={i === index ? 'true' : undefined}
             >

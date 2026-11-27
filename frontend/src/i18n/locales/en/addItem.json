@@ -16,7 +16,8 @@
       "title": "Car for rent",
       "description": "Rent out your car: price per day, deposit, conditions and an availability calendar.",
       "button": "Rent out a car"
-    }
+    },
+    "error": "Could not create the draft. Please try again."
   },
   "steps": {
     "vehicle": "Vehicle",

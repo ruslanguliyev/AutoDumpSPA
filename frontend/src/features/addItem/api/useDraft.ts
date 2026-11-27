@@ -80,8 +80,8 @@ mutation UpdatePartTranslations($id: String!, $translations: [PartTranslationInp
 `;
 
 const UPDATE_TEXT_TRANSLATIONS = `
-mutation UpdateTextTranslations(: String!, : String!, : [TextTranslationInput!]!) {
-  updateTextTranslations(kind: , id: , translations: )
+mutation UpdateTextTranslations($kind: String!, $id: String!, $translations: [TextTranslationInput!]!) {
+  updateTextTranslations(kind: $kind, id: $id, translations: $translations)
 }
 `;
 
