@@ -53,7 +53,7 @@ export const PART_PHOTO_TOOL = {
         type: 'array',
         maxItems: 8,
         description:
-          'Cars the part fits, only when a readable part number or label makes it certain. Empty when unsure.',
+          'Cars the part most likely fits: from a readable part number or label, or from a distinctive shape, mount or logo. Empty only when there is no basis at all.',
         items: {
           type: 'object',
           additionalProperties: false,
@@ -66,12 +66,18 @@ export const PART_PHOTO_TOOL = {
           required: ['brand'],
         },
       },
+      compatibilityBasis: {
+        type: 'string',
+        enum: ['label', 'likely', 'none'],
+        description:
+          'label: fitment follows from a part number or label readable on the photo. likely: an informed guess from the look of the part. none: no compatibility given.',
+      },
       description: {
         type: 'string',
         description: 'A short listing description of the part, in the requested language.',
       },
     },
-    required: ['isCarPart', 'confidence', 'name', 'category', 'description'],
+    required: ['isCarPart', 'confidence', 'name', 'category', 'compatibilityBasis', 'description'],
   },
 };
 
@@ -83,7 +89,7 @@ export function partPhotoSystemPrompt(): string {
     'If the photo does not clearly show a car part (people, documents, screenshots, whole cars, anything else), set isCarPart to false and leave the other fields empty.',
     'Pick category only from the enum. Use "other" when none fits.',
     'brand and partNumber: only what is printed and readable. Never guess them.',
-    'compatibility: only when a readable part number or label makes the fitment certain. Otherwise return an empty list. Never guess fitment from the shape alone.',
+    'compatibility: list the cars (make, model, years) the part most likely fits. Prefer a readable part number or label, and use what you know about that number. Without one, give your best informed guess from a distinctive shape, mount, connector or logo, and set compatibilityBasis to "likely". For a generic part that fits too many cars to name (a universal bulb, a fuse), return an empty list. Cars sold in Azerbaijan first. At most 8 entries. model is the plain model name as a buyer would pick it (Golf, E-Class, Camry, Octavia, A6); put generations into yearFrom and yearTo, not into model.',
     'description: 2 to 4 plain sentences about what the part is and what it does, and the brand and number if readable.',
     'Do not state whether the part is new or used, its wear, its price, a warranty, delivery, or contacts. The seller adds those.',
     'No emoji, no links, no phone numbers. Stay under 600 characters.',

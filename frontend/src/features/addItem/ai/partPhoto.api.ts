@@ -12,6 +12,8 @@ export type PartPhotoResult = {
   partNumber: string;
   /** Cars from our own make/model catalogue, e.g. "Toyota Camry 2012–2017". */
   compatibility: string[];
+  /** True when the fitment comes from a number or label on the photo; false for an informed guess. */
+  compatibilityConfirmed: boolean;
   description: string;
 };
 

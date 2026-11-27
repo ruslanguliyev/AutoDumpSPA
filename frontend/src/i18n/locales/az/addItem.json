@@ -313,6 +313,7 @@
     "errorRate": "Çox sayda sorğu. Bir az sonra cəhd edin.",
     "errorUnavailable": "Süni intellekt hazırda əlçatan deyil. Sahələri əl ilə doldurun.",
     "errorType": "JPEG, PNG və ya WebP şəkli lazımdır.",
-    "errorSize": "Şəkil çox böyükdür (20 MB-a qədər)."
+    "errorSize": "Şəkil çox böyükdür (20 MB-a qədər).",
+    "compatibilityGuess": "Süni intellekt uyğunluğu şəkildəki nömrəyə görə yox, hissənin görünüşünə görə təxmin etdi. Dərc etməzdən əvvəl artikul və ya VIN ilə yoxlayın."
   }
 }

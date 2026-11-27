@@ -171,6 +171,8 @@ export function PartPhotoAi() {
           </dl>
           {!result.compatibility.length ? (
             <p className="text-[13px] text-muted-foreground">{t('partAi.noCompatibility')}</p>
+          ) : !result.compatibilityConfirmed ? (
+            <p className="text-[13px] text-warning">{t('partAi.compatibilityGuess')}</p>
           ) : null}
           <p className="text-[13px] text-muted-foreground">{t('partAi.sellerSets')}</p>
           <div className="flex flex-wrap gap-2">

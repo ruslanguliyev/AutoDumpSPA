@@ -1,4 +1,5 @@
 import { matchBrand, matchModel } from '../catalog/match-catalog';
+import { SEARCH_MODELS } from '../catalog/search-catalog.data';
 import { PART_CATEGORY_VALUES, PartCategoryValue } from './part-photo-prompt';
 
 export type PartPhotoConfidence = 'high' | 'medium' | 'low';
@@ -12,6 +13,8 @@ export type PartPhotoResult = {
   partNumber: string;
   /** "Toyota Camry 2012–2017", one entry per car, matched to our own make/model catalogue. */
   compatibility: string[];
+  /** True when the fitment comes from a number or label on the photo; false for an informed guess. */
+  compatibilityConfirmed: boolean;
   description: string;
 };
 
@@ -30,6 +33,25 @@ const text = (value: unknown, max: number) => {
 const year = (value: unknown) =>
   typeof value === 'number' && Number.isInteger(value) && value >= 1950 && value <= CURRENT_YEAR + 1 ? value : null;
 
+const foldModel = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+/**
+ * Our catalogue model for what the model wrote: an exact match first, then the longest
+ * catalogue name the text starts with, so "Golf V", "E-Class W213" or "Octavia A7" still land.
+ */
+function catalogModel(brand: string, raw: unknown): string | null {
+  if (typeof raw !== 'string' || !raw.trim()) return null;
+  const exact = matchModel(brand, raw);
+  if (exact) return exact;
+  const folded = foldModel(raw.replace(/\([^)]*\)/g, ' '));
+  let best: string | null = null;
+  for (const model of SEARCH_MODELS[brand] ?? []) {
+    const key = foldModel(model);
+    if (key.length >= 2 && folded.startsWith(key) && (!best || key.length > foldModel(best).length)) best = model;
+  }
+  return best;
+}
+
 /** Only makes and models our catalogue knows; anything else is dropped rather than shown. */
 function compatibilityOf(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
@@ -39,7 +61,7 @@ function compatibilityOf(raw: unknown): string[] {
     const entry = item as { brand?: unknown; model?: unknown; yearFrom?: unknown; yearTo?: unknown } | null;
     const brand = matchBrand(typeof entry?.brand === 'string' ? entry.brand : null);
     if (!brand) continue;
-    const model = matchModel(brand, typeof entry?.model === 'string' ? entry.model : null);
+    const model = catalogModel(brand, entry?.model);
     let from = year(entry?.yearFrom);
     let to = year(entry?.yearTo);
     if (from && to && to < from) [from, to] = [to, from];
@@ -51,7 +73,8 @@ function compatibilityOf(raw: unknown): string[] {
     seen.add(key);
     out.push(label);
   }
-  return out;
+  // A bare make next to that make's models adds nothing.
+  return out.filter((label) => label.includes(' ') || !out.some((other) => other.startsWith(`${label} `)));
 }
 
 export function buildPartPhotoResult(raw: unknown): PartPhotoResult {
@@ -69,6 +92,7 @@ export function buildPartPhotoResult(raw: unknown): PartPhotoResult {
       brand: '',
       partNumber: '',
       compatibility: [],
+      compatibilityConfirmed: false,
       description: '',
     };
   }
@@ -88,6 +112,7 @@ export function buildPartPhotoResult(raw: unknown): PartPhotoResult {
   // A part number is letters, digits and separators; anything else is not one.
   const partNumber = text(value.partNumber, 40);
   const brand = text(value.brand, 60);
+  const compatibility = compatibilityOf(value.compatibility);
 
   return {
     isCarPart: true,
@@ -96,7 +121,8 @@ export function buildPartPhotoResult(raw: unknown): PartPhotoResult {
     category,
     brand: URL_OR_EMAIL.test(brand) ? '' : brand,
     partNumber: /^[A-Za-z0-9][A-Za-z0-9 .\-/]*$/.test(partNumber) ? partNumber : '',
-    compatibility: compatibilityOf(value.compatibility),
+    compatibility,
+    compatibilityConfirmed: compatibility.length > 0 && value.compatibilityBasis === 'label',
     description,
   };
 }
